@@ -1,0 +1,33 @@
+.sidebar {
+    background-color: white;
+    border-right: 1px solid #dee2e6;
+    min-height: 100vh;
+    width: 256px;
+}
+
+.nav-menu {
+    padding: 1rem;
+}
+
+.nav-list {
+    margin-bottom: 0.25rem;
+}
+
+.nav-link-custom {
+    display: flex;
+    align-items: center;
+    margin: auto;
+    color: #212529;
+    text-decoration: none;
+    margin-bottom: 12px;
+    width: 75%;
+    gap: 0.75rem;
+    padding: 0.625rem 2.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nav-link-custom.active {
+    background-color: #C7FFA7;
+    /* color: #176B2C; */
+}
