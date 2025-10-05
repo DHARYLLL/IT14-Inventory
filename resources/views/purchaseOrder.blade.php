@@ -161,9 +161,9 @@
             </div>
 
             {{-- Body --}}
-            <div class="modal-body">
-
-                <form action="">
+            <form action="{{ route('POItems.store') }}" method="POST">
+                @csrf
+                <div class="modal-body">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="" class="form-label">
@@ -189,7 +189,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="" class="form-label">
-                                 <i class="bi bi-geo-alt" style="color: #60BF4F"></i> Company Address
+                                    <i class="bi bi-geo-alt" style="color: #60BF4F"></i> Company Address
                             </label>
                             <input type="text" class="form-control">
                         </div>
@@ -200,7 +200,7 @@
                             <input type="text" class="form-control">
                         </div>
                     </div>
-                    
+            
                     <div class="flex-fill">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3 class="fw-semibold">Order Items</h3>
@@ -211,40 +211,36 @@
                         <div class="d-flex align-items-center justify-content-between gap-3">
                             <label class="form-label">
                                 <i class="bi bi-card-text" style="color: #60BF4F"></i> Item Description
-                                <input type="text" class="form-control">
+                                <input type="text" name="Item_description" class="form-control">
                             </label>
                             <label class="form-label">
                                 <i class="bi bi-hash" style="color: #60BF4F"></i> Quantity
-                                <input type="number" class="form-control">
+                                <input type="number" name="Quantity" class="form-control">
                             </label>
                             <label class="form-label">
                                 <i class="bi bi-currency-dollar" style="color: #60BF4F"></i> Unit Price
-                                <input type="number" class="form-control">
+                                <input type="number" name="Unit_price" class="form-control">
                             </label>
                             <label class="form-label">
                                 <i class="bi bi-calculator" style="color: #60BF4F"></i> Total Price per Line Item
                                 <input type="number" class="form-control">
                             </label>
                         </div>
-                </form>
-
-
+                    </div>
                 </div>
-
-                
-            </div>
-
-            {{-- Footer --}}
-            <div class="modal-footer d-flex justify-content-between align-items-center">
-                <div>
-                    <img src="{{ asset('images/alar-logo.png') }}" alt="Alar Memorial Services Logo" style="max-width: 100%; height: 3rem;">
+                {{-- Footer --}}
+                <div class="modal-footer d-flex justify-content-between align-items-center">
+                    <div>
+                        <img src="{{ asset('images/alar-logo.png') }}" alt="Alar Memorial Services Logo" style="max-width: 100%; height: 3rem;">
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-create">Save changes</button>
+                    </div>
                 </div>
+            </form>
 
-                <div>
-                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-create">Save changes</button>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>
