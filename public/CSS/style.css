@@ -29,7 +29,16 @@
 }
 
 .nav-link-custom.active {
-    background-color: #C7FFA7;
+    background-color: #60BF4F;
+    color: white;
+}
+
+.nav-link-custom.active i {
+    color: white;
+}
+
+.nav-link-custom:hover:not(.active) {
+    background-color: #f1f1f1;
 }
 
 .main-content {
@@ -63,7 +72,7 @@
     background-color: #D9D9D9;
     border-radius: 0.5rem;
     padding: 1.5rem;
-    min-height: 500px;
+    min-height: 80vh;
 }
 
 .btn-custom {
