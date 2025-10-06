@@ -6,6 +6,7 @@
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
 }
 
+/* Nav */
 .nav-menu {
     padding: 1rem;
 }
@@ -33,6 +34,11 @@
     color: white;
 }
 
+.nav-link-custom.active:hover {
+    background-color: #4ea53c;
+    color: white;
+}
+
 .nav-link-custom.active i {
     color: white;
 }
@@ -41,6 +47,7 @@
     background-color: #f1f1f1;
 }
 
+/* main */
 .main-content {
     flex: 1;
 }
@@ -122,10 +129,8 @@
 }
 
 .btn.btn-create:hover {
-    background-color: #60BF4F;
-    /* background-color: #4ea53c; */
+    background-color: #4ea53c;
     color: white;
-    opacity: 0.85;
 }
 
 .btn.btn-add-item {
@@ -137,4 +142,26 @@
     background-color: #60BF4F;
     color: white;
     opacity: 0.85;
+}
+
+/* Action buttons */
+.btn.btn-edit-custom {
+    background-color: #60BF4F;
+    color: white;
+}
+
+.btn.btn-edit-custom:hover {
+    background-color: #4ea53c;
+    color: white;
+}
+
+.btn.btn-delete-custom {
+    background-color: #f10000;
+    color: white;
+}
+
+.btn.btn-delete-custom:hover {
+    background-color: #c00b0b;
+    color: white;
+
 }

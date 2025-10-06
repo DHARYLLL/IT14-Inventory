@@ -28,7 +28,7 @@
             <nav class="nave-menu flex-fill">
                 <ul class="list-unstyled">
                     <li class="nav-list">
-                        <a href="#" class="nav-link-custom">
+                        <a href="{{ route('dashboard.index') }}" class="nav-link-custom {{ request()->routeIs('dashboard.*') ? 'active' : '' }}">
                             <i class="bi bi-house-door"></i>
                             <span>Dashboard</span>
                         </a>
@@ -42,7 +42,7 @@
                     </li>
 
                     <li class="nav-list">
-                        <a href="#" class="nav-link-custom">
+                        <a href="{{ route('equipment.index') }}" class="nav-link-custom {{ request()->routeIs('equipment.*') ? 'active' : '' }}">
                             <i class="bi bi-house-door"></i>
                             <span>Equipment</span>
                         </a>
@@ -82,10 +82,7 @@
                         <span><h1>@yield('head')</h1></span>
 
                         <div>
-                            <div class="search-input position-relative" style="width: 400px">
-                                <i class="bi bi-search search-icon"></i>
-                                <input type="search" placeholder="Search" class="form-control">
-                            </div>
+                            
                         </div>
 
                     </div>

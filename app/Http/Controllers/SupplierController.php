@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SupplierRequest;
 use Illuminate\Http\Request;
 
 class SupplierController extends Controller
@@ -13,7 +14,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        return view('alar.supplier');
+        $suppliers = Supplier::all();
+        return view('alar.supplier', ['suppliers' => $suppliers]);
     }
 
     /**
@@ -27,9 +29,12 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SupplierRequest $request)
     {
-        //
+        $supplier = $request->validated();
+        Supplier::create($supplier);
+
+        return redirect()->back();
     }
 
     /**
@@ -53,7 +58,9 @@ class SupplierController extends Controller
      */
     public function update(Request $request, Supplier $supplier)
     {
-        //
+        $editSupplier = $request->validated();
+        $supplier->update($editSupplier);
+        return redirect()->back();
     }
 
     /**
@@ -61,6 +68,7 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        //
+        $supplier->delete();
+        return redirect()->back();
     }
 }

@@ -7,7 +7,7 @@
     @section('name', 'Staff')
 
     <div class="d-flex align-items-center justify-content-between mb-4">
-        <h2 class="fw-semibold">Suppliers</h2>
+        <h2 class="fw-semibold">Stocks</h2>
 
         <button class="btn btn-custom d-flex align-items-center gap-2" type="button" data-bs-toggle="modal" data-bs-target="#NewPOModal">
             <i class="bi bi-plus-lg"></i>
