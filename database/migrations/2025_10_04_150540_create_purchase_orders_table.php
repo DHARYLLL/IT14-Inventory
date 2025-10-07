@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->id();
-            $table->string('Supplier');
+            $table->string('status', 15);
+            $table->decimal('total_amount', 8,2)->nullable();
+            $table->date('submitted_date')->nullable();
+            $table->date('approved_date')->nullable();
+           
+            $table->unsignedBigInteger('supplier_id')->nullable();
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onUpdate('cascade')->nullOnDelete();
             $table->timestamps();
         });
     }

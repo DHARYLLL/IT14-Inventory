@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('equipments', function (Blueprint $table) {
             $table->id();
+            $table->string('eq_name', 100);
+            $table->smallInteger('eq_available')->nullable();
+            $table->smallInteger('eq_in_use')->nullable();
             $table->timestamps();
         });
     }

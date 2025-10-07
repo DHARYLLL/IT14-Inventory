@@ -13,10 +13,18 @@ return new class extends Migration
     {
         Schema::create('purchase_order_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('purchase_order_id')->constrained();
-            $table->string('Item_description');
-            $table->integer('Quantity');
-            $table->decimal('Unit_price', 10, 2);
+            $table->string('item', 100);
+            $table->smallInteger('qty');
+            $table->string('sizeWeight', 20);
+            $table->decimal('unit_price', 5,2);
+            $table->decimal('total_amount', 8,2);
+            $table->date('expiry_date')->nullable();
+
+            $table->unsignedBigInteger('po_id')->nullable();
+            $table->foreign('po_id')->references('id')->on('purchase_orders')->onUpdate('cascade')->nullOnDelete();
+
+            $table->unsignedBigInteger('stock_id')->nullable();
+            $table->foreign('stock_id')->references('id')->on('stocks')->onUpdate('cascade')->nullOnDelete();
             $table->timestamps();
         });
     }

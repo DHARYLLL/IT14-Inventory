@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('svs_stocks', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('stock_id')->nullable();
+            $table->foreign('stock_id')->references('id')->on('stocks')->onUpdate('cascade');
+            $table->unsignedBigInteger('service_id')->nullable();
+            $table->foreign('service_id')->references('id')->on('services_requests')->onUpdate('cascade');
+
+            $table->smallInteger('stock_used')->nullable();
+
             $table->timestamps();
         });
     }

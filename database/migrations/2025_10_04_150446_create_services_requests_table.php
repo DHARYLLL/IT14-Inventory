@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('services_requests', function (Blueprint $table) {
             $table->id();
+            $table->date('svc_startDate')->nullable();
+            $table->date('svc_endDate')->nullable();
+            $table->string('svc_wakeLoc', 150);
+            $table->string('svc_churchLoc', 150);
+            $table->string('svc_burialLoc', 150);
+            $table->string('svc_status', 15);
+
+            $table->unsignedBigInteger('package_id')->nullable();
+            $table->foreign('package_id')->references('id')->on('packages')->onUpdate('cascade');
+            
             $table->timestamps();
         });
     }

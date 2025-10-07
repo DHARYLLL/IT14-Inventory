@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('svs_equipments', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('service_id')->nullable();
+            $table->foreign('service_id')->references('id')->on('services_requests')->onUpdate('cascade');
+            $table->unsignedBigInteger('equipment_id')->nullable();
+            $table->foreign('equipment_id')->references('id')->on('equipments')->onUpdate('cascade');
+
+            $table->smallInteger('eq_used')->nullable();
+
             $table->timestamps();
         });
     }

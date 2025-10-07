@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->date('invoice_date');
+            $table->decimal('total', 8,2);
+
+            $table->unsignedBigInteger('po_id')->nullable();
+            $table->foreign('po_id')->references('id')->on('purchase_orders')->onUpdate('cascade')->nullOnDelete();
             $table->timestamps();
         });
     }
