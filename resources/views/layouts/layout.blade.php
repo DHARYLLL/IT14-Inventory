@@ -79,7 +79,7 @@
                 </ul>
             </nav>
 
-            {{-- Logout Button --}}
+            {{-- Logout Button
             <div class="mt-auto p-3 border-top">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -89,7 +89,7 @@
                         <span>Logout</span>
                     </button>
                 </form>
-            </div>
+            </div> --}}
         </aside>
 
         <div class="main-content d-flex flex-column">
@@ -110,10 +110,27 @@
                             <i class="bi bi-bell fs-5"></i>
                         </button>
 
-                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
-                            style="width: 36px; height: 36px; cursor: pointer;">
-                            <span class="fw-semibold small">ST</span>
+                        <div class="dropdown">
+                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center dropdown-toggle"
+                                id="profileDropdown"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                style="width: 36px; height: 36px; cursor: pointer;">
+                                <span class="fw-semibold small">ST</span>
+                            </div>
+
+                            <ul class="dropdown-menu mb-0 align-items-center" aria-labelledby="profileDropdown">
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="btn btn-outline-danger w-75 justify-content-center gap-2">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        <span>Logout</span></button>
+                                    </form>
+                                </li>
+                            </ul>
                         </div>
+
                     </div>
                 </div>
             </header>

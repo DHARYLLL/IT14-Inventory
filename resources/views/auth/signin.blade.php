@@ -1,4 +1,4 @@
-@extends('layouts.authLayauth')
+@extends('layouts.authLayout')
 @section('title', 'ALAR Memorial - Sing In')
 
 <body>

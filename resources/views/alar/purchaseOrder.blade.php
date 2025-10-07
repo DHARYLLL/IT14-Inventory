@@ -73,7 +73,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="ViewPOItemsModal" tabindex="-1" aria-labelledby="NewPOModalLabel" aria-hidden="true">
+<div class="modal fade" id="NewPOModal" tabindex="-1" aria-labelledby="NewPOModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-custom">
         <div class="modal-content">
 
