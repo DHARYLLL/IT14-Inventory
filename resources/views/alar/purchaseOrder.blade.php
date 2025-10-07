@@ -28,19 +28,43 @@
                         <th class="fw-semibold">Apporved Date</th>
                         <th class="fw-semibold">Delivered Date</th>
                         <th class="fw-semibold">Status</th>
-                        <th class="fw-semibold">Action</th>
+                        <th class="fw-semibold text-center">Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <td>001</td>
-                    <td>Supplier 1</td>
-                    <td>10000</td>
-                    <td>09/25/25</td>
-                    <td>09/26/25</td>
-                    <td>10/01/25</td>
-                    <td>Delivered</td>
-                    <td></td>
+                    {{-- @if ()
+                    <tr>
+                        <td colspan="6" class="text-center text-secondary py-3">
+                            No supplies available.
+                        </td>
+                    </tr>
+                    @else --}}
+                    {{-- @foreach ( as ) --}}
+                        <td>001</td>
+                        <td>Supplier 1</td>
+                        <td>10000</td>
+                        <td>09/25/25</td>
+                        <td>09/26/25</td>
+                        <td>10/01/25</td>
+                        <td>Delivered</td>
+                        <td>
+                            <div class="d-flex justify-content-center align-items-center gap-2">
+                                <button type="button" class="btn btn-edit-custom btn-md" data-bs-toggle="modal" data-bs-target="#ViewPOItemsModal">
+                                    <i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i>
+                                </button>
+
+                                <form action="" method="POST" class="m-0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-delete-custom btn-md">
+                                        <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    {{-- @endforeach --}}
+                    {{-- @endif --}}
                 </tbody>
             </table>
         </div>
@@ -49,7 +73,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="NewPOModal" tabindex="-1" aria-labelledby="NewPOModalLabel" aria-hidden="true">
+<div class="modal fade" id="ViewPOItemsModal" tabindex="-1" aria-labelledby="NewPOModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-custom">
         <div class="modal-content">
 
