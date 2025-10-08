@@ -1,0 +1,61 @@
+.purchase-order-container {
+    background-color: transparent;
+}
+
+.card {
+    border-radius: 1rem;
+}
+
+.form-control,
+.form-select {
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #60BF4F;
+    box-shadow: 0 0 0 0.2rem rgba(96, 191, 79, 0.15);
+}
+
+.form-section {
+    background-color: #f8f9fa;
+    transition: all 0.2s ease;
+}
+
+.form-section:hover {
+    background-color: #f1f3f4;
+}
+
+.btn-outline-success {
+    border-width: 2px;
+}
+
+.btn-outline-success:hover {
+    background-color: #60BF4F;
+    color: white;
+    border-color: #60BF4F;
+}
+
+label {
+    font-size: 0.9rem;
+}
+
+small.text-danger {
+    font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+    .purchase-order-container .card {
+        padding: 1rem;
+    }
+
+    .form-section {
+        padding: 1rem !important;
+    }
+
+    .btn-outline-success,
+    .btn-success {
+        width: 100%;
+    }
+}

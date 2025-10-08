@@ -9,12 +9,18 @@
     <script defer src="{{ asset('JS/func.js') }}"></script>
 
     <!-- Flaticon uIcons -->
-    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
-    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-straight/css/uicons-regular-straight.css">
+    <link rel="stylesheet"
+        href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link rel="stylesheet"
+        href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-straight/css/uicons-regular-straight.css">
 
     <link rel="stylesheet" href="{{ asset('CSS/style.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ asset('CSS/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/purchaseOrder.css') }}">
+
+
 </head>
 
 <body>
@@ -129,9 +135,7 @@
 
                         <div class="dropdown">
                             <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center dropdown-toggle"
-                                id="profileDropdown"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
+                                id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false"
                                 style="width: 36px; height: 36px; cursor: pointer;">
                                 <span class="fw-semibold small">ST</span>
                             </div>
@@ -140,9 +144,10 @@
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
-                                        <button type="submit" class="btn btn-outline-danger w-75 justify-content-center gap-2">
-                                        <i class="bi bi-box-arrow-right"></i>
-                                        <span>Logout</span></button>
+                                        <button type="submit"
+                                            class="btn btn-outline-danger w-75 justify-content-center gap-2">
+                                            <i class="bi bi-box-arrow-right"></i>
+                                            <span>Logout</span></button>
                                     </form>
                                 </li>
                             </ul>

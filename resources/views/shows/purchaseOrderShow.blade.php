@@ -6,6 +6,7 @@
 
     @section('head', 'Purchase Order')
     @section('name', 'Staff')
+    <link rel="stylesheet" href="{{ asset('CSS/POshow.css') }}">
 
     
         <div class="d-flex align-items-center justify-content-between mb-4">
@@ -15,118 +16,130 @@
             </a>
         </div>
 
-        <div class="row border">
+        <div class="d-flex rounded gap-3">
 
             <div class="col col-3">
 
-                <div class="bg-white rounded border status-Pending">
+                <div class="card-custom p-3">
 
                     <div class="row">
-                        <div class="col col-4">
-                            <p>Status:</p>
-                        </div>
-                        <div class="col col-8">
-                            <p>{{ $poData->status }}</p>
+                        <div class="col-md-12">
+                            
+                            <div class="d-flex flex-column gap-2">
+
+                                <div class="d-flex align-items-center">
+                                    <label class="col-4">Status</label>
+                                    <span class="mx-2">:</span>
+                                    <input type="text" class="form-control col" value="{{ $poData->status }}" readonly>
+                                </div>
+
+                                <div class="d-flex align-items-center">
+                                    <label class="col-4">Submitted Date</label>
+                                    <span class="mx-2">:</span>
+                                    <input type="text" class="form-control col" value="{{ $poData->submitted_date }}" readonly>
+                                </div>
+
+                                <div class="d-flex align-items-center">
+                                    <label class="col-4">Approve Date</label>
+                                    <span class="mx-2">:</span>
+                                    <input type="text" class="form-control col" value="{{ $poData->approved_date }}" readonly>
+                                </div>
+
+                                <div class="d-flex align-items-center">
+                                    <label class="col-4">Delivered Date</label>
+                                    <span class="mx-2">:</span>
+                                    <input type="text" class="form-control col" value="{{ $poData->delivered_date }}" readonly>
+                                </div>
+
+                                <div class="d-flex align-items-center">
+                                    <label class="col-4">Total</label>
+                                    <span class="mx-2">:</span>
+                                    <input type="text" class="form-control col" value="{{ $poItemData->sum('total_amount') }}" readonly>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col col-4">
-                            <p>Submitted Date:</p>
-                        </div>
-                        <div class="col col-8">
-                            <p>{{ $poData->submitted_date }}</p>
-                        </div>
-                    </div>
+                    <hr>
 
-                    <div class="row">
-                        <div class="col col-4">
-                            <p>Approved Date:</p>
-                        </div>
-                        <div class="col col-8">
-                            <p>{{ $poData->approved_date }}</p>
-                        </div>
-                    </div>
+                    <div class="row py-2">
+                        @if($poData->status == 'Pending')
+                            <form action="{{ route('Purchase-Order.update', $poData->id) }}" method="post" class="{{ $poData->status }}">
+                                @csrf
+                                @method('put')
+                                <input type="hidden" name="total" value="{{ $poItemData->sum('total_amount') }}">
+                                <div class="d-flex justify-content-center mt-3">
+                                    <button class="btn btn-approve-custom w-75" type="submit">Approve</button>
+                                </div>
+                            </form>
+                        @endif
 
-                    <div class="row">
-                        <div class="col col-4">
-                            <p>Delivered Date:</p>
-                        </div>
-                        <div class="col col-8">
-                            <p>{{ $poData->delivered_date }}</p>
-                        </div>
-                    </div>
+                        @if($poData->status == 'Approved')
+                            <form action="{{ route('Invoice.store') }}" method="POST" class="{{ $poData->status }}">
+                                @csrf
+                                <div class="d-flex flex-column gap-2">
 
-                    <div class="row">
-                        <div class="col col-4">
-                            <p>Total:</p>
-                        </div>
-                        <div class="col col-8">
-                            <p>{{ $poItemData->sum('total_amount') }}</p>
-
-
-                            @if($poData->status == 'Pending')
-                                <form action="{{ route('Purchase-Order.update', $poData->id) }}" method="post" class="{{ $poData->status }}">
-                                    @csrf
-                                    @method('put')
-                                    <input type="text" name="total" value="{{ $poItemData->sum('total_amount') }}">
-                                    <button type="submit">Approve</button>
-                                </form>
-                            @endif
-
-                            @if($poData->status == 'Approved')
-                                <form action="{{ route('Stock.store') }}" method="POST" class="{{ $poData->status }}">
-                                    @csrf
-                                    <input type="text" placeholder="invoice number" name="inv_num">
-                                    <input type="date" name="inv_date">
-                                    <input type="text" name="total">
-                                    <input type="text" name="po_id" value="{{ $poData->id }}">
-                                    <button type="submit">Delivered</button>
-
-                                </form>
-                            @endif
-
-                            @if($invData)
-                                <div class="row">
-                                    <div class="col col-4">
-                                        <p>Invoice Number:</p>
+                                    <div class="d-flex align-items-center mt-2">
+                                        <label class="col-4">Invoice number</label>
+                                        <span class="mx-2">:</span>
+                                        <input type="text" class="form-control" name="inv_num">
                                     </div>
-                                    <div class="col col-8">
-                                        <p>{{ $invData->invoice_number }}</p>
+
+                                    <div class="d-flex align-items-center mt-2">
+                                        <label class="col-4">Date</label>
+                                        <span class="mx-2">:</span>
+                                        <input type="date" class="form-control my-3" name="inv_date">
+                                    </div>
+
+                                    <div class="d-flex align-items-center mt-2">
+                                        <label class="col-4">Total</label>
+                                        <span class="mx-2">:</span>
+                                        <input type="text" class="form-control" name="total">
+                                        <input type="hidden" name="po_id" value="{{ $poData->id }}">
+                                    </div>
+
+                                    <div class="d-flex justify-content-center mt-2">
+                                        <button class="btn btn-approve-custom w-75" type="submit">Delivered</button>
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col col-4">
-                                        <p>Submitted Date:</p>
-                                    </div>
-                                    <div class="col col-8">
-                                        <p>{{ $invData->invoice_date }}</p>
-                                    </div>
+                            </form>
+                        @endif
+
+                        @if($invData)
+                            <div class="d-flex flex-column gap-2">
+
+                                <div class="d-flex align-items-center mt-2">
+                                    <label class="col-4">Invoice number</label>
+                                    <span class="mx-2">:</span>
+                                    <input type="text" class="form-control" value="{{ $invData->invoice_number }}" readonly>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col col-4">
-                                        <p>Total:</p>
-                                    </div>
-                                    <div class="col col-8">
-                                        <p>{{ $invData->total }}</p>
-                                    </div>
+                                <div class="d-flex align-items-center mt-2">
+                                    <label class="col-4">Submitted Date</label>
+                                    <span class="mx-2">:</span>
+                                    <input type="date" class="form-control my-3" value="{{ $invData->invoice_date }}" readonly>
                                 </div>
-                            @endif
 
-                        </div>
+                                <div class="d-flex align-items-center mt-2">
+                                    <label class="col-4">Total</label>
+                                    <span class="mx-2">:</span>
+                                    <input type="text" class="form-control" value="{{ $invData->total }}" readonly>
+                                </div>
+                            </div>
+
+                        @endif
                     </div>
-
-                    
 
                 </div>
 
             </div>
-            <div class="col col-9">
+            
+            <div class="col col-9 card-custom-2">
 
                 {{-- table --}}
-                <div class="bg-white rounded border overflow-hidden">
+                <div class="bg-white rounded border overflow-hidden" style="min-height: 70vh">
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr class="table-light">

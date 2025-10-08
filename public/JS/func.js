@@ -13,42 +13,72 @@ btnList.forEach(btn => {
 */
 
 // For Po
-if(document.getElementById('add_new')) {
+if (document.getElementById('add_new')) {
+    const addBtn = document.getElementById('add_new');
+    const pasteHere = document.getElementById('pasteHere');
 
-    document.getElementById('add_new').addEventListener('click', () => {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('input-group');
+    const template = `
+        <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold text-secondary">
+                    <i class="bi bi-receipt" style="color:#60BF4F"></i> Item Name
+                </label>
+                <input type="text" name="itemName[]" class="form-control shadow-sm">
+            </div>
 
-        wrapper.innerHTML = `
-            <input type="text" name="itemName[]" placeholder="item name">
-            <input type="number" name="qty[]" placeholder="qty">
-            <input type="text" name="unitPrice[]" placeholder="unitPrice">
-            <input type="text" name="sizeWeigth[]" placeholder="size/weight">
-            <button type="button" class="remove-btn">Remove</button>
-        `;
+            <div class="col-md-2">
+                <label class="form-label fw-semibold text-secondary">
+                    <i class="bi bi-box" style="color:#60BF4F"></i> Quantity
+                </label>
+                <input type="number" name="qty[]" class="form-control shadow-sm">
+            </div>
 
-        document.getElementById('pasteHere').appendChild(wrapper);
+            <div class="col-md-2">
+                <label class="form-label fw-semibold text-secondary">
+                    <i class="bi bi-tag" style="color:#60BF4F"></i> Unit Price
+                </label>
+                <input type="text" name="unitPrice[]" class="form-control shadow-sm">
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-semibold text-secondary">
+                    <i class="bi bi-weight" style="color:#60BF4F"></i> Size/Weight
+                </label>
+                <input type="text" name="sizeWeigth[]" class="form-control shadow-sm">
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="button" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
+                    <i class="bi bi-x-circle"></i> Remove
+                </button>
+            </div>
+        </div>
+    `;
+
+    // Add new row
+    addBtn.addEventListener("click", function () {
+        pasteHere.insertAdjacentHTML("beforeend", template);
     });
 
-    // Event delegation for all remove buttons (even future ones)
-    document.getElementById('pasteHere').addEventListener('click', function(event) {
-        if (event.target && event.target.classList.contains('remove-btn')) {
-            event.target.closest('.input-group').remove();
+    // Remove row (event delegation)
+    pasteHere.addEventListener("click", function (e) {
+        if (e.target.closest(".remove-btn")) {
+            e.target.closest(".form-section").remove();
         }
     });
-
 }
+
 
 
 // For service request
 
 function getQty() {
     var get = document.getElementById('equipment');
-    if (get){
+    if (get) {
         var idData = get.options[get.selectedIndex].value;
         let forQty = idData.slice(idData.indexOf(",") + 1);
         document.getElementById("avail").value = forQty;
-    }else{
+    } else {
         document.getElementById("avail").value = '';
     }
 
@@ -81,7 +111,7 @@ function checkInputEq() {
 
 if (document.getElementById('equipment')){
 
-    document.getElementById('addEquipment').addEventListener('click', function(event) {
+    document.getElementById('addEquipment').addEventListener('click', function (event) {
         if (event.target && event.target.classList.contains('remove-eq')) {
             event.target.closest('.input-group-eq').remove();
         }
@@ -91,11 +121,11 @@ if (document.getElementById('equipment')){
 // for stock 
 function getQtySto() {
     var get = document.getElementById('stock');
-    if (get){
+    if (get) {
         var idData = get.options[get.selectedIndex].value;
         let forQty = idData.slice(idData.indexOf(",") + 1);
         document.getElementById("sto").value = forQty;
-    }else{
+    } else {
         document.getElementById("sto").value = '';
     }
 
@@ -129,7 +159,7 @@ function checkInputSto() {
 
 if (document.getElementById('add_sto')){
 
-    document.getElementById('addStock').addEventListener('click', function(event) {
+    document.getElementById('addStock').addEventListener('click', function (event) {
         if (event.target && event.target.classList.contains('remove-sto')) {
             event.target.closest('.input-group-sto').remove();
         }
@@ -147,7 +177,7 @@ document.getElementById('searchInput').addEventListener('input', function () {
         const qty = row.cells[1].innerText.toLowerCase();
         if (address.includes(filter)) {
             row.style.display = '';
-        } 
+        }
         if (qty.includes(filter)) {
             row.style.display = '';
         } else {
