@@ -10,7 +10,7 @@
         {{-- Header section --}}
         <div class="d-flex align-items-center justify-content-between mb-4">
             <div class="d-flex align-items-center gap-2">
-                <a href="{{ route('purchaseOrder.index') }}" class="text-decoration-none">
+                <a href="{{ route('Purchase-Order.index') }}" class="text-decoration-none">
                     <h4 class="text-dark mb-0 fw-semibold">Purchase Order</h4>
                 </a>
                 <span class="text-muted">></span>
