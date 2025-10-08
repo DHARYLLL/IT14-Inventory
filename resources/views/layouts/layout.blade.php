@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
+    <script defer src="{{ asset('JS/func.js') }}"></script>
 
     <!-- Flaticon uIcons -->
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
@@ -102,7 +103,7 @@
 
                     <div class="d-flex align-items-center gap-3">
                         <button class="btn btn-link text-decoration-none d-flex align-items-center text-dark gap-2">
-                            <span>@yield('name')</span>
+                            <div>@yield('name')</div>
                             <i class="bi bi-chevron-down"></i>
                         </button>
 

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('sizeWeight', 20);
             $table->decimal('unit_price', 5,2);
             $table->decimal('total_amount', 8,2);
-            $table->date('expiry_date')->nullable();
 
             $table->unsignedBigInteger('po_id')->nullable();
             $table->foreign('po_id')->references('id')->on('purchase_orders')->onUpdate('cascade')->nullOnDelete();

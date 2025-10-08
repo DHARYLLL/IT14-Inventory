@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\PurchaseOrderItem;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PurchaseOrderItemRequest;
+use App\Models\PurchaseOrder;
+use App\Models\Stock;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PurchaseOrderItemController extends Controller
@@ -30,10 +33,7 @@ class PurchaseOrderItemController extends Controller
      */
     public function store(PurchaseOrderItemRequest $request)
     {
-        $POItems = $request->validated();
-        PurchaseOrderItem::create($POItems);
-
-        return redirect()->back();
+        //
     }
 
     /**

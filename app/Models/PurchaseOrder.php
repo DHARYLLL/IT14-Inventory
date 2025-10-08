@@ -6,12 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class PurchaseOrder extends Model
 {
+    protected $table = 'purchase_orders';
     protected $fillable = [
-        'supplier'
+        'status',
+        'total_amount',
+        'submitted_date',
+        'approved_date',
+        'delivered_date',
+        'supplier_id',
+        'emp_id'
     ];
 
-    public function items()
-    {
-        return $this->hasMany(PurchaseOrderItem::class);
+    public function poToSup(){
+        return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
+
+    public function poToEmp(){
+        return $this->belongsTo(Employee::class, 'emp_id');
+    }
+
+    public function poToInv(){
+        return $this->belongsTo(Invoice::class, 'po_id');
     }
 }

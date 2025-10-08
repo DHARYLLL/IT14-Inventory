@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->string('invoice_number', 50);
             $table->date('invoice_date');
             $table->decimal('total', 8,2);
 

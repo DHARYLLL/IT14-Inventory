@@ -22,6 +22,8 @@ return new class extends Migration
 
             $table->unsignedBigInteger('package_id')->nullable();
             $table->foreign('package_id')->references('id')->on('packages')->onUpdate('cascade');
+            $table->unsignedBigInteger('emp_id')->nullable();
+            $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();
             
             $table->timestamps();
         });

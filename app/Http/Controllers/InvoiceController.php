@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
+use App\Models\Log;
+use App\Models\PurchaseOrder;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -29,7 +33,29 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Invoice::create([
+            'invoice_number' => $request->inv_num,
+            'invoice_date' => $request->inv_date,
+            'total' => $request->total,
+            'po_id' => $request->po_id
+        ]);
+
+        PurchaseOrder::findOrFail($request->po_id)->update([
+            'status' => 'Delivered',
+            'delivered_date' => Carbon::now()->format('Y-m-d')
+        ]);
+
+        $empId = Employee::orderBy('id','desc')->take(1)->value('id');
+        $invId = Invoice::orderBy('id','desc')->take(1)->value('id');
+
+        Log::create([
+            'action' => 'Create',
+            'from' => 'Created Invoice | ID: ' . $invId,
+            'action_date' => Carbon::now()->format('Y-m-d'),
+            'emp_id' => $empId
+        ]);
+
+        return redirect()->back();
     }
 
     /**

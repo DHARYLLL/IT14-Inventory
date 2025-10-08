@@ -6,10 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class PurchaseOrderItem extends Model
 {
+    protected $table = 'purchase_order_items';
     protected $fillable = [
-        'Item_description',
-        'Quantity',
-        'Unit_price'
+        'item',
+        'qty',
+        'sizeWeight',
+        'unit_price',
+        'total_amount',
+        'expiry_date',
+        'po_id',
+        'stock_id'
     ];
 
     public function purchaseOrder()
