@@ -30,8 +30,8 @@
 
                 @if ($svcReqData->isEmpty())
                     <tr>
-                        <td colspan="3" class="text-center text-secondary py-3">
-                            No Equipment available.
+                        <td colspan="8" class="text-center text-secondary py-3">
+                            No New Service Request.
                         </td>
                     </tr>    
                 @else

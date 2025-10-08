@@ -14,6 +14,7 @@ class ServiceRequest extends Model
         'svc_churchLoc',
         'svc_burialLoc',
         'svc_status',
+        'svc_equipment_status',
         'package_id',
         'emp_id'
     ];

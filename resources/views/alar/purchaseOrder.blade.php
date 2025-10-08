@@ -35,8 +35,8 @@
             <tbody>
                 @if ($poData->isEmpty())
                     <tr>
-                        <td colspan="6" class="text-center text-secondary py-3">
-                            No supplies available.
+                        <td colspan="8" class="text-center text-secondary py-3">
+                            No New Purchase Order.
                         </td>
                     </tr>
                 @else

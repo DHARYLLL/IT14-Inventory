@@ -79,6 +79,19 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col col-6">
+                        <form action="" method="post">
+                            <button class="btn btn-secondary w-100">Retun Equipment</button>
+                        </form>
+                    </div>
+                    <div class="col col-6">
+                        <form action="" method="post">
+                            <button class="btn btn-primary w-100">Complete Service</button>
+                        </form>
+                    </div>
+                </div>
+
 
 
 
