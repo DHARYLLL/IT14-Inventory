@@ -1,19 +1,6 @@
 @extends('layouts.layout')
 @section('title', 'Purchase Order')
 
-<style>
-
-    .form1 .Delivered {
-        display: none;
-    }
-    .form1 .Approved {
-        display: none;
-    }
-    .form2 .Delivered {
-        display: none;
-    }
-
-</style>
 
 @section('content')
 
@@ -77,16 +64,17 @@
                         <div class="col col-8">
                             <p>{{ $poItemData->sum('total_amount') }}</p>
 
-                            <div class="form1">
+
+                            @if($poData->status == 'Pending')
                                 <form action="{{ route('Purchase-Order.update', $poData->id) }}" method="post" class="{{ $poData->status }}">
                                     @csrf
                                     @method('put')
                                     <input type="text" name="total" value="{{ $poItemData->sum('total_amount') }}">
                                     <button type="submit">Approve</button>
                                 </form>
-                            </div>
+                            @endif
 
-                            <div class="form2">
+                            @if($poData->status == 'Approved')
                                 <form action="{{ route('Invoice.store') }}" method="POST" class="{{ $poData->status }}">
                                     @csrf
                                     <input type="text" placeholder="invoice number" name="inv_num">
@@ -96,39 +84,41 @@
                                     <button type="submit">Delivered</button>
 
                                 </form>
-                            </div>
+                            @endif
+
+                            @if($invData)
+                                <div class="row">
+                                    <div class="col col-4">
+                                        <p>Invoice Number:</p>
+                                    </div>
+                                    <div class="col col-8">
+                                        <p>{{ $invData->invoice_number }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col col-4">
+                                        <p>Submitted Date:</p>
+                                    </div>
+                                    <div class="col col-8">
+                                        <p>{{ $invData->invoice_date }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col col-4">
+                                        <p>Total:</p>
+                                    </div>
+                                    <div class="col col-8">
+                                        <p>{{ $invData->total }}</p>
+                                    </div>
+                                </div>
+                            @endif
 
                         </div>
                     </div>
 
-                    @if($invData)
-                        <div class="row">
-                            <div class="col col-4">
-                                <p>Invoice Number:</p>
-                            </div>
-                            <div class="col col-8">
-                                <p>{{ $invData->invoice_number }}</p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col col-4">
-                                <p>Submitted Date:</p>
-                            </div>
-                            <div class="col col-8">
-                                <p>{{ $invData->invoice_date }}</p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col col-4">
-                                <p>Total:</p>
-                            </div>
-                            <div class="col col-8">
-                                <p>{{ $invData->total }}</p>
-                            </div>
-                        </div>
-                    @endif
+                    
 
                 </div>
 
