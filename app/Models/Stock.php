@@ -12,4 +12,8 @@ class Stock extends Model
         'item_qty',
         'size_weight'
     ];
+
+    public function stoToSvcSto(){
+        return $this->hasMany(SvsStock::class, 'stock_id');
+    }
 }

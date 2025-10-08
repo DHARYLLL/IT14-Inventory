@@ -35,7 +35,7 @@
                 <tbody>
                     @if ($poData->isEmpty())
                         <tr>
-                            <td colspan="6" class="text-center text-secondary py-3">
+                            <td colspan="8" class="text-center text-secondary py-3">
                                 No supplies available.
                             </td>
                         </tr>
@@ -84,7 +84,7 @@
             </div>
 
             {{-- Body --}}
-            <form action="{{ route('POItems.store') }}" method="POST">
+            <form action="{{ route('Purchase-Order.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row mb-3">

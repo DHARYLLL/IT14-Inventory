@@ -54,10 +54,11 @@ function getQty() {
 
 }
 
-
-if (document.getElementById('equipment')){
-    document.getElementById('add_eq').addEventListener('click', () => {
-  
+function checkInputEq() {
+    const input = document.getElementById("avail");
+    if (input.value.trim() === "") {
+        alert("Input is empty");
+    } else {
         var get = document.getElementById('equipment');
 
         var nameData = get.options[get.selectedIndex].innerText;
@@ -74,9 +75,11 @@ if (document.getElementById('equipment')){
             <input type="number" name="eqQty[]" placeholder="qty">
             <button type="button" class="remove-eq">Remove</button>
         `;
-
         document.getElementById('addEquipment').appendChild(wrapper);
-    });
+    }
+}
+
+if (document.getElementById('equipment')){
 
     document.getElementById('addEquipment').addEventListener('click', function(event) {
         if (event.target && event.target.classList.contains('remove-eq')) {
@@ -98,9 +101,11 @@ function getQtySto() {
 
 }
 
-if (document.getElementById('add_sto')){
-    document.getElementById('add_sto').addEventListener('click', () => {
-  
+function checkInputSto() {
+    const input = document.getElementById("sto");
+    if (input.value.trim() === "") {
+        alert("Input is empty");
+    } else {
         var get = document.getElementById('stock');
 
         var nameData = get.options[get.selectedIndex].innerText;
@@ -119,7 +124,10 @@ if (document.getElementById('add_sto')){
         `;
 
         document.getElementById('addStock').appendChild(wrapper);
-    });
+    }
+}
+
+if (document.getElementById('add_sto')){
 
     document.getElementById('addStock').addEventListener('click', function(event) {
         if (event.target && event.target.classList.contains('remove-sto')) {

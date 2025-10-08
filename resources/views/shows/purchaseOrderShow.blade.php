@@ -75,7 +75,7 @@
                             @endif
 
                             @if($poData->status == 'Approved')
-                                <form action="{{ route('Invoice.store') }}" method="POST" class="{{ $poData->status }}">
+                                <form action="{{ route('Stock.store') }}" method="POST" class="{{ $poData->status }}">
                                     @csrf
                                     <input type="text" placeholder="invoice number" name="inv_num">
                                     <input type="date" name="inv_date">

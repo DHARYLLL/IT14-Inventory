@@ -7,11 +7,7 @@
 
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h2 class="fw-semibold">Equipments</h2>
-
-        <button class="btn btn-custom d-flex align-items-center gap-2" type="button" data-bs-toggle="modal" data-bs-target="#NewPOModal">
-            <i class="bi bi-plus-lg"></i>
-            <span>Add Supplier</span>
-        </button>
+        <a href="{{ route('Equipment.create') }}" class="btn btn-custom d-flex align-items-center gap-2"><i class="bi bi-plus-lg"></i><span>Add Equipment</span></a>
     </div>
 
     {{-- table --}}
@@ -19,17 +15,36 @@
         <table class="table table-hover mb-0">
             <thead>
                 <tr class="table-light">
-                    <th class="fw-semibold">Item #</th>
-                    <th class="fw-semibold">Item name</th>
-                    <th class="fw-semibold">Item quantity</th>
+                    <th class="fw-semibold">Equipment</th>
+                    <th class="fw-semibold">Available</th>
+                    <th class="fw-semibold">In use</th>
                     <th class="fw-semibold">Action</th>
                 </tr>
             </thead>
 
             <tbody>
-                <td>001</td>
-                <td>Item 1</td>
-                <td>50</td>
+
+                @if ($eqData->isEmpty())
+                    <tr>
+                        <td colspan="4" class="text-center text-secondary py-3">
+                            No Equipment available.
+                        </td>
+                    </tr>    
+                @else
+                    @foreach($eqData as $row)
+                        <tr>
+                            <td>{{ $row->eq_name }}</td>
+                            <td>{{ $row->eq_available }}</td>
+                            <td>{{ $row->eq_in_use }}</td>
+                            <td>
+                                <a href="{{ route('Equipment.show', $row->id) }}">View</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
+
+                
+
             </tbody>
         </table>
     </div>

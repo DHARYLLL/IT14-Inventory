@@ -40,16 +40,16 @@
                     </li>
 
                     <li class="nav-list">
-                        <a href="{{ route('stock.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('stock.*') ? 'active' : '' }}">
+                        <a href="{{ route('Stock.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Stock.*') ? 'active' : '' }}">
                             <i class="bi bi-box-seam"></i>
                             <span>Inventory</span>
                         </a>
                     </li>
 
                     <li class="nav-list">
-                        <a href="{{ route('equipment.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('equipment.*') ? 'active' : '' }}">
+                        <a href="{{ route('Equipment.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Equipment.*') ? 'active' : '' }}">
                             <i class="bi bi-gear"></i>
                             <span>Equipment</span>
                         </a>
@@ -71,10 +71,26 @@
                     </li>
 
                     <li class="nav-list">
-                        <a href="{{ route('purchaseOrder.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('purchaseOrder.*') ? 'active' : '' }}">
+                        <a href="{{ route('Purchase-Order.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Purchase-Order.*') ? 'active' : '' }}">
                             <i class="bi bi-receipt"></i>
                             <span>Purchase Order</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-list">
+                        <a href="{{ route('Service-Request.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Service-Request.*') ? 'active' : '' }}">
+                            <i class="bi bi-receipt"></i>
+                            <span>Service Request</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-list">
+                        <a href="{{ route('Package.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Package.*') ? 'active' : '' }}">
+                            <i class="bi bi-receipt"></i>
+                            <span>Package</span>
                         </a>
                     </li>
                 </ul>

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('item', 100);
             $table->smallInteger('qty');
             $table->string('sizeWeight', 20);
-            $table->decimal('unit_price', 5,2);
+            $table->decimal('unit_price', 8,2);
             $table->decimal('total_amount', 8,2);
 
             $table->unsignedBigInteger('po_id')->nullable();
