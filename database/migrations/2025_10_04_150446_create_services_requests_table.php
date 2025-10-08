@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('svc_wakeLoc', 150);
             $table->string('svc_churchLoc', 150);
             $table->string('svc_burialLoc', 150);
-            $table->string('svc_status', 15);
             $table->string('svc_equipment_status', 15);
 
             $table->unsignedBigInteger('package_id')->nullable();

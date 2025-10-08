@@ -72,25 +72,28 @@
 
                 <div class="row">
                     <div class="col col-4">
-                        <p>status</p>
+                        <p>Equipment status</p>
                     </div>
                     <div class="col col-8">
-                        <p>{{ $svcReqData->svc_status }}</p>
+                        <p>{{ $svcReqData->svc_equipment_status }}</p>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col col-6">
-                        <form action="" method="post">
-                            <button class="btn btn-secondary w-100">Retun Equipment</button>
-                        </form>
+                @if($svcReqData->svc_equipment_status == "Returned")
+                    
+                @else
+                    <div class="row">
+                        <div class="col col-12">
+                            <form action="{{ route('Service-Request.update', $svcReqData->id ) }}" method="post">
+                                @csrf
+                                @method('put')
+                                <button class="btn btn-secondary w-100">Retun Equipment</button>
+                            </form>
+                        </div>
+                    
                     </div>
-                    <div class="col col-6">
-                        <form action="" method="post">
-                            <button class="btn btn-primary w-100">Complete Service</button>
-                        </form>
-                    </div>
-                </div>
+                @endif
+                
 
 
 

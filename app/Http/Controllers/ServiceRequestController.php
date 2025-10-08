@@ -56,7 +56,7 @@ class ServiceRequestController extends Controller
             'svc_wakeLoc' => $request->wakeLoc,
             'svc_churchLoc' => $request->churhcLoc,
             'svc_burialLoc' => $request->burialLoc,
-            'svc_status' => 'Pending',
+            'svc_equipment_status' => 'Not Return',
             'package_id' => $request->package
         ]);
 
@@ -133,9 +133,31 @@ class ServiceRequestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ServiceRequest $serviceRequest)
+    public function update(Request $request, String $id)
     {
-        //
+        $svcEqs = SvsEquipment::where('service_id', '=', $id)->get();
+
+        ServiceRequest::findOrFail($id)->update([
+            'svc_equipment_status' => 'Returned'
+        ]);
+
+        foreach ($svcEqs as $svcEq) {
+            $getEq = Equipment::where('id', '=', $svcEq->equipment_id)->first();
+            Equipment::findOrFail($getEq->id)->update([
+                'eq_available' => $getEq->eq_available + $svcEq->eq_used,
+                'eq_in_use' => $getEq->eq_in_use - $svcEq->eq_used
+            ]);
+        }
+
+        $empId = Employee::orderBy('id','desc')->take(1)->value('id');
+        Log::create([
+            'action' => 'Returned',
+            'from' => 'Returned Equipment from Service Request | ID: ' . $id,
+            'action_date' => Carbon::now()->format('Y-m-d'),
+            'emp_id' => $empId
+        ]);
+
+        return redirect(route('Service-Request.index'));
     }
 
     /**
