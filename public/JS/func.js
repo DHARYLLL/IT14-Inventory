@@ -17,14 +17,43 @@ if(document.getElementById('add_new')) {
 
     document.getElementById('add_new').addEventListener('click', () => {
         const wrapper = document.createElement('div');
-        wrapper.classList.add('input-group');
+        wrapper.classList.add('row');
+        wrapper.classList.add('mb-2');
+        wrapper.classList.add('p-3');
+
 
         wrapper.innerHTML = `
-            <input type="text" name="itemName[]" placeholder="item name">
-            <input type="number" name="qty[]" placeholder="qty">
-            <input type="text" name="unitPrice[]" placeholder="unitPrice">
-            <input type="text" name="sizeWeigth[]" placeholder="size/weight">
-            <button type="button" class="remove-btn">Remove</button>
+            
+            <div class="col-md-4 mb-2">
+                <label for="" class="form-label">
+                    <i class="bi bi-receipt" style="color: #60BF4F"></i> Item Name
+                </label>
+                <input type="text" name="itemName[]" class="form-control">
+            </div>
+            <div class="col-md-2 mb-2">
+                <label class="form-label">
+                    <i class="bi bi-calendar3" style="color: #60BF4F"></i> Quantity
+                </label>
+                <input type="number" name="qty[]" class="form-control">
+            </div>
+            <div class="col-md-2 mb-2">
+                <label class="form-label">
+                    <i class="bi bi-calendar3" style="color: #60BF4F"></i> Unit Price
+                </label>
+                <input type="text" name="unitPrice[]" class="form-control">
+            </div>
+            <div class="col-md-2 mb-2">
+                <label class="form-label">
+                    <i class="bi bi-calendar3" style="color: #60BF4F"></i> size/weight
+                </label>
+                <input type="text" name="sizeWeigth[]" class="form-control">
+            </div>
+
+            <div class="col-md-2 mb-2 d-flex align-items-end">
+                <label class="form-label invisible">Remove</label>
+                <button type="button" id="remove-btn" class="btn remove-btn text-danger border">Remove</button>
+            </div>
+            
         `;
 
         document.getElementById('pasteHere').appendChild(wrapper);
@@ -33,7 +62,7 @@ if(document.getElementById('add_new')) {
     // Event delegation for all remove buttons (even future ones)
     document.getElementById('pasteHere').addEventListener('click', function(event) {
         if (event.target && event.target.classList.contains('remove-btn')) {
-            event.target.closest('.input-group').remove();
+            event.target.closest('.row').remove();
         }
     });
 
