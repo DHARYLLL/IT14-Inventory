@@ -19,7 +19,7 @@
     </div>
 
     {{-- table --}}
-    <div class="bg-white rounded border overflow-hidden">
+    <div class="bg-white rounded border overflow-hidden" style="min-height: 70vh">
         <table class="table table-hover align-middle mb-0">
             <thead>
                 <tr class="table-light">
@@ -148,8 +148,41 @@
                     </div>
                 @endforeach
                 @endif
+                
             </tbody>
+            
         </table>
+
+        {{-- Custom Pagination --}}
+        <div class="d-flex justify-content-center mt-3">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination mb-0">
+                    <li class="page-item {{ $suppliers->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $suppliers->previousPageUrl() ?? '#' }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    @for ($i = 1; $i <= $suppliers->lastPage(); $i++)
+                        <li class="page-item {{ $suppliers->currentPage() == $i ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $suppliers->url($i) }}">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    <li class="page-item {{ $suppliers->currentPage() == $suppliers->lastPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $suppliers->nextPageUrl() ?? '#' }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        {{-- Showing results text --}}
+        <div class="text-center text-secondary mt-2">
+            Showing {{ $suppliers->firstItem() ?? 0 }} to {{ $suppliers->lastItem() ?? 0 }} of {{ $suppliers->total() ?? 0 }} results
+        </div>
+        
     </div>
     
 @endsection

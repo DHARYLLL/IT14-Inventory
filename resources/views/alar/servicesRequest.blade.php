@@ -30,7 +30,7 @@
 
                 @if ($svcReqData->isEmpty())
                     <tr>
-                        <td colspan="3" class="text-center text-secondary py-3">
+                        <td colspan="8" class="text-center text-secondary py-3">
                             No Equipment available.
                         </td>
                     </tr>    

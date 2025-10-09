@@ -26,7 +26,7 @@
 
         {{-- Main Card --}}
         <div class="card border-0 shadow-sm">
-            <div class="card-body">
+            <div class="card-body" style="min-height: 70vh">
                 <form action="{{ route('Purchase-Order.store') }}" method="POST" id="form">
                     @csrf
 
