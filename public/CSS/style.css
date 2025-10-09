@@ -165,3 +165,127 @@
     color: white;
 
 }
+
+/* ===============================
+   Form Add Equipment/Stock Styles
+   =============================== */
+#addEquipment .row,
+#addStock .row {
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid #f2f2f2;
+    padding-bottom: 0.5rem;
+}
+
+input[readonly] {
+    background-color: #f9f9f9 !important;
+}
+
+/* Hover animation for buttons */
+.btn-outline-danger:hover {
+    background-color: #ffebeb;
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.submit-btn {
+    background-color: #60BF4F;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(96, 191, 79, 0.3);
+}
+
+.submit-btn:hover {
+    background-color: #4da73c;
+    transform: scale(1.03);
+    box-shadow: 0 4px 10px rgba(96, 191, 79, 0.4);
+}
+
+.submit-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 1px 4px rgba(96, 191, 79, 0.3);
+}
+
+/* ===============================
+   Add Package Form Styles
+   =============================== */
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-container label {
+    color: #555;
+    font-weight: 600;
+}
+
+.form-container input.form-control {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-container input.form-control:focus {
+    border-color: #60BF4F;
+    box-shadow: 0 0 6px rgba(96, 191, 79, 0.4);
+    outline: none;
+}
+
+.form-container .btn.submit-btn {
+    background-color: #60BF4F;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+/* ===============================
+   Add Package Enumerated Inclusion Styles (Improved)
+   =============================== */
+#inclusion-list .inclusion-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#inclusion-list .number-box {
+    width: 40px;
+    height: 40px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #333;
+    flex-shrink: 0;
+}
+
+#inclusion-list .form-control {
+    flex: 1;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+#inclusion-list .form-control:focus {
+    border-color: #60BF4F;
+    box-shadow: 0 0 6px rgba(96, 191, 79, 0.4);
+}
+
+#inclusion-list .remove-inclusion {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+#inclusion-list .remove-inclusion:hover {
+    background-color: #ffebeb;
+    border-color: #dc3545;
+    transform: scale(1.05);
+}
