@@ -116,8 +116,8 @@
                                 </div>
 
                                 <div class="col-md-2 d-flex align-items-end">
-                                    <button type="button" id="remove-btn"
-                                        class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2">
+                                    <button type="button"
+                                        class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
                                         <i class="bi bi-x-circle"></i> Remove
                                     </button>
                                 </div>

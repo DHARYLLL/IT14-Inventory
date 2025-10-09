@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
@@ -70,6 +71,7 @@ Route::resource('Equipment', EquipmentController::class);
 Route::resource('Service-Request', ServiceRequestController::class);
 Route::resource('Package', PackageController::class);
 Route::resource('Stock', StockController::class);
+Route::resource('Log', LogController::class);
 
 
 // Logout

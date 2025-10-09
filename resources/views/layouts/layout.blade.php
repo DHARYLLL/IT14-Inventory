@@ -70,7 +70,7 @@
                     </li>
 
                     <li class="nav-list">
-                        <a href="#" class="nav-link-custom">
+                        <a href="{{ route('Log.index') }}" class="nav-link-custom {{ request()->routeIs('Log-Order.*') ? 'active' : '' }}">
                             <i class="bi bi-journal-text"></i>
                             <span>Logs</span>
                         </a>
