@@ -26,7 +26,7 @@
                 @if ($stoData->isEmpty())
                     <tr>
                         <td colspan="4" class="text-center text-secondary py-3">
-                            No Equipment available.
+                            No Stcok Item Available.
                         </td>
                     </tr>    
                 @else

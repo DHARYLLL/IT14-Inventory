@@ -26,7 +26,7 @@
                 @if ($pacData->isEmpty())
                     <tr>
                         <td colspan="3" class="text-center text-secondary py-3">
-                            No Equipment available.
+                            No new Package.
                         </td>
                     </tr>    
                 @else

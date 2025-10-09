@@ -36,7 +36,7 @@
                 @if($suppliers->isEmpty())
                 <tr>
                     <td colspan="6" class="text-center text-secondary py-3">
-                        No supplies available.
+                        No New Suppliers.
                     </td>
                 </tr>
                 @else

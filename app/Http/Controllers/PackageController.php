@@ -48,7 +48,7 @@ class PackageController extends Controller
 
         Log::create([
             'action' => 'Added',
-            'from' => 'Added Equipment | ID: ' . $getPkg,
+            'from' => 'Added Package | ID: ' . $getPkg,
             'action_date' => Carbon::now()->format('Y-m-d'),
             'emp_id' => $empId
         ]);

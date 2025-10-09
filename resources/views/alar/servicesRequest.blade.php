@@ -21,7 +21,7 @@
                     <th class="fw-semibold">Wake Loc.</th>
                     <th class="fw-semibold">Church Loc.</th>
                     <th class="fw-semibold">Burial Loc.</th>
-                    <th class="fw-semibold">Status</th>
+                    <th class="fw-semibold">Equipmet</th>
                     <th class="fw-semibold">Action</th>
                 </tr>
             </thead>
@@ -31,7 +31,7 @@
                 @if ($svcReqData->isEmpty())
                     <tr>
                         <td colspan="8" class="text-center text-secondary py-3">
-                            No Equipment available.
+                            No New Service Request.
                         </td>
                     </tr>    
                 @else
@@ -43,7 +43,7 @@
                             <td>{{ $row->svc_wakeLoc }}</td>
                             <td>{{ $row->svc_churchLoc }}</td>
                             <td>{{ $row->svc_burialLoc }}</td>
-                            <td>{{ $row->svc_status }}</td>
+                            <td>{{ $row->svc_equipment_status }}</td>
                             <td>
                                 <a href="{{ route('Service-Request.show', $row->id) }}">View</a>
                             </td>

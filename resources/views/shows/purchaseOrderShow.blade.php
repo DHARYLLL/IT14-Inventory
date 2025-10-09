@@ -76,7 +76,7 @@
                         @endif
 
                         @if($poData->status == 'Approved')
-                            <form action="{{ route('Invoice.store') }}" method="POST" class="{{ $poData->status }}">
+                            <form action="{{ route('Stock.store') }}" method="POST" class="{{ $poData->status }}">
                                 @csrf
                                 <div class="d-flex flex-column gap-2">
 
