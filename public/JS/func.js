@@ -12,7 +12,9 @@ btnList.forEach(btn => {
 //});         
 */
 
-// For Po
+// ===============================
+// For Purchase Order (PO) Section
+// ===============================
 if (document.getElementById('add_new')) {
     const addBtn = document.getElementById('add_new');
     const pasteHere = document.getElementById('pasteHere');
@@ -70,125 +72,160 @@ if (document.getElementById('add_new')) {
 
 
 
-// For service request
+// ===============================
+// For Service Request Section
+// ===============================
+
+// --- EQUIPMENT --- //
 
 function getQty() {
-    var get = document.getElementById('equipment');
-    if (get) {
-        var idData = get.options[get.selectedIndex].value;
-        let forQty = idData.slice(idData.indexOf(",") + 1);
-        document.getElementById("avail").value = forQty;
-    } else {
-        document.getElementById("avail").value = '';
-    }
+    const get = document.getElementById('equipment');
+    const availInput = document.getElementById("avail");
 
+    if (get && availInput) {
+        const idData = get.options[get.selectedIndex].value;
+        const forQty = idData.slice(idData.indexOf(",") + 1);
+        availInput.value = forQty;
+    } else if (availInput) {
+        availInput.value = '';
+    }
 }
 
 function checkInputEq() {
     const input = document.getElementById("avail");
+    const get = document.getElementById('equipment');
+    if (!input || !get) return;
+
     if (input.value.trim() === "") {
         alert("Input is empty");
-    } else {
-        var get = document.getElementById('equipment');
-
-        var nameData = get.options[get.selectedIndex].innerText;
-        var idData = get.options[get.selectedIndex].value;
-
-        let forId = idData.slice(0, idData.indexOf(","));
-
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('input-group-eq');
-
-        wrapper.innerHTML = `
-            <input type="text" name=""  value="` + nameData + `">
-            <input type="text" name="equipment[]" value="`+ forId + `">      
-            <input type="number" name="eqQty[]" placeholder="qty">
-            <button type="button" class="remove-eq">Remove</button>
-        `;
-        document.getElementById('addEquipment').appendChild(wrapper);
+        return;
     }
+
+    const selectedOption = get.options[get.selectedIndex];
+    const nameData = selectedOption.text.trim();
+    const idData = selectedOption.value.split(",")[0];
+
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('row', 'g-2', 'align-items-end', 'mb-2', 'added-item');
+
+    wrapper.innerHTML = `
+        <div class="col-md-6">
+            <label class="form-label fw-semibold text-secondary">Equipment</label>
+            <input type="text" class="form-control" value="${nameData}" readonly>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold text-secondary">Qty</label>
+            <input type="number" class="form-control" name="eqQty[]" placeholder="Qty">
+        </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-outline-danger w-100 remove-eq mt-4">
+                <i class="bi bi-x-circle"></i> Remove
+            </button>
+        </div>
+        <input type="hidden" name="equipment[]" value="${idData}">
+    `;
+
+    document.getElementById('addEquipment').appendChild(wrapper);
 }
 
-if (document.getElementById('equipment')){
-
+// remove equipment row
+if (document.getElementById('addEquipment')) {
     document.getElementById('addEquipment').addEventListener('click', function (event) {
         if (event.target && event.target.classList.contains('remove-eq')) {
-            event.target.closest('.input-group-eq').remove();
+            event.target.closest('.added-item').remove();
         }
     });
 }
 
-// for stock 
-function getQtySto() {
-    var get = document.getElementById('stock');
-    if (get) {
-        var idData = get.options[get.selectedIndex].value;
-        let forQty = idData.slice(idData.indexOf(",") + 1);
-        document.getElementById("sto").value = forQty;
-    } else {
-        document.getElementById("sto").value = '';
-    }
 
+
+// --- STOCK --- //
+
+function getQtySto() {
+    const get = document.getElementById('stock');
+    const stoInput = document.getElementById("sto");
+
+    if (get && stoInput) {
+        const idData = get.options[get.selectedIndex].value;
+        const forQty = idData.slice(idData.indexOf(",") + 1);
+        stoInput.value = forQty;
+    } else if (stoInput) {
+        stoInput.value = '';
+    }
 }
 
 function checkInputSto() {
     const input = document.getElementById("sto");
+    const get = document.getElementById('stock');
+    if (!input || !get) return;
+
     if (input.value.trim() === "") {
         alert("Input is empty");
-    } else {
-        var get = document.getElementById('stock');
-
-        var nameData = get.options[get.selectedIndex].innerText;
-        var idData = get.options[get.selectedIndex].value;
-
-        let forId = idData.slice(0, idData.indexOf(","));
-
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('input-group-sto');
-
-        wrapper.innerHTML = `
-            <input type="text" name=""  value="` + nameData + `">
-            <input type="text" name="stock[]" value="`+ forId + `">      
-            <input type="number" name="stockQty[]" placeholder="Stock Qty">
-            <button type="button" class="remove-sto">Remove</button>
-        `;
-
-        document.getElementById('addStock').appendChild(wrapper);
+        return;
     }
+
+    const selectedOption = get.options[get.selectedIndex];
+    const nameData = selectedOption.text.trim();
+    const idData = selectedOption.value.split(",")[0];
+
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('row', 'g-2', 'align-items-end', 'mb-2', 'added-item');
+
+    wrapper.innerHTML = `
+        <div class="col-md-6">
+            <label class="form-label fw-semibold text-secondary">Stock</label>
+            <input type="text" class="form-control" value="${nameData}" readonly>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold text-secondary">Stock Qty</label>
+            <input type="number" class="form-control" name="stockQty[]" placeholder="Stock Qty">
+        </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-outline-danger w-100 remove-sto mt-4">
+                <i class="bi bi-x-circle"></i> Remove
+            </button>
+        </div>
+        <input type="hidden" name="stock[]" value="${idData}">
+    `;
+
+    document.getElementById('addStock').appendChild(wrapper);
 }
 
-if (document.getElementById('add_sto')){
-
+// remove stock row
+if (document.getElementById('addStock')) {
     document.getElementById('addStock').addEventListener('click', function (event) {
         if (event.target && event.target.classList.contains('remove-sto')) {
-            event.target.closest('.input-group-sto').remove();
+            event.target.closest('.added-item').remove();
         }
     });
 }
 
-// stop
 
-document.getElementById('searchInput').addEventListener('input', function () {
-    const filter = this.value.toLowerCase();
-    const rows = document.querySelectorAll("#tableBody tr");
 
-    rows.forEach(row => {
-        const address = row.cells[0].innerText.toLowerCase();
-        const qty = row.cells[1].innerText.toLowerCase();
-        if (address.includes(filter)) {
-            row.style.display = '';
-        }
-        if (qty.includes(filter)) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
+// ===============================
+// Table Search Filtering
+// ===============================
+const searchInput = document.getElementById('searchInput');
+const clearSearch = document.getElementById('clearSearch');
 
+if (searchInput && clearSearch) {
+    searchInput.addEventListener('input', function () {
+        const filter = this.value.toLowerCase();
+        const rows = document.querySelectorAll("#tableBody tr");
+
+        rows.forEach(row => {
+            const address = row.cells[0].innerText.toLowerCase();
+            const qty = row.cells[1].innerText.toLowerCase();
+            if (address.includes(filter) || qty.includes(filter)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
     });
-});
 
-document.getElementById('clearSearch').addEventListener('click', function () {
-    const searchInput = document.getElementById('searchInput');
-    searchInput.value = '';
-    searchInput.dispatchEvent(new Event('input')); // Trigger the input event to reset the table
-});
+    clearSearch.addEventListener('click', function () {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input')); // reset table
+    });
+}
