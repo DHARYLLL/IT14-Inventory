@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\Invoice;
 use App\Models\Log;
+use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,9 +36,11 @@ class StockController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->qtyArrived , $request->stockId);
         $request->validate([
             'inv_num' => 'required',
             'inv_date' => 'required',
+            'qtyArrived.*' => 'required',
             'total' => 'required|numeric|min:1'
         ], [
             'inv_num.required' => 'This field is required.',
@@ -45,13 +48,14 @@ class StockController extends Controller
             'total.numeric' => 'Number Only.',
             'total.min' => 'Cannot be 0'            
         ]);
+
+        
         
         $items = PurchaseOrderItem::where('po_id', '=', $request->po_id)->get();
         //$stock = stockModel::where()->first;
 
-        $getStock = array();
-        $getStockID = array();
-        $total = array();
+        $getId = $request->stockId;
+        $getArrivedQty = $request->qtyArrived;
 
         Invoice::create([
             'invoice_number' => $request->inv_num,
@@ -59,7 +63,7 @@ class StockController extends Controller
             'total' => $request->total,
             'po_id' => $request->po_id
         ]);
-
+        /*
         foreach($items as $item){
             //array_push($getStock, $item->qty);
             //array_push($getStockID, $item->stock_id);
@@ -68,18 +72,43 @@ class StockController extends Controller
                 'item_qty' => $stock->item_qty + $item->qty
             ]);
         }
+        */
 
-        $empId = Employee::orderBy('id','desc')->take(1)->value('id');
+        for ($i=0; $i < count($getId); $i++) { 
+            $stock = Stock::where('id', '=', $getId[$i])->first();
+            Stock::findOrFail($stock->id)->update([
+                'item_qty' => $stock->item_qty + $getArrivedQty[$i]
+            ]);
+            PurchaseOrderItem::where('stock_id', '=' , $getId[$i])->update([
+                'qty_arrived' => $getArrivedQty[$i]
+            ]);
+
+        }
+
+
+        PurchaseOrder::findOrFail($request->po_id)->update([
+            'status' => "Delivered",
+            'delivered_date' => $request->inv_date
+        ]);
+
         $invId = Invoice::orderBy('id','desc')->take(1)->value('id');
 
         Log::create([
             'action' => 'Create',
             'from' => 'Created Invoice | ID: ' . $invId,
             'action_date' => Carbon::now()->format('Y-m-d'),
-            'emp_id' => $empId
+            'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Stock.index'));
+        Log::create([
+            'action' => 'Added',
+            'from' => 'Added Stock from Po | ID: ' . $request->po_id,
+            'action_date' => Carbon::now()->format('Y-m-d'),
+            'emp_id' => session('loginId')
+        ]);
+
+        //return redirect(route('Stock.index'));
+        return redirect()->back();
     }
 
     /**

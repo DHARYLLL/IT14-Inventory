@@ -26,4 +26,8 @@ class Employee extends Model
         return $this->hasMany(ServiceRequest::class, 'emp_id');
     }
 
+    public function empToLog(){
+        return $this->hasMany(Log::class, 'emp_id');
+    }
+
 }

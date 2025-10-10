@@ -13,4 +13,8 @@ class Log extends Model
         'action_date',
         'emp_id'
     ];
+
+    public function logToEmp(){
+        return $this->belongsTo(Employee::class, 'emp_id');
+    }
 }

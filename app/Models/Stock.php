@@ -10,7 +10,8 @@ class Stock extends Model
     protected $fillable = [
         'item_name',
         'item_qty',
-        'size_weight'
+        'size_weight',
+        'item_unit_price'
     ];
 
     public function stoToSvcSto(){

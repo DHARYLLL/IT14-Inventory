@@ -6,12 +6,13 @@
     @section('head', 'Supplier')
     @section('name', 'Staff')
 
-    <div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex align-items-center justify-content-end mb-4">
+        {{--
         <div class="search-input position-relative" style="width: 400px">
             <i class="bi bi-search search-icon"></i>
             <input type="search" placeholder="Search" class="form-control">
         </div>
-
+        --}}
         <button class="btn btn-custom d-flex align-items-center gap-2" type="button" data-bs-toggle="modal" data-bs-target="#NewSupplierModal">
             <i class="bi bi-plus-lg"></i>
             <span>Add Supplier</span>
@@ -20,7 +21,7 @@
 
     {{-- table --}}
     <div class="bg-white rounded border overflow-hidden" style="min-height: 70vh">
-        <table class="table table-hover align-middle mb-0">
+        <table class="table table-hover align-middle mb-0" >
             <thead>
                 <tr class="table-light">
                     <th class="fw-semibold">Supplier #</th>

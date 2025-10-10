@@ -30,8 +30,9 @@ class PurchaseOrderController extends Controller
      */
     public function create()
     {
+        $stoData = Stock::all();
         $supData = Supplier::all();
-        return view('functions/poItemsAdd', ['supData' => $supData]);
+        return view('functions/poItemsAdd', ['supData' => $supData, 'stoData' => $stoData]);
     }
 
     /**
@@ -57,13 +58,14 @@ class PurchaseOrderController extends Controller
             'supp.required' => "This field is required."
         ]);
 
-        $item = $request -> itemName;
+
         $qty = $request -> qty;
         $unitPrice = $request -> unitPrice;
+        $item = $request -> itemName;
         $sizeWeight = $request -> sizeWeigth;
 
         $newItems = array();
-        $newQty = array();
+        $newUnitPrice = array();
         $newsizeWeight = array();
         //dd(stockModel::where('item_name', '=', $item[0])->get());
 
@@ -74,8 +76,8 @@ class PurchaseOrderController extends Controller
         for ($i=0; $i < count($item) ; $i++) {     
             if (!Stock::where('item_name', '=', $item[$i])->where('size_weight', '=', $sizeWeight[$i])->first()){        
                 array_push($newItems, $item[$i]);
-                array_push($newQty, $qty[$i]);
                 array_push($newsizeWeight, $sizeWeight[$i]);
+                array_push($newUnitPrice, $unitPrice[$i]);
             }
         }
         
@@ -85,7 +87,8 @@ class PurchaseOrderController extends Controller
                 Stock::create([
                     'item_name' => $newItems[$i],
                     'item_qty' => 0,
-                    'size_weight' => $newsizeWeight[$i]
+                    'size_weight' => $newsizeWeight[$i],
+                    'item_unit_price' => $newUnitPrice[$i]
                 ]);
             }
         }
@@ -120,7 +123,7 @@ class PurchaseOrderController extends Controller
             'action' => 'Create',
             'from' => 'Created Purchase Order | ID: ' . $po,
             'action_date' => Carbon::now()->format('Y-m-d'),
-            'emp_id' => $empId
+            'emp_id' => session('loginId')
         ]);
 
         return redirect(route('Purchase-Order.index'));
@@ -162,7 +165,7 @@ class PurchaseOrderController extends Controller
             'action' => 'Approved',
             'from' => 'Approved Purchase Order | ID: ' . $id,
             'action_date' => Carbon::now()->format('Y-m-d'),
-            'emp_id' => $empId
+            'emp_id' => session('loginId')
         ]);
 
         return redirect()->back();

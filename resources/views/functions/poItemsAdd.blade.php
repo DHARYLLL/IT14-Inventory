@@ -16,12 +16,6 @@
                 <span class="text-muted">></span>
                 <p class="mb-0 text-secondary fw-medium">Create Purchase Order</p>
             </div>
-
-            <button class="btn btn-success d-flex align-items-center gap-2 shadow-sm" type="button" data-bs-toggle="modal"
-                data-bs-target="#NewSupplierModal">
-                <i class="bi bi-plus-lg"></i>
-                <span>Add Supplier</span>
-            </button>
         </div>
 
         {{-- Main Card --}}
@@ -57,6 +51,18 @@
                                 <i class="bi bi-send"></i> Submit
                             </button>
                         </div>
+
+                        <div>
+                            <select class="form-select" name="" id="select_stock">
+                                <option selected disabled>Select Item</option>
+                                @foreach($stoData as $row)
+                                    <option value="{{ $row->item_name }},{{ $row->item_unit_price }}:{{ $row->size_weight }}">{{ $row->item_name }} {{ $row->size_weight }}: {{ $row->item_qty }}</option>
+                                @endforeach
+                            </select>
+                            <button class="btn btn-outline-success" type="button" onclick="setStock()">
+                                <i class="bi bi-plus-circle"></i> Add More
+                            </button>
+                        </div>
                     </div>
 
                     {{-- Dynamic input fields --}}
@@ -69,17 +75,18 @@
                         @endphp
 
                         @foreach ($oldItems as $i => $item)
+                            
                             <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
 
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-secondary">
                                         <i class="bi bi-receipt text-success"></i> Item Name
-                                    </label>
+                                    </label>  
                                     <input type="text" name="itemName[]" value="{{ $item }}"
                                         class="form-control shadow-sm">
                                     @error("itemName.$i")
                                         <small class="text-danger">{{ $message }}</small>
-                                    @enderror
+                                    @enderror              
                                 </div>
 
                                 <div class="col-md-2">

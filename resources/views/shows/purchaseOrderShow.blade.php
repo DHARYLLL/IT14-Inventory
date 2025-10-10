@@ -75,37 +75,7 @@
                             </form>
                         @endif
 
-                        @if($poData->status == 'Approved')
-                            <form action="{{ route('Stock.store') }}" method="POST" class="{{ $poData->status }}">
-                                @csrf
-                                <div class="d-flex flex-column gap-2">
-
-                                    <div class="d-flex align-items-center mt-2">
-                                        <label class="col-4">Invoice number</label>
-                                        <span class="mx-2">:</span>
-                                        <input type="text" class="form-control" name="inv_num">
-                                    </div>
-
-                                    <div class="d-flex align-items-center mt-2">
-                                        <label class="col-4">Date</label>
-                                        <span class="mx-2">:</span>
-                                        <input type="date" class="form-control my-3" name="inv_date">
-                                    </div>
-
-                                    <div class="d-flex align-items-center mt-2">
-                                        <label class="col-4">Total</label>
-                                        <span class="mx-2">:</span>
-                                        <input type="text" class="form-control" name="total">
-                                        <input type="hidden" name="po_id" value="{{ $poData->id }}">
-                                    </div>
-
-                                    <div class="d-flex justify-content-center mt-2">
-                                        <button class="btn btn-approve-custom w-75" type="submit">Delivered</button>
-                                    </div>
-                                </div>
-
-                            </form>
-                        @endif
+                        
 
                         @if($invData)
                             <div class="d-flex flex-column gap-2">
@@ -138,41 +108,134 @@
             
             <div class="col col-9 card-custom-2">
 
-                {{-- table --}}
-                <div class="bg-white rounded border overflow-hidden" style="min-height: 70vh">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr class="table-light">
-                                <th class="fw-semibold">Item Name</th>
-                                <th class="fw-semibold">Qty</th>
-                                <th class="fw-semibold">Size/Weight</th>
-                                <th class="fw-semibold">Unit Price</th>
-                                <th class="fw-semibold">Total Amount</th>
-                            </tr>
-                        </thead>
 
-                        <tbody>
-                            @if ($poItemData->isEmpty())
-                                <tr>
-                                    <td colspan="6" class="text-center text-secondary py-3">
-                                        No supplies available.
-                                    </td>
-                                </tr>
-                            @else
-                                @foreach ($poItemData as $row)
-                                    <tr>
-                                        <td>{{ $row->item }}</td>
-                                        <td>{{ $row->qty }}</td>
-                                        <td>{{ $row->sizeWeight }}</td>
-                                        <td>{{ $row->unit_price }}</td>
-                                        <td>{{ $row->total_amount }}</td>
+                @if($poData->status == 'Approved')
+                    
+                    <form action="{{ route('Stock.store') }}" method="POST" class="{{ $poData->status }}">
+                        @csrf
+
+                        {{-- table --}}
+                        <div class="bg-white rounded border overflow-hidden" style="min-height: 70vh">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr class="table-light">
+                                        <th class="fw-semibold">Item Name</th>
+                                        <th class="fw-semibold">Qty</th>
+                                        <th class="fw-semibold">Size/Weight</th>
+                                        <th class="fw-semibold">Unit Price</th>
+                                        <th class="fw-semibold">Total Amount</th>
+                                        @if($poData->status == 'Approved')
+                                            <th class="fw-semibold">Qty Arrived</th>
+                                        @endif
                                     </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                                </thead>
 
+                                <tbody>
+                                    @if ($poItemData->isEmpty())
+                                        <tr>
+                                            <td colspan="6" class="text-center text-secondary py-3">
+                                                No supplies available.
+                                            </td>
+                                        </tr>
+                                    @else
+                                        @foreach ($poItemData as $row)
+                                            <tr>
+                                                <td>{{ $row->item }} 
+                                                    <input type="text" name="stockId[]" value="{{ $row->stock_id }}">
+                                                </td>
+                                                <td>{{ $row->qty }}</td>
+                                                <td>{{ $row->sizeWeight }}</td>
+                                                <td>{{ $row->unit_price }}</td>
+                                                <td>{{ $row->total_amount }}</td>
+                                                @if($poData->status == 'Approved')
+                                                    <td>
+                                                        <input type="number" name="qtyArrived[]" placeholder="Qty Arrived">
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+    
+                        <div class="d-flex flex-column gap-2">
+
+                            <div class="d-flex align-items-center mt-2">
+                                <label class="col-4">Invoice number</label>
+                                <span class="mx-2">:</span>
+                                <input type="text" class="form-control" name="inv_num">
+                            </div>
+
+                            <div class="d-flex align-items-center mt-2">
+                                <label class="col-4">Date</label>
+                                <span class="mx-2">:</span>
+                                <input type="date" class="form-control my-3" name="inv_date">
+                            </div>
+
+                            <div class="d-flex align-items-center mt-2">
+                                <label class="col-4">Total</label>
+                                <span class="mx-2">:</span>
+                                <input type="text" class="form-control" name="total">
+                                <input type="hidden" name="po_id" value="{{ $poData->id }}">
+                            </div>
+
+                            <div class="d-flex justify-content-center mt-2">
+                                <button class="btn btn-approve-custom w-75" type="submit">Delivered</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                @else
+                    
+                    {{-- table --}}
+                    <div class="bg-white rounded border overflow-hidden" style="min-height: 70vh">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr class="table-light">
+                                    <th class="fw-semibold">Item Name</th>
+                                    <th class="fw-semibold">Qty</th>
+                                    <th class="fw-semibold">Size/Weight</th>
+                                    <th class="fw-semibold">Unit Price</th>
+                                    <th class="fw-semibold">Total Amount</th>
+                                    @if($poData->status == 'Delivered')
+                                        <th class="fw-semibold">Qty Arrived</th>
+                                    @endif
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if ($poItemData->isEmpty())
+                                    <tr>
+                                        <td colspan="6" class="text-center text-secondary py-3">
+                                            No supplies available.
+                                        </td>
+                                    </tr>
+                                @else
+                                    @foreach ($poItemData as $row)
+                                        <tr>
+                                            <td>{{ $row->item }}</td>
+                                            <td>{{ $row->qty }}</td>
+                                            <td>{{ $row->sizeWeight }}</td>
+                                            <td>{{ $row->unit_price }}</td>
+                                            <td>{{ $row->total_amount }}</td>
+                                            @if($poData->status == 'Delivered')
+                                                <td>
+                                                    {{ $row->qty_arrived }}
+                                                </td>
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+
+                @endif
+                
+ 
+                
             </div>
 
 

@@ -51,8 +51,8 @@
                             <td>{{ $row->status }}</td>
                             <td>
                                 <div class="d-flex justify-content-center align-items-center gap-2">
-                                    <a href="{{ route('Purchase-Order.show', $row->id) }}" class="btn btn-edit-custom btn-md"><i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>
-                                    
+                                    <a href="{{ route('Purchase-Order.show', $row->id) }}" class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>
+                                    {{--
                                     <form action="" method="POST" class="m-0">
                                         @csrf
                                         @method('DELETE')
@@ -60,6 +60,7 @@
                                             <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
                                         </button>
                                     </form>
+                                    --}}
                                 </div>
                             </td>
                         </tr>

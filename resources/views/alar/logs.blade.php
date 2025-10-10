@@ -26,7 +26,7 @@
 
                 @if ($logData->isEmpty())
                     <tr>
-                        <td colspan="4" class="text-center text-secondary py-3">
+                        <td colspan="5" class="text-center text-secondary py-3">
                             No Recent Activity.
                         </td>
                     </tr>    
@@ -37,7 +37,7 @@
                             <td>{{ $row->action }}</td>
                             <td>{{ $row->from }}</td>
                             <td>{{ $row->action_date }}</td>
-                            <td>{{ $row->emp_id }}</td>
+                            <td>{{ $row->logToEmp->emp_fname }} {{ $row->logToEmp->emp_mname }} {{ $row->logToEmp->emp_lname }}</td>
                         </tr>
                     @endforeach
                 @endif

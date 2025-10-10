@@ -275,7 +275,7 @@ body {
 .input-group i {
     position: absolute;
     left: 15px;
-    top: 50%;
+    top: 40%;
     transform: translateY(-50%);
     color: #7f8c8d;
 }

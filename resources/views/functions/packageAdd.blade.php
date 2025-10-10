@@ -34,20 +34,23 @@
                 <div class="d-flex align-items-center mb-2 inclusion-item gap-2">
                     <div class="number-box d-flex align-items-center justify-content-center rounded bg-light border"
                         style="width: 38px; height: 38px; font-weight: 500;">1</div>
-                    <input type="text" name="pkg_inclusion[]" class="form-control"
+                    <input type="text" name="pkg_inclusion" class="form-control"
                         placeholder="Enter inclusion item">
+                    {{--
                     <button type="button"
                         class="btn btn-outline-danger d-flex align-items-center justify-content-center remove-inclusion"
                         style="width: 38px; height: 38px;">
                         <i class="bi bi-trash"></i>
                     </button>
+                    --}}
                 </div>
             </div>
 
-
+            {{--
             <button type="button" class="btn btn-outline-success mt-2" id="add-inclusion">
                 <i class="bi bi-plus-circle"></i> Add More
             </button>
+            --}}
         </div>
 
         {{-- Submit Button --}}

@@ -13,7 +13,7 @@ class PurchaseOrderItem extends Model
         'sizeWeight',
         'unit_price',
         'total_amount',
-        'expiry_date',
+        'qty_arrived',
         'po_id',
         'stock_id'
     ];

@@ -16,9 +16,10 @@
             <thead>
                 <tr class="table-light">
                     <th class="fw-semibold">Item #</th>
-                    <th class="fw-semibold">Item name</th>
+                    <th class="fw-semibold">Item name</th>          
+                    <th class="fw-semibold">Size/Weight</th>
                     <th class="fw-semibold">Item quantity</th>
-                    <th class="fw-semibold">Action</th>
+                    <th class="fw-semibold">Unit Price</th>
                 </tr>
             </thead>
 
@@ -32,12 +33,11 @@
                 @else
                     @foreach($stoData as $row)
                         <tr>
+                            <td>{{ $row->id }}</td>
                             <td>{{ $row->item_name }}</td>
-                            <td>{{ $row->item_qty }}</td>
                             <td>{{ $row->size_weight }}</td>
-                            <td>
-                                <a href="">View</a>
-                            </td>
+                            <td>{{ $row->item_qty }}</td>
+                            <td>{{ $row->item_unit_price }}</td>
                         </tr>
                     @endforeach
                 @endif

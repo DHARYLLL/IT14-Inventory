@@ -24,7 +24,7 @@
             <select name="package" id="package" class="form-select">
                 <option value="">Select Package</option>
                 @foreach ($pkgData as $data)
-                    <option value="{{ $data->id }}">{{ $data->id }} — {{ $data->pkg_name }}</option>
+                    <option value="{{ $data->id }}">{{ $data->pkg_name }}</option>
                 @endforeach
             </select>
             @error('package')

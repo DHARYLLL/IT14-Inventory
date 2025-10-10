@@ -15,7 +15,7 @@
             <h1 class="welcome-text">Sign In</h1>
             <p class="subtitle">Enter your credentials to access your account</p>
 
-            <form method="POST" action="{{ route('login.post') }}">
+            <form method="POST" action="{{ route('login') }}">
                 @csrf
 
                 <div class="input-group">
@@ -43,11 +43,11 @@
 
             <div class="signup-link">
                 Don’t have an account?
-                <a href="{{ route('register') }}">Sign up now</a>
+                <a href="{{-- route('register') --}}">Sign up now</a>
             </div>
         </div>
     </div>
-
+{{--
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.querySelector('.login-form');
@@ -73,5 +73,6 @@
             });
         });
     </script>
+--}}
 </body>
 

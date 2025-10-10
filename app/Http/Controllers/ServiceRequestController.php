@@ -98,13 +98,13 @@ class ServiceRequestController extends Controller
             ]);
         }
 
-        $empId = Employee::orderBy('id','desc')->take(1)->value('id');
+        //$empId = Employee::orderBy('id','desc')->take(1)->value('id');
 
         Log::create([
             'action' => 'Create',
             'from' => 'Created Service Request | ID: ' . $getId,
             'action_date' => Carbon::now()->format('Y-m-d'),
-            'emp_id' => $empId
+            'emp_id' => session('loginId')
         ]);
         
 
@@ -149,12 +149,12 @@ class ServiceRequestController extends Controller
             ]);
         }
 
-        $empId = Employee::orderBy('id','desc')->take(1)->value('id');
+        //$empId = Employee::orderBy('id','desc')->take(1)->value('id');
         Log::create([
             'action' => 'Returned',
             'from' => 'Returned Equipment from Service Request | ID: ' . $id,
             'action_date' => Carbon::now()->format('Y-m-d'),
-            'emp_id' => $empId
+            'emp_id' => session('loginId')
         ]);
 
         return redirect(route('Service-Request.index'));

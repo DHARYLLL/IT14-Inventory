@@ -71,6 +71,90 @@ if (document.getElementById('add_new')) {
 }
 
 
+// get stock
+
+function setStock() {
+    var get = document.getElementById('select_stock');
+    if (get){
+        var idData = get.options[get.selectedIndex].value;
+        let forName = idData.slice(0, idData.indexOf(","));
+        let forUnitPrice = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
+        let forSizeWeight = idData.slice(idData.indexOf(":") + 1);
+        //document.getElementById("itemName").value = forQty;
+
+        //const addBtn = document.getElementById('add_new');
+        const pasteHere = document.getElementById('pasteHere');
+
+        const template = `
+            <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold text-secondary">
+                        <i class="bi bi-receipt" style="color:#60BF4F"></i> Item Name
+                    </label>
+                    <input type="text" name="itemName[]" class="form-control shadow-sm" value="${forName}" readonly>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold text-secondary">
+                        <i class="bi bi-box" style="color:#60BF4F"></i> Quantity
+                    </label>
+                    <input type="number" name="qty[]" class="form-control shadow-sm">
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold text-secondary">
+                        <i class="bi bi-tag" style="color:#60BF4F"></i> Unit Price
+                    </label>
+                    <input type="text" name="unitPrice[]" class="form-control shadow-sm" value="${forUnitPrice}" readonly>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold text-secondary">
+                        <i class="bi bi-weight" style="color:#60BF4F"></i> Size/Weight
+                    </label>
+                    <input type="text" name="sizeWeigth[]" class="form-control shadow-sm" value="${forSizeWeight}" readonly>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
+                        <i class="bi bi-x-circle"></i> Remove
+                    </button>
+                </div>
+            </div>
+        `;
+
+        pasteHere.insertAdjacentHTML("beforeend", template);
+
+    }else{
+        document.getElementById("itemName").value = '';
+    }
+
+}
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize tooltips globally
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Reinitialize tooltips each time a modal is shown (fix for modals and dynamic content)
+    // document.addEventListener('shown.bs.modal', function () {
+    //     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    //     tooltipTriggerList.map(function (tooltipTriggerEl) {
+    //         return new bootstrap.Tooltip(tooltipTriggerEl);
+    //     });
+    // });
+});
+
 
 // ===============================
 // For Service Request Section

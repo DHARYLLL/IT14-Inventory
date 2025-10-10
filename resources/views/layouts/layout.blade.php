@@ -49,7 +49,7 @@
                         <a href="{{ route('Stock.index') }}"
                             class="nav-link-custom {{ request()->routeIs('Stock.*') ? 'active' : '' }}">
                             <i class="bi bi-box-seam"></i>
-                            <span>Inventory</span>
+                            <span>Stock</span>
                         </a>
                     </li>
 
@@ -70,7 +70,7 @@
                     </li>
 
                     <li class="nav-list">
-                        <a href="{{ route('Log.index') }}" class="nav-link-custom {{ request()->routeIs('Log-Order.*') ? 'active' : '' }}">
+                        <a href="{{ route('Log.index') }}" class="nav-link-custom {{ request()->routeIs('Log.*') ? 'active' : '' }}">
                             <i class="bi bi-journal-text"></i>
                             <span>Logs</span>
                         </a>
@@ -124,6 +124,7 @@
                     </div>
 
                     <div class="d-flex align-items-center gap-3">
+                        {{--
                         <button class="btn btn-link text-decoration-none d-flex align-items-center text-dark gap-2">
                             <div>@yield('name')</div>
                             <i class="bi bi-chevron-down"></i>
@@ -132,7 +133,7 @@
                         <button class="btn btn-link text-dark p-2">
                             <i class="bi bi-bell fs-5"></i>
                         </button>
-
+                        --}}
                         <div class="dropdown">
                             <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center dropdown-toggle"
                                 id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false"

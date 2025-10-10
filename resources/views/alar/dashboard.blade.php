@@ -77,7 +77,7 @@
                 </div>
 
                 <!-- Purchase Order Summary -->
-                <div class="col-md-12">
+                {{-- <div class="col-md-12">
                     <div class="dashboard-box">
                         <h5>Purchase Order Summary</h5>
                         <table class="table table-borderless table-hover placeholder-table">
@@ -94,7 +94,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
         </div>

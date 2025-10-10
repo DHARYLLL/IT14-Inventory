@@ -36,7 +36,7 @@
                         <td>{{ $row->pkg_name }}</td>
                         <td>{{ $row->pkg_inclusion }}</td>
                         <td>
-                            <a href="{{ route('Equipment.show', $row->id) }}">View</a>
+                            <a href="{{ route('Equipment.show', $row->id) }}" class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>
                         </td>
                     </tr>
                 @endforeach

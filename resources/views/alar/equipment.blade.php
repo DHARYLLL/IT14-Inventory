@@ -37,7 +37,7 @@
                             <td>{{ $row->eq_available }}</td>
                             <td>{{ $row->eq_in_use }}</td>
                             <td>
-                                <a href="{{ route('Equipment.show', $row->id) }}">View</a>
+                                <a href="{{ route('Equipment.show', $row->id) }}" class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>
                             </td>
                         </tr>
                     @endforeach
