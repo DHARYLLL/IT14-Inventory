@@ -2,13 +2,14 @@
 @section('title', 'Equipments')
 
 @section('content')
-@section('head', 'Packages')
+@section('head', 'Show Packages')
 @section('name', 'Staff')
 
 <div class="d-flex align-items-center justify-content-between mb-4">
-    <h2 class="fw-semibold">Packages</h2>
-    <a href="{{ route('Package.create') }}" class="btn btn-custom d-flex align-items-center gap-2"><i
-            class="bi bi-plus-lg"></i><span>Add Package</span></a>
+    <h2 class="fw-semibold">Show Packages</h2>
+    <a href="{{ route('Package.index') }}" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+        <i class="bi bi-arrow-left-circle"></i> <span>Back</span>
+    </a>
 </div>
 
 {{-- table --}}
@@ -16,25 +17,25 @@
     <table class="table table-hover mb-0">
         <thead>
             <tr class="table-light">
-                <th class="fw-semibold">Package</th>
+                <th class="fw-semibold">Inclusion</th>
                 <th class="fw-semibold">Action</th>
             </tr>
         </thead>
 
         <tbody>
 
-            @if ($pacData->isEmpty())
+            @if ($pckIncData->isEmpty())
                 <tr>
                     <td colspan="3" class="text-center text-secondary py-3">
                         No new Package.
                     </td>
                 </tr>
             @else
-                @foreach ($pacData as $row)
+                @foreach ($pckIncData as $row)
                     <tr>
-                        <td>{{ $row->pkg_name }}</td>
+                        <td>{{ $row->pkg_inclusion }}</td>
                         <td>
-                            <a href="{{ route('Package.show', $row->id) }}" class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>
+                            hellos
                         </td>
                     </tr>
                 @endforeach

@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Employee;
+use App\Models\Equipment;
 use App\Models\Package;
+use App\Models\packageInclusion;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
 use App\Models\Stock;
@@ -64,19 +66,19 @@ class fakeDataSeeder extends Seeder
             'item_name' => 'Candle',
             'item_qty' => 0,
             'size_weight' => 'Large',
-            'item_unit_price' => 0
+            'item_unit_price' => 10
         ]);
         Stock::create([
             'item_name' => 'Candle',
             'item_qty' => 0,
             'size_weight' => 'Medium',
-            'item_unit_price' => 0
+            'item_unit_price' => 10
         ]);
         Stock::create([
             'item_name' => 'Candle',
             'item_qty' => 0,
             'size_weight' => 'Small',
-            'item_unit_price' => 0
+            'item_unit_price' => 10
         ]);
 
         PurchaseOrderItem::create([
@@ -105,6 +107,69 @@ class fakeDataSeeder extends Seeder
             'total_amount' => 30,
             'po_id' => 1,
             'stock_id' => 3
+        ]);
+
+        Package::create([
+            'pkg_name' => 'MOA'
+        ]);
+        packageInclusion::create([
+            'pkg_inclusion' => '15K inclusion',
+            'package_id' => 1
+        ]);
+        packageInclusion::create([
+            'pkg_inclusion' => 'Free 1/2 sack rice',
+            'package_id' => 1
+        ]);
+        packageInclusion::create([
+            'pkg_inclusion' => 'Tarpauline',
+            'package_id' => 1
+        ]);
+        packageInclusion::create([
+            'pkg_inclusion' => 'Flower stand',
+            'package_id' => 1
+        ]);
+        packageInclusion::create([
+            'pkg_inclusion' => 'Coffee',
+            'package_id' => 1
+        ]);
+        packageInclusion::create([
+            'pkg_inclusion' => 'Sugar',
+            'package_id' => 1
+        ]);
+        packageInclusion::create([
+            'pkg_inclusion' => 'Biscuit',
+            'package_id' => 1
+        ]);
+        packageInclusion::create([
+            'pkg_inclusion' => 'Tombstone',
+            'package_id' => 1
+        ]);
+
+
+        Equipment::create([
+            'eq_name' => 'Candelabra (gold)',
+            'eq_available' => 10,
+            'eq_in_use' => 0
+        ]);
+        Equipment::create([
+            'eq_name' => 'Candelabra (silver)',
+            'eq_available' => 10,
+            'eq_in_use' => 0
+        ]);
+        Equipment::create([
+            'eq_name' => 'Casket stand',
+            'eq_available' => 10,
+            'eq_in_use' => 0
+        ]);
+        Equipment::create([
+            'eq_name' => 'Flower stand',
+            'eq_available' => 10,
+            'eq_in_use' => 0
+        ]);
+        Equipment::create([
+            'eq_name' => 'Tarpauline',
+            'eq_available' => 10,
+            'eq_in_use' => 0
         ]);
     }
 }

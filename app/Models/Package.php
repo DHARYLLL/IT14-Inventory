@@ -16,4 +16,7 @@ class Package extends Model
         return $this->hasMany(ServiceRequest::class, 'package_id');
     }
 
+    public function pkgToPkgInc(){
+        return $this->hasMany(packageInclusion::class , 'package_id');
+    }
 }

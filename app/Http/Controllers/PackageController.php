@@ -6,8 +6,10 @@ use App\Models\Package;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\Log;
+use App\Models\packageInclusion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\Cast\String_;
 
 class PackageController extends Controller
 {
@@ -35,33 +37,43 @@ class PackageController extends Controller
     {
         $request->validate([
             'pkg_name' => 'required|unique:packages,pkg_name',
-            'pkg_inclusion' => 'required'
+            'pkg_inclusion.*' => 'required'
+        ],[
+            'pkg_inclusion.*.required' => 'This field is required'
         ]);
 
+        $pkgInclusions = $request->pkg_inclusion;
         Package::create([
             'pkg_name' => $request->pkg_name,
-            'pkg_inclusion' =>$request->pkg_inclusion
         ]);
 
         $getPkg = Package::orderBy('id','desc')->take(1)->value('id');
-        $empId = Employee::orderBy('id','desc')->take(1)->value('id');
+
+        for ($i=0; $i < count($pkgInclusions); $i++) { 
+            packageInclusion::create([
+                'pkg_inclusion' => $pkgInclusions[$i],
+                'package_id' => $getPkg
+            ]);
+        }
 
         Log::create([
             'action' => 'Added',
             'from' => 'Added Package | ID: ' . $getPkg,
             'action_date' => Carbon::now()->format('Y-m-d'),
-            'emp_id' => $empId
+            'emp_id' => session('loginId')
         ]);
 
         return redirect(route('Package.index'));
+        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Package $package)
+    public function show(String $id)
     {
-        //
+        $pckIncData = packageInclusion::where('package_id', '=' , $id)->get();
+        return view('shows/packageInclusionShow', ['pckIncData' => $pckIncData]);
     }
 
     /**

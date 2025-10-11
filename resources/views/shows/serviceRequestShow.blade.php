@@ -27,6 +27,24 @@
 
                 <div class="row">
                     <div class="col col-4">
+                        <p>Client Name:</p>
+                    </div>
+                    <div class="col col-8">
+                        <p>{{ $svcReqData->client_name }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-4">
+                        <p>Contact Number:</p>
+                    </div>
+                    <div class="col col-8">
+                        <p>{{ $svcReqData->client_contact_number }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-4">
                         <p>start date</p>
                     </div>
                     <div class="col col-8">
@@ -78,20 +96,36 @@
                         <p>{{ $svcReqData->svc_equipment_status }}</p>
                     </div>
                 </div>
+                @if($svcReqData->svc_equipment_status == "Pending")
 
-                @if($svcReqData->svc_equipment_status == "Returned")
-                    
-                @else
+                    <div class="row">
+                        <div class="col col-12">
+                            <form action="{{ route('Service-Request.update', $svcReqData->id) }}" method="POST">
+                                @csrf
+                                @method('put')
+                                <input type="text" name="status" value="{{ $svcReqData->svc_equipment_status }}" hidden>
+                                <input type="text" value="{{ $svcReqData->id }}" hidden>
+                                <button type="" class="btn btn-secondary w-100">Deploy Equipment</button>
+
+                            </form>
+                        </div>
+                    </div>
+                
+                @elseif($svcReqData->svc_equipment_status == "Deployed")
+
                     <div class="row">
                         <div class="col col-12">
                             <form action="{{ route('Service-Request.update', $svcReqData->id ) }}" method="post">
                                 @csrf
                                 @method('put')
+                                <input type="text" name="status" value="{{ $svcReqData->svc_equipment_status }}" hidden>
+                                <input type="text" value="{{ $svcReqData->id }}" hidden>
                                 <button class="btn btn-secondary w-100">Retun Equipment</button>
                             </form>
                         </div>
                     
                     </div>
+                    
                 @endif
                 
 
@@ -108,6 +142,7 @@
                             <thead>
                                 <tr class="table-light">
                                     <th class="fw-semibold">Item name</th>
+                                    <th class="fw-semibold">Size/Weight</th>
                                     <th class="fw-semibold">Qty</th>
                                 </tr>
                             </thead>
@@ -124,6 +159,7 @@
                                     @foreach($svcStoData as $row)
                                         <tr>
                                             <td>{{ $row->svcStoToSto->item_name }}</td>
+                                            <td>{{ $row->svcStoToSto->size_weight }}</td>
                                             <td>{{ $row->stock_used }}</td>
                                         </tr>
                                     @endforeach
