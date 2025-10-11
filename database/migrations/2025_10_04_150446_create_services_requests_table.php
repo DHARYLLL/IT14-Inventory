@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('services_requests', function (Blueprint $table) {
             $table->id();
+            $table->string('client_name', 100);
+            $table->string('client_contact_number', 11);
             $table->date('svc_startDate')->nullable();
             $table->date('svc_endDate')->nullable();
             $table->string('svc_wakeLoc', 150);
             $table->string('svc_churchLoc', 150);
             $table->string('svc_burialLoc', 150);
             $table->string('svc_equipment_status', 15);
+            $table->date('svc_return_Date')->nullable();
 
             $table->unsignedBigInteger('package_id')->nullable();
             $table->foreign('package_id')->references('id')->on('packages')->onUpdate('cascade');

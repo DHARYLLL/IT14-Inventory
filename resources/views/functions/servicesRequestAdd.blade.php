@@ -32,6 +32,24 @@
             @enderror
         </div>
 
+        {{-- Client name --}}
+        <div class="col-md-6">
+            <label for="clientName" class="form-label fw-semibold">Client Name</label>
+            <input type="text" name="clientName" id="clientName" class="form-control">
+            @error('clientName')
+                <div class="text-danger small mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+
+        {{-- Contact Number --}}
+        <div class="col-md-6">
+            <label for="clientConNum" class="form-label fw-semibold">Contact Number</label>
+            <input type="text" name="clientConNum" id="clientConNum" class="form-control">
+            @error('clientConNum')
+                <div class="text-danger small mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+
         {{-- Start Date --}}
         <div class="col-md-6">
             <label for="startDate" class="form-label fw-semibold">Start Date</label>

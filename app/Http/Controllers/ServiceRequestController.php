@@ -14,6 +14,8 @@ use App\Models\SvsStock;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+use function Laravel\Prompts\alert;
+
 class ServiceRequestController extends Controller
 {
     /**
@@ -43,6 +45,8 @@ class ServiceRequestController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'clientName' => 'required',
+            'clientConNum' => 'required',
             'startDate' => 'required',
             'endDate' => 'required',
             'wakeLoc' => 'required',
@@ -51,13 +55,17 @@ class ServiceRequestController extends Controller
         ]);
 
         ServiceRequest::create([
+            'client_name' => $request->clientName,
+            'client_contact_number' => $request->clientConNum,
             'svc_startDate' => $request->startDate,
             'svc_endDate' => $request->endDate,
             'svc_wakeLoc' => $request->wakeLoc,
             'svc_churchLoc' => $request->churhcLoc,
             'svc_burialLoc' => $request->burialLoc,
-            'svc_equipment_status' => 'Not Return',
-            'package_id' => $request->package
+            'svc_equipment_status' => 'Pending',
+            'svc_return_date' => Carbon::now()->format('Y-m-d'),
+            'package_id' => $request->package,
+            'emp_id' => session('loginId')
         ]);
 
         //get all equipment in request
@@ -72,14 +80,7 @@ class ServiceRequestController extends Controller
                 'equipment_id' => $eq[$i],
                 'eq_used' => $eqQty[$i]
             ]);
-
-            $eqData = Equipment::where('id', '=', $eq[$i])->first();
-            Equipment::findOrFail($eqData->id)->update([
-                'eq_available' => $eqData->eq_available - $eqQty[$i],
-                'eq_in_use' => $eqData->eq_in_use + $eqQty[$i]
-            ]);
         }
-
 
         //get all stock in request
         $sto = $request->stock;
@@ -91,14 +92,7 @@ class ServiceRequestController extends Controller
                 'service_id'=> $getId,
                 'stock_used' => $stoQty[$i]
             ]);
-
-            $stoData = Stock::where('id', '=', $sto[$i])->first();
-            Stock::findOrFail($stoData->id)->update([
-                'item_qty' => $stoData->item_qty - $stoQty[$i]
-            ]);
         }
-
-        //$empId = Employee::orderBy('id','desc')->take(1)->value('id');
 
         Log::create([
             'action' => 'Create',
@@ -108,7 +102,7 @@ class ServiceRequestController extends Controller
         ]);
         
 
-        return redirect()->back();
+        return redirect(route('Service-Request.show', $getId));
     }
 
     /**
@@ -136,28 +130,84 @@ class ServiceRequestController extends Controller
     public function update(Request $request, String $id)
     {
         $svcEqs = SvsEquipment::where('service_id', '=', $id)->get();
+        $svcStos = SvsStock::where('service_id', '=', $id)->get();
 
-        ServiceRequest::findOrFail($id)->update([
-            'svc_equipment_status' => 'Returned'
-        ]);
-
-        foreach ($svcEqs as $svcEq) {
-            $getEq = Equipment::where('id', '=', $svcEq->equipment_id)->first();
-            Equipment::findOrFail($getEq->id)->update([
-                'eq_available' => $getEq->eq_available + $svcEq->eq_used,
-                'eq_in_use' => $getEq->eq_in_use - $svcEq->eq_used
+        //
+        if ($request->status == 'Deployed') {
+            ServiceRequest::findOrFail($id)->update([
+                'svc_equipment_status' => 'Returned'
             ]);
+
+            foreach ($svcEqs as $svcEq) {
+                $getEq = Equipment::where('id', '=', $svcEq->equipment_id)->first();
+                Equipment::findOrFail($getEq->id)->update([
+                    'eq_available' => $getEq->eq_available + $svcEq->eq_used,
+                    'eq_in_use' => $getEq->eq_in_use - $svcEq->eq_used
+                ]);
+            }
+
+            //$empId = Employee::orderBy('id','desc')->take(1)->value('id');
+            Log::create([
+                'action' => 'Returned',
+                'from' => 'Returned Equipment from Service Request | ID: ' . $id,
+                'action_date' => Carbon::now()->format('Y-m-d'),
+                'emp_id' => session('loginId')
+            ]);
+
+            return redirect(route('Service-Request.index'));
         }
 
-        //$empId = Employee::orderBy('id','desc')->take(1)->value('id');
-        Log::create([
-            'action' => 'Returned',
-            'from' => 'Returned Equipment from Service Request | ID: ' . $id,
-            'action_date' => Carbon::now()->format('Y-m-d'),
-            'emp_id' => session('loginId')
-        ]);
+        if ($request->status == 'Pending') {
+            
+            ServiceRequest::findOrFail($id)->update([
+                'svc_equipment_status' => 'Deployed'
+            ]);
+            
+            /*
+            $test = array();
+            $testId = array();
+            foreach ($svcEqs as $data) {
+                $eqData = Equipment::where('id', '=', $data->equipment_id)->first();
+                array_push($test, $data->eq_used);
+                array_push($testId, $data->equipment_id);
+            }
 
-        return redirect(route('Service-Request.index'));
+            dd($test, $testId);
+            */
+            
+            foreach ($svcEqs as $data) {
+                $eqData = Equipment::where('id', '=', $data->equipment_id)->first();
+                Equipment::findOrFail($eqData->id)->update([
+                    'eq_available' => $eqData->eq_available - $data->eq_used,
+                    'eq_in_use' => $eqData->eq_in_use + $data->eq_used
+                ]);
+            }
+
+            foreach ($svcStos as $data) {
+                $stoData = Stock::where('id', '=', $data->stock_id)->first();
+                Stock::findOrFail($stoData->id)->update([
+                    'item_qty' => $stoData->item_qty - $data->stock_used
+                ]);
+            }
+
+            Log::create([
+                'action' => 'Deployed',
+                'from' => 'Deployed Stock from Service Request | ID: ' . $id,
+                'action_date' => Carbon::now()->format('Y-m-d'),
+                'emp_id' => session('loginId')
+            ]);
+
+            Log::create([
+                'action' => 'Deployed',
+                'from' => 'Deployed Equipment from Service Request | ID: ' . $id,
+                'action_date' => Carbon::now()->format('Y-m-d'),
+                'emp_id' => session('loginId')
+            ]);
+            
+            return redirect()->back();
+        }
+
+        return redirect()->back();
     }
 
     /**

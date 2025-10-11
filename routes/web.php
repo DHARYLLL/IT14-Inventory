@@ -18,6 +18,7 @@ use App\Http\Middleware\AuthCheck;
 use App\Models\Invoice;
 use App\Models\Package;
 use App\Models\PurchaseOrderItem;
+use App\Models\ServiceRequest;
 use Illuminate\Support\Facades\Auth;
 
 // ====================
@@ -80,6 +81,7 @@ Route::middleware(AuthCheck::class)->group(function () {
     Route::resource('Invoice', InvoiceController::class);
     Route::resource('Equipment', EquipmentController::class);
     Route::resource('Service-Request', ServiceRequestController::class);
+    //Route::put('Service-Request/{$id}/Deploy-Equipment', [ServiceRequestController::class, 'deploy'])->name('Service-Request.deploy');
     Route::resource('Package', PackageController::class);
     Route::resource('Stock', StockController::class);
     Route::resource('Log', LogController::class);

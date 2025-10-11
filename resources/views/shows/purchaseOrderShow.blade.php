@@ -87,7 +87,7 @@
                                 </div>
 
                                 <div class="d-flex align-items-center mt-2">
-                                    <label class="col-4">Submitted Date</label>
+                                    <label class="col-4">Invoice Date</label>
                                     <span class="mx-2">:</span>
                                     <input type="date" class="form-control my-3" value="{{ $invData->invoice_date }}" readonly>
                                 </div>
@@ -168,9 +168,15 @@
                             </div>
 
                             <div class="d-flex align-items-center mt-2">
-                                <label class="col-4">Date</label>
+                                <label class="col-4">Invoice Date</label>
                                 <span class="mx-2">:</span>
                                 <input type="date" class="form-control my-3" name="inv_date">
+                            </div>
+
+                            <div class="d-flex align-items-center mt-2">
+                                <label class="col-4">Delivery Date</label>
+                                <span class="mx-2">:</span>
+                                <input type="date" class="form-control my-3" name="del_date">
                             </div>
 
                             <div class="d-flex align-items-center mt-2">

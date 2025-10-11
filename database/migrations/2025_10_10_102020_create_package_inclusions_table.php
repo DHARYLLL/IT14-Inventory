@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('packages', function (Blueprint $table) {
+        Schema::create('package_inclusions', function (Blueprint $table) {
             $table->id();
-            $table->string('pkg_name', 100)->unique();
+            $table->string('pkg_inclusion', 100)->unique();
+
+            $table->unsignedBigInteger('package_id')->nullable();
+            $table->foreign('package_id')->references('id')->on('packages')->onUpdate('cascade');
+
             $table->timestamps();
         });
     }
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('packages');
+        Schema::dropIfExists('package_inclusions');
     }
 };

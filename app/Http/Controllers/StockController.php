@@ -41,10 +41,12 @@ class StockController extends Controller
             'inv_num' => 'required',
             'inv_date' => 'required',
             'qtyArrived.*' => 'required',
+            'del_date' => 'required',
             'total' => 'required|numeric|min:1'
         ], [
             'inv_num.required' => 'This field is required.',
             'inv_date.required' => 'This field is required.',
+            'del_date.required' => 'This field is required.',
             'total.numeric' => 'Number Only.',
             'total.min' => 'Cannot be 0'            
         ]);
@@ -88,7 +90,7 @@ class StockController extends Controller
 
         PurchaseOrder::findOrFail($request->po_id)->update([
             'status' => "Delivered",
-            'delivered_date' => $request->inv_date
+            'delivered_date' => $request->del_date
         ]);
 
         $invId = Invoice::orderBy('id','desc')->take(1)->value('id');
