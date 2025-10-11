@@ -41,13 +41,7 @@
                 <button type="submit" class="login-btn">Sign In</button>
             </form>
 
-            <div class="signup-link">
-                Don’t have an account?
-                <a href="{{-- route('register') --}}">Sign up now</a>
-            </div>
-        </div>
-    </div>
-{{--
+            {{--
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.querySelector('.login-form');
@@ -75,4 +69,3 @@
     </script>
 --}}
 </body>
-

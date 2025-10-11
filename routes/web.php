@@ -73,7 +73,7 @@ Route::get('/login', [LoginController::class, 'loginPage'])->name('showLogin');
 Route::post('/', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::middleware(AuthCheck::class)->group(function(){
+Route::middleware(AuthCheck::class)->group(function () {
     //Resource
     Route::resource('Purchase-Order', PurchaseOrderController::class);
     Route::resource('Purchase-Order-Item', PurchaseOrderItem::class);
