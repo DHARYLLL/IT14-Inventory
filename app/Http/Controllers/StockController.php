@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Stock;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
+use App\Models\Equipment;
 use App\Models\Invoice;
 use App\Models\Log;
 use App\Models\PurchaseOrder;
@@ -50,13 +51,13 @@ class StockController extends Controller
             'total.numeric' => 'Number Only.',
             'total.min' => 'Cannot be 0'            
         ]);
-
         
         
         $items = PurchaseOrderItem::where('po_id', '=', $request->po_id)->get();
         //$stock = stockModel::where()->first;
 
         $getId = $request->stockId;
+        $getType = $request->type;
         $getArrivedQty = $request->qtyArrived;
 
         Invoice::create([
@@ -77,13 +78,26 @@ class StockController extends Controller
         */
 
         for ($i=0; $i < count($getId); $i++) { 
-            $stock = Stock::where('id', '=', $getId[$i])->first();
-            Stock::findOrFail($stock->id)->update([
-                'item_qty' => $stock->item_qty + $getArrivedQty[$i]
-            ]);
-            PurchaseOrderItem::where('stock_id', '=' , $getId[$i])->update([
-                'qty_arrived' => $getArrivedQty[$i]
-            ]);
+
+            if($getType[$i] == 'Consumable'){
+                $stock = Stock::where('id', '=', $getId[$i])->first();
+                Stock::findOrFail($stock->id)->update([
+                    'item_qty' => $stock->item_qty + $getArrivedQty[$i]
+                ]);
+                PurchaseOrderItem::where('stock_id', '=' , $getId[$i])->update([
+                    'qty_arrived' => $getArrivedQty[$i]
+                ]);
+            }
+
+            if($getType[$i] == 'Non-Consumable'){
+                $eq = Equipment::where('id', '=', $getId[$i])->first();
+                Equipment::findOrFail($eq->id)->update([
+                    'eq_available' => $eq->eq_available + $getArrivedQty[$i]
+                ]);
+                PurchaseOrderItem::where('eq_id', '=' , $getId[$i])->update([
+                    'qty_arrived' => $getArrivedQty[$i]
+                ]);
+            }
 
         }
 

@@ -11,7 +11,8 @@ class Stock extends Model
         'item_name',
         'item_qty',
         'size_weight',
-        'item_unit_price'
+        'item_unit_price',
+        'item_type'
     ];
 
     public function stoToSvcSto(){

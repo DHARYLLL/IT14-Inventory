@@ -14,8 +14,10 @@ class PurchaseOrderItem extends Model
         'unit_price',
         'total_amount',
         'qty_arrived',
+        'type',
         'po_id',
-        'stock_id'
+        'stock_id',
+        'eq_id'
     ];
 
     public function purchaseOrder()

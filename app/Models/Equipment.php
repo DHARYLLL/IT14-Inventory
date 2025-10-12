@@ -9,7 +9,10 @@ class Equipment extends Model
     protected $table = 'equipments';
     protected $fillable = [
         'eq_name',
+        'eq_type',
         'eq_available',
+        'eq_size_weight',
+        'eq_unit_price',
         'eq_in_use'
     ];
 

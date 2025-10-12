@@ -52,18 +52,62 @@
                             </button>
                         </div>
 
-                        <div>
-                            <select class="form-select" name="" id="select_stock">
-                                <option selected disabled>Select Item</option>
-                                @foreach($stoData as $row)
-                                    <option value="{{ $row->item_name }},{{ $row->item_unit_price }}:{{ $row->size_weight }}">{{ $row->item_name }} {{ $row->size_weight }}: {{ $row->item_qty }}</option>
-                                @endforeach
-                            </select>
-                            <button class="btn btn-outline-success" type="button" onclick="setStock()">
-                                <i class="bi bi-plus-circle"></i> Add More
-                            </button>
-                        </div>
+                        
                     </div>
+
+                    {{-- ADD stock and equipment --}}
+
+                    <div class="row mb-4">
+
+                        <div class="col col-6">
+
+                            <div class="row">
+                                <div class="col col-8">
+                                    <div>
+                                        <select class="form-select" name="" id="select_stock">
+                                            <option selected disabled>Select Item</option>
+                                            @foreach($stoData as $row)
+                                                <option value="{{ $row->item_name }},{{ $row->item_unit_price }}:{{ $row->size_weight }};{{ $row->item_type }}">{{ $row->item_name }} {{ $row->size_weight }}: {{ $row->item_qty }} {{ $row->item_type }}</option>
+                                            @endforeach
+                                        </select>
+                            
+                                    </div>
+                                </div>
+                                <div class="col col-4">
+                                    <button class="btn btn-outline-success" type="button" onclick="setStock()">
+                                        <i class="bi bi-plus-circle"></i> Add Item
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col col-6">
+
+                            <div class="row">
+                                <div class="col col-8">
+                                    <div>
+                                        <select class="form-select" name="" id="select_equipment">
+                                            <option selected disabled>Select Item</option>
+                                            @foreach($eqData as $row)
+                                                <option value="{{ $row->eq_name }},{{ $row->eq_unit_price }}:{{ $row->eq_size_weight }};{{ $row->eq_type }}">{{ $row->eq_name }}</option>
+                                            @endforeach
+                                        </select>
+                            
+                                    </div>
+                                </div>
+                                <div class="col col-4">
+                                    <button class="btn btn-outline-success" type="button" onclick="setEquipment()">
+                                        <i class="bi bi-plus-circle"></i> Add Equipment
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
 
                     {{-- Dynamic input fields --}}
                     <div id="pasteHere">
@@ -72,6 +116,7 @@
                             $oldQtys = old('qty', ['']);
                             $oldunitPrices = old('unitPrice', ['']);
                             $oldsizeWeigth = old('sizeWeigth', ['']);
+                            $oldType = old('typeSelect', ['']);
                         @endphp
 
                         @foreach ($oldItems as $i => $item)
@@ -89,7 +134,7 @@
                                     @enderror              
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <label class="form-label fw-semibold text-secondary">
                                         <i class="bi bi-box text-success"></i> Quantity
                                     </label>
@@ -122,10 +167,25 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-2 d-flex align-items-end">
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold text-secondary">
+                                        <i class="bi bi-weight text-success"></i> Type
+                                    </label>
+
+                                    <select name="typeSelect[]" class="form-select shadow-sm placeType">
+                                        <option value="">Select Type</option>
+                                        <option value="Consumable" {{ ($oldType[$i] ?? '') === 'Consumable' ? 'selected' : '' }}>Consumable</option>
+                                        <option value="Non-Consumable" {{ ($oldType[$i] ?? '') === 'Non-Consumable' ? 'selected' : '' }}>Non-Consumable</option>
+                                    </select>
+                                    @error("typeSelect.$i")
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-1 d-flex align-items-end">
                                     <button type="button"
                                         class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
-                                        <i class="bi bi-x-circle"></i> Remove
+                                        <i class="bi bi-x-circle"></i>
                                     </button>
                                 </div>
                             </div>

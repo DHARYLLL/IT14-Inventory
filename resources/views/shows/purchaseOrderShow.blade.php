@@ -120,8 +120,9 @@
                                 <thead>
                                     <tr class="table-light">
                                         <th class="fw-semibold">Item Name</th>
-                                        <th class="fw-semibold">Qty</th>
                                         <th class="fw-semibold">Size/Weight</th>
+                                        <th class="fw-semibold">Qty</th>                                    
+                                        <th class="fw-semibold">Type</th>
                                         <th class="fw-semibold">Unit Price</th>
                                         <th class="fw-semibold">Total Amount</th>
                                         @if($poData->status == 'Approved')
@@ -140,11 +141,23 @@
                                     @else
                                         @foreach ($poItemData as $row)
                                             <tr>
-                                                <td>{{ $row->item }} 
-                                                    <input type="text" name="stockId[]" value="{{ $row->stock_id }}">
-                                                </td>
-                                                <td>{{ $row->qty }}</td>
+                                                @if($row->stock_id)
+                                                    <td>
+                                                        {{ $row->item }}
+                                                        <input type="text" name="stockId[]" value="{{ $row->stock_id }}">
+                                                    </td>
+                                                @endif
+                                                @if($row->eq_id)
+                                                    <td>
+                                                        {{ $row->item }}
+                                                        <input type="text" name="stockId[]" value="{{ $row->eq_id }}">
+                                                    </td>
+                                                @endif
                                                 <td>{{ $row->sizeWeight }}</td>
+                                                <td>{{ $row->qty }}</td>                                              
+                                                <td>{{ $row->type }}
+                                                    <input type="text" name="type[]" value="{{ $row->type }}">
+                                                </td>
                                                 <td>{{ $row->unit_price }}</td>
                                                 <td>{{ $row->total_amount }}</td>
                                                 @if($poData->status == 'Approved')
@@ -200,9 +213,10 @@
                         <table class="table table-hover mb-0">
                             <thead>
                                 <tr class="table-light">
-                                    <th class="fw-semibold">Item Name</th>
-                                    <th class="fw-semibold">Qty</th>
+                                    <th class="fw-semibold">Item Name</th>                                
                                     <th class="fw-semibold">Size/Weight</th>
+                                    <th class="fw-semibold">Qty</th>
+                                    <th class="fw-semibold">Type</th>
                                     <th class="fw-semibold">Unit Price</th>
                                     <th class="fw-semibold">Total Amount</th>
                                     @if($poData->status == 'Delivered')
@@ -221,9 +235,10 @@
                                 @else
                                     @foreach ($poItemData as $row)
                                         <tr>
-                                            <td>{{ $row->item }}</td>
-                                            <td>{{ $row->qty }}</td>
+                                            <td>{{ $row->item }}</td>                                        
                                             <td>{{ $row->sizeWeight }}</td>
+                                            <td>{{ $row->qty }}</td>
+                                            <td>{{ $row->type }}</td>
                                             <td>{{ $row->unit_price }}</td>
                                             <td>{{ $row->total_amount }}</td>
                                             @if($poData->status == 'Delivered')

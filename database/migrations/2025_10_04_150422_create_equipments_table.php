@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('equipments', function (Blueprint $table) {
             $table->id();
             $table->string('eq_name', 100)->unique();
+            $table->string('eq_type', 15);
             $table->smallInteger('eq_available')->nullable();
+            $table->string('eq_size_weight', 20);
+            $table->decimal('eq_unit_price', 8,2);
             $table->smallInteger('eq_in_use')->nullable();
             $table->timestamps();
         });
