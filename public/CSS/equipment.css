@@ -6,8 +6,22 @@
     /* tighter spacing below button */
 }
 
+.equipment-table-container {
+    margin-top: 0;
+    padding-top: 0;
+}
 
-
+/* Table Style */
+.modern-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.95rem;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
 
 /* Header (No background color now) */
 .modern-table thead {

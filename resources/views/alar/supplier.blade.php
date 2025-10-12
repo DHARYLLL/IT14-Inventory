@@ -215,7 +215,7 @@ aria-hidden="true">
 
             {{-- Footer --}}
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-green" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-outline-green modal-btn" data-bs-dismiss="modal">
                     Close
                 </button>
                 <button type="submit" class="btn btn-green modal-btn">
