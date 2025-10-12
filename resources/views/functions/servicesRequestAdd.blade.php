@@ -2,12 +2,11 @@
 @section('title', 'Equipments')
 
 @section('content')
-@section('head', 'Add Services Request')
+@section('head', 'Add Service Requests')
 @section('name', 'Staff')
 
-<div class="d-flex align-items-center justify-content-between mb-4">
-    <h2 class="fw-semibold mb-0">Add Service Request</h2>
-    <a href="{{ route('Service-Request.index') }}" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+<div class="d-flex align-items-center justify-content-end m-1">
+    <a href="{{ route('Service-Request.index') }}" class="btn btn-green d-flex align-items-center gap-2">
         <i class="bi bi-arrow-left"></i>
         <span>Back</span>
     </a>
@@ -139,7 +138,7 @@
 
         {{-- Submit Button --}}
         <div class="text-end mt-4">
-            <button type="submit" class="btn btn-success submit-btn">
+            <button type="submit" class="btn btn-green"><i class="bi bi-save"></i>
                 Submit Request
             </button>
         </div>

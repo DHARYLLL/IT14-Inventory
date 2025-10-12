@@ -1,36 +1,34 @@
 @extends('layouts.layout')
-@section('title', 'Equipments')
+@section('title', 'Equipment Details')
 
 @section('content')
-    @section('head', 'Show Equipment')
-    @section('name', 'Staff')
+@section('head', 'Equipment Details')
+@section('name', 'Staff')
 
-    <div class="d-flex align-items-center justify-content-end mb-4">
+<div class="d-flex align-items-center justify-content-end equipment-header m-1">
+    <a href="{{ route('Equipment.index') }}" class="btn btn-green d-flex gap-2">
+        <i class="bi bi-arrow-left"></i><span>Back</span>
+    </a>
+</div>
 
-        <a href="{{ route('Equipment.index') }}" class="btn btn-custom d-flex align-items-center gap-2"></i><span>Back</span></a>
-    </div>
+<!-- Equipment Info Table -->
+<table class="modern-table table-hover mb-0">
+    <thead>
+        <tr>
+            <th class="fw-semibold">Equipment Name</th>
+            <th class="fw-semibold">Available</th>
+            <th class="fw-semibold">In Use</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ $eqData->eq_name }}</td>
+            <td>{{ $eqData->eq_available }}</td>
+            <td>{{ $eqData->eq_in_use }}</td>
+        </tr>
+    </tbody>
+</table>
 
-    {{-- table --}}
-    <div class="bg-white rounded border overflow-hidden">
-        <form action="{{ route('Equipment.store') }}" method="POST">
-            @csrf
 
-            <div class="row">
-                <div class="col col-4">
-                    <p>Equipemnt name:</p>
-                    <p>{{ $eqData->eq_name }}</p>
-                </div>
-                <div class="col col-4">
-                    <p>Equipemnt Available:</p>
-                    <p>{{ $eqData->eq_available }}</p>
-                </div>
-                <div class="col col-4">
-                    <p>Equipemnt In use:</p>
-                    <p>{{ $eqData->eq_in_use }}</p>
-                </div>
-            </div>
 
-        </form>
-        
-    </div>
 @endsection
