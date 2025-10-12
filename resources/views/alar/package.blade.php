@@ -5,8 +5,7 @@
 @section('head', 'Packages')
 @section('name', 'Staff')
 
-<div class="d-flex align-items-center justify-content-between mb-2">
-    <h2 class="fw-semibold text-success">Packages</h2>
+<div class="d-flex align-items-center justify-content-end m-1">
 
     <!-- Trigger Modal -->
     <button class="btn btn-green d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#addPackageModal">

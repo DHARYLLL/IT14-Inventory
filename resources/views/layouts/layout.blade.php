@@ -103,7 +103,7 @@
                     <div class="dropdown">
                         <div class="profile-circle dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <span class="fw-semibold small">ST</span>
+                            <span class="fw-semibold small">A</span>
                         </div>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                             <li class="px-3 py-2 text-muted small">Logged in as: @yield('name')</li>
