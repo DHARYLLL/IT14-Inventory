@@ -66,45 +66,51 @@ class fakeDataSeeder extends Seeder
             'item_name' => 'Candle',
             'item_qty' => 0,
             'size_weight' => 'Large',
-            'item_unit_price' => 10
+            'item_unit_price' => 10,
+            'item_type' => 'Consumable'
         ]);
         Stock::create([
             'item_name' => 'Candle',
             'item_qty' => 0,
             'size_weight' => 'Medium',
-            'item_unit_price' => 10
+            'item_unit_price' => 10,
+            'item_type' => 'Consumable'
         ]);
         Stock::create([
             'item_name' => 'Candle',
             'item_qty' => 0,
             'size_weight' => 'Small',
-            'item_unit_price' => 10
+            'item_unit_price' => 10,
+            'item_type' => 'Consumable'
         ]);
 
         PurchaseOrderItem::create([
             'item' => 'Candle',
-            'qty' => 3,
+            'qty' => 20,
             'sizeWeight' => 'Large',
             'unit_price' => 10,
             'total_amount' => 30,
+            'type' => 'Consumable',
             'po_id' => 1,
             'stock_id' => 1
         ]);
         PurchaseOrderItem::create([
             'item' => 'Candle',
-            'qty' => 3,
+            'qty' => 20,
             'sizeWeight' => 'Medium',
             'unit_price' => 10,
             'total_amount' => 30,
+            'type' => 'Consumable',
             'po_id' => 1,
             'stock_id' => 2
         ]);
         PurchaseOrderItem::create([
             'item' => 'Candle',
-            'qty' => 3,
+            'qty' => 20,
             'sizeWeight' => 'Small',
             'unit_price' => 10,
             'total_amount' => 30,
+            'type' => 'Consumable',
             'po_id' => 1,
             'stock_id' => 3
         ]);
@@ -148,27 +154,42 @@ class fakeDataSeeder extends Seeder
 
         Equipment::create([
             'eq_name' => 'Candelabra (gold)',
+            'eq_type' => 'Non-Consumable',
             'eq_available' => 10,
+            'eq_size_weight' => '12mm',
+            'eq_unit_price' => 3340,
             'eq_in_use' => 0
         ]);
         Equipment::create([
             'eq_name' => 'Candelabra (silver)',
+            'eq_type' => 'Non-Consumable',
             'eq_available' => 10,
+            'eq_size_weight' => '12mm',
+            'eq_unit_price' => 3340,
             'eq_in_use' => 0
         ]);
         Equipment::create([
             'eq_name' => 'Casket stand',
+            'eq_type' => 'Non-Consumable',
             'eq_available' => 10,
+            'eq_size_weight' => '54x20x24',
+            'eq_unit_price' => 42000,
             'eq_in_use' => 0
         ]);
         Equipment::create([
             'eq_name' => 'Flower stand',
+            'eq_type' => 'Non-Consumable',
             'eq_available' => 10,
+            'eq_size_weight' => '2m',
+            'eq_unit_price' => 1499,
             'eq_in_use' => 0
         ]);
         Equipment::create([
             'eq_name' => 'Tarpauline',
+            'eq_type' => 'Non-Consumable',
             'eq_available' => 10,
+            'eq_size_weight' => '10x14 ft',
+            'eq_unit_price' => 14299,
             'eq_in_use' => 0
         ]);
     }
