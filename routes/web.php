@@ -9,6 +9,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\packageInclusionController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\ServiceRequestController;
@@ -83,6 +84,7 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::resource('Service-Request', ServiceRequestController::class);
     //Route::put('Service-Request/{$id}/Deploy-Equipment', [ServiceRequestController::class, 'deploy'])->name('Service-Request.deploy');
     Route::resource('Package', PackageController::class);
+    Route::resource('Package-Inclusion', packageInclusionController::class);
     Route::resource('Stock', StockController::class);
     Route::resource('Log', LogController::class);
 
