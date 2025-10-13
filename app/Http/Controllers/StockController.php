@@ -41,15 +41,19 @@ class StockController extends Controller
         $request->validate([
             'inv_num' => 'required',
             'inv_date' => 'required',
-            'qtyArrived.*' => 'required',
+            'qtyArrived.*' => 'required|min:1|max:4',
             'del_date' => 'required',
-            'total' => 'required|numeric|min:1'
+            'total' => 'required|min:1|max:6'
         ], [
             'inv_num.required' => 'This field is required.',
             'inv_date.required' => 'This field is required.',
             'del_date.required' => 'This field is required.',
             'total.numeric' => 'Number Only.',
-            'total.min' => 'Cannot be 0'            
+            'total.min' => 'Total must be 1 or more',
+            'total.max' => '6 digits is the max.',
+            'qtyArrived.*.required' => 'This field is required.',
+            'qtyArrived.*.min' => 'Quantity must be 1 or more.',
+            'qtyArrived.*.max' => '4 digits is the max.'            
         ]);
         
         

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Dashboard;
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
+use App\Models\Log;
+use App\Models\Stock;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -13,7 +16,24 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('alar.dashboard');
+        $stockData = Stock::all();
+        $lowStockData = Stock::where('item_qty', '<', 11)->get();
+        $noStockData = Stock::where('item_qty', '=', 0)->get();
+        $logData = Log::latest()->take(10)->get();
+
+        $getValue = Invoice::select('total')->whereMonth('invoice_date', date('m'))->get();
+        $set = array();
+        if (count($getValue) > 0) {
+
+            foreach ($getValue as $data) {
+                array_push($set, $data->total);
+            }
+        }
+        
+        $getAv = count($getValue) > 0 ? array_sum($set) / count($getValue) : 0;
+
+        return view('alar.dashboard', ['stockData' => $stockData, 'lowStockData' => $lowStockData, 
+        'noStockData' => $noStockData, 'logData' => $logData, 'getAv' => $getAv]);
     }
 
     /**

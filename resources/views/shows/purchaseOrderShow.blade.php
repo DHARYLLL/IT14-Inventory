@@ -144,25 +144,28 @@
                                                 @if($row->stock_id)
                                                     <td>
                                                         {{ $row->item }}
-                                                        <input type="text" name="stockId[]" value="{{ $row->stock_id }}">
+                                                        <input type="text" name="stockId[]" value="{{ $row->stock_id }}" hidden>
                                                     </td>
                                                 @endif
                                                 @if($row->eq_id)
                                                     <td>
                                                         {{ $row->item }}
-                                                        <input type="text" name="stockId[]" value="{{ $row->eq_id }}">
+                                                        <input type="text" name="stockId[]" value="{{ $row->eq_id }}" hidden>
                                                     </td>
                                                 @endif
                                                 <td>{{ $row->sizeWeight }}</td>
                                                 <td>{{ $row->qty }}</td>                                              
                                                 <td>{{ $row->type }}
-                                                    <input type="text" name="type[]" value="{{ $row->type }}">
+                                                    <input type="text" name="type[]" value="{{ $row->type }}" hidden>
                                                 </td>
                                                 <td>{{ $row->unit_price }}</td>
                                                 <td>{{ $row->total_amount }}</td>
                                                 @if($poData->status == 'Approved')
                                                     <td>
-                                                        <input type="number" name="qtyArrived[]" placeholder="Qty Arrived">
+                                                        <input type="number" name="qtyArrived[]" placeholder="Qty Arrived" value="{{ old('qtyArrived.' . $loop->index) }}">
+                                                        @error('qtyArrived.' . $loop->index)
+                                                            <small class="text-danger">{{ $message }}</small>
+                                                        @enderror
                                                     </td>
                                                 @endif
                                             </tr>
@@ -177,26 +180,38 @@
                             <div class="d-flex align-items-center mt-2">
                                 <label class="col-4">Invoice number</label>
                                 <span class="mx-2">:</span>
-                                <input type="text" class="form-control" name="inv_num">
+                                <input type="text" class="form-control" name="inv_num" value="{{ old('inv_num') }}">
+                                @error("inv_num")
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
 
                             <div class="d-flex align-items-center mt-2">
                                 <label class="col-4">Invoice Date</label>
                                 <span class="mx-2">:</span>
-                                <input type="date" class="form-control my-3" name="inv_date">
+                                <input type="date" class="form-control my-3" name="inv_date" value="{{ old('inv_date') }}">
+                                @error("inv_date")
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
 
                             <div class="d-flex align-items-center mt-2">
                                 <label class="col-4">Delivery Date</label>
                                 <span class="mx-2">:</span>
-                                <input type="date" class="form-control my-3" name="del_date">
+                                <input type="date" class="form-control my-3" name="del_date" value="{{ old('del_date') }}">
+                                @error("del_date")
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
 
                             <div class="d-flex align-items-center mt-2">
                                 <label class="col-4">Total</label>
                                 <span class="mx-2">:</span>
-                                <input type="text" class="form-control" name="total">
-                                <input type="hidden" name="po_id" value="{{ $poData->id }}">
+                                <input type="text" class="form-control" name="total" value="{{ old('total') }}">
+                                <input type="hidden" name="po_id" value="{{ $poData->id }}" value="{{ $poData->id }}">
+                                @error("total")
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
 
                             <div class="d-flex justify-content-center mt-2">
