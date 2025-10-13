@@ -106,24 +106,25 @@ class ServiceRequestController extends Controller
         //get all equipment in request
 
         $getId = ServiceRequest::orderBy('id','desc')->take(1)->value('id');
-        
-        for ($i=0; $i < count($eq); $i++) { 
-            SvsEquipment::create([
-                'service_id' => $getId,
-                'equipment_id' => $eq[$i],
-                'eq_used' => $eqQty[$i]
-            ]);
+
+        if ($eq != null) {
+            for ($i=0; $i < count($eq); $i++) { 
+                SvsEquipment::create([
+                    'service_id' => $getId,
+                    'equipment_id' => $eq[$i],
+                    'eq_used' => $eqQty[$i]
+                ]);
+            } 
         }
 
-        //get all stock in request
-        
-        
-        for ($i=0; $i < count($sto); $i++) { 
-            SvsStock::create([
-                'stock_id' => $sto[$i],
-                'service_id'=> $getId,
-                'stock_used' => $stoQty[$i]
-            ]);
+        if ($sto != null) {
+            for ($i=0; $i < count($sto); $i++) { 
+                SvsStock::create([
+                    'stock_id' => $sto[$i],
+                    'service_id'=> $getId,
+                    'stock_used' => $stoQty[$i]
+                ]);
+            }
         }
 
         Log::create([
@@ -245,8 +246,15 @@ class ServiceRequestController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ServiceRequest $serviceRequest)
+    public function destroy(String $id)
     {
-        //
+        ServiceRequest::findOrFail($id)->delete();
+        Log::create([
+            'action' => 'Deleted',
+            'from' => 'Delted Service Request | ID: ' . $id,
+            'action_date' => Carbon::now()->format('Y-m-d'),
+            'emp_id' => session('loginId')
+        ]);
+        return redirect()->back()->with('promt', 'Deleted Succesfully');
     }
 }

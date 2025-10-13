@@ -156,7 +156,8 @@ class PurchaseOrderController extends Controller
                     'total_amount' => $qty[$i] * $unitPrice[$i],
                     'type' => $type[$i],
                     'po_id' => $po,
-                    'stock_id' => $getStock->id
+                    'stock_id' => $getStock->id,
+                    'eq_id' => session('loginId')
                 ]);
             } 
             
@@ -170,7 +171,8 @@ class PurchaseOrderController extends Controller
                     'total_amount' => $qty[$i] * $unitPrice[$i],
                     'type' => $type[$i],
                     'po_id' => $po,
-                    'eq_id' => $getEquipment->id
+                    'eq_id' => $getEquipment->id,
+                    'eq_id' => session('loginId')
                 ]);
             } 
 
@@ -232,8 +234,15 @@ class PurchaseOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PurchaseOrder $purchaseOrder)
+    public function destroy(String $id)
     {
-        //
+        PurchaseOrder::findOrFail($id)->delete();
+        Log::create([
+            'action' => 'Deleted',
+            'from' => 'Delted Purchase Order | ID: ' . $id,
+            'action_date' => Carbon::now()->format('Y-m-d'),
+            'emp_id' => session('loginId')
+        ]);
+        return redirect()->back()->with('promt', 'Deleted Succesfully');
     }
 }

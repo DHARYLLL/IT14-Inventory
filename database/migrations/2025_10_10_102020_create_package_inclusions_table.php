@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('pkg_inclusion', 100)->unique();
 
-            $table->unsignedBigInteger('package_id')->nullable();
-            $table->foreign('package_id')->references('id')->on('packages')->onUpdate('cascade');
+            $table->unsignedBigInteger('package_id');
+            $table->foreign('package_id')->references('id')->on('packages')->onUpdate('cascade')->onDelete('cascade');
 
             $table->timestamps();
         });

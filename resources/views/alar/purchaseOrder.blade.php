@@ -9,6 +9,9 @@
     
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h2 class="fw-semibold">Purchase Order</h2>
+        @session('promt')
+            <h2 class="fw-semibold bg-danger-subtle">{{ $value }}</h2>
+        @endsession
 
         <a href="{{ route('Purchase-Order.create') }}" class="btn btn-custom d-flex align-items-center gap-2"><i class="bi bi-plus-lg"></i>
             <span>New Purchase Order</span>
@@ -51,16 +54,18 @@
                             <td>{{ $row->status }}</td>
                             <td>
                                 <div class="d-flex justify-content-center align-items-center gap-2">
-                                    <a href="{{ route('Purchase-Order.show', $row->id) }}" class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>
-                                    {{--
-                                    <form action="" method="POST" class="m-0">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-delete-custom btn-md">
-                                            <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
-                                        </button>
-                                    </form>
-                                    --}}
+                                    <a href="{{ route('Purchase-Order.show', $row->id) }}" class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top" title="Show"></i></a>
+                                    
+                                    @if($row->status == "Pending")
+                                        <form action="{{ route('Purchase-Order.destroy', $row->id) }}" method="POST" class="m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-outline-danger btn-md">
+                                                <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                    
                                 </div>
                             </td>
                         </tr>

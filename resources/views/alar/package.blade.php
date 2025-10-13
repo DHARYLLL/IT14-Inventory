@@ -35,6 +35,13 @@
                         <td>{{ $row->pkg_name }}</td>
                         <td>
                             <a href="{{ route('Package.show', $row->id) }}" class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>
+                            <form action="{{ route('Package.destroy', $row->id) }}" method="POST" class="m-0">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger btn-md">
+                                    <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

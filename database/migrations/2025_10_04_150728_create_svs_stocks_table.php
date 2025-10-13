@@ -16,8 +16,8 @@ return new class extends Migration
 
             $table->unsignedBigInteger('stock_id')->nullable();
             $table->foreign('stock_id')->references('id')->on('stocks')->onUpdate('cascade');
-            $table->unsignedBigInteger('service_id')->nullable();
-            $table->foreign('service_id')->references('id')->on('services_requests')->onUpdate('cascade');
+            $table->unsignedBigInteger('service_id');
+            $table->foreign('service_id')->references('id')->on('services_requests')->onUpdate('cascade')->onDelete('cascade');
 
             $table->smallInteger('stock_used')->nullable();
 

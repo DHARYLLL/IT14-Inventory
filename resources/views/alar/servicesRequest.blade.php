@@ -7,6 +7,9 @@
 
 <div class="d-flex align-items-center justify-content-between mb-4">
     <h2 class="fw-semibold">Services Request</h2>
+    @session('promt')
+        <h2 class="fw-semibold bg-danger-subtle">{{ $value }}</h2>
+    @endsession
     <a href="{{ route('Service-Request.create') }}" class="btn btn-custom d-flex align-items-center gap-2"><i
             class="bi bi-plus-lg"></i><span>Create Services</span></a>
 </div>
@@ -49,6 +52,18 @@
                         <td>{{ $row->svc_equipment_status }}</td>
                         <td>
                             <a href="{{ route('Service-Request.show', $row->id) }}" class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>
+
+                            @if($row->svc_equipment_status == "Pending")
+                                <form action="{{ route('Service-Request.destroy', $row->id) }}" method="POST" class="m-0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger btn-md">
+                                        <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
+                                    </button>
+                                </form>
+                            @endif
+
+
                         </td>
                     </tr>
                 @endforeach

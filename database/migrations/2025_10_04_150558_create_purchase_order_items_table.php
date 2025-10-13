@@ -21,8 +21,8 @@ return new class extends Migration
             $table->smallInteger('qty_arrived')->nullable();
             $table->string('type', 15);
 
-            $table->unsignedBigInteger('po_id')->nullable();
-            $table->foreign('po_id')->references('id')->on('purchase_orders')->onUpdate('cascade')->nullOnDelete();
+            $table->unsignedBigInteger('po_id');
+            $table->foreign('po_id')->references('id')->on('purchase_orders')->onUpdate('cascade')->onDelete('cascade');
 
             $table->unsignedBigInteger('stock_id')->nullable();
             $table->foreign('stock_id')->references('id')->on('stocks')->onUpdate('cascade')->nullOnDelete();
