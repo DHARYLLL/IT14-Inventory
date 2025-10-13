@@ -22,29 +22,20 @@
                     <i class="fas fa-envelope"></i>
                     <input type="email" name="email" placeholder="Email" required value="{{ old('email') }}">
                 </div>
-                @error('email')
-                    <div class="error-message">
-                        <i class="fas fa-exclamation-circle"></i> {{ $message }}
-                    </div>
-                @enderror
 
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
                     <input type="password" name="password" placeholder="Password" required>
                 </div>
-                @error('password')
-                    <div class="error-message">
-                        <i class="fas fa-exclamation-circle"></i> {{ $message }}
+
+                @session('fail')
+                    <div class="error-message mb-3">
+                        <i class="fas fa-exclamation-circle"></i> {{ $value }}
                     </div>
-                @enderror
+                @endsession
 
                 <button type="submit" class="login-btn">Sign In</button>
             </form>
-
-            <div class="signup-link">
-                Don’t have an account?
-                <a href="{{-- route('register') --}}">Sign up now</a>
-            </div>
         </div>
     </div>
 {{--

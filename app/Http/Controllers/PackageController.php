@@ -71,8 +71,9 @@ class PackageController extends Controller
      */
     public function show(String $id)
     {
-        $pckIncData = packageInclusion::where('package_id', '=', $id)->get();
-        return view('shows/packageInclusionShow', ['pckIncData' => $pckIncData]);
+        $pckIncData = packageInclusion::where('package_id', '=' , $id)->get();
+        $pkgData = Package::findOrFail($id);
+        return view('shows/packageInclusionShow', ['pckIncData' => $pckIncData, 'pkgData' => $pkgData]);
     }
 
     /**
@@ -86,9 +87,27 @@ class PackageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Package $package)
+    public function update(Request $request, String $id)
     {
-        //
+        $request->validate([
+            'pkgName' => 'required|max:50|unique:packages,pkg_name'
+        ], [
+            'pkgName.required' => 'This field is required.',
+            'pkgName.unique' => 'Package name is already added.',
+            'pkgName.max' => 'Max 50 character reached.'
+        ]);
+        Package::findOrFail($id)->update([
+            'pkg_name' => $request->pkgName
+        ]);
+
+        Log::create([
+            'action' => 'Update',
+            'from' => 'Updated Package name | ID: ' . $id,
+            'action_date' => Carbon::now()->format('Y-m-d'),
+            'emp_id' => session('loginId')
+        ]);
+
+        return redirect()->back()->with('promt', 'Updated Sucessfuly');
     }
 
     /**

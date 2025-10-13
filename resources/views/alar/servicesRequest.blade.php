@@ -10,6 +10,10 @@
     @session('promt')
         <h2 class="fw-semibold bg-danger-subtle">{{ $value }}</h2>
     @endsession
+    <div class="input-group" style="border-radius: 10px; overflow: hidden;">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search Service Request" style="border-radius: 0; border: none;">
+        <button class="btn" id="clearSearch" style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
+    </div>
     <a href="{{ route('Service-Request.create') }}" class="btn btn-custom d-flex align-items-center gap-2"><i
             class="bi bi-plus-lg"></i><span>Create Services</span></a>
 </div>
@@ -20,17 +24,19 @@
         <thead>
             <tr class="table-light">
                 <th class="fw-semibold">Package</th>
+                <th class="fw-semibold">Client</th>
+                <th class="fw-semibold">Contact #</th>
                 <th class="fw-semibold">Start Date</th>
                 <th class="fw-semibold">End Date</th>
                 <th class="fw-semibold">Wake Loc.</th>
-                <th class="fw-semibold">Church Loc.</th>
+                
                 <th class="fw-semibold">Burial Loc.</th>
                 <th class="fw-semibold">Equipment</th>
                 <th class="fw-semibold">Action</th>
             </tr>
         </thead>
 
-        <tbody>
+        <tbody id="tableBody">
 
             @if ($svcReqData->isEmpty())
                 <tr>
@@ -43,11 +49,12 @@
                     <tr>
                         {{-- Safely display the package name (avoid null errors) --}}
                         <td>{{ $row->svcReqToPac->pkg_name ?? '—' }}</td>
-
+                        <td>{{ $row->client_name }}</td>
+                        <td>{{ $row->client_contact_number }}</td>
                         <td>{{ $row->svc_startDate }}</td>
                         <td>{{ $row->svc_endDate }}</td>
                         <td>{{ $row->svc_wakeLoc }}</td>
-                        <td>{{ $row->svc_churchLoc }}</td>
+                        
                         <td>{{ $row->svc_burialLoc }}</td>
                         <td>{{ $row->svc_equipment_status }}</td>
                         <td>
