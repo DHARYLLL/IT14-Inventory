@@ -63,11 +63,11 @@ class PurchaseOrderController extends Controller
         ]);
 
 
-        $qty = $request -> qty;
-        $unitPrice = $request -> unitPrice;
-        $item = $request -> itemName;
-        $sizeWeight = $request -> sizeWeigth;
-        $type = $request -> typeSelect;
+        $qty = $request->qty;
+        $unitPrice = $request->unitPrice;
+        $item = $request->itemName;
+        $sizeWeight = $request->sizeWeigth;
+        $type = $request->typeSelect;
 
         $newItems = array();
         $newItemUnitPrice = array();
@@ -82,33 +82,31 @@ class PurchaseOrderController extends Controller
 
 
         // Check if stocks exists in the stocks and equipment table
-        for ($i=0; $i < count($item) ; $i++) {  
+        for ($i = 0; $i < count($item); $i++) {
             if ($type[$i] == "Consumable") {
-                if (Stock::where('item_name', '=', $item[$i])->where('size_weight', '=', $sizeWeight[$i])->doesntExist()){        
+                if (Stock::where('item_name', '=', $item[$i])->where('size_weight', '=', $sizeWeight[$i])->doesntExist()) {
                     array_push($newItems, $item[$i]);
                     array_push($newItemSizeWeight, $sizeWeight[$i]);
                     array_push($newItemUnitPrice, $unitPrice[$i]);
                     array_push($newItemType, $type[$i]);
-                    
                 }
-            } 
-            
+            }
+
             if ($type[$i] == "Non-Consumable") {
-                
-                if(Equipment::where('eq_name', '=', $item[$i])->where('eq_size_weight', '=', $sizeWeight[$i])->doesntExist()){
-                    
+
+                if (Equipment::where('eq_name', '=', $item[$i])->where('eq_size_weight', '=', $sizeWeight[$i])->doesntExist()) {
+
                     array_push($newEquipment, $item[$i]);
                     array_push($newEquipmentSizeWeight, $sizeWeight[$i]);
                     array_push($newEquipmentUnitPrice, $unitPrice[$i]);
                     array_push($newEquipmentType, $type[$i]);
                 }
-            }   
-            
+            }
         }
 
         // Create record for new stocks and in stocks table
-        if (count($newItems)){
-            for ($i=0; $i < count($newItems) ; $i++) {       
+        if (count($newItems)) {
+            for ($i = 0; $i < count($newItems); $i++) {
                 Stock::create([
                     'item_name' => $newItems[$i],
                     'item_qty' => 0,
@@ -119,8 +117,8 @@ class PurchaseOrderController extends Controller
             }
         }
         // Create record for new equipment and in equipments table
-        if (count($newEquipment)){
-            for ($i=0; $i < count($newEquipment) ; $i++) {       
+        if (count($newEquipment)) {
+            for ($i = 0; $i < count($newEquipment); $i++) {
                 Equipment::create([
                     'eq_name' => $newEquipment[$i],
                     'eq_type' => $newEquipmentType[$i],
@@ -140,14 +138,14 @@ class PurchaseOrderController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        $po = PurchaseOrder::orderBy('id','desc')->take(1)->value('id');
-        
-        
+        $po = PurchaseOrder::orderBy('id', 'desc')->take(1)->value('id');
+
+
         // store in PO
-        for ($i=0; $i < count($item) ; $i++) {    
+        for ($i = 0; $i < count($item); $i++) {
 
             if ($type[$i] == "Consumable") {
-                $getStock = Stock::where('item_name', '=', $item[$i])->where('size_weight', '=', $sizeWeight[$i])->first();   
+                $getStock = Stock::where('item_name', '=', $item[$i])->where('size_weight', '=', $sizeWeight[$i])->first();
                 PurchaseOrderItem::create([
                     'item' => $item[$i],
                     'qty' => $qty[$i],
@@ -159,10 +157,10 @@ class PurchaseOrderController extends Controller
                     'stock_id' => $getStock->id,
                     'eq_id' => session('loginId')
                 ]);
-            } 
-            
+            }
+
             if ($type[$i] == "Non-Consumable") {
-                $getEquipment = Equipment::where('eq_name', '=', $item[$i])->where('eq_size_weight', '=', $sizeWeight[$i])->first();   
+                $getEquipment = Equipment::where('eq_name', '=', $item[$i])->where('eq_size_weight', '=', $sizeWeight[$i])->first();
                 PurchaseOrderItem::create([
                     'item' => $item[$i],
                     'qty' => $qty[$i],
@@ -174,10 +172,7 @@ class PurchaseOrderController extends Controller
                     'eq_id' => $getEquipment->id,
                     'eq_id' => session('loginId')
                 ]);
-            } 
-
-
-            
+            }
         }
 
         //logs
@@ -188,7 +183,8 @@ class PurchaseOrderController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Purchase-Order.show', $po));
+        return redirect(route('Purchase-Order.index', $po))
+            ->with('success', 'Purchase Order has been Successfully created!');;
     }
 
     /**
@@ -243,6 +239,6 @@ class PurchaseOrderController extends Controller
             'action_date' => Carbon::now()->format('Y-m-d'),
             'emp_id' => session('loginId')
         ]);
-        return redirect()->back()->with('promt', 'Deleted Succesfully');
+        return redirect()->back()->with('success', 'Deleted Successfully');
     }
 }

@@ -9,10 +9,7 @@
     
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h2 class="fw-semibold">Purchase Order</h2>
-        @session('promt')
-            <h2 class="fw-semibold bg-danger-subtle">{{ $value }}</h2>
-        @endsession
-
+        
         <a href="{{ route('Purchase-Order.create') }}" class="btn btn-custom d-flex align-items-center gap-2"><i class="bi bi-plus-lg"></i>
             <span>New Purchase Order</span>
         </a>

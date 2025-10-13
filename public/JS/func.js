@@ -88,11 +88,11 @@ if (document.getElementById('add_new')) {
 
 function setStock() {
     var get = document.getElementById('select_stock');
-    if (get){
+    if (get) {
         var idData = get.options[get.selectedIndex].value;
         let forName = idData.slice(0, idData.indexOf(","));
         let forUnitPrice = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
-        let forSizeWeight = idData.slice(idData.indexOf(":") + 1, idData.indexOf(";") );
+        let forSizeWeight = idData.slice(idData.indexOf(":") + 1, idData.indexOf(";"));
         let forType = idData.slice(idData.indexOf(";") + 1);
         //document.getElementById("itemName").value = forQty;
 
@@ -152,7 +152,7 @@ function setStock() {
 
         pasteHere.insertAdjacentHTML("beforeend", template);
 
-    }else{
+    } else {
         document.getElementById("itemName").value = '';
     }
 
@@ -163,9 +163,9 @@ function setStock() {
 // get equipment
 
 function setEquipment() {
-    
+
     var get = document.getElementById('select_equipment');
-    if (get){
+    if (get) {
         var idData = get.options[get.selectedIndex].value;
         let forName = idData.slice(0, idData.indexOf(","));
         let forUnitPrice = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
@@ -230,7 +230,7 @@ function setEquipment() {
 
         pasteHere.insertAdjacentHTML("beforeend", template);
 
-    }else{
+    } else {
         document.getElementById("itemName").value = '';
     }
 
@@ -238,7 +238,7 @@ function setEquipment() {
 
 
 //set type for PO
-function getType(){
+function getType() {
     const getType = document.getElementById("placeType");
     const set = document.getElementById("setType");
     const setType = getType.options[getType.selectedIndex].value;
