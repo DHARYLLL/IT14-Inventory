@@ -22,7 +22,7 @@
         <div class="col-md-6">
             <label for="package" class="form-label fw-semibold">Package</label>
             <select name="package" id="package" class="form-select">
-                <option value="">Select Package</option>
+                <option disabled selected>Select Package</option>
                 @foreach ($pkgData as $data)
                     <option value="{{ $data->id }}">{{ $data->pkg_name }}</option>
                 @endforeach
@@ -35,7 +35,7 @@
         {{-- Client name --}}
         <div class="col-md-6">
             <label for="clientName" class="form-label fw-semibold">Client Name</label>
-            <input type="text" name="clientName" id="clientName" class="form-control">
+            <input type="text" name="clientName" id="clientName" class="form-control" value="{{ old('clientName') }}">
             @error('clientName')
                 <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
@@ -44,7 +44,7 @@
         {{-- Contact Number --}}
         <div class="col-md-6">
             <label for="clientConNum" class="form-label fw-semibold">Contact Number</label>
-            <input type="text" name="clientConNum" id="clientConNum" class="form-control">
+            <input type="text" name="clientConNum" id="clientConNum" class="form-control" value="{{ old('clientConNum') }}">
             @error('clientConNum')
                 <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
@@ -53,7 +53,7 @@
         {{-- Start Date --}}
         <div class="col-md-6">
             <label for="startDate" class="form-label fw-semibold">Start Date</label>
-            <input type="date" name="startDate" id="startDate" class="form-control">
+            <input type="date" name="startDate" id="startDate" class="form-control" value="{{ old('startDate') }}">
             @error('startDate')
                 <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
@@ -62,7 +62,7 @@
         {{-- End Date --}}
         <div class="col-md-6">
             <label for="endDate" class="form-label fw-semibold">End Date</label>
-            <input type="date" name="endDate" id="endDate" class="form-control">
+            <input type="date" name="endDate" id="endDate" class="form-control" value="{{ old('endDate') }}">
             @error('endDate')
                 <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
@@ -71,7 +71,7 @@
         {{-- Wake Location --}}
         <div class="col-md-6">
             <label for="wakeLoc" class="form-label fw-semibold">Wake Location</label>
-            <input type="text" name="wakeLoc" id="wakeLoc" class="form-control">
+            <input type="text" name="wakeLoc" id="wakeLoc" class="form-control" value="{{ old('wakeLoc') }}">
             @error('wakeLoc')
                 <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
@@ -80,7 +80,7 @@
         {{-- Church Location --}}
         <div class="col-md-6">
             <label for="churhcLoc" class="form-label fw-semibold">Church Location</label>
-            <input type="text" name="churhcLoc" id="churhcLoc" class="form-control">
+            <input type="text" name="churhcLoc" id="churhcLoc" class="form-control" value="{{ old('churhcLoc') }}">
             @error('churhcLoc')
                 <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
@@ -89,7 +89,7 @@
         {{-- Burial Location --}}
         <div class="col-md-6">
             <label for="burialLoc" class="form-label fw-semibold">Burial Location</label>
-            <input type="text" name="burialLoc" id="burialLoc" class="form-control">
+            <input type="text" name="burialLoc" id="burialLoc" class="form-control" value="{{ old('burialLoc') }}">
             @error('burialLoc')
                 <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
@@ -108,13 +108,57 @@
                     @endforeach
                 </select>
                 <input type="text" id="avail" class="form-control w-25" readonly placeholder="Available">
+                @session('emptyEq')
+                    <div class="text-danger small mt-1">{{ $value }}</div>
+               @endsession
                 <button type="button" id="add_eq" onclick="checkInputEq()" class="btn btn-outline-success">
                     Add Equipment
                 </button>
             </div>
         </div>
 
-        <div id="addEquipment" class="col-12 mt-2"></div>
+        <div id="addEquipment" class="col-12 mt-2">
+            @php
+                $oldEq = old('eqName', ['']);
+                $oldEqQtys = old('eqQty', ['']);
+                $oldEqId = old('equipment', ['']);
+            @endphp
+
+            @if(!empty(array_filter($oldEq)))
+
+                @foreach($oldEq as $i => $item)
+
+                    <div class="row g-2 align-items-end mb-2 added-item">
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-secondary">Equipment</label>
+                            <input type="text" class="form-control" name="eqName[]" value="{{ $item }}" readonly>
+                            <input type="text" name="equipment[]" value="{{ $oldEqId[$i] ?? '' }}" hidden>
+                            @error("eqName.$i")
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold text-secondary">Qty</label>
+                            <input type="number" class="form-control" name="eqQty[]" placeholder="Qty" value="{{ $oldEqQtys[$i] ?? '' }}">     
+                            @error("eqQty.$i")
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-outline-danger w-100 remove-eq mt-4">
+                                <i class="bi bi-x-circle"></i> Remove
+                            </button>
+                        </div>
+
+                    </div>
+
+
+                @endforeach
+
+            @endif
+
+        </div>
 
         {{-- Stock --}}
         <div class="col-12 mt-3">
@@ -135,7 +179,51 @@
             </div>
         </div>
 
-        <div id="addStock" class="col-12 mt-2"></div>
+        <div id="addStock" class="col-12 mt-2">
+            @php
+                $oldItems = old('itemName', ['']);
+                $oldQtys = old('stockQty', ['']);
+                $oldStock = old('stock', ['']);
+            @endphp
+
+            @if(!empty(array_filter($oldItems)))
+
+                @foreach($oldItems as $i => $item)
+
+                    <div class="row g-2 align-items-end mb-2 added-item">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-secondary">Stock</label>
+                            <input type="text" class="form-control" name="itemName[]" value="{{ $item }}" readonly>
+                            <input type="text" name="stock[]" value="{{ $oldStock[$i] ?? '' }}" hidden>
+                            @error("itemName.$i")
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror 
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold text-secondary">Stock Qty</label>
+                            <input type="number" class="form-control" name="stockQty[]" placeholder="Stock Qty" value="{{ $oldQtys[$i] ?? '' }}">
+                            @error("stockQty.$i")
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-outline-danger w-100 remove-sto mt-4">
+                                <i class="bi bi-x-circle"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+
+
+                @endforeach
+
+            @endif
+
+
+
+
+
+
+        </div>
 
         {{-- Submit Button --}}
         <div class="text-end mt-4">

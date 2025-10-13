@@ -306,7 +306,8 @@ function checkInputEq() {
     wrapper.innerHTML = `
         <div class="col-md-6">
             <label class="form-label fw-semibold text-secondary">Equipment</label>
-            <input type="text" class="form-control" value="${nameData}" readonly>
+            <input type="text" class="form-control" name="eqName[]" value="${nameData}" readonly>
+            <input type="text" name="equipment[]" value="${idData}" hidden>
         </div>
         <div class="col-md-3">
             <label class="form-label fw-semibold text-secondary">Qty</label>
@@ -317,7 +318,6 @@ function checkInputEq() {
                 <i class="bi bi-x-circle"></i> Remove
             </button>
         </div>
-        <input type="hidden" name="equipment[]" value="${idData}">
     `;
 
     document.getElementById('addEquipment').appendChild(wrapper);
@@ -369,7 +369,8 @@ function checkInputSto() {
     wrapper.innerHTML = `
         <div class="col-md-6">
             <label class="form-label fw-semibold text-secondary">Stock</label>
-            <input type="text" class="form-control" value="${nameData}" readonly>
+            <input type="text" class="form-control" name="itemName[]" value="${nameData}" readonly>
+            <input type="text" name="stock[]" value="${idData}" hidden>
         </div>
         <div class="col-md-3">
             <label class="form-label fw-semibold text-secondary">Stock Qty</label>
@@ -380,7 +381,6 @@ function checkInputSto() {
                 <i class="bi bi-x-circle"></i> Remove
             </button>
         </div>
-        <input type="hidden" name="stock[]" value="${idData}">
     `;
 
     document.getElementById('addStock').appendChild(wrapper);

@@ -13,6 +13,7 @@ use App\Models\SvsEquipment;
 use App\Models\SvsStock;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 use function Laravel\Prompts\alert;
 
@@ -45,14 +46,48 @@ class ServiceRequestController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'package' => 'required',
             'clientName' => 'required',
             'clientConNum' => 'required',
-            'startDate' => 'required',
-            'endDate' => 'required',
+            'startDate' => [
+                'required',
+                Rule::date()->afterOrEqual(today())
+            ],
+            'endDate' => 'required|date|after:startDate',
             'wakeLoc' => 'required',
             'churhcLoc' => 'required',
-            'burialLoc' => 'required'
+            'burialLoc' => 'required',
+            'itemName.*' => 'required',
+            'stockQty.*' => 'required|min:1|max:6',
+            'eqName.*' => 'required',
+            'eqQty.*' => 'required|min:1|max:6',
+        ], [
+            'package.required' => 'This field is required.',
+            'clientName.required' => 'This field is required.',
+            'clientConNum.required' => 'This field is required.',
+            'startDate.required' => 'This field is required.',
+            'startDate.after' => 'The start date must be today or after.',
+            'endDate.required' => 'This field is required.',
+            'endDate.after' => 'The end date must be after start date.',
+            'wakeLoc.required' => 'This field is required.',
+            'churhcLoc.required' => 'This field is required.',
+            'burialLoc.required' => 'This field is required.',
+            'stockQty.*.required' => 'This field is required.',
+            'stockQty.*.min' => 'Item quantity must be 1 or more.',
+            'stockQty.*.max' => '6 digit item quantity reached.',
+            'eqQty.*.required' => 'This field is required.',
+            'eqQty.*.min' => 'Equipment quantity must be 1 or more.',
+            'eqQty.*.max' => '6 digit equipment quantity reached.'
         ]);
+
+        $eq = $request->equipment;
+        $eqQty = $request->eqQty;
+        $sto = $request->stock;
+        $stoQty = $request->stockQty;
+        
+        if ($eq == null && $sto == null) {
+            return redirect()->back()->with('emptyEq', 'Must have atleast 1 equipment or item.')->withInput();
+        }
 
         ServiceRequest::create([
             'client_name' => $request->clientName,
@@ -69,8 +104,6 @@ class ServiceRequestController extends Controller
         ]);
 
         //get all equipment in request
-        $eq = $request->equipment;
-        $eqQty = $request->eqQty;
 
         $getId = ServiceRequest::orderBy('id','desc')->take(1)->value('id');
         
@@ -83,8 +116,7 @@ class ServiceRequestController extends Controller
         }
 
         //get all stock in request
-        $sto = $request->stock;
-        $stoQty = $request->stockQty;
+        
         
         for ($i=0; $i < count($sto); $i++) { 
             SvsStock::create([
