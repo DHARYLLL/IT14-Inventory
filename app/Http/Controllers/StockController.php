@@ -142,17 +142,44 @@ class StockController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Stock $stock)
+    public function edit(String $id)
     {
-        //
+        $stockData = Stock::findOrFail($id);
+        return view('functions/stockEdit', ['stockData' => $stockData]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Stock $stock)
+    public function update(Request $request, String $id)
     {
-        //
+        $request->validate([
+            'itemName' => "required|min:5|max:100",
+            'unitPrice' => "required|numeric|min:1",
+            'sizeWeight.*' => "required"
+        ],  [
+            'itemName.*.required' => 'This field is required.',
+            'itemName.*.min' => '5 - 100 Characters only.',
+            'itemName.*.max' => '5 - 100 Characters only.',
+            'unitPrice.*.required' => 'This field is required.',
+            'unitPrice.*.numeric' => 'Number only.',
+            'sizeWeigth.*.required' => 'This field is required.'
+        ]);
+
+        Stock::findOrFail($id)->update([
+            'item_name' => $request->itemName,
+            'size_weight' => $request->sizeWeight,
+            'item_unit_price' => $request->unitPrice
+        ]);
+
+        Log::create([
+            'action' => 'Updated',
+            'from' => 'Update Stock | ID: ' . $id,
+            'action_date' => Carbon::now()->format('Y-m-d'),
+            'emp_id' => session('loginId')
+        ]);
+
+        return redirect()->back()->with('promt', 'Updated Sucessfuly');
     }
 
     /**

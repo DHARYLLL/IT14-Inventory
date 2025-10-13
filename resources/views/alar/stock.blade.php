@@ -20,6 +20,7 @@
                     <th class="fw-semibold">Size/Weight</th>
                     <th class="fw-semibold">Item quantity</th>
                     <th class="fw-semibold">Unit Price</th>
+                    <th class="fw-semibold">Action</th>
                 </tr>
             </thead>
 
@@ -38,6 +39,9 @@
                             <td>{{ $row->size_weight }}</td>
                             <td>{{ $row->item_qty }}</td>
                             <td>{{ $row->item_unit_price }}</td>
+                            <td>
+                                <a href="{{ route('Stock.edit', $row->id) }}">Edit</a>
+                            </td>
                         </tr>
                     @endforeach
                 @endif
