@@ -1,61 +1,154 @@
-.purchase-order-container {
-    background-color: transparent;
+/* === PURCHASE ORDER SHOW PAGE STYLING === */
+
+/* Layout structure */
+.card-custom,
+.card-custom-2 {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    padding: 20px;
 }
 
-.card {
-    border-radius: 1rem;
+/* Left panel (status + details) */
+.card-custom {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.form-control,
-.form-select {
-    border-radius: 0.5rem;
-    transition: all 0.2s ease;
-}
-
-.form-control:focus,
-.form-select:focus {
-    border-color: #60BF4F;
-    box-shadow: 0 0 0 0.2rem rgba(96, 191, 79, 0.15);
-}
-
-.form-section {
-    background-color: #f8f9fa;
-    transition: all 0.2s ease;
-}
-
-.form-section:hover {
-    background-color: #f1f3f4;
-}
-
-.btn-outline-success {
-    border-width: 2px;
-}
-
-.btn-outline-success:hover {
-    background-color: #60BF4F;
-    color: white;
-    border-color: #60BF4F;
-}
-
+/* Headings and labels */
 label {
-    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
 }
 
-small.text-danger {
-    font-size: 0.8rem;
+input.form-control[readonly] {
+    background-color: #fafafa;
+    border: 2px solid #60BF4F;
+    border-radius: 6px;
+    padding: 8px 10px;
+    color: #333;
+    font-weight: 500;
 }
 
-@media (max-width: 768px) {
-    .purchase-order-container .card {
-        padding: 1rem;
+input.form-control:focus {
+    border-color: #4ea63f;
+    box-shadow: 0 0 0 0.2rem rgba(96, 191, 79, 0.25);
+}
+
+/* Horizontal line for clean separation */
+hr {
+    border-top: 1.5px solid #e8e8e8;
+    margin-top: 18px;
+    margin-bottom: 14px;
+}
+
+/* Approve & Delivered buttons */
+.btn-approve-custom {
+    border: 2px solid #60BF4F;
+    color: #60BF4F;
+    font-weight: 600;
+    border-radius: 8px;
+    background: transparent;
+    padding: 10px;
+    transition: all 0.2s ease;
+}
+
+.btn-approve-custom:hover {
+    background-color: #60BF4F;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* Go Back button (top-right) */
+.btn-custom {
+    background-color: #60BF4F;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+}
+
+.btn-custom:hover {
+    background-color: #4ea63f;
+    transform: translateY(-1px);
+}
+
+/* Table Styling */
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.95rem;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: #f8fdf8;
+    border-bottom: 2px solid #60BF4F;
+    color: #333;
+    font-weight: 600;
+    padding: 14px;
+}
+
+.table tbody td {
+    padding: 14px 18px;
+    color: #555;
+    border-bottom: 1px solid #eee;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1fbf1;
+    transition: 0.2s;
+}
+
+/* Consistent spacing for both sections */
+.col-3,
+.col-9 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Inputs inside the right form */
+.card-custom-2 input.form-control {
+    border: 2px solid #60BF4F;
+    border-radius: 6px;
+    padding: 8px 10px;
+}
+
+/* Table card on the right */
+.card-custom-2 {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* Shadow & hover effect for main cards */
+.card-custom:hover,
+.card-custom-2:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transition: all 0.25s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .d-flex.rounded.gap-3 {
+        flex-direction: column;
     }
 
-    .form-section {
-        padding: 1rem !important;
+    .col-3,
+    .col-9 {
+        width: 100%;
     }
 
-    .btn-outline-success,
-    .btn-success {
+    .btn-approve-custom {
         width: 100%;
     }
 }

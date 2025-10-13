@@ -1,4 +1,4 @@
-.sidebar {
+/*.sidebar {
     background-color: white;
     border-right: 1px solid #dee2e6;
     min-height: 100vh;
@@ -6,7 +6,6 @@
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Nav */
 .nav-menu {
     padding: 1rem;
 }
@@ -47,7 +46,6 @@
     background-color: #f1f1f1;
 }
 
-/* main */
 .main-content {
     flex: 1;
 }
@@ -94,7 +92,6 @@
     margin: 1.75rem auto;
     background: white;
     border-radius: 8px;
-    /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); */
 }
 
 .modal-header.modal-header-custom {
@@ -111,11 +108,7 @@
     background-color: white;
     color: #60BF4F;
     border-color: #60BF4F;
-    /* border: 2px solid #6fb33f;
-    padding: 10px 25px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s; */
+    
 }
 
 .btn.btn-cancel:hover {
@@ -144,7 +137,6 @@
     opacity: 0.85;
 }
 
-/* Action buttons */
 .btn.btn-edit-custom {
     background-color: #60BF4F;
     color: white;
@@ -166,9 +158,6 @@
 
 }
 
-/* ===============================
-   Form Add Equipment/Stock Styles
-   =============================== */
 #addEquipment .row,
 #addStock .row {
     margin-bottom: 0.75rem;
@@ -180,7 +169,6 @@ input[readonly] {
     background-color: #f9f9f9 !important;
 }
 
-/* Hover animation for buttons */
 .btn-outline-danger:hover {
     background-color: #ffebeb;
     border-color: #dc3545;
@@ -205,9 +193,7 @@ input[readonly] {
     box-shadow: 0 1px 4px rgba(96, 191, 79, 0.3);
 }
 
-/* ===============================
-   Add Package Form Styles
-   =============================== */
+
 .form-container {
     max-width: 800px;
     margin: 0 auto;
@@ -238,9 +224,7 @@ input[readonly] {
     border-radius: 8px;
 }
 
-/* ===============================
-   Add Package Enumerated Inclusion Styles (Improved)
-   =============================== */
+
 #inclusion-list .inclusion-item {
     display: flex;
     align-items: center;

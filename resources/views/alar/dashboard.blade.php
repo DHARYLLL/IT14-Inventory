@@ -75,27 +75,6 @@
                         </table>
                     </div>
                 </div>
-
-                <!-- Purchase Order Summary -->
-                {{-- <div class="col-md-12">
-                    <div class="dashboard-box">
-                        <h5>Purchase Order Summary</h5>
-                        <table class="table table-borderless table-hover placeholder-table">
-                            <thead>
-                                <tr>
-                                    <th>Status</th>
-                                    <th>Count</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="2" class="text-center text-muted">No data available</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div> --}}
-
             </div>
         </div>
 
