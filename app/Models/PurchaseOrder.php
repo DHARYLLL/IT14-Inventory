@@ -17,15 +17,18 @@ class PurchaseOrder extends Model
         'emp_id'
     ];
 
-    public function poToSup(){
+    public function poToSup()
+    {
         return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
-    public function poToEmp(){
+    public function poToEmp()
+    {
         return $this->belongsTo(Employee::class, 'emp_id');
     }
 
-    public function poToInv(){
-        return $this->belongsTo(Invoice::class, 'po_id');
+    public function poToInv()
+    {
+        return $this->hasOne(Invoice::class, 'po_id');
     }
 }

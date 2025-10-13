@@ -8,15 +8,16 @@ class Package extends Model
 {
     protected $table = 'packages';
     protected $fillable = [
-        'pkg_name',
-        'pkg_inclusion'
+        'pkg_name'
     ];
 
-    public function pacToSvcReq(){
+    public function pacToSvcReq()
+    {
         return $this->hasMany(ServiceRequest::class, 'package_id');
     }
 
-    public function pkgToPkgInc(){
-        return $this->hasMany(packageInclusion::class , 'package_id');
+    public function pkgToPkgInc()
+    {
+        return $this->hasMany(packageInclusion::class, 'package_id');
     }
 }

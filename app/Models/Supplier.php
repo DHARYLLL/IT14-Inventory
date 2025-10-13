@@ -15,7 +15,8 @@ class Supplier extends Model
         'company_address'
     ];
 
-    public function supToPo(){
+    public function supToPo()
+    {
         return $this->hasMany(PurchaseOrder::class, 'supplier_id');
     }
 }
