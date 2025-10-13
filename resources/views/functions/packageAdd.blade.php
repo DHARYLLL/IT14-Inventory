@@ -19,7 +19,7 @@
         <div class="row g-3 mb-3">
             <div class="col-md-12">
                 <label class="form-label fw-semibold text-secondary">Package Name</label>
-                <input type="text" class="form-control" placeholder="Enter package name" name="pkg_name">
+                <input type="text" class="form-control" placeholder="Enter package name" name="pkg_name" value="{{ old('pkg_name') }}">
                 @error('pkg_name')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror

@@ -95,8 +95,15 @@ class PackageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Package $package)
+    public function destroy(String $id)
     {
-        //
+        Package::findOrFail($id)->delete();
+        Log::create([
+            'action' => 'Deleted',
+            'from' => 'Delted Package | ID: ' . $id,
+            'action_date' => Carbon::now()->format('Y-m-d'),
+            'emp_id' => session('loginId')
+        ]);
+        return redirect()->back()->with('promt', 'Deleted Succesfully');
     }
 }
