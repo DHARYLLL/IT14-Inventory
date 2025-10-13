@@ -71,8 +71,9 @@ class PackageController extends Controller
      */
     public function show(String $id)
     {
-        $pckIncData = packageInclusion::where('package_id', '=', $id)->get();
-        return view('shows/packageInclusionShow', ['pckIncData' => $pckIncData]);
+        $pckIncData = packageInclusion::where('package_id', '=' , $id)->get();
+        $pkgData = Package::findOrFail($id);
+        return view('shows/packageInclusionShow', ['pckIncData' => $pckIncData, 'pkgData' => $pkgData]);
     }
 
     /**
