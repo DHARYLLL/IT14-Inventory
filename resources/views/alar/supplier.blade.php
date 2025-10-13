@@ -214,21 +214,21 @@
                             <label for="" class="form-label">
                                 <i class="bi bi-receipt" style="color: #60BF4F"></i> First Name
                             </label>
-                            <input type="text" name="fname" class="form-control">
+                            <input type="text" name="fname" class="form-control" value="{{ old('fname') }}">
                         </div>
 
                         <div class="col-md-4">
                             <label class="form-label">
                                 <i class="bi bi-calendar3" style="color: #60BF4F"></i> Middle Name
                             </label>
-                            <input type="text" name="mname" class="form-control">
+                            <input type="text" name="mname" class="form-control" value="{{ old('mname') }}">
                         </div>
 
                         <div class="col-md-4">
                             <label class="form-label">
                                 <i class="bi bi-calendar3" style="color: #60BF4F"></i> Last Name
                             </label>
-                            <input type="text" name="lname" class="form-control">
+                            <input type="text" name="lname" class="form-control" value="{{ old('lname') }}">
                         </div>
 
                     </div>
@@ -238,13 +238,19 @@
                             <label for="" class="form-label">
                                     <i class="bi bi-geo-alt" style="color: #60BF4F"></i> Contact Number
                             </label>
-                            <input type="text" name="contact_number" class="form-control">
+                            <input type="text" name="contact_number" class="form-control" value="{{ old('contact_number') }}">
+                            @error('contact_number')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">
                                 <i class="bi bi-telephone" style="color: #60BF4F"></i> Company Name
                             </label>
-                            <input type="text" name="company_name" class="form-control">
+                            <input type="text" name="company_name" class="form-control" value="{{ old('company_name') }}">
+                            @error('company_name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
                     </div>
 
@@ -253,7 +259,7 @@
                             <label for="" class="fomr-label">
                                 <i class="bi bi-geo-alt" style="color: #60BF4F"></i> Company Address
                             </label>
-                            <input type="text" name="company_address" class="form-control">
+                            <input type="text" name="company_address" class="form-control" value="{{ old('company_address') }}">
                         </div>
                     </div>
                 </div>
@@ -287,3 +293,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // });
 });
 </script>
+
+
+@if ($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var myModal = new bootstrap.Modal(document.getElementById('NewSupplierModal'));
+            myModal.show();
+        });
+    </script>
+@endif
+
