@@ -6,7 +6,10 @@
     @section('name', 'Staff')
 
     <div class="d-flex align-items-center justify-content-between mb-4">
-        
+        <div class="input-group" style="border-radius: 10px; overflow: hidden;">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search Logs" style="border-radius: 0; border: none;">
+            <button class="btn" id="clearSearch" style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
+        </div>
     </div>
 
     {{-- table --}}
@@ -15,14 +18,15 @@
             <thead>
                 <tr class="table-light">
                     <th class="fw-semibold">ID</th>
+                    <th class="fw-semibold">Employee</th>
                     <th class="fw-semibold">Action</th>
                     <th class="fw-semibold">From</th>
                     <th class="fw-semibold">Date</th>
-                    <th class="fw-semibold">Employee</th>
+                    
                 </tr>
             </thead>
 
-            <tbody>
+            <tbody id="tableBody">
 
                 @if ($logData->isEmpty())
                     <tr>
@@ -34,10 +38,10 @@
                     @foreach($logData as $row)
                         <tr>
                             <td>{{ $row->id }}</td>
+                            <td>{{ $row->logToEmp->emp_fname }} {{ $row->logToEmp->emp_mname }} {{ $row->logToEmp->emp_lname }}</td>
                             <td>{{ $row->action }}</td>
                             <td>{{ $row->from }}</td>
-                            <td>{{ $row->action_date }}</td>
-                            <td>{{ $row->logToEmp->emp_fname }} {{ $row->logToEmp->emp_mname }} {{ $row->logToEmp->emp_lname }}</td>
+                            <td>{{ $row->action_date }}</td> 
                         </tr>
                     @endforeach
                 @endif

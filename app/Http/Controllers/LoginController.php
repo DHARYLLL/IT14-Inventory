@@ -34,10 +34,10 @@ class LoginController extends Controller
                 $request->session()->regenerate();
                 return redirect(route('dashboard.index'));
             }else{
-                return back()->with('fail', 'Incorrect Password');
+                return back()->with('fail', 'Incorrect Password')->withInput();
             }
         }else{
-            return back()->with('fail', 'Invalid Username');
+            return back()->with('fail', 'Invalid Username')->withInput();
         }
         return $user;
     }

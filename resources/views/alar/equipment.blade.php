@@ -7,6 +7,10 @@
 
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h2 class="fw-semibold">Equipments</h2>
+        <div class="input-group" style="border-radius: 10px; overflow: hidden;">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search Equipment" style="border-radius: 0; border: none;">
+            <button class="btn" id="clearSearch" style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
+        </div>
         <a href="{{ route('Equipment.create') }}" class="btn btn-custom d-flex align-items-center gap-2"><i class="bi bi-plus-lg"></i><span>Add Equipment</span></a>
     </div>
 
@@ -24,7 +28,7 @@
                 </tr>
             </thead>
 
-            <tbody>
+            <tbody id="tableBody">
 
                 @if ($eqData->isEmpty())
                     <tr>
