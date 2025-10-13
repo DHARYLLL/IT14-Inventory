@@ -23,7 +23,7 @@ class ServiceRequestController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
         $svcReqData = ServiceRequest::all();
         return view('alar/servicesRequest', ['svcReqData' => $svcReqData]);
     }
@@ -84,7 +84,7 @@ class ServiceRequestController extends Controller
         $eqQty = $request->eqQty;
         $sto = $request->stock;
         $stoQty = $request->stockQty;
-        
+
         if ($eq == null && $sto == null) {
             return redirect()->back()->with('emptyEq', 'Must have atleast 1 equipment or item.')->withInput();
         }
@@ -105,23 +105,23 @@ class ServiceRequestController extends Controller
 
         //get all equipment in request
 
-        $getId = ServiceRequest::orderBy('id','desc')->take(1)->value('id');
+        $getId = ServiceRequest::orderBy('id', 'desc')->take(1)->value('id');
 
         if ($eq != null) {
-            for ($i=0; $i < count($eq); $i++) { 
+            for ($i = 0; $i < count($eq); $i++) {
                 SvsEquipment::create([
                     'service_id' => $getId,
                     'equipment_id' => $eq[$i],
                     'eq_used' => $eqQty[$i]
                 ]);
-            } 
+            }
         }
 
         if ($sto != null) {
-            for ($i=0; $i < count($sto); $i++) { 
+            for ($i = 0; $i < count($sto); $i++) {
                 SvsStock::create([
                     'stock_id' => $sto[$i],
-                    'service_id'=> $getId,
+                    'service_id' => $getId,
                     'stock_used' => $stoQty[$i]
                 ]);
             }
@@ -133,7 +133,7 @@ class ServiceRequestController extends Controller
             'action_date' => Carbon::now()->format('Y-m-d'),
             'emp_id' => session('loginId')
         ]);
-        
+
 
         return redirect(route('Service-Request.show', $getId));
     }
@@ -191,11 +191,11 @@ class ServiceRequestController extends Controller
         }
 
         if ($request->status == 'Pending') {
-            
+
             ServiceRequest::findOrFail($id)->update([
                 'svc_equipment_status' => 'Deployed'
             ]);
-            
+
             /*
             $test = array();
             $testId = array();
@@ -207,7 +207,7 @@ class ServiceRequestController extends Controller
 
             dd($test, $testId);
             */
-            
+
             foreach ($svcEqs as $data) {
                 $eqData = Equipment::where('id', '=', $data->equipment_id)->first();
                 Equipment::findOrFail($eqData->id)->update([
@@ -236,7 +236,7 @@ class ServiceRequestController extends Controller
                 'action_date' => Carbon::now()->format('Y-m-d'),
                 'emp_id' => session('loginId')
             ]);
-            
+
             return redirect()->back();
         }
 
@@ -255,6 +255,6 @@ class ServiceRequestController extends Controller
             'action_date' => Carbon::now()->format('Y-m-d'),
             'emp_id' => session('loginId')
         ]);
-        return redirect()->back()->with('promt', 'Deleted Succesfully');
+        return redirect()->back()->with('success', 'Deleted Succesfully');
     }
 }

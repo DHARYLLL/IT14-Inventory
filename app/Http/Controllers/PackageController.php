@@ -38,7 +38,7 @@ class PackageController extends Controller
         $request->validate([
             'pkg_name' => 'required|unique:packages,pkg_name',
             'pkg_inclusion.*' => 'required'
-        ],[
+        ], [
             'pkg_inclusion.*.required' => 'This field is required'
         ]);
 
@@ -47,9 +47,9 @@ class PackageController extends Controller
             'pkg_name' => $request->pkg_name,
         ]);
 
-        $getPkg = Package::orderBy('id','desc')->take(1)->value('id');
+        $getPkg = Package::orderBy('id', 'desc')->take(1)->value('id');
 
-        for ($i=0; $i < count($pkgInclusions); $i++) { 
+        for ($i = 0; $i < count($pkgInclusions); $i++) {
             packageInclusion::create([
                 'pkg_inclusion' => $pkgInclusions[$i],
                 'package_id' => $getPkg
@@ -64,7 +64,6 @@ class PackageController extends Controller
         ]);
 
         return redirect(route('Package.index'));
-        
     }
 
     /**
@@ -72,9 +71,8 @@ class PackageController extends Controller
      */
     public function show(String $id)
     {
-        $pckIncData = packageInclusion::where('package_id', '=' , $id)->get();
-        $pkgData = Package::findOrFail($id);
-        return view('shows/packageInclusionShow', ['pckIncData' => $pckIncData, 'pkgData' => $pkgData]);
+        $pckIncData = packageInclusion::where('package_id', '=', $id)->get();
+        return view('shows/packageInclusionShow', ['pckIncData' => $pckIncData]);
     }
 
     /**
@@ -123,6 +121,6 @@ class PackageController extends Controller
             'action_date' => Carbon::now()->format('Y-m-d'),
             'emp_id' => session('loginId')
         ]);
-        return redirect()->back()->with('promt', 'Deleted Succesfully');
+        return redirect()->back()->with('success', 'Deleted Successfully');
     }
 }
