@@ -141,13 +141,13 @@
                                     @else
                                         @foreach ($poItemData as $row)
                                             <tr>
-                                                @if($row->stock_id)
+                                                @if($row->type == "Consumable")
                                                     <td>
                                                         {{ $row->item }}
                                                         <input type="text" name="stockId[]" value="{{ $row->stock_id }}" hidden>
                                                     </td>
                                                 @endif
-                                                @if($row->eq_id)
+                                                @if($row->type == "Non-Consumable")
                                                     <td>
                                                         {{ $row->item }}
                                                         <input type="text" name="stockId[]" value="{{ $row->eq_id }}" hidden>
