@@ -8,13 +8,12 @@
     <div class="purchase-order-container">
 
         {{-- Header section --}}
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center justify-content-end p-2 mb-2">
             <div class="d-flex align-items-center gap-2">
-                <a href="{{ route('Purchase-Order.index') }}" class="text-decoration-none">
-                    <h4 class="text-dark mb-0 fw-semibold">Purchase Order</h4>
+                <a href="{{ route('Purchase-Order.index') }}" class="btn btn-green d-flex align-items-center gap-2 px-3">
+                    <i class="bi bi-arrow-left"></i>
+                    <span>Back</span>
                 </a>
-                <span class="text-muted">></span>
-                <p class="mb-0 text-secondary fw-medium">Create Purchase Order</p>
             </div>
         </div>
 
@@ -47,7 +46,7 @@
                             <button class="btn btn-outline-success" type="button" id="add_new">
                                 <i class="bi bi-plus-circle"></i> Add More
                             </button>
-                            <button class="btn btn-success text-white px-4" type="submit">
+                            <button class="btn btn-green text-white px-4" type="submit">
                                 <i class="bi bi-send"></i> Submit
                             </button>
                         </div>

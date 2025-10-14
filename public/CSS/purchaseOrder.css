@@ -59,3 +59,132 @@ small.text-danger {
         width: 100%;
     }
 }
+
+.card-modern {
+    background-color: #ffffff;
+    border: 1px solid #e6e6e6;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: 0.2s ease-in-out;
+}
+
+.card-modern:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-label {
+    font-size: 0.95rem;
+}
+
+.modern-input {
+    border-radius: 10px;
+    border: 1px solid #dcdcdc;
+    padding: 10px 14px;
+    transition: all 0.2s ease-in-out;
+}
+
+.modern-input:focus {
+    border-color: #60BF4F;
+    box-shadow: 0 0 6px rgba(96, 191, 79, 0.3);
+}
+
+.btn-success-modern {
+    background-color: #60BF4F;
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 10px 20px;
+    border: none;
+    transition: 0.2s ease;
+}
+
+.btn-success-modern:hover {
+    background-color: #4ca63d;
+    box-shadow: 0 4px 10px rgba(96, 191, 79, 0.3);
+}
+
+/* Modern Card Container */
+.modern-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    margin-top: 1rem;
+    overflow-x: auto;
+    min-height: 70vh;
+}
+
+/* Modern Table */
+.modern-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    font-size: 0.95rem;
+}
+
+.modern-table thead th {
+    background: #f9fafb;
+    color: #555;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    padding: 12px 14px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.modern-table tbody tr {
+    background: #fff;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.modern-table tbody tr:hover {
+    background: #f5f9ff;
+    transform: translateY(-2px);
+}
+
+.modern-table td {
+    padding: 12px 14px;
+    vertical-align: middle;
+    border-top: none;
+}
+
+/* Badge for Type column */
+.type-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.type-badge.consumable {
+    background-color: #e0f8e9;
+    color: #1a7f37;
+}
+
+.type-badge.non-consumable {
+    background-color: #eaf1ff;
+    color: #2a5bd7;
+}
+
+/* Qty Arrived Input */
+.qty-input {
+    border: 1px solid #d0d7de;
+    border-radius: 8px;
+    padding: 6px 8px;
+    width: 120px;
+    font-size: 0.9rem;
+    transition: 0.2s;
+}
+
+.qty-input:focus {
+    border-color: #4c9aff;
+    box-shadow: 0 0 0 3px rgba(76, 154, 255, 0.15);
+    outline: none;
+}
+
+/* Text muted */
+.text-muted {
+    color: #6c757d !important;
+}
