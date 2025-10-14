@@ -21,6 +21,9 @@
     <link rel="stylesheet" href="{{ asset('CSS/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/purchaseOrder.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/equipment.css') }}">
+
+
 
 
 
