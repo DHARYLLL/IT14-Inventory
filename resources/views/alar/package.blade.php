@@ -20,8 +20,8 @@
     <table class="table table-hover mb-0">
         <thead>
             <tr class="table-light">
-                <th class="fw-semibold">Package</th>
-                <th class="fw-semibold">Action</th>
+                <th class="col col-md-10 fw-semibold">Package</th>
+                <th class="col col-md-2 fw-semibold text-center">Action</th>
             </tr>
         </thead>
 
