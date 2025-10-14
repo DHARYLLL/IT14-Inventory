@@ -7,9 +7,9 @@
 
 <!-- Header Section -->
 
-<div class="d-flex align-items-center gap-3 justify-content-between p-2 mb-2">
+<div class="d-flex align-items-center gap-3 justify-content-between p-2 mb-0">
     <!-- Search Bar -->
-    <div class="input-group" style="max-width: 400px; border-radius: 10px; overflow: hidden;">
+    <div class="input-group" style="max-width: 600px; border-radius: 10px; overflow: hidden;">
         <input type="text" id="searchInput" class="form-control" placeholder="Search Equipment"
             style="border-radius: 0; border: none;">
         <button class="btn" id="clearSearch"
