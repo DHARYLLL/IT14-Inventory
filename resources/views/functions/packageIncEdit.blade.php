@@ -14,13 +14,13 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col col-6">
-                <button type="submit" class="btn btn-green w-100">Save</button>
+        <div class="row justify-content-center align-items-center">
+            <div class="col col-2">
+                <a href="{{ route('Package.show', $pkgIncData->package_id) }}" class="btn btn-outline-danger w-100"><i
+                        class="bi bi-x-lg px-2"></i>Cancel</a>
             </div>
-            <div class="col col-6">
-                <a href="{{ route('Package.show', $pkgIncData->package_id) }}"
-                    class="btn btn-outline-success w-100">Cancel</a>
+            <div class="col col-2">
+                <button type="submit" class="btn btn-green w-100"><i class="bi bi-floppy px-2"></i>Save</button>
             </div>
         </div>
 

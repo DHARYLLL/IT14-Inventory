@@ -7,7 +7,7 @@
 
 <div class="d-flex align-items-center justify-content-end mb-4">
     <a href="{{ route('Package.index') }}" class="btn btn-outline-success d-flex align-items-center gap-2">
-        <i class="bi bi-arrow-left-circle"></i> <span>Back</span>
+        <i class="bi bi-arrow-left"></i> <span>Back</span>
     </a>
 </div>
 
@@ -68,8 +68,8 @@
 
         {{-- Submit Button --}}
         <div class="row mt-3">
-            <div class="col">
-                <button type="submit" class="btn submit-btn w-100 py-2">Submit</button>
+            <div class="col col-12 ">
+                <button type="submit" class="btn submit-btn w-100 px-2"><i class="bi bi-send px-2"></i>Submit</button>
             </div>
         </div>
     </form>

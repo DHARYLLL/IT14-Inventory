@@ -114,9 +114,10 @@
 
                                 {{-- Footer --}}
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-green modal-btn"
-                                        data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-green modal-btn">Save changes</button>
+                                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i
+                                            class="bi bi-x-lg px-2"></i>Cancel</button>
+                                    <button type="submit" class="btn btn-green"><i class="bi bi-floppy px-2"></i>Save
+                                        Changes</button>
                                 </div>
                             </form>
                         </div>
@@ -212,9 +213,10 @@ aria-hidden="true">
 
             {{-- Footer --}}
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-green modal-btn"
-                    data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-green modal-btn">Add Supplier</button>
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i
+                        class="bi bi-x-lg px-1"></i>Cancel</button>
+                <button type="submit" class="btn btn-green"><i class="bi bi-plus-lg px-1"></i>Add
+                    Supplier</button>
             </div>
         </form>
     </div>

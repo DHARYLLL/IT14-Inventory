@@ -24,7 +24,7 @@
                 @enderror
             </div>
             <div class="col-md-4">
-                <button class="btn btn-green w-100">Update</button>
+                <button class="btn btn-green w-50"><i class="bi bi-floppy px-2"></i>Update</button>
             </div>
         </div>
     </form>
