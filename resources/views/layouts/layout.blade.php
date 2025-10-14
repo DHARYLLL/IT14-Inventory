@@ -126,7 +126,7 @@
             </div> --}}
         </aside>
         {{-- Main Content --}}
-        <div class="main-content flex-fill d-flex flex-column h-100">
+        <div class="main-content flex-fill d-flex flex-column h-100" style="width: 85%;">
             {{-- Header --}}
             <header class="header px-4 py-3 shadow-sm" style="height: 13%;">
                 <div class="d-flex align-items-center justify-content-between">

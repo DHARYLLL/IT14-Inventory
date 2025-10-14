@@ -7,7 +7,7 @@ body {
 
 /* SIDEBAR */
 .sidebar {
-    width: 260px;
+    width: 15%;
     background-color: #ffffff;
     border-right: 1px solid #e5e5e5;
     min-height: 100vh;
