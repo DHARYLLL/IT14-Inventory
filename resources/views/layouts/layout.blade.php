@@ -20,12 +20,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('CSS/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/purchaseOrder.css') }}">
+    
     <link rel="stylesheet" href="{{ asset('CSS/layout.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/equipment.css') }}">
     <link rel="stylesheet" href="{{ asset('css/supplier.css') }}">
     <link rel="stylesheet" href="{{ asset('css/stockEdit.css') }}">
-
-
+    
 
 
 
@@ -34,8 +34,8 @@
 </head>
 
 <body>
-    <div class="d-flex">
-        <aside class="sidebar d-flex flex-column">
+    <div class="d-flex vh-100">
+        <aside class="sidebar d-flex flex-column h-100">
             {{-- LOGO --}}
             <div class="logo mb-4">
                 <div class="d-flex align-items-center gap-2">
@@ -126,9 +126,9 @@
             </div> --}}
         </aside>
         {{-- Main Content --}}
-        <div class="main-content flex-fill d-flex flex-column">
+        <div class="main-content flex-fill d-flex flex-column h-100" style="width: 85%;">
             {{-- Header --}}
-            <header class="header px-4 py-3 shadow-sm ">
+            <header class="header px-4 py-3 shadow-sm" style="height: 13%;">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-3">
                         <h1>@yield('head')</h1>
@@ -172,7 +172,7 @@
                 </div>
             </header>
             {{-- Content --}}
-            <main class="flex-fill p-4">
+            <main class="flex-fill p-4 overflow-auto" style="height: 87%;">
                 <div class="content-area bg-light p-2 rounded shadow-sm">
                     @yield('content')
                 </div>

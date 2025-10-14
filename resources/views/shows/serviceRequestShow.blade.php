@@ -96,6 +96,26 @@
                         <p>{{ $svcReqData->svc_equipment_status }}</p>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col col-4">
+                        <p>Deployed Date</p>
+                    </div>
+                    <div class="col col-8">
+                        <p>{{ $svcReqData->svc_deploy_date }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-4">
+                        <p>Return Date</p>
+                    </div>
+                    <div class="col col-8">
+                        <p>{{ $svcReqData->svc_return_date }}</p>
+                    </div>
+                </div>
+
+
                 @if($svcReqData->svc_equipment_status == "Pending")
 
                     <div class="row">
