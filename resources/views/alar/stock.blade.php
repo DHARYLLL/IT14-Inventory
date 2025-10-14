@@ -45,7 +45,7 @@
                     <td>{{ $row->item_unit_price }}</td>
                     <td>
                         <a href="{{ route('Stock.edit', $row->id) }}" class="btn btn-outline-success btn-md">
-                            <i class="fi fi-rr-edit" data-bs-toggle="tooltip" data-bs-placement="top"
+                            <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Edit"></i>
                         </a>
                     </td>

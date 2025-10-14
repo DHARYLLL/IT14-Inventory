@@ -1,7 +1,6 @@
 @extends('shows/packageInclusionShow')
 
 @section('package-edit')
-    
     <form action="{{ route('Package-Inclusion.update', $pkgIncData->id) }}" method="post">
         @csrf
         @method('put')
@@ -17,13 +16,13 @@
 
         <div class="row">
             <div class="col col-6">
-                <button type="submit" class="btn btn-primary w-100">Save</button>
+                <button type="submit" class="btn btn-green w-100">Save</button>
             </div>
-             <div class="col col-6">
-                <a href="{{ route('Package.show', $pkgIncData->package_id) }}" class="btn btn-secondary w-100">cancel</a>
+            <div class="col col-6">
+                <a href="{{ route('Package.show', $pkgIncData->package_id) }}"
+                    class="btn btn-outline-success w-100">Cancel</a>
             </div>
         </div>
 
     </form>
-
 @endsection
