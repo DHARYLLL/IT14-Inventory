@@ -41,15 +41,15 @@
             </div>
 
             <div class="summary-card out-of-stock flex-fill">
-                <h5>This month average spending</h5>
+                <h5>This Month Average Spending</h5>
                 <div class="card-content">
-                    <i class="bi bi-x-circle"></i>
+                    <i class="bi bi-cash-coin"></i>
                     <span class="count">{{ $getAv }}</span>
                 </div>
             </div>
         </div>
 
-        <!-- Lower Section (3 Boxes) -->
+        <!-- Lower Section (2 Boxes) -->
         <div class="bottom-section">
             <div class="row g-3">
 
@@ -57,9 +57,8 @@
                 <div class="col-md-6">
                     <div class="dashboard-box">
                         <h5>Recent Activity</h5>
-                        <div class="placeholder-box overflow-auto">
-                            
-                            <table class="table table-borderless table-hover placeholder-table">
+                        <div class="placeholder-box">
+                            <table class="table table-borderless table-hover placeholder-table mb-0">
                                 <thead>
                                     <tr>
                                         <th>Action</th>
@@ -68,7 +67,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if ($lowStockData->isEmpty())
+                                    @if ($logData->isEmpty())
                                         <tr>
                                             <td colspan="3" class="text-center text-muted">No data available</td>
                                         </tr>
@@ -81,11 +80,8 @@
                                             </tr>
                                         @endforeach
                                     @endif
-                                    
                                 </tbody>
                             </table>
-
-
                         </div>
                     </div>
                 </div>
@@ -94,8 +90,8 @@
                 <div class="col-md-6">
                     <div class="dashboard-box">
                         <h5>Low Stock Items</h5>
-                        <div class="placeholder-box overflow-auto">
-                            <table class="table table-borderless table-hover placeholder-table">
+                        <div class="placeholder-box">
+                            <table class="table table-borderless table-hover placeholder-table mb-0">
                                 <thead>
                                     <tr>
                                         <th>Item Name</th>
@@ -117,32 +113,11 @@
                                             </tr>
                                         @endforeach
                                     @endif
-                            
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-
-                <!-- Purchase Order Summary -->
-                {{-- <div class="col-md-12">
-                    <div class="dashboard-box">
-                        <h5>Purchase Order Summary</h5>
-                        <table class="table table-borderless table-hover placeholder-table">
-                            <thead>
-                                <tr>
-                                    <th>Status</th>
-                                    <th>Count</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="2" class="text-center text-muted">No data available</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div> --}}
 
             </div>
         </div>

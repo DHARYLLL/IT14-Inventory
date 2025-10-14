@@ -22,6 +22,6 @@ class PurchaseOrderItem extends Model
 
     public function purchaseOrder()
     {
-        return $this->belongsTo(PurchaseOrder::class);
+        return $this->belongsTo(PurchaseOrder::class, 'po_id');
     }
 }

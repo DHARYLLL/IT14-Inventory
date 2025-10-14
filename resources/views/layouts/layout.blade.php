@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {{-- comment --}}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +20,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('CSS/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/purchaseOrder.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/equipment.css') }}">
+
+
+
+
 
 
 </head>
@@ -62,17 +69,18 @@
                     </li>
 
                     <li class="nav-list">
-                        <a href="{{ route('supplier.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('supplier.*') ? 'active' : '' }}">
-                            <i class="bi bi-truck"></i>
-                            <span>Supplier</span>
+                        <a href="{{ route('Package.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Package.*') ? 'active' : '' }}">
+                            <i class="bi bi-receipt"></i>
+                            <span>Package</span>
                         </a>
                     </li>
 
                     <li class="nav-list">
-                        <a href="{{ route('Log.index') }}" class="nav-link-custom {{ request()->routeIs('Log.*') ? 'active' : '' }}">
-                            <i class="bi bi-journal-text"></i>
-                            <span>Logs</span>
+                        <a href="{{ route('supplier.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('supplier.*') ? 'active' : '' }}">
+                            <i class="bi bi-truck"></i>
+                            <span>Supplier</span>
                         </a>
                     </li>
 
@@ -93,10 +101,10 @@
                     </li>
 
                     <li class="nav-list">
-                        <a href="{{ route('Package.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Package.*') ? 'active' : '' }}">
-                            <i class="bi bi-receipt"></i>
-                            <span>Package</span>
+                        <a href="{{ route('Log.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Log.*') ? 'active' : '' }}">
+                            <i class="bi bi-journal-text"></i>
+                            <span>Log</span>
                         </a>
                     </li>
                 </ul>
@@ -114,10 +122,10 @@
                 </form>
             </div> --}}
         </aside>
-
-        <div class="main-content d-flex flex-column">
+        {{-- Main Content --}}
+        <div class="main-content flex-fill d-flex flex-column">
             {{-- Header --}}
-            <header class="header">
+            <header class="header px-4 py-3 shadow-sm ">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-3">
                         <h1>@yield('head')</h1>
@@ -141,14 +149,17 @@
                                 <span class="fw-semibold small">ST</span>
                             </div>
 
-                            <ul class="dropdown-menu mb-0 align-items-center" aria-labelledby="profileDropdown">
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                <li class="px-3 py-2 text-muted small">Logged in as: @yield('name')</li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
-                                        <button type="submit"
-                                            class="btn btn-outline-danger w-75 justify-content-center gap-2">
+                                        <button type="submit" class="dropdown-item text-danger">
                                             <i class="bi bi-box-arrow-right"></i>
-                                            <span>Logout</span></button>
+                                            Logout</button>
                                     </form>
                                 </li>
                             </ul>
@@ -157,9 +168,9 @@
                     </div>
                 </div>
             </header>
-
+            {{-- Content --}}
             <main class="flex-fill p-4">
-                <div class="content-area">
+                <div class="content-area bg-light p-2 rounded shadow-sm">
                     @yield('content')
                 </div>
             </main>
@@ -170,17 +181,17 @@
 </body>
 
 @if (session('success'))
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        Swal.fire({
-            icon: 'success',
-            title: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 2000
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'success',
+                title: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
         });
-    });
-</script>
+    </script>
 @endif
 
 </html>
