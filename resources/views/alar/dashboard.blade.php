@@ -7,13 +7,6 @@
 @section('content')
     <div class="dashboard-container">
 
-        <!-- Search and Summary Section -->
-        <div class="dashboard-header d-flex align-items-center justify-content-between mb-4">
-            <div class="search-bar">
-                <input type="text" placeholder="Search" class="form-control shadow-sm">
-            </div>
-        </div>
-
         <!-- Summary Cards -->
         <div class="summary-cards d-flex flex-wrap gap-3 mb-4">
             <div class="summary-card total-items flex-fill">
@@ -121,6 +114,5 @@
 
             </div>
         </div>
-
     </div>
 @endsection

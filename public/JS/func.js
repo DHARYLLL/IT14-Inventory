@@ -88,6 +88,15 @@ if (document.getElementById('add_new')) {
 
 function setStock() {
     var get = document.getElementById('select_stock');
+
+
+    if (!get) return;
+
+    if (get.value.trim() === "") {
+        alert("Input is empty");
+        return;
+    }
+
     if (get) {
         var idData = get.options[get.selectedIndex].value;
         let forName = idData.slice(0, idData.indexOf(","));
@@ -165,6 +174,12 @@ function setStock() {
 function setEquipment() {
 
     var get = document.getElementById('select_equipment');
+    if (!get) return;
+
+    if (get.value.trim() === "") {
+        alert("Input is empty");
+        return;
+    }
     if (get) {
         var idData = get.options[get.selectedIndex].value;
         let forName = idData.slice(0, idData.indexOf(","));

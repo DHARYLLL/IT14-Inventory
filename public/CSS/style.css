@@ -453,3 +453,23 @@ body {
 .text-secondary {
     color: #6c757d !important;
 }
+
+/* Si gar nag butang ani hahahaha (start)*/
+
+.cust-h-heading {
+    height: 10%;
+}
+
+.cust-h-content {
+    height: 90%;
+    overflow: auto;
+}
+
+.cust-sticky th {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 20;
+}
+
+/* Si gar nag butang ani hahahaha (end)*/

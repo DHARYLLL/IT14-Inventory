@@ -64,7 +64,7 @@
                                 <div class="col col-8">
                                     <div>
                                         <select class="form-select" name="" id="select_stock">
-                                            <option selected disabled>Select Item</option>
+                                            <option value="" selected disabled>Select Item</option>
                                             @foreach ($stoData as $row)
                                                 <option
                                                     value="{{ $row->item_name }},{{ $row->item_unit_price }}:{{ $row->size_weight }};{{ $row->item_type }}">
@@ -90,7 +90,7 @@
                                 <div class="col col-8">
                                     <div>
                                         <select class="form-select" name="" id="select_equipment">
-                                            <option selected disabled>Select Item</option>
+                                            <option value="" selected disabled>Select Item</option>
                                             @foreach ($eqData as $row)
                                                 <option
                                                     value="{{ $row->eq_name }},{{ $row->eq_unit_price }}:{{ $row->eq_size_weight }};{{ $row->eq_type }}">
