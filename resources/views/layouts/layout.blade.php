@@ -173,7 +173,7 @@
             </header>
             {{-- Content --}}
             <main class="flex-fill p-4 overflow-auto" style="height: 87%;">
-                <div class="content-area bg-light p-2 rounded shadow-sm">
+                <div class="content-area bg-light p-2 rounded shadow-sm h-100">
                     @yield('content')
                 </div>
             </main>
