@@ -23,6 +23,9 @@
     <link rel="stylesheet" href="{{ asset('CSS/layout.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/equipment.css') }}">
     <link rel="stylesheet" href="{{ asset('css/supplier.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/stockEdit.css') }}">
+
+
 
 
 
@@ -96,7 +99,7 @@
                         <a href="{{ route('Service-Request.index') }}"
                             class="nav-link-custom {{ request()->routeIs('Service-Request.*') ? 'active' : '' }}">
                             <i class="bi bi-receipt"></i>
-                            <span>Service Request</span>
+                            <span>Service Requests</span>
                         </a>
                     </li>
 

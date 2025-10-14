@@ -15,11 +15,11 @@
         <button class="btn" id="clearSearch"
             style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
     </div>
-
+    {{-- 
     <a href="{{ route('Equipment.create') }}" class="btn btn-custom d-flex align-items-center gap-2 px-3 py-2"
         style="background-color: #28a745; color: white; white-space: nowrap;">
         <i class="bi bi-plus-lg"></i><span>Add Equipment</span>
-    </a>
+    </a> --}}
 </div>
 
 
