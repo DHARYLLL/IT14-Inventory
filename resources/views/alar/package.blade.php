@@ -19,48 +19,47 @@
 </div>
 
 {{-- Table --}}
-<div class="bg-white rounded border overflow-hidden">
-    <table class="modern-table table-hover mb-0">
-        <thead>
-            <tr class="table-light">
-                <th class="fw-semibold">Package</th>
-                <th class="col col-md-2 fw-semibold text-center">Action</th>
-            </tr>
-        </thead>
+<table class="modern-table table-hover mb-0">
+    <thead>
+        <tr class="table-light">
+            <th class="fw-semibold">Package</th>
+            <th class="col col-md-2 fw-semibold text-center">Action</th>
+        </tr>
+    </thead>
 
-        <tbody id="tableBody">
-            @if ($pacData->isEmpty())
+    <tbody id="tableBody">
+        @if ($pacData->isEmpty())
+            <tr>
+                <td colspan="2" class="text-center text-secondary py-3">
+                    No packages available.
+                </td>
+            </tr>
+        @else
+            @foreach ($pacData as $row)
                 <tr>
-                    <td colspan="2" class="text-center text-secondary py-3">
-                        No packages available.
+                    <td>{{ $row->pkg_name }}</td>
+                    <td class="text-center">
+                        <div class="d-inline-flex justify-content-center gap-2">
+                            <a href="{{ route('Package.show', $row->id) }}"
+                                class="btn btn-outline-success btn-md d-flex align-items-center justify-content-center">
+                                <i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="View"></i>
+                            </a>
+                            <form action="{{ route('Package.destroy', $row->id) }}" method="POST" class="m-0">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="btn btn-outline-danger btn-md d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Delete"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
-            @else
-                @foreach ($pacData as $row)
-                    <tr>
-                        <td>{{ $row->pkg_name }}</td>
-                        <td class="text-center">
-                            <div class="d-inline-flex justify-content-center gap-2">
-                                <a href="{{ route('Package.show', $row->id) }}"
-                                    class="btn btn-outline-success btn-md d-flex align-items-center justify-content-center">
-                                    <i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="View"></i>
-                                </a>
-                                <form action="{{ route('Package.destroy', $row->id) }}" method="POST" class="m-0">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="btn btn-outline-danger btn-md d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top"
-                                            title="Delete"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
-            @endif
-        </tbody>
-    </table>
+            @endforeach
+        @endif
+    </tbody>
+</table>
 </div>
 @endsection

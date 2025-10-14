@@ -289,3 +289,37 @@ input[readonly] {
     border-color: #dc3545;
     transform: scale(1.05);
 }
+
+/* ===== Equipment Card Design ===== */
+
+.card {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.card-body p {
+    font-size: 0.95rem;
+    color: #495057;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+.btn-green {
+    background-color: #198754;
+    color: #fff;
+    border: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-green:hover {
+    background-color: #157347;
+    transform: scale(1.03);
+}
+
+.border {
+    border: 1px solid #dee2e6 !important;
+}
