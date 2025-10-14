@@ -67,10 +67,8 @@
         </div>
 
         {{-- Submit Button --}}
-        <div class="row mt-3">
-            <div class="col col-12 ">
-                <button type="submit" class="btn submit-btn w-100 px-2"><i class="bi bi-send px-2"></i>Submit</button>
-            </div>
+        <div class="col col-12 mt-3 text-end">
+            <button type="submit" class="btn submit-btn w-25 px-2"><i class="bi bi-send px-2"></i>Submit</button>
         </div>
     </form>
 </div>
