@@ -3,7 +3,7 @@
 
 @section('content')
 
-@section('head', 'Edit Stock')
+@section('head', 'Stocks')
 @section('name', 'Staff')
 
 <div class="stock-edit-container p-3">
@@ -52,7 +52,7 @@
 
             <div class="d-flex justify-content-end gap-3 mt-4">
                 <button type="submit" class="btn btn-green px-4">Save Changes</button>
-                <a href="{{ route('Stock.index') }}" class="btn btn-outline-secondary px-4">Go Back</a>
+                <a href="{{ route('Stock.index') }}" class="btn btn-outline-success">Go Back</a>
             </div>
         </form>
     </div>

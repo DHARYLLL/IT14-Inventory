@@ -2,35 +2,33 @@
 @section('title', 'Equipments')
 
 @section('content')
-    @section('head', 'Show Equipment')
-    @section('name', 'Staff')
+@section('head', 'Equipment View')
+@section('name', 'Staff')
 
-    <div class="d-flex align-items-center justify-content-end mb-4">
+<div class="d-flex align-items-center justify-content-end m-2">
+    <a href="{{ route('Equipment.index') }}" class="btn btn-green d-flex align-items-center gap-2 px-3">
+        <i class="bi bi-arrow-left"></i>
+        <span>Back</span>
+    </a>
+</div>
 
-        <a href="{{ route('Equipment.index') }}" class="btn btn-custom d-flex align-items-center gap-2"></i><span>Back</span></a>
-    </div>
-
-    {{-- table --}}
-    <div class="bg-white rounded border overflow-hidden">
-        <form action="{{ route('Equipment.store') }}" method="POST">
-            @csrf
-
-            <div class="row">
-                <div class="col col-4">
-                    <p>Equipemnt name:</p>
-                    <p>{{ $eqData->eq_name }}</p>
-                </div>
-                <div class="col col-4">
-                    <p>Equipemnt Available:</p>
-                    <p>{{ $eqData->eq_available }}</p>
-                </div>
-                <div class="col col-4">
-                    <p>Equipemnt In use:</p>
-                    <p>{{ $eqData->eq_in_use }}</p>
-                </div>
+<div class="card shadow-sm border-0 rounded-4 p-4 bg-white">
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <p class="fw-semibold text-dark mb-1">Equipment Name</p>
+                <div class="border rounded-3 p-2 bg-light">{{ $eqData->eq_name }}</div>
             </div>
-
-        </form>
-        
+            <div class="col-md-4">
+                <p class="fw-semibold text-dark mb-1">Available</p>
+                <div class="border rounded-3 p-2 bg-light">{{ $eqData->eq_available }}</div>
+            </div>
+            <div class="col-md-4">
+                <p class="fw-semibold text-dark mb-1">In Use</p>
+                <div class="border rounded-3 p-2 bg-light">{{ $eqData->eq_in_use }}</div>
+            </div>
+        </div>
     </div>
+</div>
+
 @endsection
