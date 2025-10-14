@@ -89,6 +89,59 @@ class ServiceRequestController extends Controller
             return redirect()->back()->with('emptyEq', 'Must have atleast 1 equipment or item.')->withInput();
         }
 
+        //get all equipment in request
+
+        $equipmentErrors = [];
+
+        if ($eq !== null) {
+            for ($i = 0; $i < count($eq); $i++) {
+                $equipmentId = $eq[$i];
+                $requestedQty = (int) $eqQty[$i];
+
+                $equipment = Equipment::find($equipmentId);
+
+                if (!$equipment) {
+                    $equipmentErrors["equipment.$i"] = "Equipment item not found.";
+                    continue;
+                }
+
+                if ($requestedQty > $equipment->eq_available) {
+                    $equipmentErrors["eqQty.$i"] = "Requested quantity ($requestedQty) exceeds available equipment ({$equipment->eq_available}).";
+                }
+            }
+
+            if (!empty($equipmentErrors)) {
+                return back()->withErrors($equipmentErrors)->withInput();
+            }
+        }
+
+
+        $StoErrors = [];
+
+        if ($sto != null) {
+            for ($i = 0; $i < count($sto); $i++) {
+                $stockId = $sto[$i];
+                $requestedQty = (int) $stoQty[$i];
+
+                // Get stock from DB
+                $stock = Stock::find($stockId); // replace with your actual Stock model
+
+                if (!$stock) {
+                    $StoErrors["stock.$i"] = "Stock item not found.";
+                    continue;
+                }
+
+                if ($requestedQty > $stock->item_qty) {
+                    $StoErrors["stockQty.$i"] = "Requested quantity ({$requestedQty}) exceeds available stock ({$stock->item_qty}).";
+                }
+            }
+
+            if (!empty($StoErrors)) {
+                return back()->withErrors($StoErrors)->withInput();
+            }
+
+        }
+
         ServiceRequest::create([
             'client_name' => $request->clientName,
             'client_contact_number' => $request->clientConNum,
@@ -102,8 +155,6 @@ class ServiceRequestController extends Controller
             'package_id' => $request->package,
             'emp_id' => session('loginId')
         ]);
-
-        //get all equipment in request
 
         $getId = ServiceRequest::orderBy('id', 'desc')->take(1)->value('id');
 

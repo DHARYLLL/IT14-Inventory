@@ -24,7 +24,7 @@
             <select name="package" id="package" class="form-select">
                 <option disabled selected>Select Package</option>
                 @foreach ($pkgData as $data)
-                    <option value="{{ $data->id }}">{{ $data->pkg_name }}</option>
+                    <option value="{{ $data->id }}" {{ old('package') == $data->id ? 'selected' : '' }}>{{ $data->pkg_name }}</option>
                 @endforeach
             </select>
             @error('package')
@@ -99,7 +99,7 @@
         <div class="col-12">
             <label for="equipment" class="form-label fw-semibold">Equipment</label>
             <div class="d-flex gap-2 align-items-center">
-                <select name="equipment" id="equipment" class="form-select w-50" onchange="getQty()">
+                <select name="" id="equipment" class="form-select w-50" onchange="getQty()">
                     <option value="">Select Equipment</option>
                     @foreach ($eqData as $data)
                         <option value="{{ $data->id }},{{ $data->eq_available }}">
@@ -164,7 +164,7 @@
         <div class="col-12 mt-3">
             <label for="stock" class="form-label fw-semibold">Stock</label>
             <div class="d-flex gap-2 align-items-center">
-                <select name="stock" id="stock" class="form-select w-50" onchange="getQtySto()">
+                <select name="" id="stock" class="form-select w-50" onchange="getQtySto()">
                     <option value="">Select Stock</option>
                     @foreach ($stoData as $data)
                         <option value="{{ $data->id }},{{ $data->item_qty }}">
@@ -217,12 +217,6 @@
                 @endforeach
 
             @endif
-
-
-
-
-
-
         </div>
 
         {{-- Submit Button --}}
