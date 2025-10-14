@@ -20,12 +20,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('CSS/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/purchaseOrder.css') }}">
-    
+
     <link rel="stylesheet" href="{{ asset('CSS/layout.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/equipment.css') }}">
     <link rel="stylesheet" href="{{ asset('css/supplier.css') }}">
     <link rel="stylesheet" href="{{ asset('css/stockEdit.css') }}">
-    
+
 
 
 
@@ -99,7 +99,7 @@
                         <a href="{{ route('Service-Request.index') }}"
                             class="nav-link-custom {{ request()->routeIs('Service-Request.*') ? 'active' : '' }}">
                             <i class="bi bi-receipt"></i>
-                            <span>Service Requests</span>
+                            <span>Service Request</span>
                         </a>
                     </li>
 

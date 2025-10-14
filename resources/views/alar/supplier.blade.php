@@ -5,7 +5,7 @@
 @section('head', 'Supplier')
 @section('name', 'Staff')
 
-<div class="d-flex align-items-center justify-content-end m-2">
+<div class="d-flex align-items-center justify-content-end p-2 mb-0">
     <button class="btn btn-green d-flex align-items-center gap-2" type="button" data-bs-toggle="modal"
         data-bs-target="#NewSupplierModal"><i class="bi bi-plus-lg"></i><span>Add Supplier</span>
     </button>

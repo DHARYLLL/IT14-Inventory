@@ -1,15 +1,15 @@
 @extends('layouts.layout')
-@section('title', 'Service Requests')
+@section('title', 'Service Request')
 
 @section('content')
 @section('head', 'Service Requests')
 @section('name', 'Staff')
 
-<div class="d-flex align-items-center justify-content-between mb-4">
+<div class="d-flex align-items-center justify-content-between p-2 mb-0">
     @session('promt')
         <h2 class="fw-semibold bg-danger-subtle">{{ $value }}</h2>
     @endsession
-    <div class="input-group" style="max-width: 400px; border-radius: 10px; overflow: hidden;">
+    <div class="input-group" style="max-width: 600px; border-radius: 10px; overflow: hidden;">
         <input type="text" id="searchInput" class="form-control" placeholder="Search Service Request"
             style="border-radius: 0; border: none;">
         <button class="btn" id="clearSearch"
