@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('svc_churchLoc', 150);
             $table->string('svc_burialLoc', 150);
             $table->string('svc_equipment_status', 15);
-            $table->date('svc_return_Date')->nullable();
+            $table->date('svc_deploy_date')->nullable();
+            $table->date('svc_return_date')->nullable();
 
             $table->unsignedBigInteger('package_id')->nullable();
             $table->foreign('package_id')->references('id')->on('packages')->onUpdate('cascade');

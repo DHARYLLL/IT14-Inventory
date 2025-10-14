@@ -58,7 +58,7 @@
                         <td>{{ $row->svc_burialLoc }}</td>
                         <td>{{ $row->svc_equipment_status }}</td>
                         <td>
-                            <a href="{{ route('Service-Request.show', $row->id) }}" class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>
+                            <a href="{{ route('Service-Request.show', $row->id) }}" class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye" data-bs-toggle="tooltip" data-bs-placement="top" title="Show"></i></a>
 
                             @if($row->svc_equipment_status == "Pending")
                                 <form action="{{ route('Service-Request.destroy', $row->id) }}" method="POST" class="m-0">

@@ -57,7 +57,7 @@
                 <div class="col-md-6">
                     <div class="dashboard-box">
                         <h5>Recent Activity</h5>
-                        <div class="placeholder-box">
+                        <div class="placeholder-box overflow-auto">
                             <table class="table table-borderless table-hover placeholder-table mb-0">
                                 <thead>
                                     <tr>
@@ -90,7 +90,7 @@
                 <div class="col-md-6">
                     <div class="dashboard-box">
                         <h5>Low Stock Items</h5>
-                        <div class="placeholder-box">
+                        <div class="placeholder-box overflow-auto">
                             <table class="table table-borderless table-hover placeholder-table mb-0">
                                 <thead>
                                     <tr>
