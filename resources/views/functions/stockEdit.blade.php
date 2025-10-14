@@ -51,8 +51,10 @@
             </div>
 
             <div class="d-flex justify-content-end gap-3 mt-4">
-                <button type="submit" class="btn btn-green px-4">Save Changes</button>
-                <a href="{{ route('Stock.index') }}" class="btn btn-outline-success">Go Back</a>
+                <button type="submit" class="btn btn-green"><i class="bi bi-floppy px-2"></i>Save
+                    Changes</button>
+                <a href="{{ route('Stock.index') }}" class="btn btn-outline-success"><i
+                        class="bi bi-arrow-left px-2"></i>Back</a>
             </div>
         </form>
     </div>

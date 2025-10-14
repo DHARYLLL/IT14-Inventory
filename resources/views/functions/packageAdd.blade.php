@@ -6,8 +6,8 @@
 @section('name', 'Staff')
 
 <div class="d-flex align-items-center justify-content-end mb-4">
-    <a href="{{ route('Package.index') }}" class="btn btn-outline-secondary d-flex align-items-center gap-2">
-        <i class="bi bi-arrow-left-circle"></i> <span>Back</span>
+    <a href="{{ route('Package.index') }}" class="btn btn-outline-success d-flex align-items-center gap-2">
+        <i class="bi bi-arrow-left"></i> <span>Back</span>
     </a>
 </div>
 
@@ -18,8 +18,9 @@
         {{-- Package Name --}}
         <div class="row g-3 mb-3">
             <div class="col-md-12">
-                <label class="form-label fw-semibold text-secondary">Package Name</label>
-                <input type="text" class="form-control" placeholder="Enter package name" name="pkg_name" value="{{ old('pkg_name') }}">
+                <label class="form-label fw-semibold text-dark">Package Name</label>
+                <input type="text" class="form-control" placeholder="Enter package name" name="pkg_name"
+                    value="{{ old('pkg_name') }}">
                 @error('pkg_name')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
@@ -28,7 +29,7 @@
 
         {{-- Inclusions List --}}
         <div class="mb-4">
-            <label class="form-label fw-semibold text-secondary">Inclusions</label>
+            <label class="form-label fw-semibold text-dark">Inclusions</label>
 
             <div id="inclusion-list">
 
@@ -36,40 +37,38 @@
                     $oldPkg = old('pkg_inclusion', ['']);
                 @endphp
 
-                @foreach($oldPkg as $i => $item)
+                @foreach ($oldPkg as $i => $item)
                     <div class="d-flex align-items-center mb-2 inclusion-item gap-2">
-                        
+
                         <input type="text" name="pkg_inclusion[]" class="form-control" value="{{ $item }}"
                             placeholder="Enter inclusion item">
-                        
+
                         @error("pkg_inclusion.$i")
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
-                        
+
                         <button type="button"
                             class="btn btn-outline-danger d-flex align-items-center justify-content-center remove-inclusion"
                             style="width: 38px; height: 38px;">
                             <i class="bi bi-trash"></i>
                         </button>
-                        
+
                     </div>
                 @endforeach
 
-                
+
             </div>
 
-            
+
             <button type="button" class="btn btn-outline-success mt-2" id="add-inclusion">
                 <i class="bi bi-plus-circle"></i> Add More
             </button>
-            
+
         </div>
 
         {{-- Submit Button --}}
-        <div class="row mt-3">
-            <div class="col">
-                <button type="submit" class="btn submit-btn w-100 py-2">Submit</button>
-            </div>
+        <div class="col col-12 mt-3 text-end">
+            <button type="submit" class="btn submit-btn w-25 px-2"><i class="bi bi-send px-2"></i>Submit</button>
         </div>
     </form>
 </div>

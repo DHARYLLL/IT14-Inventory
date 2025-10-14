@@ -5,8 +5,8 @@
 @section('head', 'Stocks')
 @section('name', 'Staff')
 
-<div class="d-flex align-items-center gap-3 justify-content-between p-2 mb-2">
-    <div class="input-group w-25" style="border-radius: 10px; overflow: hidden;">
+<div class="d-flex align-items-center justify-content-between p-2 mb-0">
+    <div class="input-group" style="max-width: 600px; border-radius: 10px; overflow: hidden;">
         <input type="text" id="searchInput" class="form-control" placeholder="Search Stock"
             style="border-radius: 0; border: none;">
         <button class="btn" id="clearSearch"
@@ -45,7 +45,7 @@
                     <td>{{ $row->item_unit_price }}</td>
                     <td>
                         <a href="{{ route('Stock.edit', $row->id) }}" class="btn btn-outline-success btn-md">
-                            <i class="fi fi-rr-edit" data-bs-toggle="tooltip" data-bs-placement="top"
+                            <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Edit"></i>
                         </a>
                     </td>

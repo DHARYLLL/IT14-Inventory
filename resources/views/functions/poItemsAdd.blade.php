@@ -8,13 +8,12 @@
     <div class="purchase-order-container">
 
         {{-- Header section --}}
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center justify-content-end p-2 mb-2">
             <div class="d-flex align-items-center gap-2">
-                <a href="{{ route('Purchase-Order.index') }}" class="text-decoration-none">
-                    <h4 class="text-dark mb-0 fw-semibold">Purchase Order</h4>
+                <a href="{{ route('Purchase-Order.index') }}" class="btn btn-green d-flex align-items-center gap-2 px-3">
+                    <i class="bi bi-arrow-left"></i>
+                    <span>Back</span>
                 </a>
-                <span class="text-muted">></span>
-                <p class="mb-0 text-secondary fw-medium">Create Purchase Order</p>
             </div>
         </div>
 
@@ -47,12 +46,12 @@
                             <button class="btn btn-outline-success" type="button" id="add_new">
                                 <i class="bi bi-plus-circle"></i> Add More
                             </button>
-                            <button class="btn btn-success text-white px-4" type="submit">
+                            <button class="btn btn-green text-white px-4" type="submit">
                                 <i class="bi bi-send"></i> Submit
                             </button>
                         </div>
 
-                        
+
                     </div>
 
                     {{-- ADD stock and equipment --}}
@@ -66,11 +65,14 @@
                                     <div>
                                         <select class="form-select" name="" id="select_stock">
                                             <option selected disabled>Select Item</option>
-                                            @foreach($stoData as $row)
-                                                <option value="{{ $row->item_name }},{{ $row->item_unit_price }}:{{ $row->size_weight }};{{ $row->item_type }}">{{ $row->item_name }} {{ $row->size_weight }}: {{ $row->item_qty }} {{ $row->item_type }}</option>
+                                            @foreach ($stoData as $row)
+                                                <option
+                                                    value="{{ $row->item_name }},{{ $row->item_unit_price }}:{{ $row->size_weight }};{{ $row->item_type }}">
+                                                    {{ $row->item_name }} {{ $row->size_weight }}: {{ $row->item_qty }}
+                                                    {{ $row->item_type }}</option>
                                             @endforeach
                                         </select>
-                            
+
                                     </div>
                                 </div>
                                 <div class="col col-4">
@@ -89,11 +91,13 @@
                                     <div>
                                         <select class="form-select" name="" id="select_equipment">
                                             <option selected disabled>Select Item</option>
-                                            @foreach($eqData as $row)
-                                                <option value="{{ $row->eq_name }},{{ $row->eq_unit_price }}:{{ $row->eq_size_weight }};{{ $row->eq_type }}">{{ $row->eq_name }}</option>
+                                            @foreach ($eqData as $row)
+                                                <option
+                                                    value="{{ $row->eq_name }},{{ $row->eq_unit_price }}:{{ $row->eq_size_weight }};{{ $row->eq_type }}">
+                                                    {{ $row->eq_name }}</option>
                                             @endforeach
                                         </select>
-                            
+
                                     </div>
                                 </div>
                                 <div class="col col-4">
@@ -120,18 +124,17 @@
                         @endphp
 
                         @foreach ($oldItems as $i => $item)
-                            
                             <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
 
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-secondary">
                                         <i class="bi bi-receipt text-success"></i> Item Name
-                                    </label>  
+                                    </label>
                                     <input type="text" name="itemName[]" value="{{ $item }}"
                                         class="form-control shadow-sm">
                                     @error("itemName.$i")
                                         <small class="text-danger">{{ $message }}</small>
-                                    @enderror              
+                                    @enderror
                                 </div>
 
                                 <div class="col-md-1">
@@ -174,8 +177,12 @@
 
                                     <select name="typeSelect[]" class="form-select shadow-sm placeType">
                                         <option value="">Select Type</option>
-                                        <option value="Consumable" {{ ($oldType[$i] ?? '') === 'Consumable' ? 'selected' : '' }}>Consumable</option>
-                                        <option value="Non-Consumable" {{ ($oldType[$i] ?? '') === 'Non-Consumable' ? 'selected' : '' }}>Non-Consumable</option>
+                                        <option value="Consumable"
+                                            {{ ($oldType[$i] ?? '') === 'Consumable' ? 'selected' : '' }}>Consumable
+                                        </option>
+                                        <option value="Non-Consumable"
+                                            {{ ($oldType[$i] ?? '') === 'Non-Consumable' ? 'selected' : '' }}>
+                                            Non-Consumable</option>
                                     </select>
                                     @error("typeSelect.$i")
                                         <small class="text-danger">{{ $message }}</small>
