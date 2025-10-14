@@ -1,0 +1,113 @@
+/* === STOCKS INTERFACE STYLING === */
+
+/* Make stock table closer to top */
+.stock-container {
+    margin-top: -8px;
+    /* pulls the whole table section slightly upward */
+}
+
+.stock-table-container {
+    margin-top: 5px;
+    /* reduced from 10px */
+    padding-top: 0;
+}
+
+/* Table Design */
+.modern-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.95rem;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.modern-table thead {
+    background-color: #e9f8e6;
+}
+
+.modern-table thead th {
+    color: #333;
+    font-weight: 600;
+    padding: 14px 18px;
+    border-bottom: 2px solid #60BF4F;
+    text-transform: capitalize;
+}
+
+.modern-table tbody tr {
+    transition: all 0.2s ease-in-out;
+}
+
+.modern-table tbody td {
+    padding: 14px 18px;
+    vertical-align: middle;
+    color: #555;
+    border-bottom: 1px solid #eee;
+}
+
+/* Hover effect */
+.modern-table tbody tr:hover {
+    background-color: #f0fdf0;
+    transform: scale(1.002);
+}
+
+/* Empty row styling */
+.modern-table tbody tr td[colspan] {
+    background-color: #fafafa;
+    font-style: italic;
+}
+
+/* Green Button Style */
+.btn-green {
+    background-color: #60BF4F;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.btn-green:hover {
+    background-color: #52a544;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    .stock-table-container {
+        width: 100%;
+        margin-top: 0;
+        border-radius: 0;
+    }
+
+    .modern-table thead {
+        display: none;
+    }
+
+    .modern-table tr {
+        display: block;
+        margin-bottom: 10px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .modern-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .modern-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #333;
+    }
+
+    .modern-table tbody tr:hover {
+        transform: none;
+    }
+}
