@@ -10,7 +10,7 @@
         <h2 class="fw-semibold bg-danger-subtle">{{ $value }}</h2>
     @endsession
     <div class="input-group" style="max-width: 400px; border-radius: 10px; overflow: hidden;">
-        <input type="text" id="searchInput" class="form-control" placeholder="Search Equipment"
+        <input type="text" id="searchInput" class="form-control" placeholder="Search Service Request"
             style="border-radius: 0; border: none;">
         <button class="btn" id="clearSearch"
             style="background-color: #b3e6cc; color: black; border: none;">Clear</button>

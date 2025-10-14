@@ -151,7 +151,6 @@ class ServiceRequestController extends Controller
             'svc_churchLoc' => $request->churhcLoc,
             'svc_burialLoc' => $request->burialLoc,
             'svc_equipment_status' => 'Pending',
-            'svc_return_date' => Carbon::now()->format('Y-m-d'),
             'package_id' => $request->package,
             'emp_id' => session('loginId')
         ]);
@@ -219,7 +218,8 @@ class ServiceRequestController extends Controller
         //
         if ($request->status == 'Deployed') {
             ServiceRequest::findOrFail($id)->update([
-                'svc_equipment_status' => 'Returned'
+                'svc_equipment_status' => 'Returned',
+                'svc_return_date' => Carbon::now()->format('Y-m-d')
             ]);
 
             foreach ($svcEqs as $svcEq) {
@@ -244,7 +244,8 @@ class ServiceRequestController extends Controller
         if ($request->status == 'Pending') {
 
             ServiceRequest::findOrFail($id)->update([
-                'svc_equipment_status' => 'Deployed'
+                'svc_equipment_status' => 'Deployed',
+                'svc_deploy_date' => Carbon::now()->format('Y-m-d')
             ]);
 
             /*
