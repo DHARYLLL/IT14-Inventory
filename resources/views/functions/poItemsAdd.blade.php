@@ -5,116 +5,102 @@
 @section('name', 'Staff')
 
 @section('content')
-    <div class="purchase-order-container">
+    
 
-        {{-- Header section --}}
-        <div class="d-flex align-items-center justify-content-end p-2 mb-2">
-            <div class="d-flex align-items-center gap-2">
-                <a href="{{ route('Purchase-Order.index') }}" class="btn btn-green d-flex align-items-center gap-2 px-3">
-                    <i class="bi bi-arrow-left"></i>
-                    <span>Back</span>
-                </a>
-            </div>
+    {{-- Header section --}}
+    <div class="d-flex align-items-center justify-content-end p-2 mb-0 cust-h-heading">
+        <div class="d-flex align-items-center gap-2">
+            <a href="{{ route('Purchase-Order.index') }}" class="btn btn-green d-flex align-items-center gap-2 px-3">
+                <i class="bi bi-arrow-left"></i>
+                <span>Back</span>
+            </a>
         </div>
+    </div>
 
-        {{-- Main Card --}}
+    {{-- Main Card --}}
+    <div class="cust-h-content">
         <div class="card border-0 shadow-sm">
-            <div class="card-body" style="min-height: 70vh">
-                <form action="{{ route('Purchase-Order.store') }}" method="POST" id="form">
+            <div class="card-body">
+                <form action="{{ route('Purchase-Order.store') }}" method="POST" id="form" class="h-100">
                     @csrf
-
-                    {{-- Supplier selection + buttons --}}
-                    <div class="row align-items-end mb-4">
-                        <div class="col-md-6">
-                            <label for="supp" class="form-label fw-semibold text-secondary">
-                                Supplier
-                            </label>
-                            <select class="form-select shadow-sm" name="supp" id="supp">
-                                <option selected disabled>Select supplier</option>
-                                @foreach ($supData as $supp)
-                                    <option value="{{ $supp->id }}">
-                                        {{ $supp->id }} {{ $supp->fname }} {{ $supp->mname }} {{ $supp->lname }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('supp')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
+                    <div class="cust-sticky">
+                        {{-- Supplier selection + buttons --}}
+                        <div class="row align-items-end mb-4">
+                            <div class="col-md-6">
+                                <label for="supp" class="form-label fw-semibold text-secondary">
+                                    Supplier
+                                </label>
+                                <select class="form-select shadow-sm" name="supp" id="supp">
+                                    <option selected disabled>Select supplier</option>
+                                    @foreach ($supData as $supp)
+                                        <option value="{{ $supp->id }}">
+                                            {{ $supp->id }} {{ $supp->fname }} {{ $supp->mname }} {{ $supp->lname }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('supp')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-md-end gap-2 mt-3 mt-md-0">
+                                <button class="btn btn-outline-success" type="button" id="add_new">
+                                    <i class="bi bi-plus-circle"></i> Add More
+                                </button>
+                                <button class="btn btn-green text-white px-4" type="submit">
+                                    <i class="bi bi-send"></i> Submit
+                                </button>
+                            </div>
                         </div>
-
-                        <div class="col-md-6 d-flex justify-content-md-end gap-2 mt-3 mt-md-0">
-                            <button class="btn btn-outline-success" type="button" id="add_new">
-                                <i class="bi bi-plus-circle"></i> Add More
-                            </button>
-                            <button class="btn btn-green text-white px-4" type="submit">
-                                <i class="bi bi-send"></i> Submit
-                            </button>
-                        </div>
-
-
-                    </div>
-
-                    {{-- ADD stock and equipment --}}
-
-                    <div class="row mb-4">
-
-                        <div class="col col-6">
-
-                            <div class="row">
-                                <div class="col col-8">
-                                    <div>
-                                        <select class="form-select" name="" id="select_stock">
-                                            <option value="" selected disabled>Select Item</option>
-                                            @foreach ($stoData as $row)
-                                                <option
-                                                    value="{{ $row->item_name }},{{ $row->item_unit_price }}:{{ $row->size_weight }};{{ $row->item_type }}">
-                                                    {{ $row->item_name }} {{ $row->size_weight }}: {{ $row->item_qty }}
-                                                    {{ $row->item_type }}</option>
-                                            @endforeach
-                                        </select>
-
+                        {{-- ADD stock and equipment --}}
+                        <div class="row">
+                            <div class="col col-6">
+                                <div class="row">
+                                    <div class="col col-8 mb-3">
+                                        <div>
+                                            <select class="form-select" name="" id="select_stock">
+                                                <option value="" selected disabled>Select Item</option>
+                                                @foreach ($stoData as $row)
+                                                    <option
+                                                        value="{{ $row->item_name }},{{ $row->item_unit_price }}:{{ $row->size_weight }};{{ $row->item_type }}">
+                                                        {{ $row->item_name }} {{ $row->size_weight }}: {{ $row->item_qty }}
+                                                        {{ $row->item_type }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col col-4">
+                                        <button class="btn btn-outline-success" type="button" onclick="setStock()">
+                                            <i class="bi bi-plus-circle"></i> Add Item
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col col-4">
-                                    <button class="btn btn-outline-success" type="button" onclick="setStock()">
-                                        <i class="bi bi-plus-circle"></i> Add Item
-                                    </button>
-                                </div>
                             </div>
-
-                        </div>
-
-                        <div class="col col-6">
-
-                            <div class="row">
-                                <div class="col col-8">
-                                    <div>
-                                        <select class="form-select" name="" id="select_equipment">
-                                            <option value="" selected disabled>Select Item</option>
-                                            @foreach ($eqData as $row)
-                                                <option
-                                                    value="{{ $row->eq_name }},{{ $row->eq_unit_price }}:{{ $row->eq_size_weight }};{{ $row->eq_type }}">
-                                                    {{ $row->eq_name }}</option>
-                                            @endforeach
-                                        </select>
-
+                            <div class="col col-6 mb-3">
+                                <div class="row">
+                                    <div class="col col-8">
+                                        <div>
+                                            <select class="form-select" name="" id="select_equipment">
+                                                <option value="" selected disabled>Select Item</option>
+                                                @foreach ($eqData as $row)
+                                                    <option
+                                                        value="{{ $row->eq_name }},{{ $row->eq_unit_price }}:{{ $row->eq_size_weight }};{{ $row->eq_type }}">
+                                                        {{ $row->eq_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col col-4">
+                                        <button class="btn btn-outline-success" type="button" onclick="setEquipment()">
+                                            <i class="bi bi-plus-circle"></i> Add Equipment
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col col-4">
-                                    <button class="btn btn-outline-success" type="button" onclick="setEquipment()">
-                                        <i class="bi bi-plus-circle"></i> Add Equipment
-                                    </button>
-                                </div>
                             </div>
-
                         </div>
-
                     </div>
-
-
-
                     {{-- Dynamic input fields --}}
-                    <div id="pasteHere">
+                    
+                    <div id="pasteHere" class="mt-3">
                         @php
                             $oldItems = old('itemName', ['']);
                             $oldQtys = old('qty', ['']);
@@ -122,10 +108,8 @@
                             $oldsizeWeigth = old('sizeWeigth', ['']);
                             $oldType = old('typeSelect', ['']);
                         @endphp
-
                         @foreach ($oldItems as $i => $item)
                             <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
-
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-secondary">
                                         <i class="bi bi-receipt text-success"></i> Item Name
@@ -136,7 +120,6 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
-
                                 <div class="col-md-1">
                                     <label class="form-label fw-semibold text-secondary">
                                         <i class="bi bi-box text-success"></i> Quantity
@@ -147,7 +130,6 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
-
                                 <div class="col-md-2">
                                     <label class="form-label fw-semibold text-secondary">
                                         <i class="bi bi-tag text-success"></i> Unit Price
@@ -158,7 +140,6 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
-
                                 <div class="col-md-2">
                                     <label class="form-label fw-semibold text-secondary">
                                         <i class="bi bi-weight text-success"></i> Size/Weight
@@ -169,12 +150,10 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
-
                                 <div class="col-md-2">
                                     <label class="form-label fw-semibold text-secondary">
                                         <i class="bi bi-weight text-success"></i> Type
                                     </label>
-
                                     <select name="typeSelect[]" class="form-select shadow-sm placeType">
                                         <option value="">Select Type</option>
                                         <option value="Consumable"
@@ -188,7 +167,6 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
-
                                 <div class="col-md-1 d-flex align-items-end">
                                     <button type="button"
                                         class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
@@ -198,8 +176,12 @@
                             </div>
                         @endforeach
                     </div>
+                    
                 </form>
             </div>
         </div>
     </div>
+
+
+    
 @endsection
