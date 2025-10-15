@@ -5,7 +5,7 @@
 @section('head', 'Packages')
 @section('name', 'Staff')
 
-<div class="d-flex align-items-center justify-content-between p-0 mb-2 cust-h-heading">
+<div class="d-flex align-items-center justify-content-between p-0 cust-h-heading">
     <div class="input-group" style="max-width: 600px; border-radius: 10px; overflow: hidden;">
         <input type="text" id="searchInput" class="form-control" placeholder="Search Package"
             style="border-radius: 0; border: none;">
