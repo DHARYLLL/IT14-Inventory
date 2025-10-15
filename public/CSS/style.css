@@ -465,7 +465,10 @@ body {
     overflow: auto;
 }
 
-.cust-sticky th {
+.cust-h {
+    height: 90%;
+}
+.cust-sticky {
     position: sticky;
     top: 0;
     background-color: white;
