@@ -29,7 +29,7 @@
         </thead>
     </table>
     
-    <div class="overflow-auto" style="height: 75%;">
+    <div class="overflow-auto" style="height: 70%;">
         <table class="table modern-table border-black table-hover mb-0">
             <tbody id="tableBody">
                 @if ($pacData->isEmpty())
@@ -67,7 +67,7 @@
         </table>
     </div>
 
-    <div class="d-flex align-items-center flex-column p-2" style="height: 15%;">
+    <div class="d-flex align-items-center flex-column p-2" style="height: 20%;">
         {{-- Custom Pagination --}}
         <div class="d-flex flex-column align-items-center mb-0">
             <nav aria-label="Page navigation example">
