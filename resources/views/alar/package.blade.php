@@ -66,39 +66,42 @@
             </tbody>
         </table>
     </div>
-</div>
 
-
-<div class="d-flex align-items-center flex-column p-2 mb-2">
-    {{-- Custom Pagination --}}
-    <div class="d-flex flex-column align-items-center mt-3 mb-0">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination mb-0">
-                <li class="page-item {{ $pacData->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $pacData->previousPageUrl() ?? '#' }}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                @for ($i = 1; $i <= $pacData->lastPage(); $i++)
-                    <li class="page-item {{ $pacData->currentPage() == $i ? 'active' : '' }}">
-                        <a class="page-link" href="{{ $pacData->url($i) }}">{{ $i }}</a>
+    <div class="d-flex align-items-center flex-column p-2 mb-2">
+        {{-- Custom Pagination --}}
+        <div class="d-flex flex-column align-items-center mt-3 mb-0">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination mb-0">
+                    <li class="page-item {{ $pacData->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $pacData->previousPageUrl() ?? '#' }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
                     </li>
-                @endfor
-                <li class="page-item {{ $pacData->currentPage() == $pacData->lastPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $pacData->nextPageUrl() ?? '#' }}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+                    @for ($i = 1; $i <= $pacData->lastPage(); $i++)
+                        <li class="page-item {{ $pacData->currentPage() == $i ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $pacData->url($i) }}">{{ $i }}</a>
+                        </li>
+                    @endfor
+                    <li class="page-item {{ $pacData->currentPage() == $pacData->lastPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $pacData->nextPageUrl() ?? '#' }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
 
-        {{-- Showing results text --}}
-        <div class="text-secondary mt-1">
-            Showing {{ $pacData->firstItem() ?? 0 }} to {{ $pacData->lastItem() ?? 0 }} of
-            {{ $pacData->total() ?? 0 }} results
+            {{-- Showing results text --}}
+            <div class="text-secondary mt-1">
+                Showing {{ $pacData->firstItem() ?? 0 }} to {{ $pacData->lastItem() ?? 0 }} of
+                {{ $pacData->total() ?? 0 }} results
+            </div>
         </div>
     </div>
-</div>
 
+
+
+
+
+</div>
 
 @endsection
