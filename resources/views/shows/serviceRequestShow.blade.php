@@ -162,8 +162,8 @@
                                 <table class="table modern-table table-hover px-3" style="height: 10%;">
                                     <thead>
                                         <tr class="table-light">
-                                            <th class="fw-semibold">Equipmet</th>
-                                            <th class="fw-semibold">Borrowed Qty</th>
+                                            <th class="fw-semibold">Equipment</th>
+                                            <th class="col col-md-3 fw-semibold">Borrowed Qty</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -172,7 +172,7 @@
                                         <tbody>
                                             @if ($svcEqData->isEmpty())
                                                 <tr>
-                                                    <td colspan="3" class="text-center text-secondary py-3">
+                                                    <td colspan="2" class="text-center text-secondary py-3">
                                                         No Equipment available.
                                                     </td>
                                                 </tr>
