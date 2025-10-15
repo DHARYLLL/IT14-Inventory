@@ -30,7 +30,7 @@
 
 <body>
     <div class="d-flex vh-100">
-        <aside class="sidebar d-flex flex-column h-100">
+        <aside class="sidebar d-flex flex-column h-100 overflow-auto">
             {{-- LOGO --}}
             <div class="logo mb-4">
                 <div class="d-flex align-items-center gap-2">

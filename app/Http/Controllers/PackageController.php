@@ -18,7 +18,7 @@ class PackageController extends Controller
      */
     public function index()
     {
-        $pacData = Package::all();
+        $pacData = Package::paginate(8);
         return view('alar/package', ['pacData' => $pacData]);
     }
 
@@ -71,7 +71,7 @@ class PackageController extends Controller
      */
     public function show(String $id)
     {
-        $pckIncData = packageInclusion::where('package_id', '=' , $id)->get();
+        $pckIncData = packageInclusion::where('package_id', '=', $id)->get();
         $pkgData = Package::findOrFail($id);
         return view('shows/packageInclusionShow', ['pckIncData' => $pckIncData, 'pkgData' => $pkgData]);
     }
