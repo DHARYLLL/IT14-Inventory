@@ -29,7 +29,7 @@
         </thead>
     </table>
     
-    <div style="flex: 1; overflow-y: auto;">
+    <div class="overflow-auto">
         <table class="table modern-table border-black table-hover mb-0">
             <tbody id="tableBody">
                 @if ($pacData->isEmpty())
