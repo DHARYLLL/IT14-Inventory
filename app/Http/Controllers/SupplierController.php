@@ -14,7 +14,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Supplier::paginate(6);
+        $suppliers = Supplier::paginate(5);
         return view('alar.supplier', ['suppliers' => $suppliers]);
     }
 

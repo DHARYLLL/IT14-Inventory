@@ -115,7 +115,7 @@ small.text-danger {
 }
 
 /* Modern Table */
-.modern-table {
+/* .modern-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px;
@@ -147,7 +147,7 @@ small.text-danger {
     padding: 12px 14px;
     vertical-align: middle;
     border-top: none;
-}
+} */
 
 /* Badge for Type column */
 .type-badge {
