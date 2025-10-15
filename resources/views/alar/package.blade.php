@@ -19,8 +19,8 @@
 </div>
 
 {{-- Table --}}
-<div style="max-height: 65vh; display: flex; flex-direction: column; overflow: hidden;">
-    <table class="table modern-table table-hover mb-0">
+<div style="height: 90%;">
+    <table class="table modern-table table-hover mb-0" style="height: 10%;">
         <thead>
             <tr class="table-light">
                 <th class="fw-semibold">Package</th>
@@ -29,7 +29,7 @@
         </thead>
     </table>
     
-    <div class="overflow-auto">
+    <div class="overflow-auto" style="height: 75%;">
         <table class="table modern-table border-black table-hover mb-0">
             <tbody id="tableBody">
                 @if ($pacData->isEmpty())
@@ -67,9 +67,9 @@
         </table>
     </div>
 
-    <div class="d-flex align-items-center flex-column p-2 mb-2">
+    <div class="d-flex align-items-center flex-column p-2" style="height: 15%;">
         {{-- Custom Pagination --}}
-        <div class="d-flex flex-column align-items-center mt-3 mb-0">
+        <div class="d-flex flex-column align-items-center mb-0">
             <nav aria-label="Page navigation example">
                 <ul class="pagination mb-0">
                     <li class="page-item {{ $pacData->onFirstPage() ? 'disabled' : '' }}">
