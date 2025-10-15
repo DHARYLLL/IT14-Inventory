@@ -42,7 +42,7 @@
     
             @if ($svcReqData->isEmpty())
                 <tr>
-                    <td colspan="8" class="text-center text-secondary py-3">
+                    <td colspan="9" class="text-center text-secondary py-3">
                         No New Service Request.
                     </td>
                 </tr>
