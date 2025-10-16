@@ -57,38 +57,40 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="row py-2">
-                        @if ($poData->status == 'Pending')
-                            <form action="{{ route('Purchase-Order.update', $poData->id) }}" method="post"
-                                class="{{ $poData->status }}">
-                                @csrf
-                                @method('put')
-                                <input type="hidden" name="total" value="{{ $poItemData->sum('total_amount') }}">
-                                <div class="d-flex justify-content-center mt-3">
-                                    <button class="btn btn-approve-custom w-75" type="submit">Approve</button>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @if ($poData->status == 'Pending')
+                                <form action="{{ route('Purchase-Order.update', $poData->id) }}" method="post"
+                                    class="{{ $poData->status }}">
+                                    @csrf
+                                    @method('put')
+                                    <input type="hidden" name="total" value="{{ $poItemData->sum('total_amount') }}">
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <button class="btn btn-approve-custom w-75" type="submit">Approve</button>
+                                    </div>
+                                </form>
+                            @endif
+                            @if ($invData)
+                                <div class="d-flex flex-column gap-2">
+                                    <div class="d-flex align-items-center">
+                                        <label class="col-4">Invoice number</label>
+                                        <span class="mx-2">:</span>
+                                        <input type="text" class="form-control col" value="{{ $invData->invoice_number }}" readonly>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <label class="col-4">Invoice Date</label>
+                                        <span class="mx-2">:</span>
+                                        <input type="text" class="form-control col" value="{{ $invData->invoice_date }}"
+                                            readonly>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <label class="col-4">Total</label>
+                                        <span class="mx-2">:</span>
+                                        <input type="text" class="form-control col" value="{{ $invData->total }}" readonly>
+                                    </div>
                                 </div>
-                            </form>
-                        @endif
-                        @if ($invData)
-                            <div class="d-flex flex-column gap-2">
-                                <div class="d-flex align-items-center mt-2">
-                                    <label class="col-4">Invoice number</label>
-                                    <span class="mx-2">:</span>
-                                    <input type="text" class="form-control" value="{{ $invData->invoice_number }}" readonly>
-                                </div>
-                                <div class="d-flex align-items-center mt-2">
-                                    <label class="col-4">Invoice Date</label>
-                                    <span class="mx-2">:</span>
-                                    <input type="date" class="form-control my-3" value="{{ $invData->invoice_date }}"
-                                        readonly>
-                                </div>
-                                <div class="d-flex align-items-center mt-2">
-                                    <label class="col-4">Total</label>
-                                    <span class="mx-2">:</span>
-                                    <input type="text" class="form-control" value="{{ $invData->total }}" readonly>
-                                </div>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

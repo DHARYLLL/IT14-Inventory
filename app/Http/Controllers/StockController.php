@@ -41,9 +41,9 @@ class StockController extends Controller
         $request->validate([
             'inv_num' => 'required',
             'inv_date' => 'required',
-            'qtyArrived.*' => 'required|min:1|max:4',
+            'qtyArrived.*' => 'required|integer|min:1|max:4',
             'del_date' => 'required',
-            'total' => 'required|min:1|max:6'
+            'total' => 'required|integer|min:1|max:6'
         ], [
             'inv_num.required' => 'This field is required.',
             'inv_date.required' => 'This field is required.',

@@ -44,7 +44,7 @@ class PurchaseOrderController extends Controller
     {
         $request->validate([
             'itemName.*' => "required|min:5|max:100",
-            'qty.*' => "required|numeric|min:1",
+            'qty.*' => "required|integer|min:1",
             'unitPrice.*' => "required|numeric|min:1",
             'sizeWeigth.*' => "required",
             'typeSelect.*' => "required",
@@ -54,7 +54,7 @@ class PurchaseOrderController extends Controller
             'itemName.*.min' => '5 - 100 Characters only.',
             'itemName.*.max' => '5 - 100 Characters only.',
             'qty.*.required' => 'This field is required.',
-            'qty.*.numeric' => 'Number only.',
+            'qty.*.integer' => 'Number only.',
             'unitPrice.*.required' => 'This field is required.',
             'unitPrice.*.numeric' => 'Number only.',
             'sizeWeigth.*.required' => 'This field is required.',

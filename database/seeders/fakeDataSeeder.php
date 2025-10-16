@@ -89,7 +89,7 @@ class fakeDataSeeder extends Seeder
             'qty' => 20,
             'sizeWeight' => 'Large',
             'unit_price' => 10,
-            'total_amount' => 30,
+            'total_amount' => 200,
             'type' => 'Consumable',
             'po_id' => 1,
             'stock_id' => 1
@@ -99,7 +99,7 @@ class fakeDataSeeder extends Seeder
             'qty' => 20,
             'sizeWeight' => 'Medium',
             'unit_price' => 10,
-            'total_amount' => 30,
+            'total_amount' => 200,
             'type' => 'Consumable',
             'po_id' => 1,
             'stock_id' => 2
@@ -109,7 +109,7 @@ class fakeDataSeeder extends Seeder
             'qty' => 20,
             'sizeWeight' => 'Small',
             'unit_price' => 10,
-            'total_amount' => 30,
+            'total_amount' => 200,
             'type' => 'Consumable',
             'po_id' => 1,
             'stock_id' => 3
