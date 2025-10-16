@@ -25,5 +25,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(SupplierSeeder::class);
         $this->call(PackageSeeder::class);
+        $this->call(InventorySeeder::class);
+        $this->call(fakeDataSeeder::class);
     }
 }
