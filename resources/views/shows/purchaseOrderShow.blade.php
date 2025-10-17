@@ -96,12 +96,12 @@
             </div>
 
 
-            <div class="col col-9 h-100 overflow-auto">
+            <div class="col col-9 h-100">
                 @if ($poData->status == 'Approved')
-                    <form action="{{ route('Stock.store') }}" method="POST" class="{{ $poData->status }}">
+                    <form action="{{ route('Stock.store') }}" method="POST" class="{{ $poData->status }} h-100">
                         @csrf
 
-                        <div class="card-modern p-4 gap-2 cust-sticky mb-2">
+                        <div class="card-modern p-4 gap-2 cust-sticky mb-2 h-50 overflow-auto">
                             <h5 class="fw-bold mb-3 text-success">Delivery Details</h5>
                             <div class="row g-3">
                                 {{-- Invoice Number --}}

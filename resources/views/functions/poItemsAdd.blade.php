@@ -167,7 +167,8 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
-                                <div class="col-md-1 d-flex align-items-end">
+                                <div class="col-md-1 align-items-start">
+                                    <label class="form-label fw-semibold text-secondary">Remove</label>
                                     <button type="button"
                                         class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
                                         <i class="bi bi-x-circle"></i>

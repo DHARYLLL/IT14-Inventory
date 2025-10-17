@@ -217,6 +217,7 @@ class ServiceRequestController extends Controller
 
         //
         if ($request->status == 'Deployed') {
+
             ServiceRequest::findOrFail($id)->update([
                 'svc_equipment_status' => 'Returned',
                 'svc_return_date' => Carbon::now()->format('Y-m-d')
@@ -242,6 +243,15 @@ class ServiceRequestController extends Controller
         }
 
         if ($request->status == 'Pending') {
+            $get = ServiceRequest::find($id);
+            $checkDate = ServiceRequest::where('id', $id)
+                        ->whereDate('svc_startDate', '<=', Carbon::now()->format('Y-m-d'))
+                        ->whereDate('svc_endDate', '>=', Carbon::now()->format('Y-m-d'))
+                        ->first();
+            if(!$checkDate){
+                return redirect()->back()->with('promt', 'Cannot deploy before ('. $get->svc_startDate .') and after (' . $get->svc_endDate .').')
+                    ->withInput();
+            }
 
             ServiceRequest::findOrFail($id)->update([
                 'svc_equipment_status' => 'Deployed',

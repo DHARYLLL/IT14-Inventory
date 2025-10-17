@@ -62,7 +62,8 @@ if (document.getElementById('add_new')) {
                 </select>
             </div>
 
-            <div class="col-md-1 d-flex align-items-end">
+            <div class="col-md-1 align-items-start">
+                <label class="form-label fw-semibold text-secondary">Remove</label>
                 <button type="button" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
                     <i class="bi bi-x-circle"></i>
                 </button>
@@ -151,7 +152,8 @@ function setStock() {
                 </div>
                 
 
-                <div class="col-md-1 d-flex align-items-end">
+                <div class="col-md-1 align-items-start">
+                    <label class="form-label fw-semibold text-secondary">Remove</label>
                     <button type="button" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
                         <i class="bi bi-x-circle"></i>
                     </button>
@@ -235,7 +237,8 @@ function setEquipment() {
                 </div>
                 
 
-                <div class="col-md-1 d-flex align-items-end">
+                <div class="col-md-1 align-items-start">
+                    <label class="form-label fw-semibold text-secondary">Remove</label>
                     <button type="button" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
                         <i class="bi bi-x-circle"></i>
                     </button>
@@ -316,7 +319,7 @@ function checkInputEq() {
     const idData = selectedOption.value.split(",")[0];
 
     const wrapper = document.createElement('div');
-    wrapper.classList.add('row', 'g-2', 'align-items-end', 'mb-2', 'added-item');
+    wrapper.classList.add('row', 'g-2', 'align-items-start', 'mb-2', 'added-item');
 
     wrapper.innerHTML = `
         <div class="col-md-6">
@@ -329,7 +332,8 @@ function checkInputEq() {
             <input type="number" class="form-control" name="eqQty[]" placeholder="Qty">
         </div>
         <div class="col-md-3">
-            <button type="button" class="btn btn-outline-danger w-100 remove-eq mt-4">
+            <label class="form-label fw-semibold text-secondary">Remove</label>
+            <button type="button" class="btn btn-outline-danger w-100 remove-eq">
                 <i class="bi bi-x-circle"></i> Remove
             </button>
         </div>
@@ -379,7 +383,7 @@ function checkInputSto() {
     const idData = selectedOption.value.split(",")[0];
 
     const wrapper = document.createElement('div');
-    wrapper.classList.add('row', 'g-2', 'align-items-end', 'mb-2', 'added-item');
+    wrapper.classList.add('row', 'g-2', 'align-items-start', 'mb-2', 'added-item');
 
     wrapper.innerHTML = `
         <div class="col-md-6">
@@ -392,7 +396,8 @@ function checkInputSto() {
             <input type="number" class="form-control" name="stockQty[]" placeholder="Stock Qty">
         </div>
         <div class="col-md-3">
-            <button type="button" class="btn btn-outline-danger w-100 remove-sto mt-4">
+            <label class="form-label fw-semibold text-secondary">Remove</label>
+            <button type="button" class="btn btn-outline-danger w-100 remove-sto">
                 <i class="bi bi-x-circle"></i> Remove
             </button>
         </div>

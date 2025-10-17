@@ -55,6 +55,7 @@ class fakeDataSeeder extends Seeder
             'company_address' => 'Buhangin'
         ]);
 
+        /*
         PurchaseOrder::create([
             'status' => 'Pending',
             'submitted_date' => Carbon::now()->format('Y-m-d'),
@@ -114,6 +115,9 @@ class fakeDataSeeder extends Seeder
             'po_id' => 1,
             'stock_id' => 3
         ]);
+        */
+
+
 
         Package::create([
             'pkg_name' => 'MOA'

@@ -16,7 +16,9 @@
     <div class="cust-h-content">
         <div class="card-container">
             <div class="card-form">
+                
                 <h4 class="form-title mb-4">Service Request Form</h4>
+                
                 <form action="{{ route('Service-Request.store') }}" method="post" class="row g-3">
                     @csrf
                     {{-- Package --}}
@@ -125,7 +127,7 @@
 
                             @foreach($oldEq as $i => $item)
 
-                                <div class="row g-2 align-items-end mb-2 added-item">
+                                <div class="row g-2 align-items-start mb-2 added-item">
 
                                     <div class="col-md-6">
                                         <label class="form-label fw-semibold text-secondary">Equipment</label>
@@ -143,7 +145,8 @@
                                         @enderror
                                     </div>
                                     <div class="col-md-3">
-                                        <button type="button" class="btn btn-outline-danger w-100 remove-eq mt-4">
+                                        <label class="form-label fw-semibold text-secondary">Remove</label>
+                                        <button type="button" class="btn btn-outline-danger w-100 remove-eq">
                                             <i class="bi bi-x-circle"></i> Remove
                                         </button>
                                     </div>
@@ -190,7 +193,7 @@
 
                             @foreach($oldItems as $i => $item)
 
-                                <div class="row g-2 align-items-end mb-2 added-item">
+                                <div class="row g-2 align-items-start mb-2 added-item">
                                     <div class="col-md-6">
                                         <label class="form-label fw-semibold text-secondary">Stock</label>
                                         <input type="text" class="form-control" name="itemName[]" value="{{ $item }}" readonly>
@@ -207,7 +210,8 @@
                                         @enderror
                                     </div>
                                     <div class="col-md-3">
-                                        <button type="button" class="btn btn-outline-danger w-100 remove-sto mt-4">
+                                        <label class="form-label fw-semibold text-secondary">Remove</label>
+                                        <button type="button" class="btn btn-outline-danger w-100 remove-sto">
                                             <i class="bi bi-x-circle"></i> Remove
                                         </button>
                                     </div>

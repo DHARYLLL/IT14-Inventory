@@ -18,7 +18,7 @@
                     <div class="col col-4 h-100 overflow-auto">
                         <div class="card-custom p-3">
 
-                            <div class="row">
+                            <div class="row mb-2">
                                 <div class="col-md-12">
                                     <div class="d-flex flex-column gap-2">
                                         <div class="d-flex align-items-center">
@@ -100,6 +100,10 @@
                                             <input type="text" name="status" value="{{ $svcReqData->svc_equipment_status }}" hidden>
                                             <input type="text" value="{{ $svcReqData->id }}" hidden>
                                             <button type="" class="btn btn-secondary w-100">Deploy Equipment</button>
+                                            @session('promt')
+                                                <small class="text-danger">{{ $value }}</small>
+                                            @endsession
+                                            
                                         </form>
                                     </div>
                                 </div>
