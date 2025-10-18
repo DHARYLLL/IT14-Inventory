@@ -20,7 +20,7 @@ class StockController extends Controller
      */
     public function index()
     {
-        $stoData = Stock::all();
+        $stoData = Stock::paginate(5);
         return view('alar.stock', ['stoData' => $stoData]);
     }
 
@@ -79,6 +79,8 @@ class StockController extends Controller
             'qtyArrived.*.max' => '4 digits is the max.'
         ]);
         
+
+
         $items = PurchaseOrderItem::where('po_id', '=', $request->po_id)->get();
         //$stock = stockModel::where()->first;
 
@@ -87,12 +89,7 @@ class StockController extends Controller
         $getType = $request->type;
 
         $getArrivedQty = $request->qtyArrived;
-
-        $getStoArrivedQty = $request->stoQtyArrived;
-        $getEqArrivedQty = $request->eqQtyArrived;
-
-
-        /* un comment this
+        /*
         Invoice::create([
             'invoice_number' => $request->inv_num,
             'invoice_date' => $request->inv_date,
@@ -193,7 +190,7 @@ class StockController extends Controller
             'delivered_date' => $request->del_date
         ]);
 
-        $invId = Invoice::orderBy('id','desc')->take(1)->value('id');
+        $invId = Invoice::orderBy('id', 'desc')->take(1)->value('id');
 
         Log::create([
             'action' => 'Create',
