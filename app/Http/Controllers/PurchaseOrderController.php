@@ -54,6 +54,7 @@ class PurchaseOrderController extends Controller
             'itemName.*.min' => '5 - 100 Characters only.',
             'itemName.*.max' => '5 - 100 Characters only.',
             'qty.*.required' => 'This field is required.',
+            'qty.*.min' => 'Quantity must be 1 or more.',
             'qty.*.integer' => 'Number only.',
             'unitPrice.*.required' => 'This field is required.',
             'unitPrice.*.numeric' => 'Number only.',
@@ -155,7 +156,6 @@ class PurchaseOrderController extends Controller
                     'type' => $type[$i],
                     'po_id' => $po,
                     'stock_id' => $getStock->id,
-                    'eq_id' => session('loginId')
                 ]);
             }
 
@@ -170,7 +170,6 @@ class PurchaseOrderController extends Controller
                     'type' => $type[$i],
                     'po_id' => $po,
                     'eq_id' => $getEquipment->id,
-                    'eq_id' => session('loginId')
                 ]);
             }
         }

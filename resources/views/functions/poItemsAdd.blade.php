@@ -33,7 +33,7 @@
                                 <select class="form-select shadow-sm" name="supp" id="supp">
                                     <option selected disabled>Select supplier</option>
                                     @foreach ($supData as $supp)
-                                        <option value="{{ $supp->id }}">
+                                        <option value="{{ $supp->id }}" {{ old('supp') == $supp->id ? 'selected' : '' }}>
                                             {{ $supp->id }} {{ $supp->fname }} {{ $supp->mname }} {{ $supp->lname }}
                                         </option>
                                     @endforeach
@@ -84,7 +84,7 @@
                                                 @foreach ($eqData as $row)
                                                     <option
                                                         value="{{ $row->eq_name }},{{ $row->eq_unit_price }}:{{ $row->eq_size_weight }};{{ $row->eq_type }}">
-                                                        {{ $row->eq_name }}</option>
+                                                        {{ $row->eq_name }} {{ $row->eq_size_weight }}: {{ $row->eq_available }} {{ $row->eq_type }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

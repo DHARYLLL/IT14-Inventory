@@ -61,16 +61,17 @@ class StockController extends Controller
         //$stock = stockModel::where()->first;
 
         $getId = $request->stockId;
+        $getEqId = $request->eqId;
         $getType = $request->type;
         $getArrivedQty = $request->qtyArrived;
-
+/*
         Invoice::create([
             'invoice_number' => $request->inv_num,
             'invoice_date' => $request->inv_date,
             'total' => $request->total,
             'po_id' => $request->po_id
         ]);
-        /*
+        
         foreach($items as $item){
             //array_push($getStock, $item->qty);
             //array_push($getStockID, $item->stock_id);
@@ -81,30 +82,36 @@ class StockController extends Controller
         }
         */
 
-        for ($i=0; $i < count($getId); $i++) { 
-
-            if($getType[$i] == 'Consumable'){
-                $stock = Stock::where('id', '=', $getId[$i])->first();
-                Stock::findOrFail($stock->id)->update([
-                    'item_qty' => $stock->item_qty + $getArrivedQty[$i]
-                ]);
-                PurchaseOrderItem::where('stock_id', '=' , $getId[$i])->update([
-                    'qty_arrived' => $getArrivedQty[$i]
-                ]);
+        if (!empty($getId)) {
+            for ($i=0; $i < count($getId); $i++) { 
+                if($getType[$i] == 'Consumable'){
+                    $stock = Stock::where('id', '=', $getId[$i])->first();
+                    Stock::findOrFail($stock->id)->update([
+                        'item_qty' => $stock->item_qty + $getArrivedQty[$i]
+                    ]);
+                    PurchaseOrderItem::where('stock_id', '=' , $getId[$i])->where('qty_arrived', '=' , null)->orderBy('id', "ASC")->take(1)->update([
+                        'qty_arrived' => $getArrivedQty[$i]
+                    ]);
+                }
             }
-
-            if($getType[$i] == 'Non-Consumable'){
-                $eq = Equipment::where('id', '=', $getId[$i])->first();
-                Equipment::findOrFail($eq->id)->update([
-                    'eq_available' => $eq->eq_available + $getArrivedQty[$i]
-                ]);
-                PurchaseOrderItem::where('eq_id', '=' , $getId[$i])->update([
-                    'qty_arrived' => $getArrivedQty[$i]
-                ]);
-            }
-
         }
 
+        if (!empty($getEqId)) {
+            for ($i=0; $i < count($getEqId); $i++) { 
+                if($getType[$i] == 'Non-Consumable'){
+                    $eq = Equipment::where('id', '=', $getEqId[$i])->first();
+                    Equipment::findOrFail($eq->id)->update([
+                        'eq_available' => $eq->eq_available + $getArrivedQty[$i]
+                    ]);
+                    PurchaseOrderItem::where('eq_id', '=' , $getEqId[$i])->where('qty_arrived', '=' , null)->orderBy('id', "ASC")->take(1)->update([
+                        'qty_arrived' => $getArrivedQty[$i]
+                    ]);
+                }
+
+            }
+        }
+
+        
 
         PurchaseOrder::findOrFail($request->po_id)->update([
             'status' => "Delivered",

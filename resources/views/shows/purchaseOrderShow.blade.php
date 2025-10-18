@@ -187,7 +187,7 @@
                                                 @if ($row->type == 'Non-Consumable')
                                                     <td>
                                                         {{ $row->item }}
-                                                        <input type="text" name="stockId[]" value="{{ $row->eq_id }}"
+                                                        <input type="text" name="eqId[]" value="{{ $row->eq_id }}"
                                                             hidden>
                                                     </td>
                                                 @endif
