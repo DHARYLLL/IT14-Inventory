@@ -42,7 +42,7 @@
                             <td>{{ $row->id }}</td>
                             <td>{{ $row->item_name }}</td>
                             <td>{{ $row->size_weight }}</td>
-                            <td>{{ $row->item_qty }}</td>
+                            <td class="{{ $row->item_qty <= 10 ? 'bg-warning-subtle' : ''}}">{{ $row->item_qty }}</td>
                             <td>{{ $row->item_unit_price }}</td>
                             <td>
                                 <a href="{{ route('Stock.edit', $row->id) }}" class="btn btn-outline-success btn-md">

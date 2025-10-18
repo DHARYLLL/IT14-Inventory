@@ -104,7 +104,6 @@ class PurchaseOrderController extends Controller
                 }
             }
         }
-
         // Create record for new stocks and in stocks table
         if (count($newItems)) {
             for ($i = 0; $i < count($newItems); $i++) {

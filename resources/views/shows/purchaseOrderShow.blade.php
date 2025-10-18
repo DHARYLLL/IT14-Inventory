@@ -177,6 +177,7 @@
                                     @else
                                         @foreach ($poItemData as $row)
                                             <tr>
+                                                {{--
                                                 @if ($row->type == 'Consumable')
                                                     <td>
                                                         {{ $row->item }}
@@ -191,6 +192,24 @@
                                                             hidden>
                                                     </td>
                                                 @endif
+                                                --}}
+
+                                                @if ($row->type == 'Consumable')
+                                                    <td>
+                                                        {{ $row->item }}
+                                                        <input type="text" name="stockId[]" value="{{ $row->stock_id }}"
+                                                            hidden>
+                                                    </td>
+                                                @endif
+                                                @if ($row->type == 'Non-Consumable')
+                                                    <td>
+                                                        {{ $row->item }}
+                                                        <input type="text" name="stockId[]" value="{{ $row->eq_id }}"
+                                                            hidden>
+                                                    </td>
+                                                @endif
+
+
                                                 <td>{{ $row->sizeWeight }}</td>
                                                 <td>{{ $row->qty }}</td>
                                                 <td>
@@ -203,10 +222,37 @@
                                                 <td>₱{{ number_format($row->unit_price, 2) }}</td>
                                                 <td>₱{{ number_format($row->total_amount, 2) }}</td>
                                                 @if ($poData->status == 'Approved')
+                                                    {{--
+                                                    @if ($row->type == 'Consumable')
+
+
+                                                        <td>
+                                                            <input type="number" class="form-control qty-input" name="stoQtyArrived[]"
+                                                                placeholder="Qty Arrived"
+                                                                value="{{ old('stoQtyArrived.' . $loop->index) }}">
+                                                            @error('stoQtyArrived.' . $loop->index)
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </td>
+
+                                                    @endif
+                                                    @if ($row->type == 'Non-Consumable')
+
+                                                        <td>
+                                                            <input type="number" class="form-control qty-input" name="eqQtyArrived[]"
+                                                                placeholder="Qty Arrived"
+                                                                value="{{ old('eqQtyArrived.' . $loop->index) }}">
+                                                            @error('eqQtyArrived.' . $loop->index)
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </td>
+
+                                                    @endif
+                                                    --}}
+
+
                                                     <td>
-                                                        <input type="number" class="form-control qty-input" name="qtyArrived[]"
-                                                            placeholder="Qty Arrived"
-                                                            value="{{ old('qtyArrived.' . $loop->index) }}">
+                                                        <input type="number" class="form-control qty-input" name="qtyArrived[]" placeholder="Qty Arrived" value="{{ old('qtyArrived.' . $loop->index) }}">
                                                         @error('qtyArrived.' . $loop->index)
                                                             <small class="text-danger">{{ $message }}</small>
                                                         @enderror
