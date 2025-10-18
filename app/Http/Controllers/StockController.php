@@ -20,7 +20,7 @@ class StockController extends Controller
      */
     public function index()
     {
-        $stoData = Stock::all();
+        $stoData = Stock::paginate(5);
         return view('alar.stock', ['stoData' => $stoData]);
     }
 
@@ -53,10 +53,10 @@ class StockController extends Controller
             'total.max' => '6 digits is the max.',
             'qtyArrived.*.required' => 'This field is required.',
             'qtyArrived.*.min' => 'Quantity must be 1 or more.',
-            'qtyArrived.*.max' => '4 digits is the max.'            
+            'qtyArrived.*.max' => '4 digits is the max.'
         ]);
-        
-        
+
+
         $items = PurchaseOrderItem::where('po_id', '=', $request->po_id)->get();
         //$stock = stockModel::where()->first;
 
@@ -64,7 +64,7 @@ class StockController extends Controller
         $getEqId = $request->eqId;
         $getType = $request->type;
         $getArrivedQty = $request->qtyArrived;
-/*
+        /*
         Invoice::create([
             'invoice_number' => $request->inv_num,
             'invoice_date' => $request->inv_date,
@@ -83,13 +83,13 @@ class StockController extends Controller
         */
 
         if (!empty($getId)) {
-            for ($i=0; $i < count($getId); $i++) { 
-                if($getType[$i] == 'Consumable'){
+            for ($i = 0; $i < count($getId); $i++) {
+                if ($getType[$i] == 'Consumable') {
                     $stock = Stock::where('id', '=', $getId[$i])->first();
                     Stock::findOrFail($stock->id)->update([
                         'item_qty' => $stock->item_qty + $getArrivedQty[$i]
                     ]);
-                    PurchaseOrderItem::where('stock_id', '=' , $getId[$i])->where('qty_arrived', '=' , null)->orderBy('id', "ASC")->take(1)->update([
+                    PurchaseOrderItem::where('stock_id', '=', $getId[$i])->where('qty_arrived', '=', null)->orderBy('id', "ASC")->take(1)->update([
                         'qty_arrived' => $getArrivedQty[$i]
                     ]);
                 }
@@ -97,28 +97,27 @@ class StockController extends Controller
         }
 
         if (!empty($getEqId)) {
-            for ($i=0; $i < count($getEqId); $i++) { 
-                if($getType[$i] == 'Non-Consumable'){
+            for ($i = 0; $i < count($getEqId); $i++) {
+                if ($getType[$i] == 'Non-Consumable') {
                     $eq = Equipment::where('id', '=', $getEqId[$i])->first();
                     Equipment::findOrFail($eq->id)->update([
                         'eq_available' => $eq->eq_available + $getArrivedQty[$i]
                     ]);
-                    PurchaseOrderItem::where('eq_id', '=' , $getEqId[$i])->where('qty_arrived', '=' , null)->orderBy('id', "ASC")->take(1)->update([
+                    PurchaseOrderItem::where('eq_id', '=', $getEqId[$i])->where('qty_arrived', '=', null)->orderBy('id', "ASC")->take(1)->update([
                         'qty_arrived' => $getArrivedQty[$i]
                     ]);
                 }
-
             }
         }
 
-        
+
 
         PurchaseOrder::findOrFail($request->po_id)->update([
             'status' => "Delivered",
             'delivered_date' => $request->del_date
         ]);
 
-        $invId = Invoice::orderBy('id','desc')->take(1)->value('id');
+        $invId = Invoice::orderBy('id', 'desc')->take(1)->value('id');
 
         Log::create([
             'action' => 'Create',
