@@ -75,6 +75,14 @@
                     </li>
 
                     <li class="nav-list">
+                        <a href="{{ route('Chapel.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Chapel.*') ? 'active' : '' }}">
+                            <i class="bi bi-receipt"></i>
+                            <span>Chapel</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-list">
                         <a href="{{ route('supplier.index') }}"
                             class="nav-link-custom {{ request()->routeIs('supplier.*') ? 'active' : '' }}">
                             <i class="bi bi-truck"></i>

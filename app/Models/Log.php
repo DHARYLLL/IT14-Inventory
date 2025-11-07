@@ -8,9 +8,9 @@ class Log extends Model
 {
     protected $table = 'logs';
     protected $fillable = [
-        'action',
-        'from',
-        'action_date',
+        'transaction',
+        'tx_desc',
+        'tx_date',
         'emp_id'
     ];
 

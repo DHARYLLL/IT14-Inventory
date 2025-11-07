@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('logs', function (Blueprint $table) {
+        Schema::create('receipts', function (Blueprint $table) {
             $table->id();
-            $table->string('transaction', 50);
-            $table->string('tx_desc', 50);
-            $table->timestamp('tx_date', 0);
-
+            $table->string('client_name', 100);
+            $table->string('client_contact_number', 100);
+            $table->string('rcpt_status', 100);
+            $table->string('payment_amount', 100);
+            
             $table->unsignedBigInteger('emp_id')->nullable();
             $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();
+
+            $table->unsignedBigInteger('svc_id');
+            $table->foreign('svc_id')->references('id')->on('services_requests')->onUpdate('cascade')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('logs');
+        Schema::dropIfExists('receipts');
     }
 };

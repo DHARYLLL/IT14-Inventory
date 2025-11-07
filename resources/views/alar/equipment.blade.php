@@ -29,7 +29,8 @@
         <thead class="table-light">
             <tr>
                 <th class="fw-semibold">Equipment</th>
-                <th class="fw-semibold">Size/Weight</th>
+                <th class="fw-semibold">Size</th>
+                <th class="fw-semibold">Unit</th>
                 <th class="fw-semibold">Unit Price</th>
                 <th class="fw-semibold">Available</th>
                 <th class="fw-semibold">In Use</th>
@@ -48,7 +49,8 @@
                 @foreach ($eqData as $row)
                     <tr>
                         <td>{{ $row->eq_name }}</td>
-                        <td>{{ $row->eq_size_weight }}</td>
+                        <td>{{ $row->eq_size }}</td>
+                        <td>{{ $row->eq_unit }}</td>
                         <td>{{ $row->eq_unit_price }}</td>
                         <td>{{ $row->eq_available }}</td>
                         <td>{{ $row->eq_in_use }}</td>

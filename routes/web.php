@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ChapelController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\InvoiceController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\packageInclusionController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\ServiceRequestController;
+use App\Http\Controllers\setStoEqToPkgController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Middleware\AuthCheck;
@@ -87,6 +89,10 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::resource('Package-Inclusion', packageInclusionController::class);
     Route::resource('Stock', StockController::class);
     Route::resource('Log', LogController::class);
+    Route::resource('Chapel', ChapelController::class);
+
+    //new
+    Route::resource('Set-Item-Equipment', setStoEqToPkgController::class);
 
 
     // Logout

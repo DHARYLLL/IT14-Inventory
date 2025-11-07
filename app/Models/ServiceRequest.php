@@ -8,8 +8,12 @@ class ServiceRequest extends Model
 {
     protected $table = 'services_requests';
     protected $fillable = [
-        'client_name',
-        'client_contact_number',
+        'dec_name',
+        'dec_born_date',
+        'dec_died_date',
+        'dec_cause_of_death',
+        'dec_mom_name',
+        'dec_fr_name',
         'svc_startDate',
         'svc_endDate',
         'svc_wakeLoc',
@@ -18,8 +22,8 @@ class ServiceRequest extends Model
         'svc_equipment_status',
         'svc_deploy_date',
         'svc_return_date',
-        'package_id',
-        'emp_id'
+        'pkg_id',
+        'chap_id'
     ];
 
     public function svcReqToPac() {

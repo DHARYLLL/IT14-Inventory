@@ -24,6 +24,9 @@
         <thead>
             <tr class="table-light">
                 <th class="fw-semibold">Package</th>
+                <th class="fw-semibold">Items</th>
+                <th class="fw-semibold">Equipment</th>
+                <th class="fw-semibold">Price</th>
                 <th class="col col-md-2 fw-semibold text-center">Action</th>
             </tr>
         </thead>
@@ -34,7 +37,7 @@
             <tbody id="tableBody">
                 @if ($pacData->isEmpty())
                     <tr>
-                        <td colspan="2" class="text-center text-secondary py-3">
+                        <td colspan="5" class="text-center text-secondary py-3">
                             No packages available.
                         </td>
                     </tr>
@@ -42,6 +45,9 @@
                     @foreach ($pacData as $row)
                         <tr>
                             <td>{{ $row->pkg_name }}</td>
+                            <td>{{ $row->pkgToPkgSto->count() }}</td>
+                            <td>{{ $row->pkgToPkgEq->count() }}</td>
+                            <td>test price</td>
                             <td class="text-center col col-md-2">
                                 <div class="d-inline-flex justify-content-center gap-2">
                                     <a href="{{ route('Package.show', $row->id) }}"

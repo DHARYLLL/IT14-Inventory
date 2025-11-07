@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('item', 100);
             $table->smallInteger('qty');
-            $table->string('sizeWeight', 20);
+            $table->string('size', 20);
+            $table->string('unit', 20);
             $table->decimal('unit_price', 8,2);
             $table->decimal('total_amount', 8,2);
             $table->smallInteger('qty_arrived')->nullable();
@@ -29,6 +30,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger('eq_id')->nullable();
             $table->foreign('eq_id')->references('id')->on('equipments')->onUpdate('cascade')->nullOnDelete();
+
             $table->timestamps();
         });
     }

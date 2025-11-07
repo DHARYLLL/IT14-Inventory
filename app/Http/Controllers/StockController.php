@@ -89,14 +89,14 @@ class StockController extends Controller
         $getType = $request->type;
 
         $getArrivedQty = $request->qtyArrived;
-        /*
+        
         Invoice::create([
             'invoice_number' => $request->inv_num,
             'invoice_date' => $request->inv_date,
             'total' => $request->total,
             'po_id' => $request->po_id
         ]);
-        */
+        
 
 
         for ($i=0; $i < count($getId); $i++) { 

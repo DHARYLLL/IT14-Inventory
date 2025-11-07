@@ -11,12 +11,13 @@ class Equipment extends Model
         'eq_name',
         'eq_type',
         'eq_available',
-        'eq_size_weight',
+        'eq_size',
+        'eq_unit',
         'eq_unit_price',
         'eq_in_use'
     ];
 
-    public function eqToSvcEq(){
-        return $this->hasMany(SvsEquipment::class, 'equipment_id');
+    public function eqToPkgEq(){
+        return $this->hasMany(PkgEquipment::class, 'eq_id');
     }
 }

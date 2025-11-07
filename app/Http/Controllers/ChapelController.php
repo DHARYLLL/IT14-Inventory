@@ -2,28 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Package;
-use App\Http\Controllers\Controller;
-use App\Models\Employee;
+use App\Models\Chapel;
+use App\Models\ChapEquipment;
+use App\Models\ChapStock;
 use App\Models\Equipment;
 use App\Models\Log;
-use App\Models\packageInclusion;
-use App\Models\PkgEquipment;
-use App\Models\PkgStock;
 use App\Models\Stock;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use PhpParser\Node\Expr\Cast\String_;
+use Illuminate\Validation\Rule;
 
-class PackageController extends Controller
+class ChapelController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $pacData = Package::paginate(8);
-        return view('alar/package', ['pacData' => $pacData]);
+        $chapData = Chapel::all();
+        return view('alar/chapel', ['chapData' => $chapData]);
     }
 
     /**
@@ -33,7 +30,7 @@ class PackageController extends Controller
     {
         $eqData = Equipment::all();
         $stoData = Stock::all();
-        return view('functions/packageAdd', ['eqData' => $eqData, 'stoData' => $stoData]);
+        return view('functions/addChapel', ['eqData' => $eqData, 'stoData' => $stoData]);
     }
 
     /**
@@ -42,29 +39,37 @@ class PackageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'pkg_name' => 'required|unique:packages,pkg_name',
-            'pkgPrice' => 'required|numeric|min:1|max:999999.99',
-            'itemName.*' => 'required',
+            'chapName' => ['required',
+                            'max:50',
+                            Rule::unique('chapels', 'chap_name')
+                            ->where('chap_room', $request->chapRoom)],
+            'chapRoom' => 'required|max:10|unique:chapels,chap_room',
+            'chapPrice' => 'required|numeric|min:1|max:999999.99',
+            'maxCap' => 'required|integer|min:1|max:999',
             'stockQty.*' => 'required|integer|min:1|max:999',
             'eqName.*' => 'required',
-            'eqQty.*' => 'required|integer|min:1|max:999'     
+            'eqQty.*' => 'required|integer|min:1|max:999',
         ], [
-            'pkg_name.required' => 'This field is required',
-            'pkg_inclusion.*.required' => 'This field is required',
+            'chapName.required' => 'This field is required',
+            'chapName.unique' => 'Name & Room is already added.',
+            'chapRoom.unique' => 'Room is already added.',
+            'chapRoom.required' => 'This field is required',
+            'maxCap.required' => 'This field is required',
+            'maxCap.min' => 'Max capacity must be 1 or more.',
+            'maxCap.max' => 'Max 3 digit reached.',
+            'chapPrice.required' => 'This field is required.',
+            'chapPrice.numeric' => 'Number only.',
+            'chapPrice.min' => 'Price must be 1 or more.',
+            'chapPrice.max' => '6 digit price reached.',
             'stockQty.*.required' => 'This field is required.',
             'stockQty.*.min' => 'Item quantity must be 1 or more.',
             'stockQty.*.max' => '6 digit item quantity reached.',
             'eqQty.*.required' => 'This field is required.',
             'eqQty.*.min' => 'Equipment quantity must be 1 or more.',
-            'eqQty.*.max' => '6 digit equipment quantity reached.',
-            'pkgPrice.required' => 'This field is required.',
-            'pkgPrice.numeric' => 'Number only.',
-            'pkgPrice.min' => 'Price must be 1 or more.',
-            'pkgPrice.max' => '6 digit price reached.'
+            'eqQty.*.max' => '6 digit equipment quantity reached.'
         ]);
 
 
-        //Get equpment and stock requests
         $eq = $request->equipment;
         $eqQty = $request->eqQty;
         $sto = $request->stock;
@@ -126,18 +131,21 @@ class PackageController extends Controller
 
         }
 
-        Package::create([
-            'pkg_name' => $request->pkg_name,
-            'pkg_price' => $request->pkgPrice
+        Chapel::create([
+            'chap_name' => $request->chapName,
+            'chap_room' => $request->chapRoom,
+            'chap_price' => $request->chapPrice,
+            'chap_status' => 'Available',
+            'max_cap' => $request->maxCap
         ]);
 
-        // Get the package ID
-        $getPkg = Package::orderBy('id', 'desc')->take(1)->value('id');
+
+        $getChap = Chapel::orderBy('id', 'desc')->take(1)->value('id');
 
         if ($eq != null) {
             for ($i = 0; $i < count($eq); $i++) {
-                PkgEquipment::create([
-                    'pkg_id' => $getPkg,
+                ChapEquipment::create([
+                    'chap_id' => $getChap,
                     'eq_id' => $eq[$i],
                     'eq_used' => $eqQty[$i]
                 ]);
@@ -146,8 +154,8 @@ class PackageController extends Controller
 
         if ($sto != null) {
             for ($i = 0; $i < count($sto); $i++) {
-                PkgStock::create([
-                    'pkg_id' => $getPkg,
+                ChapStock::create([
+                    'chap_id' => $getChap,
                     'stock_id' => $sto[$i],    
                     'stock_used' => $stoQty[$i]
                 ]);
@@ -156,29 +164,25 @@ class PackageController extends Controller
 
         Log::create([
             'transaction' => 'Added',
-            'tx_desc' => 'Added Package | ID: ' . $getPkg,
+            'tx_desc' => 'Added Chapel | ID: ' . $getChap,
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Package.index'))->with('promt', 'Created Sucessfully');
+        return redirect(route('Chapel.index'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(String $id)
+    public function show(string $id)
     {
-        $pkgData = Package::where('id', '=', $id)->first();
-        $pkgEqData = PkgEquipment::where('pkg_id', '=', $pkgData->id)->get();
-        $pkgStoData = PkgStock::where('pkg_id', '=', $pkgData->id)->get();
-
-        return view('shows/packageInclusionShow', ['pkgData' => $pkgData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Package $package)
+    public function edit(string $id)
     {
         //
     }
@@ -186,40 +190,16 @@ class PackageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, String $id)
+    public function update(Request $request, string $id)
     {
-        $request->validate([
-            'pkgName' => 'required|max:50|unique:packages,pkg_name'
-        ], [
-            'pkgName.required' => 'This field is required.',
-            'pkgName.unique' => 'Package name is already added.',
-            'pkgName.max' => 'Max 50 character reached.'
-        ]);
-        Package::findOrFail($id)->update([
-            'pkg_name' => $request->pkgName
-        ]);
-
-        Log::create([
-            'transaction' => 'Update',
-            'tx_desc' => 'Updated Package name | ID: ' . $id,
-            'emp_id' => session('loginId')
-        ]);
-
-        return redirect()->back()->with('promt', 'Updated Sucessfuly');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(String $id)
+    public function destroy(string $id)
     {
-        Package::findOrFail($id)->delete();
-        Log::create([
-            'transaction' => 'Deleted',
-            'tx_desc' => 'Delted Package | ID: ' . $id,
-            'emp_id' => session('loginId')
-        ]);
-        
-        return redirect()->back()->with('promt', 'Deleted Successfully');
+        //
     }
 }

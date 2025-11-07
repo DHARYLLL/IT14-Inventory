@@ -10,7 +10,8 @@ class PurchaseOrderItem extends Model
     protected $fillable = [
         'item',
         'qty',
-        'sizeWeight',
+        'size',
+        'unit',
         'unit_price',
         'total_amount',
         'qty_arrived',

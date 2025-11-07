@@ -12,7 +12,7 @@
         <div class="d-flex align-items-center gap-2">
             <a href="{{ route('Purchase-Order.index') }}" class="btn btn-green d-flex align-items-center gap-2 px-3">
                 <i class="bi bi-arrow-left"></i>
-                <span>Back</span>
+                <span>Cancel</span>
             </a>
         </div>
     </div>

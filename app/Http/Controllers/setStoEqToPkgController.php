@@ -2,28 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Package;
-use App\Http\Controllers\Controller;
-use App\Models\Employee;
 use App\Models\Equipment;
-use App\Models\Log;
+use App\Models\Package;
 use App\Models\packageInclusion;
 use App\Models\PkgEquipment;
 use App\Models\PkgStock;
 use App\Models\Stock;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use PhpParser\Node\Expr\Cast\String_;
+use Illuminate\Validation\Rule;
 
-class PackageController extends Controller
+class setStoEqToPkgController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $pacData = Package::paginate(8);
-        return view('alar/package', ['pacData' => $pacData]);
+        //
     }
 
     /**
@@ -31,9 +26,11 @@ class PackageController extends Controller
      */
     public function create()
     {
+        $pkgData = Package::orderBy('id','desc')->first();
+        $pkgIncData = packageInclusion::where('package_id', '=', $pkgData->id)->get();
         $eqData = Equipment::all();
         $stoData = Stock::all();
-        return view('functions/packageAdd', ['eqData' => $eqData, 'stoData' => $stoData]);
+        return view('functions/addStoEqToPkg', ['pkgData' => $pkgData, 'pkgIncData' => $pkgIncData, 'eqData' => $eqData, 'stoData' => $stoData]);
     }
 
     /**
@@ -42,29 +39,19 @@ class PackageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'pkg_name' => 'required|unique:packages,pkg_name',
-            'pkgPrice' => 'required|numeric|min:1|max:999999.99',
             'itemName.*' => 'required',
             'stockQty.*' => 'required|integer|min:1|max:999',
             'eqName.*' => 'required',
-            'eqQty.*' => 'required|integer|min:1|max:999'     
+            'eqQty.*' => 'required|integer|min:1|max:999',
         ], [
-            'pkg_name.required' => 'This field is required',
-            'pkg_inclusion.*.required' => 'This field is required',
             'stockQty.*.required' => 'This field is required.',
             'stockQty.*.min' => 'Item quantity must be 1 or more.',
             'stockQty.*.max' => '6 digit item quantity reached.',
             'eqQty.*.required' => 'This field is required.',
             'eqQty.*.min' => 'Equipment quantity must be 1 or more.',
-            'eqQty.*.max' => '6 digit equipment quantity reached.',
-            'pkgPrice.required' => 'This field is required.',
-            'pkgPrice.numeric' => 'Number only.',
-            'pkgPrice.min' => 'Price must be 1 or more.',
-            'pkgPrice.max' => '6 digit price reached.'
+            'eqQty.*.max' => '6 digit equipment quantity reached.'
         ]);
 
-
-        //Get equpment and stock requests
         $eq = $request->equipment;
         $eqQty = $request->eqQty;
         $sto = $request->stock;
@@ -75,6 +62,7 @@ class PackageController extends Controller
         }
 
         //get all equipment in request
+
         $equipmentErrors = [];
 
         if ($eq !== null) {
@@ -126,18 +114,10 @@ class PackageController extends Controller
 
         }
 
-        Package::create([
-            'pkg_name' => $request->pkg_name,
-            'pkg_price' => $request->pkgPrice
-        ]);
-
-        // Get the package ID
-        $getPkg = Package::orderBy('id', 'desc')->take(1)->value('id');
-
         if ($eq != null) {
             for ($i = 0; $i < count($eq); $i++) {
                 PkgEquipment::create([
-                    'pkg_id' => $getPkg,
+                    'pkg_id' => $request->pkgId,
                     'eq_id' => $eq[$i],
                     'eq_used' => $eqQty[$i]
                 ]);
@@ -147,38 +127,29 @@ class PackageController extends Controller
         if ($sto != null) {
             for ($i = 0; $i < count($sto); $i++) {
                 PkgStock::create([
-                    'pkg_id' => $getPkg,
+                    'pkg_id' => $request->pkgId,
                     'stock_id' => $sto[$i],    
                     'stock_used' => $stoQty[$i]
                 ]);
             }
         }
 
-        Log::create([
-            'transaction' => 'Added',
-            'tx_desc' => 'Added Package | ID: ' . $getPkg,
-            'emp_id' => session('loginId')
-        ]);
-
         return redirect(route('Package.index'))->with('promt', 'Created Sucessfully');
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(String $id)
+    public function show(string $id)
     {
-        $pkgData = Package::where('id', '=', $id)->first();
-        $pkgEqData = PkgEquipment::where('pkg_id', '=', $pkgData->id)->get();
-        $pkgStoData = PkgStock::where('pkg_id', '=', $pkgData->id)->get();
-
-        return view('shows/packageInclusionShow', ['pkgData' => $pkgData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Package $package)
+    public function edit(string $id)
     {
         //
     }
@@ -186,40 +157,16 @@ class PackageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, String $id)
+    public function update(Request $request, string $id)
     {
-        $request->validate([
-            'pkgName' => 'required|max:50|unique:packages,pkg_name'
-        ], [
-            'pkgName.required' => 'This field is required.',
-            'pkgName.unique' => 'Package name is already added.',
-            'pkgName.max' => 'Max 50 character reached.'
-        ]);
-        Package::findOrFail($id)->update([
-            'pkg_name' => $request->pkgName
-        ]);
-
-        Log::create([
-            'transaction' => 'Update',
-            'tx_desc' => 'Updated Package name | ID: ' . $id,
-            'emp_id' => session('loginId')
-        ]);
-
-        return redirect()->back()->with('promt', 'Updated Sucessfuly');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(String $id)
+    public function destroy(string $id)
     {
-        Package::findOrFail($id)->delete();
-        Log::create([
-            'transaction' => 'Deleted',
-            'tx_desc' => 'Delted Package | ID: ' . $id,
-            'emp_id' => session('loginId')
-        ]);
-        
-        return redirect()->back()->with('promt', 'Deleted Successfully');
+        //
     }
 }

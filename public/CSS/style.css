@@ -456,12 +456,24 @@ body {
 
 /* Si gar nag butang ani hahahaha (start)*/
 
+.cust-sub-title {
+    color: black;
+    border-bottom: 3px#60BF4F solid;
+    width: max-content;
+    
+}
+
 .cust-h-heading {
     height: 10%;
 }
 
 .cust-h-content {
     height: 90%;
+    overflow: auto;
+}
+
+.cust-h-content-func {
+    height: 100%;
     overflow: auto;
 }
 
@@ -473,6 +485,63 @@ body {
     top: 0;
     background-color: white;
     z-index: 20;
+}
+
+.test-outline {
+    border: 1px black solid;
+}
+
+.test-outline-sec {
+    border: 1px green solid;
+}
+
+.cust-btn {
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    display: block;
+    font-size: 16px;
+    font-family: sans-serif;
+    padding: 6px 12px;
+    border: none;
+}
+
+.cust-btn-primary {
+    border-radius: 5px;
+    background-color: #60BF4F;
+    border: 1px #60BF4F solid;
+    transition: all 0.3s ease;
+    color: white;
+    width: fit-content;
+    height: fit-content;
+}
+
+.cust-btn-primary:hover {
+    background-color: white;
+    border: 1px #60BF4F solid;
+    color: #60BF4F;
+}
+
+.cust-btn-secondary {
+    border-radius: 5px;
+    border: 1px #60BF4F solid;
+    transition: all 0.3s ease;
+    color: #60BF4F;
+    width: fit-content;
+    height: fit-content;
+}
+
+.cust-btn-secondary:hover {
+    background-color: #60BF4F;
+    color: white;
+}
+
+.h-10 {
+    height: 10%;
+}
+
+.h-65 {
+    height: 65%;
 }
 
 /* Si gar nag butang ani hahahaha (end)*/

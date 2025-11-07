@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('logs', function (Blueprint $table) {
+        Schema::create('chapels', function (Blueprint $table) {
             $table->id();
-            $table->string('transaction', 50);
-            $table->string('tx_desc', 50);
-            $table->timestamp('tx_date', 0);
+            $table->string('chap_name', 50);
+            $table->string('chap_room', 10);
+            $table->decimal('chap_price', 8,2);
+            $table->string('chap_status', 15);   
+            $table->smallInteger('max_cap');    
 
-            $table->unsignedBigInteger('emp_id')->nullable();
-            $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();
             $table->timestamps();
+
+            $table->unique(['chap_name', 'chap_room']);
         });
     }
 
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('logs');
+        Schema::dropIfExists('chapels');
     }
 };

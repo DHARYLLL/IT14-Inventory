@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\ServiceRequest;
 use App\Http\Controllers\Controller;
+use App\Models\Chapel;
 use App\Models\Employee;
 use App\Models\Equipment;
 use App\Models\Log;
 use App\Models\Package;
+use App\Models\Receipt;
 use App\Models\Stock;
 use App\Models\SvsEquipment;
 use App\Models\SvsStock;
@@ -33,11 +35,11 @@ class ServiceRequestController extends Controller
      */
     public function create()
     {
-        $eqData = Equipment::all();
         $pkgData = Package::all();
         $svcReqData = ServiceRequest::all();
-        $stoData = Stock::all();
-        return view('functions/servicesRequestAdd', ['pkgData' => $pkgData, 'svcReqData' => $svcReqData, 'eqData' => $eqData, 'stoData' => $stoData]);
+        $chapData = Chapel::all();
+
+        return view('functions/servicesRequestAdd', ['pkgData' => $pkgData, 'svcReqData' => $svcReqData, 'chapData' => $chapData]);
     }
 
     /**
@@ -57,10 +59,13 @@ class ServiceRequestController extends Controller
             'wakeLoc' => 'required',
             'churhcLoc' => 'required',
             'burialLoc' => 'required',
-            'itemName.*' => 'required',
-            'stockQty.*' => 'required|min:1|max:6',
-            'eqName.*' => 'required',
-            'eqQty.*' => 'required|min:1|max:6',
+            'decName' => 'required',
+            'decBorn' => 'required',
+            'decDied' => 'required',
+            'decCOD' => 'required',
+            'decFName' => 'required',
+            'decMName' => 'required',
+            'payment' => 'required|integer|min:1|max:999999'
         ], [
             'package.required' => 'This field is required.',
             'clientName.required' => 'This field is required.',
@@ -72,115 +77,55 @@ class ServiceRequestController extends Controller
             'wakeLoc.required' => 'This field is required.',
             'churhcLoc.required' => 'This field is required.',
             'burialLoc.required' => 'This field is required.',
-            'stockQty.*.required' => 'This field is required.',
-            'stockQty.*.min' => 'Item quantity must be 1 or more.',
-            'stockQty.*.max' => '6 digit item quantity reached.',
-            'eqQty.*.required' => 'This field is required.',
-            'eqQty.*.min' => 'Equipment quantity must be 1 or more.',
-            'eqQty.*.max' => '6 digit equipment quantity reached.'
+            'decName.required' => 'This field is required.',
+            'decBorn.required' => 'This field is required.',
+            'decDied.required' => 'This field is required.',
+            'decCOD.required' => 'This field is required.',
+            'decFName.required' => 'This field is required.',
+            'decMName.required' => 'This field is required.',
+            'payment.required' => 'This field is required.',
+            'payment.number' => 'Number only.',
+            'payment.min' => 'Payment must be 1 or more',
+            'payment.max' => '6 digits is the max.'
         ]);
 
-        $eq = $request->equipment;
-        $eqQty = $request->eqQty;
-        $sto = $request->stock;
-        $stoQty = $request->stockQty;
-
-        if ($eq == null && $sto == null) {
-            return redirect()->back()->with('emptyEq', 'Must have atleast 1 equipment or item.')->withInput();
-        }
-
-        //get all equipment in request
-
-        $equipmentErrors = [];
-
-        if ($eq !== null) {
-            for ($i = 0; $i < count($eq); $i++) {
-                $equipmentId = $eq[$i];
-                $requestedQty = (int) $eqQty[$i];
-
-                $equipment = Equipment::find($equipmentId);
-
-                if (!$equipment) {
-                    $equipmentErrors["equipment.$i"] = "Equipment item not found.";
-                    continue;
-                }
-
-                if ($requestedQty > $equipment->eq_available) {
-                    $equipmentErrors["eqQty.$i"] = "Requested quantity ($requestedQty) exceeds available equipment ({$equipment->eq_available}).";
-                }
-            }
-
-            if (!empty($equipmentErrors)) {
-                return back()->withErrors($equipmentErrors)->withInput();
-            }
-        }
-
-
-        $StoErrors = [];
-
-        if ($sto != null) {
-            for ($i = 0; $i < count($sto); $i++) {
-                $stockId = $sto[$i];
-                $requestedQty = (int) $stoQty[$i];
-
-                // Get stock from DB
-                $stock = Stock::find($stockId); // replace with your actual Stock model
-
-                if (!$stock) {
-                    $StoErrors["stock.$i"] = "Stock item not found.";
-                    continue;
-                }
-
-                if ($requestedQty > $stock->item_qty) {
-                    $StoErrors["stockQty.$i"] = "Requested quantity ({$requestedQty}) exceeds available stock ({$stock->item_qty}).";
-                }
-            }
-
-            if (!empty($StoErrors)) {
-                return back()->withErrors($StoErrors)->withInput();
-            }
-
-        }
-
         ServiceRequest::create([
-            'client_name' => $request->clientName,
-            'client_contact_number' => $request->clientConNum,
+            'dec_name' => $request->decName,
+            'dec_born_date' => $request->decBorn,
+            'dec_died_date' => $request->decDied,
+            'dec_cause_of_death' => $request->decCOD,
+            'dec_mom_name' => $request->decMName,
+            'dec_fr_name' => $request->decFName,
             'svc_startDate' => $request->startDate,
             'svc_endDate' => $request->endDate,
             'svc_wakeLoc' => $request->wakeLoc,
             'svc_churchLoc' => $request->churhcLoc,
             'svc_burialLoc' => $request->burialLoc,
             'svc_equipment_status' => 'Pending',
-            'package_id' => $request->package,
-            'emp_id' => session('loginId')
+            'pkg_id' => $request->package,
+            'chap_id' => $request->chapel
         ]);
 
         $getId = ServiceRequest::orderBy('id', 'desc')->take(1)->value('id');
 
-        if ($eq != null) {
-            for ($i = 0; $i < count($eq); $i++) {
-                SvsEquipment::create([
-                    'service_id' => $getId,
-                    'equipment_id' => $eq[$i],
-                    'eq_used' => $eqQty[$i]
-                ]);
-            }
-        }
-
-        if ($sto != null) {
-            for ($i = 0; $i < count($sto); $i++) {
-                SvsStock::create([
-                    'stock_id' => $sto[$i],
-                    'service_id' => $getId,
-                    'stock_used' => $stoQty[$i]
-                ]);
-            }
-        }
+        Receipt::create([
+            'client_name' => $request->clientName,
+            'client_contact_number' => $request->clientConNum,
+            'rcpt_status' => 'Pending',
+            'payment_amount' => $request->payment,
+            'emp_id' => session('loginId'),
+            'svc_id' => $getId
+        ]);
 
         Log::create([
-            'action' => 'Create',
-            'from' => 'Created Service Request | ID: ' . $getId,
-            'action_date' => Carbon::now()->format('Y-m-d'),
+            'transaction' => 'Create',
+            'tx_desc' => 'Created Service Request | ID: ' . $getId,
+            'emp_id' => session('loginId')
+        ]);
+
+        Log::create([
+            'transaction' => 'Create',
+            'tx_desc' => 'Created Service Request | ID: ' . $getId,
             'emp_id' => session('loginId')
         ]);
 

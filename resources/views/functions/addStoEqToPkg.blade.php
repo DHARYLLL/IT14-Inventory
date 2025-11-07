@@ -5,38 +5,38 @@
     @section('head', 'Add Package')
     @section('name', 'Staff')
 
-    <div class="cust-h-content-func">
+    <div class="d-flex align-items-center justify-content-end mb-0 cust-h-heading">
+        <a href="{{ route('Package.index') }}" class="btn btn-outline-success d-flex align-items-center gap-2">
+            <i class="bi bi-arrow-left"></i> <span>Cancel</span>
+        </a>
+    </div>
+
+    <div class="cust-h-content">
         <div class="card bg-white border-0 rounded-3 h-100">
             <div class="card-body h-100">
-                <form action="{{ route('Package.store') }}" method="POST" class="h-100">
+                <form action="{{ route('Set-Item-Equipment.store') }}" method="POST" class="h-100">
                     @csrf
+                    {{-- Package Name --}}
+                    <div class="row test-outline h-25">
+                        <div class="col-md-9 test-outline-sec">
+                            <label class="form-label fw-semibold text-dark">Package Name:</label>
+                            <input type="text" class="form-control" value="{{ $pkgData->pkg_name }}" readonly>
+                            <input type="text" name="pkgId" value="{{ $pkgData->id }}" readonly hidden>
 
-                    <div class="row h-25">
-                        
-                        {{-- Package Name --}}
-                        <div class="col col-9">
-                            <label class="form-label fw-semibold text-dark">Package Name</label>
-                            <input type="text" class="form-control" placeholder="Enter package name" name="pkg_name"
-                                value="{{ old('pkg_name') }}">
-                            @error('pkg_name')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
                         </div>
-                        <div class="col col-3">
-                            <label class="form-label fw-semibold text-dark">Package Price</label>
-                            <input type="text" class="form-control" placeholder="Package Price" name="pkgPrice"
-                                value="{{ old('pkgPrice') }}">
-                            @error('pkgPrice')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
+                        <div class="col-md-3 test-outline-sec">
+                            <label class="form-label fw-semibold text-dark">Inclusion:</label> <br>
+                            <input type="text" class="form-control" value="{{ $pkgIncData->count() }}" readonly>
                         </div>
 
                     </div>
 
-                    <div class="row h-65">
+                    {{-- Add Equipment and Stock to Package--}}
+                    <div class="row test-outline h-65">
 
-                        <div class="col-md-6 h-100 overflow-auto">
-                            {{-- Stock --}}
+                        {{-- Stock --}}
+                        <div class="col col-6 h-100 overflow-auto">
+
                             <div class="col-12">
                                 <label for="stock" class="form-label">Stock</label>
                                 <div class="d-flex gap-2 align-items-center">
@@ -50,7 +50,10 @@
                                     </select>
                                     <input type="text" id="sto" class="form-control w-25" readonly placeholder="Available">
                                     
-                                    <button type="button" id="add_sto" onclick="checkInputSto()" class="cust-btn cust-btn-primary">Add Stock</button>
+                                    <button type="button" id="add_sto" onclick="checkInputSto()" class="btn btn-green"><i
+                                            class="bi bi-plus-circle"></i>
+                                        Add Stock
+                                    </button>
                                 </div>
                             </div>
 
@@ -99,9 +102,10 @@
 
                         </div>
 
-                        <div class="col-md-6 h-100 overflow-auto">
 
-                            {{-- Equipment --}}
+                        {{-- Equipment --}}
+                        <div class="col col-6 h-100 overflow-auto">
+
                             <div class="col-12">
                                 <label for="equipment" class="form-label">Equipment</label>
                                 <div class="d-flex gap-2 align-items-center">
@@ -114,7 +118,10 @@
                                         @endforeach
                                     </select>
                                     <input type="text" id="avail" class="form-control w-25" readonly placeholder="Available">
-                                    <button type="button" id="add_eq" onclick="checkInputEq()" class="cust-btn cust-btn-primary">Add Equipment</button>
+                                    <button type="button" id="add_eq" onclick="checkInputEq()" class="btn btn-green"><i
+                                            class="bi bi-plus-circle"></i>
+                                        Add Equipment
+                                    </button>
                                 </div>
                             </div>
                             <div id="addEquipment" class="col-12 mt-3">
@@ -167,61 +174,22 @@
 
                     </div>
 
-                    <div class="row h-10 justify-content-end align-items-center">
-                        {{-- Display Error --}}
+                    {{-- Submit Button --}}
+                    <div class="row justify-content-end h-10">
+                        
                         <div class="col col-auto">
                              @session('emptyEq')
                                     <div class="text-danger small mt-1">{{ $value }}</div>
                             @endsession
                         </div>
-
                         <div class="col col-auto">
-                            <a href="{{ route('Package.index') }}" class="btn btn-outline-success d-flex align-items-center gap-2">
-                                <i class="bi bi-arrow-left"></i> <span>Cancel</span>
-                            </a>
+                            <button type="submit" class="cust-btn cust-btn-primary"><i class="bi bi-send px-2"></i>Submit</button>
                         </div>
-
-                        {{-- Submit Button --}}
-                        <div class="col col-auto ">
                         
-                            <button type="submit" class="cust-btn cust-btn-primary"><i class="bi bi-send px-2"></i>Add Package</button>
-                        
-                        </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    {{-- JS to dynamically add/remove inclusions 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const addBtn = document.getElementById('add-inclusion');
-            const list = document.getElementById('inclusion-list');
-
-            addBtn.addEventListener('click', function() {
-                const count = list.querySelectorAll('.inclusion-item').length + 1;
-                const newItem = document.createElement('div');
-                newItem.classList.add('input-group', 'mb-2', 'inclusion-item');
-                newItem.innerHTML = `
-                        <input type="text" name="pkg_inclusion[]" class="form-control" placeholder="Enter inclusion item">
-                        <button type="button" class="btn btn-outline-danger remove-inclusion">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    `;
-                list.appendChild(newItem);
-            });
-
-            list.addEventListener('click', function(e) {
-                if (e.target.closest('.remove-inclusion')) {
-                    e.target.closest('.inclusion-item').remove();
-                    // Reorder numbering
-                    list.querySelectorAll('.inclusion-item').forEach((item, index) => {
-                        item.querySelector('.input-group-text').textContent = index + 1;
-                    });
-                }
-            });
-        });
-    </script>
-    --}}
 @endsection

@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('package_inclusions', function (Blueprint $table) {
             $table->id();
-            $table->string('pkg_inclusion', 100)->unique();
+            $table->string('pkg_inclusion', 100);
 
             $table->unsignedBigInteger('package_id');
             $table->foreign('package_id')->references('id')->on('packages')->onUpdate('cascade')->onDelete('cascade');
 
             $table->timestamps();
+
+            $table->unique(['pkg_inclusion', 'package_id']);
         });
     }
 

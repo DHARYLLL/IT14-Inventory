@@ -10,12 +10,17 @@ class Stock extends Model
     protected $fillable = [
         'item_name',
         'item_qty',
-        'size_weight',
+        'item_size',
+        'item_unit',
         'item_unit_price',
         'item_type'
     ];
 
     public function stoToSvcSto(){
         return $this->hasMany(SvsStock::class, 'stock_id');
+    }
+
+    public function stoToPkgSto(){
+        return $this->belongsTo(PkgStock::class, 'stock_id');
     }
 }

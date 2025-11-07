@@ -22,7 +22,8 @@
                 <tr class="table-white">
                     <th class="fw-semibold">Item #</th>
                     <th class="fw-semibold">Item Name</th>
-                    <th class="fw-semibold">Size / Weight</th>
+                    <th class="fw-semibold">Size</th>
+                    <th class="fw-semibold">Unit</th>
                     <th class="fw-semibold">Item Quantity</th>
                     <th class="fw-semibold">Unit Price</th>
                     <th class="fw-semibold">Action</th>
@@ -41,7 +42,8 @@
                         <tr>
                             <td>{{ $row->id }}</td>
                             <td>{{ $row->item_name }}</td>
-                            <td>{{ $row->size_weight }}</td>
+                            <td>{{ $row->item_size ? $row->item_size : '--' }}</td>
+                            <td>{{ $row->item_unit }}</td>
                             <td class="{{ $row->item_qty <= 10 ? 'bg-warning-subtle' : ''}}">{{ $row->item_qty }}</td>
                             <td>{{ $row->item_unit_price }}</td>
                             <td>

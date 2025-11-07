@@ -1,39 +1,52 @@
 @extends('layouts.layout')
-@section('title', 'Equipments')
+@section('title', 'Chapel')
 
 @section('content')
-    @section('head', 'Add Package')
+    @section('head', 'Add Chapel')
     @section('name', 'Staff')
 
     <div class="cust-h-content-func">
         <div class="card bg-white border-0 rounded-3 h-100">
             <div class="card-body h-100">
-                <form action="{{ route('Package.store') }}" method="POST" class="h-100">
+                
+                <form action="{{ route('Chapel.store') }}" method="post" class="h-100">
                     @csrf
 
-                    <div class="row h-25">
-                        
-                        {{-- Package Name --}}
-                        <div class="col col-9">
-                            <label class="form-label fw-semibold text-dark">Package Name</label>
-                            <input type="text" class="form-control" placeholder="Enter package name" name="pkg_name"
-                                value="{{ old('pkg_name') }}">
-                            @error('pkg_name')
-                                <small class="text-danger">{{ $message }}</small>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label for="chapName" class="form-label">Name:</label>
+                            <input type="text" class="form-control" name="chapName" placeholder="Chapel Name" value="{{ old('chapName') }}">
+                            @error('chapName')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col col-3">
-                            <label class="form-label fw-semibold text-dark">Package Price</label>
-                            <input type="text" class="form-control" placeholder="Package Price" name="pkgPrice"
-                                value="{{ old('pkgPrice') }}">
-                            @error('pkgPrice')
-                                <small class="text-danger">{{ $message }}</small>
+                        <div class="col-md-2">
+                            <label for="chapRoom" class="form-label">Room:</label>
+                            <input type="text" class="form-control" name="chapRoom" placeholder="Room Number" value="{{ old('chapRoom') }}">
+                            @error('chapRoom')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="col-md-2">
+                            <label for="maxCap" class="form-label">Room Capacity:</label>
+                            <input type="number" class="form-control" name="maxCap" placeholder="Room Capacity" value="{{ old('maxCap') }}">
+                            @error('maxCap')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-2">
+                            <label for="chapPrice" class="form-label">Room Price:</label>
+                            <input type="text" class="form-control" name="chapPrice" placeholder="Price" value="{{ old('chapPrice') }}">
+                            @error('chapPrice')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
 
                     </div>
 
-                    <div class="row h-65">
+                    <div class="row h-65 mt-3">
 
                         <div class="col-md-6 h-100 overflow-auto">
                             {{-- Stock --}}
@@ -167,7 +180,9 @@
 
                     </div>
 
-                    <div class="row h-10 justify-content-end align-items-center">
+
+                    {{-- Submit --}}
+                    <div class="row justify-content-end mt-4">
                         {{-- Display Error --}}
                         <div class="col col-auto">
                              @session('emptyEq')
@@ -176,52 +191,25 @@
                         </div>
 
                         <div class="col col-auto">
-                            <a href="{{ route('Package.index') }}" class="btn btn-outline-success d-flex align-items-center gap-2">
-                                <i class="bi bi-arrow-left"></i> <span>Cancel</span>
+                            <a href="{{ route('Chapel.index') }}" class="cust-btn cust-btn-secondary"><i
+                                class="bi bi-arrow-left"></i>
+                                <span>Cancel</span>
                             </a>
                         </div>
 
                         {{-- Submit Button --}}
                         <div class="col col-auto ">
                         
-                            <button type="submit" class="cust-btn cust-btn-primary"><i class="bi bi-send px-2"></i>Add Package</button>
+                            <button type="submit" class="cust-btn cust-btn-primary"><i class="bi bi-send"></i>
+                                Create
+                            </button>
                         
                         </div>
                     </div>
+                    
                 </form>
             </div>
         </div>
     </div>
 
-    {{-- JS to dynamically add/remove inclusions 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const addBtn = document.getElementById('add-inclusion');
-            const list = document.getElementById('inclusion-list');
-
-            addBtn.addEventListener('click', function() {
-                const count = list.querySelectorAll('.inclusion-item').length + 1;
-                const newItem = document.createElement('div');
-                newItem.classList.add('input-group', 'mb-2', 'inclusion-item');
-                newItem.innerHTML = `
-                        <input type="text" name="pkg_inclusion[]" class="form-control" placeholder="Enter inclusion item">
-                        <button type="button" class="btn btn-outline-danger remove-inclusion">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    `;
-                list.appendChild(newItem);
-            });
-
-            list.addEventListener('click', function(e) {
-                if (e.target.closest('.remove-inclusion')) {
-                    e.target.closest('.inclusion-item').remove();
-                    // Reorder numbering
-                    list.querySelectorAll('.inclusion-item').forEach((item, index) => {
-                        item.querySelector('.input-group-text').textContent = index + 1;
-                    });
-                }
-            });
-        });
-    </script>
-    --}}
 @endsection

@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('services_requests', function (Blueprint $table) {
             $table->id();
-            $table->string('client_name', 100);
-            $table->string('client_contact_number', 11);
+            $table->string('dec_name', 100);
+            $table->date('dec_born_date');
+            $table->date('dec_died_date');
+            $table->string('dec_cause_of_death', 100);
+            $table->string('dec_mom_name', 100);
+            $table->string('dec_fr_name', 100);
             $table->date('svc_startDate')->nullable();
             $table->date('svc_endDate')->nullable();
             $table->string('svc_wakeLoc', 150);
@@ -24,10 +28,12 @@ return new class extends Migration
             $table->date('svc_deploy_date')->nullable();
             $table->date('svc_return_date')->nullable();
 
-            $table->unsignedBigInteger('package_id')->nullable();
-            $table->foreign('package_id')->references('id')->on('packages')->onUpdate('cascade');
-            $table->unsignedBigInteger('emp_id')->nullable();
-            $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();
+            $table->unsignedBigInteger('pkg_id');
+            $table->foreign('pkg_id')->references('id')->on('packages')->onUpdate('cascade');
+
+            $table->unsignedBigInteger('chap_id')->nullable();
+            $table->foreign('chap_id')->references('id')->on('chapels')->onUpdate('cascade');
+
             
             $table->timestamps();
         });

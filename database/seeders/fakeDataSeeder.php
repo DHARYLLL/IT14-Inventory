@@ -2,10 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Models\Chapel;
+use App\Models\ChapEquipment;
+use App\Models\ChapStock;
 use App\Models\Employee;
 use App\Models\Equipment;
 use App\Models\Package;
 use App\Models\packageInclusion;
+use App\Models\PkgEquipment;
+use App\Models\PkgStock;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
 use App\Models\Stock;
@@ -41,9 +46,9 @@ class fakeDataSeeder extends Seeder
             'emp_lname' => 'Doe',
             'emp_contact_number' => '12345678910',
             'emp_address' => 'Zone 1 Buhangin San Vicente Davao City',
-            'emp_email' => 'm.doe@admin.com',
+            'emp_email' => 'm.doe@staff.com',
             'emp_password' => Hash::make('test'),
-            'emp_role' => 'admin'
+            'emp_role' => 'staff'
         ]);
 
         Supplier::create([
@@ -55,146 +60,102 @@ class fakeDataSeeder extends Seeder
             'company_address' => 'Buhangin'
         ]);
 
-        /*
-        PurchaseOrder::create([
-            'status' => 'Pending',
-            'submitted_date' => Carbon::now()->format('Y-m-d'),
-            'supplier_id' => 1,
-            'emp_id' => 1
-        ]);
+        $consumables = [
+            ['item_name' => 'Tealight Candle', 'item_qty' => 100, 'item_size' => 'Small', 'item_unit' => '8 oz', 'item_unit_price' => 5, 'item_type' => 'Consumable'],
+            ['item_name' => 'Pillar Candle', 'item_qty' => 50, 'item_size' => 'Small', 'item_unit' => '8 oz', 'item_unit_price' => 30, 'item_type' => 'Consumable'],
+            ['item_name' => 'Incense Stick', 'item_qty' => 200, 'item_size' => '21 cm', 'item_unit' => '2 oz', 'item_unit_price' => 20, 'item_type' => 'Consumable'],
+            ['item_name' => 'Flower Petals Bag', 'item_qty' => 40, 'item_size' => '', 'item_unit' => '200 g', 'item_unit_price' => 50, 'item_type' => 'Consumable'],
+            ['item_name' => 'Disinfectant Spray', 'item_qty' => 60, 'item_size' => '', 'item_unit' => '155 ml', 'item_unit_price' => 80, 'item_type' => 'Consumable'],
+            ['item_name' => 'Facial Tissue Box', 'item_qty' => 120, 'item_size' => '2 ply', 'item_unit' => '300 pcs', 'item_unit_price' => 15, 'item_type' => 'Consumable'],
+            ['item_name' => 'Latex Gloves', 'item_qty' => 500, 'item_size' => 'Small', 'item_unit' => '100 pcs', 'item_unit_price' => 120, 'item_type' => 'Consumable'],
+            ['item_name' => 'Cotton Rolls', 'item_qty' => 100, 'item_size' => '', 'item_unit' => '400 g', 'item_unit_price' => 35, 'item_type' => 'Consumable'],
 
-        // Stock::create([
-        //     'item_name' => 'Candle',
-        //     'item_qty' => 0,
-        //     'size_weight' => 'Large',
-        //     'item_unit_price' => 10,
-        //     'item_type' => 'Consumable'
-        // ]);
-        // Stock::create([
-        //     'item_name' => 'Candle',
-        //     'item_qty' => 0,
-        //     'size_weight' => 'Medium',
-        //     'item_unit_price' => 10,
-        //     'item_type' => 'Consumable'
-        // ]);
-        // Stock::create([
-        //     'item_name' => 'Candle',
-        //     'item_qty' => 0,
-        //     'size_weight' => 'Small',
-        //     'item_unit_price' => 10,
-        //     'item_type' => 'Consumable'
-        // ]);
+            ['item_name' => 'Vigil Light', 'item_qty' => 13, 'item_size' => '16 cm x 6 cm', 'item_unit' => '6 per pack', 'item_unit_price' => 35, 'item_type' => 'Consumable']
+        ];
 
-        PurchaseOrderItem::create([
-            'item' => 'Candle',
-            'qty' => 20,
-            'sizeWeight' => 'Large',
-            'unit_price' => 10,
-            'total_amount' => 200,
-            'type' => 'Consumable',
-            'po_id' => 1,
-            'stock_id' => 1
-        ]);
-        PurchaseOrderItem::create([
-            'item' => 'Candle',
-            'qty' => 20,
-            'sizeWeight' => 'Medium',
-            'unit_price' => 10,
-            'total_amount' => 200,
-            'type' => 'Consumable',
-            'po_id' => 1,
-            'stock_id' => 2
-        ]);
-        PurchaseOrderItem::create([
-            'item' => 'Candle',
-            'qty' => 20,
-            'sizeWeight' => 'Small',
-            'unit_price' => 10,
-            'total_amount' => 200,
-            'type' => 'Consumable',
-            'po_id' => 1,
-            'stock_id' => 3
-        ]);
-        */
+        foreach ($consumables as $item) {
+            Stock::create($item);
+        }
 
+        $equipments = [
+            ['eq_name' => 'Casket Stand', 'eq_type' => 'Non-Consumable', 'eq_available' => 5, 'eq_size' => '84 x 28 x 23', 'eq_unit' => 'Set of 1', 'eq_unit_price' => 2500, 'eq_in_use' => 0],
+            ['eq_name' => 'Viewing Light Set', 'eq_type' => 'Non-Consumable', 'eq_available' => 3, 'eq_size' => '48 in', 'eq_unit' => 'Set of 2', 'eq_unit_price' => 4000, 'eq_in_use' => 0],
+            ['eq_name' => 'Flower Stand', 'eq_type' => 'Non-Consumable', 'eq_available' => 8, 'eq_size' => '36 in', 'eq_unit' => 'Set of 2', 'eq_unit_price' => 900, 'eq_in_use' => 0],
+            ['eq_name' => 'Viewing Tent', 'eq_type' => 'Non-Consumable', 'eq_available' => 4, 'eq_size' => '3m x 3m', 'eq_unit' => 'Set of 2', 'eq_unit_price' => 5000, 'eq_in_use' => 0],
+            ['eq_name' => 'Chapel Chairs', 'eq_type' => 'Non-Consumable', 'eq_available' => 100, 'eq_size' => '35 x 19 x 20', 'eq_unit' => 'Set of 6', 'eq_unit_price' => 600, 'eq_in_use' => 0],
 
+            ['eq_name' => 'Carpet', 'eq_type' => 'Non-Consumable', 'eq_available' => 20, 'eq_size' => '80 x 150 cm', 'eq_unit' => 'Set of 1', 'eq_unit_price' => 600, 'eq_in_use' => 0],
+            ['eq_name' => 'Curtain', 'eq_type' => 'Non-Consumable', 'eq_available' => 20, 'eq_size' => '63 in', 'eq_unit' => 'Set of 1', 'eq_unit_price' => 600, 'eq_in_use' => 0],
+            ['eq_name' => 'Crucifix', 'eq_type' => 'Non-Consumable', 'eq_available' => 10, 'eq_size' => '25 cm', 'eq_unit' => 'Set of 1', 'eq_unit_price' => 600, 'eq_in_use' => 0]
+        ];
+
+        foreach ($equipments as $eq) {
+            Equipment::create($eq);
+        }
 
         Package::create([
-            'pkg_name' => 'MOA'
+            'pkg_name' => 'Ordinary',
+            'pkg_price' => 15000
         ]);
-        packageInclusion::create([
-            'pkg_inclusion' => '15K inclusion',
-            'package_id' => 1
+
+        PkgStock::create([
+            'pkg_id' => 1,
+            'stock_id' => 2,
+            'stock_used' => 2
         ]);
-        packageInclusion::create([
-            'pkg_inclusion' => 'Free 1/2 sack rice',
-            'package_id' => 1
+        PkgStock::create([
+            'pkg_id' => 1,
+            'stock_id' => 9,
+            'stock_used' => 1
         ]);
-        packageInclusion::create([
-            'pkg_inclusion' => 'Tarpauline',
-            'package_id' => 1
+
+        PkgEquipment::create([
+            'pkg_id' => 1,
+            'eq_id' => 1,
+            'eq_used' => 1
         ]);
-        packageInclusion::create([
-            'pkg_inclusion' => 'Flower stand',
-            'package_id' => 1
+        PkgEquipment::create([
+            'pkg_id' => 1,
+            'eq_id' => 2,
+            'eq_used' => 1
         ]);
-        packageInclusion::create([
-            'pkg_inclusion' => 'Coffee',
-            'package_id' => 1
+        PkgEquipment::create([
+            'pkg_id' => 1,
+            'eq_id' => 5,
+            'eq_used' => 25
         ]);
-        packageInclusion::create([
-            'pkg_inclusion' => 'Sugar',
-            'package_id' => 1
+
+        Chapel::create([
+            'chap_name' => 'Chapel of Rest',
+            'chap_room' => '101',
+            'chap_price' => 2000,
+            'chap_status' => 'Available',
+            'max_cap' => 20
         ]);
-        packageInclusion::create([
-            'pkg_inclusion' => 'Biscuit',
-            'package_id' => 1
+
+        ChapStock::create([
+            'chap_id' => 1,
+            'stock_id' => 9,
+            'stock_used' => 1
         ]);
-        packageInclusion::create([
-            'pkg_inclusion' => 'Tombstone',
-            'package_id' => 1
+
+        ChapEquipment::create([
+            'chap_id' => 1,
+            'eq_id' => 6,
+            'eq_used' => 1
+        ]);
+        ChapEquipment::create([
+            'chap_id' => 1,
+            'eq_id' => 7,
+            'eq_used' => 2
+        ]);
+        ChapEquipment::create([
+            'chap_id' => 1,
+            'eq_id' => 8,
+            'eq_used' => 1
         ]);
 
 
-        // Equipment::create([
-        //     'eq_name' => 'Candelabra (gold)',
-        //     'eq_type' => 'Non-Consumable',
-        //     'eq_available' => 10,
-        //     'eq_size_weight' => '12mm',
-        //     'eq_unit_price' => 3340,
-        //     'eq_in_use' => 0
-        // ]);
-        // Equipment::create([
-        //     'eq_name' => 'Candelabra (silver)',
-        //     'eq_type' => 'Non-Consumable',
-        //     'eq_available' => 10,
-        //     'eq_size_weight' => '12mm',
-        //     'eq_unit_price' => 3340,
-        //     'eq_in_use' => 0
-        // ]);
-        // Equipment::create([
-        //     'eq_name' => 'Casket stand',
-        //     'eq_type' => 'Non-Consumable',
-        //     'eq_available' => 10,
-        //     'eq_size_weight' => '54x20x24',
-        //     'eq_unit_price' => 42000,
-        //     'eq_in_use' => 0
-        // ]);
-        // Equipment::create([
-        //     'eq_name' => 'Flower stand',
-        //     'eq_type' => 'Non-Consumable',
-        //     'eq_available' => 10,
-        //     'eq_size_weight' => '2m',
-        //     'eq_unit_price' => 1499,
-        //     'eq_in_use' => 0
-        // ]);
-        // Equipment::create([
-        //     'eq_name' => 'Tarpauline',
-        //     'eq_type' => 'Non-Consumable',
-        //     'eq_available' => 10,
-        //     'eq_size_weight' => '10x14 ft',
-        //     'eq_unit_price' => 14299,
-        //     'eq_in_use' => 0
-        // ]);
+
     }
 }

@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('item_name', 100);
             $table->smallInteger('item_qty')->nullable();
-            $table->string('size_weight', 20);
+            $table->string('item_size', 20)->nullable();
+            $table->string('item_unit', 20);
             $table->decimal('item_unit_price', 8,2);
             $table->string('item_type', 15);
+
             $table->timestamps();
 
-            $table->unique(['item_name', 'size_weight']);
+            $table->unique(['item_name', 'item_size', 'item_unit']);
         });
     }
 
