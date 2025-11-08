@@ -61,7 +61,7 @@ class ServiceRequestController extends Controller
             'burialLoc' => 'required',
             'decName' => 'required',
             'decBorn' => 'required',
-            'decDied' => 'required',
+            'decDied' => 'required|date|after:decBorn',
             'decCOD' => 'required',
             'decFName' => 'required',
             'decMName' => 'required',
@@ -80,6 +80,7 @@ class ServiceRequestController extends Controller
             'decName.required' => 'This field is required.',
             'decBorn.required' => 'This field is required.',
             'decDied.required' => 'This field is required.',
+            'decDied.after' => 'The died date must be after born date.',
             'decCOD.required' => 'This field is required.',
             'decFName.required' => 'This field is required.',
             'decMName.required' => 'This field is required.',
@@ -102,8 +103,8 @@ class ServiceRequestController extends Controller
             'svc_churchLoc' => $request->churhcLoc,
             'svc_burialLoc' => $request->burialLoc,
             'svc_equipment_status' => 'Pending',
-            'pkg_id' => $request->package,
-            'chap_id' => $request->chapel
+            'pkg_id' => $request->pkgId,
+            'chap_id' => $request->chapId
         ]);
 
         $getId = ServiceRequest::orderBy('id', 'desc')->take(1)->value('id');
@@ -112,15 +113,10 @@ class ServiceRequestController extends Controller
             'client_name' => $request->clientName,
             'client_contact_number' => $request->clientConNum,
             'rcpt_status' => 'Pending',
-            'payment_amount' => $request->payment,
+            'paid_amount' => $request->payment,
+            'total_payment' => $request->total,
             'emp_id' => session('loginId'),
             'svc_id' => $getId
-        ]);
-
-        Log::create([
-            'transaction' => 'Create',
-            'tx_desc' => 'Created Service Request | ID: ' . $getId,
-            'emp_id' => session('loginId')
         ]);
 
         Log::create([
@@ -177,10 +173,10 @@ class ServiceRequestController extends Controller
             }
 
             //$empId = Employee::orderBy('id','desc')->take(1)->value('id');
+
             Log::create([
-                'action' => 'Returned',
-                'from' => 'Returned Equipment from Service Request | ID: ' . $id,
-                'action_date' => Carbon::now()->format('Y-m-d'),
+                'transaction' => 'Returned',
+                'tx_desc' => 'Returned Equipment from Service Request | ID: ' . $id,
                 'emp_id' => session('loginId')
             ]);
 
@@ -231,16 +227,14 @@ class ServiceRequestController extends Controller
             }
 
             Log::create([
-                'action' => 'Deployed',
-                'from' => 'Deployed Stock from Service Request | ID: ' . $id,
-                'action_date' => Carbon::now()->format('Y-m-d'),
+                'transaction' => 'Deployed',
+                'tx_desc' => 'Deployed Stock from Service Request | ID: ' . $id,
                 'emp_id' => session('loginId')
             ]);
 
             Log::create([
-                'action' => 'Deployed',
-                'from' => 'Deployed Equipment from Service Request | ID: ' . $id,
-                'action_date' => Carbon::now()->format('Y-m-d'),
+                'transaction' => 'Deployed',
+                'tx_desc' => 'Deployed Equipment from Service Request | ID: ' . $id,
                 'emp_id' => session('loginId')
             ]);
 
@@ -257,9 +251,8 @@ class ServiceRequestController extends Controller
     {
         ServiceRequest::findOrFail($id)->delete();
         Log::create([
-            'action' => 'Deleted',
-            'from' => 'Delted Service Request | ID: ' . $id,
-            'action_date' => Carbon::now()->format('Y-m-d'),
+            'transaction' => 'Deleted',
+            'tx_desc' => 'Delted Service Request | ID: ' . $id,
             'emp_id' => session('loginId')
         ]);
         return redirect()->back()->with('success', 'Deleted Succesfully');

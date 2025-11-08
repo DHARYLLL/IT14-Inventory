@@ -13,6 +13,7 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\packageInclusionController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
+use App\Http\Controllers\receiptController;
 use App\Http\Controllers\ServiceRequestController;
 use App\Http\Controllers\setStoEqToPkgController;
 use App\Http\Controllers\StockController;
@@ -90,6 +91,7 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::resource('Stock', StockController::class);
     Route::resource('Log', LogController::class);
     Route::resource('Chapel', ChapelController::class);
+    Route::resource('Receipt', receiptController::class);
 
     //new
     Route::resource('Set-Item-Equipment', setStoEqToPkgController::class);

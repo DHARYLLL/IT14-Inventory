@@ -107,6 +107,14 @@
                     </li>
 
                     <li class="nav-list">
+                        <a href="{{ route('Receipt.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Receipt.*') ? 'active' : '' }}">
+                            <i class="bi bi-receipt"></i>
+                            <span>Receipts</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-list">
                         <a href="{{ route('Log.index') }}"
                             class="nav-link-custom {{ request()->routeIs('Log.*') ? 'active' : '' }}">
                             <i class="bi bi-journal-text"></i>

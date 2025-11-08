@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('client_name', 100);
             $table->string('client_contact_number', 100);
-            $table->string('rcpt_status', 100);
-            $table->string('payment_amount', 100);
+            $table->string('rcpt_status', 15);
+            $table->decimal('paid_amount', 8,2);
+            $table->decimal('total_payment', 8,2);
             
             $table->unsignedBigInteger('emp_id')->nullable();
             $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();

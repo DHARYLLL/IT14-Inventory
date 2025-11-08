@@ -51,8 +51,8 @@
                     <tr>
                         {{-- Safely display the package name (avoid null errors) --}}
                         <td>{{ $row->svcReqToPac->pkg_name ?? '—' }}</td>
-                        <td>{{ $row->client_name }}</td>
-                        <td>{{ $row->client_contact_number }}</td>
+                        <td>{{ $row->svcReqToRcpt->client_name ?? '—' }}</td>
+                        <td>{{ $row->svcReqToRcpt->client_contact_number ?? '—' }}</td>
                         <td>{{ $row->svc_startDate }}</td>
                         <td>{{ $row->svc_endDate }}</td>
                         <td>{{ $row->svc_wakeLoc }}</td>

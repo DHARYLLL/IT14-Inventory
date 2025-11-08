@@ -27,7 +27,7 @@
                             <select name="package" id="package" class="form-select" onchange="PricePkg()">
                                 <option value="">Select Package</option>
                                 @foreach ($pkgData as $data)
-                                    <option value="{{ $data->id }},{{ $data->pkg_price }}" {{ old('package') == $data->id ? 'selected' : '' }}>
+                                    <option value="{{ $data->id }},{{ $data->pkg_price }}" {{ old('package') == $data->id.','.$data->pkg_price ? 'selected' : '' }}>
                                         {{ $data->pkg_name }} | Price: ₱{{ $data->pkg_price }}
                                     </option>
                                 @endforeach
@@ -42,7 +42,7 @@
                                 <option value="">None</option>
 
                                 @foreach ($chapData as $data)
-                                    <option value="{{ $data->id }},{{ $data->chap_price }}" {{ old('chapel') == $data->id ? 'selected' : '' }}>
+                                    <option value="{{ $data->id }},{{ $data->chap_price }}" {{ old('chapel') == $data->id.','.$data->chap_price ? 'selected' : '' }}>
                                         {{ $data->chap_name }} - Room {{ $data->chap_room }} | Price: ₱{{ $data->chap_price }}
                                     </option>
                                 @endforeach
@@ -54,23 +54,25 @@
 
                         <div class="col-md-3">
                             <label for="payment" class="form-label">Total Payment</label>
-                            <input type="text" class="form-control" id="totalPayment" readonly>
+                            <input type="text" class="form-control" id="totalPayment" readonly name="total" value="{{ old('total') }}">
 
-                            <input type="text" id="setPricePkg" readonly>
-                            <input type="text" id="setPriceChap" readonly>
+                            <input type="text" id="setPricePkg" name="setPricePkg" readonly value="{{ old('setPricePkg') }}">
+                            <input type="text" id="setPriceChap" name="setPriceChap" readonly value="{{ old('setPriceChap') }}">
 
-                            <input type="text" id="setIdPkg" readonly>
-                            <input type="text" id="setIdChap" readonly>
+                            <input type="text" id="setIdPkg" readonly name="pkgId" value="{{ old('pkgId') }}">
+                            <input type="text" id="setIdChap" readonly name="chapId" value="{{ old('chapId') }}">
                         </div>
                         <div class="col-md-3">
                             <label for="payment" class="form-label">Payment</label>
-                            <input type="text" class="form-control" name="payment">
+                            <input type="text" class="form-control" name="payment" value="{{ old('payment') }}">
                             @error('payment')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
 
                     </div>
+
+                    {{-- Custom Script for Payment --}}
                     <script>
                         function PricePkg(){
                             var getPkg = document.getElementById('package');
@@ -140,28 +142,28 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="" class="form-label">Name</label>
-                                    <input type="text" name="decName" placeholder="Deceased Full Name" class="form-control">
+                                    <input type="text" name="decName" placeholder="Deceased Full Name" class="form-control" value="{{ old('decName') }}">
                                     @error('decName')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-3">
                                     <label for="" class="form-label">Born</label>
-                                    <input type="date" name="decBorn" class="form-control">
+                                    <input type="date" name="decBorn" class="form-control" value="{{ old('decBorn') }}">
                                     @error('decBorn')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-3">
                                     <label for="" class="form-label">Died</label>
-                                    <input type="date" name="decDied" class="form-control">
+                                    <input type="date" name="decDied" class="form-control" value="{{ old('decDied') }}">
                                     @error('decDied')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-12">
                                     <label for="" class="form-label">Cause of Death</label>
-                                    <input type="text" name="decCOD" class="form-control" placeholder="Deceasd Cause of Death">
+                                    <input type="text" name="decCOD" class="form-control" placeholder="Deceasd Cause of Death" value="{{ old('decCOD') }}">
                                     @error('decCOD')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
@@ -173,14 +175,14 @@
                             <div class="row mt-3">
                                 <div class="col-md-6">
                                     <label for="" class="form-label">Father Name</label>
-                                    <input type="text" name="decFName" class="form-control" placeholder="Deceased Father Name">
+                                    <input type="text" name="decFName" class="form-control" placeholder="Deceased Father Name" value="{{ old('decFName') }}">
                                     @error('decFName')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <label for="" class="form-label">Mother Maiden Name</label>
-                                    <input type="text" name="decMName" class="form-control" placeholder="Deceased Mother Maiden Name">
+                                    <input type="text" name="decMName" class="form-control" placeholder="Deceased Mother Maiden Name" value="{{ old('decMName') }}">
                                     @error('decMName')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror

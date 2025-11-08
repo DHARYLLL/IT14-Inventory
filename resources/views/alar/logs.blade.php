@@ -21,8 +21,8 @@
                 <tr class="table-light">
                     <th class="fw-semibold">ID</th>
                     <th class="fw-semibold">Employee</th>
-                    <th class="fw-semibold">Action</th>
-                    <th class="fw-semibold">From</th>
+                    <th class="fw-semibold">Transaction</th>
+                    <th class="fw-semibold">Description</th>
                     <th class="fw-semibold">Date</th>
                 </tr>
             </thead>
@@ -39,9 +39,9 @@
                             <td>{{ $row->id }}</td>
                             <td>{{ $row->logToEmp->emp_fname }} {{ $row->logToEmp->emp_mname }} {{ $row->logToEmp->emp_lname }}
                             </td>
-                            <td>{{ $row->action }}</td>
-                            <td>{{ $row->from }}</td>
-                            <td>{{ $row->action_date }}</td>
+                            <td>{{ $row->transaction }}</td>
+                            <td>{{ $row->tx_desc }}</td>
+                            <td>{{ $row->tx_date }}</td>
                         </tr>
                     @endforeach
                 @endif

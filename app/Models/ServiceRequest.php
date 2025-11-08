@@ -27,7 +27,11 @@ class ServiceRequest extends Model
     ];
 
     public function svcReqToPac() {
-        return $this->belongsTo(Package::class, 'package_id');
+        return $this->belongsTo(Package::class, 'pkg_id');
+    }
+
+    public function svcReqToRcpt() {
+        return $this->hasOne(Receipt::class, 'svc_id');
     }
 
 }
