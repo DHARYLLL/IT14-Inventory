@@ -6,8 +6,40 @@
 @section('name', 'Staff')
 <link rel="stylesheet" href="{{ asset('CSS/POshow.css') }}">
 
-    <div class="d-flex align-items-center justify-content-end cust-h-heading">
-        <a href="{{ route('Service-Request.index') }}" class="btn btn-custom d-flex align-items-center gap-2"><span>Back</span></a>
+    <div class="d-flex align-items-center justify-content-end cust-h-heading gap-2">
+
+        <a href="{{ route('Service-Request.index') }}" class="cust-btn cust-btn-secondary"><span>Back</span></a>
+
+        @if($svcReqData->svc_equipment_status == "Pending")
+            <div class="row">
+                <div class="col col-12">
+                    <form action="{{ route('Service-Request.update', $svcReqData->id) }}" method="POST">
+                        @csrf
+                        @method('put')
+                        <input type="text" name="status" value="{{ $svcReqData->svc_equipment_status }}" hidden>
+                        <input type="text" value="{{ $svcReqData->id }}" hidden>
+                        <button type="" class="cust-btn cust-btn-primary">Deploy Equipment</button>
+                        @session('promt')
+                            <small class="text-danger">{{ $value }}</small>
+                        @endsession
+                        
+                    </form>
+                </div>
+            </div>
+        @elseif($svcReqData->svc_equipment_status == "Deployed")
+            <div class="row">
+                <div class="col col-12">
+                    <form action="{{ route('Service-Request.update', $svcReqData->id ) }}" method="post">
+                        @csrf
+                        @method('put')
+                        <input type="text" name="status" value="{{ $svcReqData->svc_equipment_status }}" hidden>
+                        <input type="text" value="{{ $svcReqData->id }}" hidden>
+                        <button class="cust-btn cust-btn-primary">Retun Equipment</button>
+                    </form>
+                </div>
+            </div>
+        @endif
+        
     </div>
 
     {{-- table --}}
@@ -29,13 +61,13 @@
                                 <div class="d-flex align-items-center">
                                     <label class="col-4 form-label">Client Name</label>
                                     <span class="mx-2">:</span>
-                                    <input type="text" class="form-control col" value="{{ $svcReqData->client_name }}" readonly>
+                                    <input type="text" class="form-control col" value="{{ $svcReqData->svcReqToRcpt->client_name }}" readonly>
                                 </div>
 
                                 <div class="d-flex align-items-center">
                                     <label class="col-4 form-label">Contact Number</label>
                                     <span class="mx-2">:</span>
-                                    <input type="text" class="form-control col" value="{{ $svcReqData->client_contact_number }}" readonly>
+                                    <input type="text" class="form-control col" value="{{ $svcReqData->svcReqToRcpt->client_contact_number }}" readonly>
                                 </div>
 
                                 <div class="d-flex align-items-center">
@@ -90,38 +122,10 @@
                         </div>
                     </div>
 
-                    @if($svcReqData->svc_equipment_status == "Pending")
-                        <div class="row">
-                            <div class="col col-12">
-                                <form action="{{ route('Service-Request.update', $svcReqData->id) }}" method="POST">
-                                    @csrf
-                                    @method('put')
-                                    <input type="text" name="status" value="{{ $svcReqData->svc_equipment_status }}" hidden>
-                                    <input type="text" value="{{ $svcReqData->id }}" hidden>
-                                    <button type="" class="btn btn-secondary w-100">Deploy Equipment</button>
-                                    @session('promt')
-                                        <small class="text-danger">{{ $value }}</small>
-                                    @endsession
-                                    
-                                </form>
-                            </div>
-                        </div>
-                    @elseif($svcReqData->svc_equipment_status == "Deployed")
-                        <div class="row">
-                            <div class="col col-12">
-                                <form action="{{ route('Service-Request.update', $svcReqData->id ) }}" method="post">
-                                    @csrf
-                                    @method('put')
-                                    <input type="text" name="status" value="{{ $svcReqData->svc_equipment_status }}" hidden>
-                                    <input type="text" value="{{ $svcReqData->id }}" hidden>
-                                    <button class="btn btn-secondary w-100">Retun Equipment</button>
-                                </form>
-                            </div>
-                        </div>
-                    @endif
                 </div>
             </div>
             
+            {{-- Stock and Equipment tables --}}
             <div class="col col-8 h-100 overflow-auto" >
                 <div class="row" style="height: 45%;">
                     <div class="col">
@@ -129,7 +133,8 @@
                             <thead>
                                 <tr class="table-light">
                                     <th class="fw-semibold">Item name</th>
-                                    <th class="fw-semibold">Size/Weight</th>
+                                    <th class="fw-semibold">Size</th>
+                                    <th class="fw-semibold">Unit</th>
                                     <th class="fw-semibold">Qty</th>
                                 </tr>
                             </thead>
@@ -138,17 +143,17 @@
                         <div class="overflow-auto" style="height: 80%;">
                             <table class="table modern-table border-black table-hover mb-0">
                                 <tbody>
-                                    @if ($svcStoData->isEmpty())
+                                    @if ($pkgStoData->isEmpty())
                                         <tr>
                                             <td colspan="3" class="text-center text-secondary py-3">
                                                 No Equipment available.
                                             </td>
                                         </tr>
                                     @else
-                                        @foreach($svcStoData as $row)
+                                        @foreach($pkgStoData as $row)
                                             <tr>
-                                                <td>{{ $row->svcStoToSto->item_name }}</td>
-                                                <td>{{ $row->svcStoToSto->size_weight }}</td>
+                                                <td>{{ $row->pkgStoToSto->item_name }}</td>
+                                                <td>{{ $row->pkgStoToSto->size_weight }}</td>
                                                 <td>{{ $row->stock_used }}</td>
                                             </tr>
                                         @endforeach
@@ -173,16 +178,16 @@
                         <div class="overflow-auto" style="height: 80%;">
                             <table class="table modern-table border-black table-hover mb-0">
                                 <tbody>
-                                    @if ($svcEqData->isEmpty())
+                                    @if ($pkgEqData->isEmpty())
                                         <tr>
                                             <td colspan="2" class="text-center text-secondary py-3">
                                                 No Equipment available.
                                             </td>
                                         </tr>
                                     @else
-                                        @foreach($svcEqData as $row)
+                                        @foreach($pkgEqData as $row)
                                             <tr>
-                                                <td>{{ $row->svcEqToEq->eq_name }}</td>
+                                                <td>{{ $row->pkgEqToEq->eq_name }}</td>
                                                 <td>{{ $row->eq_used }}</td>
                                             </tr>
                                         @endforeach

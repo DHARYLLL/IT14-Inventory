@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Receipt;
+use App\Models\ServiceRequest;
 use Illuminate\Http\Request;
 
 class receiptController extends Controller
@@ -37,7 +38,8 @@ class receiptController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $rcptData = Receipt::findOrFail($id);
+        return view('shows/receiptShow', ['rcptData' => $rcptData]);
     }
 
     /**
@@ -45,7 +47,8 @@ class receiptController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $rcptData = Receipt::findOrFail($id);     
+        return view('functions/receiptEdit', ['rcptData' => $rcptData]);
     }
 
     /**
@@ -53,7 +56,42 @@ class receiptController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $getRcpt = Receipt::findOrFail($id);
+        if ($request->check == 'edit') {
+            $request->validate([
+                'clientName' => 'required|unique:receipts,client_name',
+                'clientConNum' => 'required'
+            ], [
+                'clientName.required' => 'This field is required.',
+                'clientName.unique' => 'Name already added.',
+                'clientConNum.required' => 'This field is required.'
+            ]);
+
+            Receipt::findOrFail($id)->update([
+                'client_name' => $request->clientName,
+                'client_contact_number' => $request->clientConNum
+            ]);
+
+            return redirect()->back()->with('promt', 'Updated Successfuly.');
+        }
+        
+        if ($request->check == 'payment') {
+            /*
+            $request->validate([
+                'paid' => 'required|numeric|min:1|max:999999.99'
+            ], [
+                'paid.required' => 'This field is required.',
+                'paid.numeric' => 'Number only.',
+                'paid.min' => 'Amount must be 1 or more.',
+                'paid.max' => 'Max 6 digits reached.'
+            ]);
+            */
+            Receipt::findOrFail($id)->update([
+                'rcpt_status' => 'Paid',
+                'paid_amount' => $getRcpt->total_payment
+            ]);
+            return redirect(route('Receipt.show', $id))->with('promt', 'Paid Successfuly.');
+        }
     }
 
     /**

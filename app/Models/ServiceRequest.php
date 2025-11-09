@@ -34,4 +34,8 @@ class ServiceRequest extends Model
         return $this->hasOne(Receipt::class, 'svc_id');
     }
 
+    public function svcReqToChap () {
+        return $this->belongsTo(Chapel::class, 'chap_id');
+    }
+
 }

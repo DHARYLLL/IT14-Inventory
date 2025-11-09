@@ -456,11 +456,10 @@ body {
 
 /* Si gar nag butang ani hahahaha (start)*/
 
-.cust-sub-title {
+.cust-sub-title{
     color: black;
     border-bottom: 3px#60BF4F solid;
     width: max-content;
-    
 }
 
 .cust-h-heading {
@@ -540,8 +539,19 @@ body {
     height: 10%;
 }
 
+.h-20 {
+    height: 20%;
+}
+
 .h-65 {
     height: 65%;
 }
 
+.h-60 {
+    height: 60%;
+}
+
+.h-80 {
+    height: 80%;
+}
 /* Si gar nag butang ani hahahaha (end)*/

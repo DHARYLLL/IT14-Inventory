@@ -9,6 +9,8 @@ use App\Models\Employee;
 use App\Models\Equipment;
 use App\Models\Log;
 use App\Models\Package;
+use App\Models\PkgEquipment;
+use App\Models\PkgStock;
 use App\Models\Receipt;
 use App\Models\Stock;
 use App\Models\SvsEquipment;
@@ -135,9 +137,9 @@ class ServiceRequestController extends Controller
     public function show(String $id)
     {
         $svcReqData = ServiceRequest::findOrFail($id);
-        $svcStoData = SvsStock::where('service_id', '=', $id)->get();
-        $svcEqData = SvsEquipment::where('service_id', '=', $id)->get();
-        return view('shows/serviceRequestShow', ['svcReqData' => $svcReqData, 'svcStoData' => $svcStoData, 'svcEqData' => $svcEqData]);
+        $pkgStoData = PkgStock::where('pkg_id', '=', $svcReqData->pkg_id )->get();
+        $pkgEqData = PkgEquipment::where('pkg_id', '=', $svcReqData->pkg_id)->get();
+        return view('shows/serviceRequestShow', ['svcReqData' => $svcReqData, 'pkgStoData' => $pkgStoData, 'pkgEqData' => $pkgEqData]);
     }
 
     /**

@@ -14,4 +14,8 @@ class Chapel extends Model
         'chap_status',
         'max_cap',
     ];
+
+    public function chapToSvcReq() {
+        return $this->hasOne(Receipt::class, 'chap_id');
+    }
 }

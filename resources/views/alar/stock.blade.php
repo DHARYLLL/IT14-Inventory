@@ -47,9 +47,9 @@
                             <td class="{{ $row->item_qty <= 10 ? 'bg-warning-subtle' : ''}}">{{ $row->item_qty }}</td>
                             <td>{{ $row->item_unit_price }}</td>
                             <td>
-                                <a href="{{ route('Stock.edit', $row->id) }}" class="btn btn-outline-success btn-md">
-                                    <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Edit"></i>
+                                <a href="{{ route('Stock.edit', $row->id) }}" class="btn btn-outline-success btn-md" 
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                    <i class="bi bi-pencil-square"></i>
                                 </a>
                             </td>
                         </tr>

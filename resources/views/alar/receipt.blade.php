@@ -54,11 +54,19 @@
                         <td>{{ $row->rcptToEmp->emp_fname }} {{ $row->rcptToEmp->emp_lname }}</td>
                         <td class="text-center align-middle">
                             <div class="d-flex justify-content-center align-items-center gap-2">
-                                <a href="{{ route('Receipt.show', $row->id) }}"
-                                    class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top"
-                                    title="View">
-                                    <i class="fi fi-rr-eye"></i>
-                                </a>
+                                @if($row->rcpt_status == 'Pending')
+                                    <a href="{{ route('Receipt.edit', $row->id) }}"
+                                        class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                @endif
+                                 @if($row->rcpt_status == 'Paid')
+                                    <a href="{{ route('Receipt.show', $row->id) }}"
+                                        class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Show">
+                                        <i class="fi fi-rr-eye"></i>
+                                    </a>
+                                @endif
+                                
                             </div>
                         </td>
                     </tr>
