@@ -53,7 +53,7 @@ class pkgStockController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt', 'Added Successfully.');
+        return redirect()->back()->with('promt-sto', 'Added Successfully.');
     }
 
     /**
@@ -97,7 +97,7 @@ class pkgStockController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt', 'Updated Successfully.');
+        return redirect()->back()->with('promt-sto', 'Updated Successfully.');
     }
 
     /**
@@ -115,6 +115,6 @@ class pkgStockController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt', 'Deleted Successfully.');
+        return redirect()->back()->with('promt-sto', 'Deleted Successfully.');
     }
 }

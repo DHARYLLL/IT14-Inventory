@@ -13,18 +13,22 @@
                 <form action="{{ route('Package.update', $pkgData->id) }}" method="POST" class="h-25">
                     @csrf
                     @method('put')
-                    <div class="row justify-content-between align-items-end">
+                    <div class="row justify-content-between align-items-start">
                         <div class="col-md-8">
                             <label class="fw-semibold text-dark mb-1">Package Name</label>
                             <input type="text" name="pkgName" class="form-control" value="{{ $pkgData->pkg_name }}">
                             @error('pkgName')
                                 <p class="text-danger small mt-1">{{ $message }}</p>
                             @enderror
+                            @session('promt')
+                                <div class="text-success small mt-1">{{ $value }}</div>      
+                            @endsession
                         </div>
 
-                        <div class="col col-auto">
-                            <div class="row">
+                        <div class="col-md-4 mt-4">
+                            <div class="row justify-content-end">
                                 <div class="col col-auto">
+                                   
                                     <a href="{{ route('Package.index') }}" class="btn btn-outline-success d-flex align-items-center gap-2 px-3">
                                         <i class="bi bi-arrow-left"></i> <span>Back</span>
                                     </a>
@@ -56,7 +60,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @session('promt')
+                                @session('promt-sto')
                                     <tr>
                                         <td colspan="5" class="text-center" style="font-style: normal;"><div class="text-success small mt-1">{{ $value }}</div></td>
                                     </tr>
