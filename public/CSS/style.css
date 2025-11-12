@@ -535,6 +535,30 @@ body {
     color: white;
 }
 
+.cust-btn-danger-primary {
+    border-radius: 5px;
+    background-color: #bf4f4f;
+    border: 1px #bf4f4f solid;
+    transition: all 0.3s ease;
+    color: white;
+    width: fit-content;
+    height: fit-content;
+}
+
+.cust-btn-danger-secondary {
+    border-radius: 5px;
+    border: 1px #bf4f4f solid;
+    transition: all 0.3s ease;
+    color: #bf4f4f;
+    width: fit-content;
+    height: fit-content;
+}
+
+.cust-btn-danger-secondary:hover {
+    background-color: #bf4f4f;
+    color: white;
+}
+
 .h-10 {
     height: 10%;
 }

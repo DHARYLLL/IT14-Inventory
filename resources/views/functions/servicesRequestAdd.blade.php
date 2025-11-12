@@ -255,8 +255,8 @@
                     <div class="row justify-content-end mt-4">
                         {{-- Display Error --}}
                         <div class="col col-auto">
-                             @session('')
-                                    <div class="text-danger small mt-1">{{ $value }}</div>
+                            @session('promt')
+                                <div class="text-danger small mt-1">{{ $value }}</div>
                             @endsession
                         </div>
 

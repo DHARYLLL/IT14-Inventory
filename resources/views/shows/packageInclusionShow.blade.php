@@ -14,6 +14,7 @@
 
                     <div class="row h-100">
 
+                        {{-- Stock --}}
                         <div class="col col-6 h-100 overflow-auto">
 
                             <table class="table table-hover align-middle mb-0">
@@ -51,8 +52,9 @@
 
                         </div>
 
-                        <div class="col col-6 h-100 overflow-auto">
 
+                        {{-- Equipment --}}
+                        <div class="col col-6 h-100 overflow-auto">
 
                             <table class="table table-hover align-middle mb-0">
                                 <thead class="table-success text-secondary" >
@@ -119,47 +121,6 @@
                         </div>
                     </div>
                 </form>
-                
-            
-
-                {{--
-                <div class="table-responsive rounded-3 shadow-sm h-50">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-success text-secondary" >
-                            <tr>
-                                <th class="fw-semibold">Item</th>
-                                <th class="fw-semibold">Size</th>
-                                <th class="fw-semibold">Unit</th>
-                                <th class="fw-semibold">Utilize</th>
-                                <th class="fw-semibold text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if ($pkgStoData->isEmpty())
-                                <tr>
-                                    <td colspan="5" class="text-center text-secondary py-3">No Package Inclusions Found.</td>
-                                </tr>
-                            @else
-                                @foreach ($pkgStoData as $row)
-                                    <tr>
-                                        <td>{{ $row->pkgStoToSto->item_name }}</td>
-                                        <td>{{ $row->pkgStoToSto->item_size }}</td>
-                                        <td>{{ $row->pkgStoToSto->item_unit }}</td>
-                                        <td>{{ $row->stock_used }}</td>
-                                        <td class="text-center">
-                                            <a href="{{ route('Package-Inclusion.edit', $row->id) }}"
-                                                class="btn btn-outline-success btn-md px-3"><i class="bi bi-pencil-square"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
-                    <a href="{{ route('Package.index') }}" class="btn btn-outline-success d-flex align-items-center gap-2 px-3">
-                        <i class="bi bi-arrow-left"></i> <span>Back</span>
-                    </a>
-                </div>
-                --}}
 
                 <div class="mt-4">
                     @yield('package-edit')

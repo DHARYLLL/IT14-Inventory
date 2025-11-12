@@ -60,7 +60,7 @@
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                 @endif
-                                 @if($row->rcpt_status == 'Paid')
+                                @if($row->rcpt_status == 'Paid')
                                     <a href="{{ route('Receipt.show', $row->id) }}"
                                         class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Show">
                                         <i class="fi fi-rr-eye"></i>

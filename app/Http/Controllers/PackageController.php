@@ -178,9 +178,14 @@ class PackageController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Package $package)
+    public function edit(String $id)
     {
-        //
+        $pkgData = Package::findOrFail($id);
+        $pkgEqData = PkgEquipment::where('pkg_id', '=', $id)->get();
+        $pkgStoData = PkgStock::where('pkg_id', '=', $id)->get();
+        $eqData = Equipment::all();
+        $stoData = Stock::all();
+        return view('functions/packageEdit', ['pkgData' => $pkgData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'eqData' => $eqData, 'stoData' => $stoData]);
     }
 
     /**

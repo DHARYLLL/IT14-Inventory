@@ -11,6 +11,8 @@ use App\Http\Controllers\LogController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\packageInclusionController;
+use App\Http\Controllers\pkgEquipmentController;
+use App\Http\Controllers\pkgStockController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\receiptController;
@@ -92,6 +94,8 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::resource('Log', LogController::class);
     Route::resource('Chapel', ChapelController::class);
     Route::resource('Receipt', receiptController::class);
+    Route::resource('Pkg-Stock', pkgStockController::class);
+    Route::resource('Pkg-Equipment', pkgEquipmentController::class);
 
     //new
     Route::resource('Set-Item-Equipment', setStoEqToPkgController::class);
@@ -115,35 +119,3 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::delete('/supplier/{supplier}/delete', [SupplierController::class, 'destroy'])->name('supplier.destroy');
     Route::put('/Supplier/{supplier}/update', [SupplierController::class, 'update'])->name('supplier.update');
 });
-
-
-/*
-
-Route::resource('Purchase-Order', PurchaseOrderController::class);
-Route::resource('Purchase-Order-Item', PurchaseOrderItem::class);
-Route::resource('Invoice', InvoiceController::class);
-Route::resource('Equipment', EquipmentController::class);
-Route::resource('Service-Request', ServiceRequestController::class);
-Route::resource('Package', PackageController::class);
-Route::resource('Stock', StockController::class);
-Route::resource('Log', LogController::class);
-
-
-// Logout
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
-// After login, redirect to Purchase Order
-//Route::get('/PurchaseOrder', [PurchaseOrderController::class, 'index'])->name('purchaseOrder.index');
-
-// Other pages
-Route::get('/Dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-//Route::get('/Equipment', [EquipmentController::class, 'index'])->name('equipment.index');
-//Route::get('/Stock', [StockController::class, 'index'])->name('stock.index');
-Route::get('/Supplier', [SupplierController::class, 'index'])->name('supplier.index');
-
-// Data routes
-//Route::post('/PurchaseOrderItems', [PurchaseOrderItemController::class, 'store'])->name('POItems.store');
-Route::post('/Supplier', [SupplierController::class, 'store'])->name('supplier.store');
-Route::delete('/supplier/{supplier}/delete', [SupplierController::class, 'destroy'])->name('supplier.destroy');
-Route::put('/Supplier/{supplier}/update', [SupplierController::class, 'update'])->name('supplier.update');
-*/

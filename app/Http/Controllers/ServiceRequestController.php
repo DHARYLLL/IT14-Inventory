@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ServiceRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Chapel;
+use App\Models\ChapEquipment;
+use App\Models\ChapStock;
 use App\Models\Employee;
 use App\Models\Equipment;
 use App\Models\Log;
@@ -155,26 +157,28 @@ class ServiceRequestController extends Controller
      */
     public function update(Request $request, String $id)
     {
-        $svcEqs = SvsEquipment::where('service_id', '=', $id)->get();
-        $svcStos = SvsStock::where('service_id', '=', $id)->get();
+        $pkgId = ServiceRequest::where('id', $id)->take(1)->value('pkg_id');
+        
 
-        //
+        $pkgEqs = PkgEquipment::where('pkg_id', '=', $pkgId)->get();
+        $pkgStos = PkgStock::where('pkg_id', '=', $pkgId)->get();
+
+        // returning equipment
         if ($request->status == 'Deployed') {
+
+            // return equipment from package
+            foreach ($pkgEqs as $pkgEq) {
+                $getEq = Equipment::where('id', '=', $pkgEq->eq_id)->first();
+                Equipment::findOrFail($getEq->id)->update([
+                    'eq_available' => $getEq->eq_available + $pkgEq->eq_used,
+                    'eq_in_use' => $getEq->eq_in_use - $pkgEq->eq_used
+                ]);
+            }
 
             ServiceRequest::findOrFail($id)->update([
                 'svc_equipment_status' => 'Returned',
                 'svc_return_date' => Carbon::now()->format('Y-m-d')
             ]);
-
-            foreach ($svcEqs as $svcEq) {
-                $getEq = Equipment::where('id', '=', $svcEq->equipment_id)->first();
-                Equipment::findOrFail($getEq->id)->update([
-                    'eq_available' => $getEq->eq_available + $svcEq->eq_used,
-                    'eq_in_use' => $getEq->eq_in_use - $svcEq->eq_used
-                ]);
-            }
-
-            //$empId = Employee::orderBy('id','desc')->take(1)->value('id');
 
             Log::create([
                 'transaction' => 'Returned',
@@ -185,6 +189,7 @@ class ServiceRequestController extends Controller
             return redirect(route('Service-Request.index'));
         }
 
+        // Deploying stock and equipment
         if ($request->status == 'Pending') {
             $get = ServiceRequest::find($id);
             $checkDate = ServiceRequest::where('id', $id)
@@ -196,37 +201,27 @@ class ServiceRequestController extends Controller
                     ->withInput();
             }
 
-            ServiceRequest::findOrFail($id)->update([
-                'svc_equipment_status' => 'Deployed',
-                'svc_deploy_date' => Carbon::now()->format('Y-m-d')
-            ]);
-
-            /*
-            $test = array();
-            $testId = array();
-            foreach ($svcEqs as $data) {
-                $eqData = Equipment::where('id', '=', $data->equipment_id)->first();
-                array_push($test, $data->eq_used);
-                array_push($testId, $data->equipment_id);
-            }
-
-            dd($test, $testId);
-            */
-
-            foreach ($svcEqs as $data) {
-                $eqData = Equipment::where('id', '=', $data->equipment_id)->first();
+            // update deployed equipment from package
+            foreach ($pkgEqs as $data) {
+                $eqData = Equipment::where('id', '=', $data->eq_id)->first();
                 Equipment::findOrFail($eqData->id)->update([
                     'eq_available' => $eqData->eq_available - $data->eq_used,
                     'eq_in_use' => $eqData->eq_in_use + $data->eq_used
                 ]);
             }
 
-            foreach ($svcStos as $data) {
+            // update deployed stocks from package
+            foreach ($pkgStos as $data) {
                 $stoData = Stock::where('id', '=', $data->stock_id)->first();
                 Stock::findOrFail($stoData->id)->update([
                     'item_qty' => $stoData->item_qty - $data->stock_used
                 ]);
             }
+
+            ServiceRequest::findOrFail($id)->update([
+                'svc_equipment_status' => 'Deployed',
+                'svc_deploy_date' => Carbon::now()->format('Y-m-d')
+            ]);
 
             Log::create([
                 'transaction' => 'Deployed',
@@ -254,7 +249,7 @@ class ServiceRequestController extends Controller
         ServiceRequest::findOrFail($id)->delete();
         Log::create([
             'transaction' => 'Deleted',
-            'tx_desc' => 'Delted Service Request | ID: ' . $id,
+            'tx_desc' => 'Deleted Service Request | ID: ' . $id,
             'emp_id' => session('loginId')
         ]);
         return redirect()->back()->with('success', 'Deleted Succesfully');
