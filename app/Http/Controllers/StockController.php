@@ -193,16 +193,14 @@ class StockController extends Controller
         $invId = Invoice::orderBy('id', 'desc')->take(1)->value('id');
 
         Log::create([
-            'action' => 'Create',
-            'from' => 'Created Invoice | ID: ' . $invId,
-            'action_date' => Carbon::now()->format('Y-m-d'),
+            'transaction' => 'Create',
+            'tx_desc' => 'Created Invoice | ID: ' . $invId,
             'emp_id' => session('loginId')
         ]);
 
         Log::create([
-            'action' => 'Added',
-            'from' => 'Added Stock from Po | ID: ' . $request->po_id,
-            'action_date' => Carbon::now()->format('Y-m-d'),
+            'transaction' => 'Added',
+            'tx_desc' => 'Added Stock from Po | ID: ' . $request->po_id,
             'emp_id' => session('loginId')
         ]);
 
@@ -252,9 +250,8 @@ class StockController extends Controller
         ]);
 
         Log::create([
-            'action' => 'Updated',
-            'from' => 'Update Stock | ID: ' . $id,
-            'action_date' => Carbon::now()->format('Y-m-d'),
+            'transaction' => 'Updated',
+            'tx_desc' => 'Update Stock | ID: ' . $id,
             'emp_id' => session('loginId')
         ]);
 

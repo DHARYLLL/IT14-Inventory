@@ -56,9 +56,8 @@
                             <td>{{ $row->delivered_date }}</td>
                             <td>
                                 <div class="d-flex justify-content-center align-items-center gap-2">
-                                    <a href="{{ route('Purchase-Order.show', $row->id) }}"
-                                        class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye" data-bs-toggle="tooltip"
-                                            data-bs-placement="top" title="Show"></i></a>
+                                    <a href="{{ route('Purchase-Order.show', $row->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="View"
+                                        class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye"></i></a>
                                     @if ($row->status == 'Pending')
                                         <form action="{{ route('Purchase-Order.destroy', $row->id) }}" method="POST"
                                             class="m-0">

@@ -46,7 +46,8 @@ class PurchaseOrderController extends Controller
             'itemName.*' => "required|min:5|max:100",
             'qty.*' => "required|integer|min:1",
             'unitPrice.*' => "required|numeric|min:1",
-            'sizeWeigth.*' => "required",
+            'size.*' => "required",
+            'unit.*' => "required",
             'typeSelect.*' => "required",
             'supp' => "required"
         ],  [
@@ -58,7 +59,8 @@ class PurchaseOrderController extends Controller
             'qty.*.integer' => 'Number only.',
             'unitPrice.*.required' => 'This field is required.',
             'unitPrice.*.numeric' => 'Number only.',
-            'sizeWeigth.*.required' => 'This field is required.',
+            'size.*.required' => 'This field is required.',
+            'size.*.required' => 'This field is required.',
             'typeSelect.*.required' => 'This field is required.',
             'supp.required' => "This field is required."
         ]);
@@ -67,27 +69,30 @@ class PurchaseOrderController extends Controller
         $qty = $request->qty;
         $unitPrice = $request->unitPrice;
         $item = $request->itemName;
-        $sizeWeight = $request->sizeWeigth;
+        $size = $request->size;
+        $unit = $request->unit;
         $type = $request->typeSelect;
 
         $newItems = array();
         $newItemUnitPrice = array();
-        $newItemSizeWeight = array();
+        $newItemSize = array();
+        $newItemUnit = array();
         $newItemType = array();
 
         $newEquipment = array();
         $newEquipmentUnitPrice = array();
-        $newEquipmentSizeWeight = array();
+        $newEquipmentSize = array();
+        $newEquipmentUnit = array();
         $newEquipmentType = array();
         //dd(stockModel::where('item_name', '=', $item[0])->get());
-
-
+        
         // Check if stocks exists in the stocks and equipment table
         for ($i = 0; $i < count($item); $i++) {
             if ($type[$i] == "Consumable") {
-                if (Stock::where('item_name', '=', $item[$i])->where('size_weight', '=', $sizeWeight[$i])->doesntExist()) {
+                if (Stock::where('item_name', '=', $item[$i])->where('item_size', '=', $size[$i])->where('item_unit', '=', $unit[$i])->doesntExist()) {
                     array_push($newItems, $item[$i]);
-                    array_push($newItemSizeWeight, $sizeWeight[$i]);
+                    array_push($newItemSize, $size[$i]);
+                    array_push($newItemUnit, $unit[$i]);
                     array_push($newItemUnitPrice, $unitPrice[$i]);
                     array_push($newItemType, $type[$i]);
                 }
@@ -95,10 +100,11 @@ class PurchaseOrderController extends Controller
 
             if ($type[$i] == "Non-Consumable") {
 
-                if (Equipment::where('eq_name', '=', $item[$i])->where('eq_size_weight', '=', $sizeWeight[$i])->doesntExist()) {
+                if (Equipment::where('eq_name', '=', $item[$i])->where('eq_size', '=', $size[$i])->where('eq_unit', '=', $unit[$i])->doesntExist()) {
 
                     array_push($newEquipment, $item[$i]);
-                    array_push($newEquipmentSizeWeight, $sizeWeight[$i]);
+                    array_push($newEquipmentSize, $size[$i]);
+                    array_push($newEquipmentUnit, $unit[$i]);
                     array_push($newEquipmentUnitPrice, $unitPrice[$i]);
                     array_push($newEquipmentType, $type[$i]);
                 }
@@ -110,7 +116,8 @@ class PurchaseOrderController extends Controller
                 Stock::create([
                     'item_name' => $newItems[$i],
                     'item_qty' => 0,
-                    'size_weight' => $newItemSizeWeight[$i],
+                    'item_size' => $newItemSize[$i],
+                    'item_unit' => $newItemUnit[$i],
                     'item_unit_price' => $newItemUnitPrice[$i],
                     'item_type' => $newItemType[$i]
                 ]);
@@ -123,7 +130,8 @@ class PurchaseOrderController extends Controller
                     'eq_name' => $newEquipment[$i],
                     'eq_type' => $newEquipmentType[$i],
                     'eq_available' => 0,
-                    'eq_size_weight' => $newEquipmentSizeWeight[$i],
+                    'eq_size' => $newEquipmentSize[$i],
+                    'eq_unit' => $newEquipmentUnit[$i],
                     'eq_unit_price' => $newEquipmentUnitPrice[$i],
                     'eq_in_use' => 0
                 ]);
@@ -145,11 +153,12 @@ class PurchaseOrderController extends Controller
         for ($i = 0; $i < count($item); $i++) {
 
             if ($type[$i] == "Consumable") {
-                $getStock = Stock::where('item_name', '=', $item[$i])->where('size_weight', '=', $sizeWeight[$i])->first();
+                $getStock = Stock::where('item_name', '=', $item[$i])->where('item_size', '=', $size[$i])->where('item_unit', '=', $unit[$i])->first();
                 PurchaseOrderItem::create([
                     'item' => $item[$i],
                     'qty' => $qty[$i],
-                    'sizeWeight' => $sizeWeight[$i],
+                    'size' => $size[$i],
+                    'unit' => $unit[$i],
                     'unit_price' => $unitPrice[$i],
                     'total_amount' => $qty[$i] * $unitPrice[$i],
                     'type' => $type[$i],
@@ -159,11 +168,12 @@ class PurchaseOrderController extends Controller
             }
 
             if ($type[$i] == "Non-Consumable") {
-                $getEquipment = Equipment::where('eq_name', '=', $item[$i])->where('eq_size_weight', '=', $sizeWeight[$i])->first();
+                $getEquipment = Equipment::where('eq_name', '=', $item[$i])->where('eq_size', '=', $size[$i])->where('eq_unit', '=', $unit[$i])->first();
                 PurchaseOrderItem::create([
                     'item' => $item[$i],
                     'qty' => $qty[$i],
-                    'sizeWeight' => $sizeWeight[$i],
+                    'size' => $size[$i],
+                    'unit' => $unit[$i],
                     'unit_price' => $unitPrice[$i],
                     'total_amount' => $qty[$i] * $unitPrice[$i],
                     'type' => $type[$i],
@@ -175,9 +185,8 @@ class PurchaseOrderController extends Controller
 
         //logs
         Log::create([
-            'action' => 'Create',
-            'from' => 'Created Purchase Order | ID: ' . $po,
-            'action_date' => Carbon::now()->format('Y-m-d'),
+            'transaction' => 'Create',
+            'tx_desc' => 'Created Purchase Order | ID: ' . $po,
             'emp_id' => session('loginId')
         ]);
 
@@ -216,9 +225,8 @@ class PurchaseOrderController extends Controller
         ]);
 
         Log::create([
-            'action' => 'Approved',
-            'from' => 'Approved Purchase Order | ID: ' . $id,
-            'action_date' => Carbon::now()->format('Y-m-d'),
+            'transaction' => 'Approved',
+            'tx_desc' => 'Approved Purchase Order | ID: ' . $id,
             'emp_id' => session('loginId')
         ]);
 
@@ -232,9 +240,8 @@ class PurchaseOrderController extends Controller
     {
         PurchaseOrder::findOrFail($id)->delete();
         Log::create([
-            'action' => 'Deleted',
-            'from' => 'Delted Purchase Order | ID: ' . $id,
-            'action_date' => Carbon::now()->format('Y-m-d'),
+            'transaction' => 'Deleted',
+            'tx_desc' => 'Delted Purchase Order | ID: ' . $id,
             'emp_id' => session('loginId')
         ]);
         return redirect()->back()->with('success', 'Deleted Successfully');

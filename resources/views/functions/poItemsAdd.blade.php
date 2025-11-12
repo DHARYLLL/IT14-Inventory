@@ -61,9 +61,8 @@
                                                 <option value="" selected disabled>Select Item</option>
                                                 @foreach ($stoData as $row)
                                                     <option
-                                                        value="{{ $row->item_name }},{{ $row->item_unit_price }}:{{ $row->size_weight }};{{ $row->item_type }}">
-                                                        {{ $row->item_name }} {{ $row->size_weight }}: {{ $row->item_qty }}
-                                                        {{ $row->item_type }}</option>
+                                                        value="{{ $row->item_name }},{{ $row->item_unit_price }}:{{ $row->item_size }};{{ $row->item_unit }}">
+                                                        {{ $row->item_name }} | Size: {{ $row->item_size }} | Unit: {{ $row->unit }} | {{ $row->item_type }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -83,8 +82,8 @@
                                                 <option value="" selected disabled>Select Item</option>
                                                 @foreach ($eqData as $row)
                                                     <option
-                                                        value="{{ $row->eq_name }},{{ $row->eq_unit_price }}:{{ $row->eq_size_weight }};{{ $row->eq_type }}">
-                                                        {{ $row->eq_name }} {{ $row->eq_size_weight }}: {{ $row->eq_available }} {{ $row->eq_type }}</option>
+                                                        value="{{ $row->eq_name }},{{ $row->eq_unit_price }}:{{ $row->eq_size }};{{ $row->eq_unit }}">
+                                                        {{ $row->eq_name }} | Size: {{ $row->eq_size }} | Unit: {{ $row->eq_unit }} | {{ $row->eq_type }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -105,15 +104,14 @@
                             $oldItems = old('itemName', ['']);
                             $oldQtys = old('qty', ['']);
                             $oldunitPrices = old('unitPrice', ['']);
-                            $oldsizeWeigth = old('sizeWeigth', ['']);
+                            $oldsize = old('size', ['']);
+                            $oldunit = old('unit', ['']);
                             $oldType = old('typeSelect', ['']);
                         @endphp
                         @foreach ($oldItems as $i => $item)
                             <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-secondary">
-                                        <i class="bi bi-receipt text-success"></i> Item Name
-                                    </label>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold text-secondary">Item Name</label>
                                     <input type="text" name="itemName[]" value="{{ $item }}"
                                         class="form-control shadow-sm">
                                     @error("itemName.$i")
@@ -121,19 +119,15 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-1">
-                                    <label class="form-label fw-semibold text-secondary">
-                                        <i class="bi bi-box text-success"></i> Quantity
-                                    </label>
+                                    <label class="form-label fw-semibold text-secondary">Quantity</label>
                                     <input type="number" name="qty[]" value="{{ $oldQtys[$i] ?? '' }}"
                                         class="form-control shadow-sm">
                                     @error("qty.$i")
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
-                                <div class="col-md-2">
-                                    <label class="form-label fw-semibold text-secondary">
-                                        <i class="bi bi-tag text-success"></i> Unit Price
-                                    </label>
+                                <div class="col-md-1">
+                                    <label class="form-label fw-semibold text-secondary">Unit Price</label>
                                     <input type="text" name="unitPrice[]" value="{{ $oldunitPrices[$i] ?? '' }}"
                                         class="form-control shadow-sm">
                                     @error("unitPrice.$i")
@@ -141,19 +135,23 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label fw-semibold text-secondary">
-                                        <i class="bi bi-weight text-success"></i> Size/Weight
-                                    </label>
-                                    <input type="text" name="sizeWeigth[]" value="{{ $oldsizeWeigth[$i] ?? '' }}"
+                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                    <input type="text" name="size[]" value="{{ $oldsize[$i] ?? '' }}"
                                         class="form-control shadow-sm">
-                                    @error("sizeWeigth.$i")
+                                    @error("size.$i")
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label fw-semibold text-secondary">
-                                        <i class="bi bi-weight text-success"></i> Type
-                                    </label>
+                                    <label class="form-label fw-semibold text-secondary">Unit</label>
+                                    <input type="text" name="unit[]" value="{{ $oldunit[$i] ?? '' }}"
+                                        class="form-control shadow-sm">
+                                    @error("unit.$i")
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold text-secondary">Type</label>
                                     <select name="typeSelect[]" class="form-select shadow-sm placeType">
                                         <option value="">Select Type</option>
                                         <option value="Consumable"
@@ -170,7 +168,7 @@
                                 <div class="col-md-1 align-items-start">
                                     <label class="form-label fw-semibold text-secondary">Remove</label>
                                     <button type="button"
-                                        class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
+                                        class="btn btn-outline-danger remove-btn">
                                         <i class="bi bi-x-circle"></i>
                                     </button>
                                 </div>

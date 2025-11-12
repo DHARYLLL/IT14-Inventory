@@ -21,32 +21,29 @@ if (document.getElementById('add_new')) {
 
     const template = `
         <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
-            <div class="col-md-4">
-                <label class="form-label fw-semibold text-secondary">
-                    <i class="bi bi-receipt" style="color:#60BF4F"></i> Item Name
-                </label>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold text-secondary">Item Name</label>
                 <input type="text" name="itemName[]" class="form-control shadow-sm">
             </div>
 
             <div class="col-md-1">
-                <label class="form-label fw-semibold text-secondary">
-                    <i class="bi bi-box" style="color:#60BF4F"></i> Quantity
-                </label>
+                <label class="form-label fw-semibold text-secondary">Quantity</label>
                 <input type="number" name="qty[]" class="form-control shadow-sm">
             </div>
 
-            <div class="col-md-2">
-                <label class="form-label fw-semibold text-secondary">
-                    <i class="bi bi-tag" style="color:#60BF4F"></i> Unit Price
-                </label>
+            <div class="col-md-1">
+                <label class="form-label fw-semibold text-secondary">Unit Price</label>
                 <input type="text" name="unitPrice[]" class="form-control shadow-sm">
             </div>
 
             <div class="col-md-2">
-                <label class="form-label fw-semibold text-secondary">
-                    <i class="bi bi-weight" style="color:#60BF4F"></i> Size/Weight
-                </label>
-                <input type="text" name="sizeWeigth[]" class="form-control shadow-sm">
+                <label class="form-label fw-semibold text-secondary">Size</label>
+                <input type="text" name="size[]" class="form-control shadow-sm">
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-semibold text-secondary">Unit</label>
+                <input type="text" name="unit[]" class="form-control shadow-sm">
             </div>
 
             <div class="col-md-2">
@@ -64,7 +61,7 @@ if (document.getElementById('add_new')) {
 
             <div class="col-md-1 align-items-start">
                 <label class="form-label fw-semibold text-secondary">Remove</label>
-                <button type="button" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
+                <button type="button" class="btn btn-outline-danger remove-btn">
                     <i class="bi bi-x-circle"></i>
                 </button>
             </div>
@@ -102,8 +99,8 @@ function setStock() {
         var idData = get.options[get.selectedIndex].value;
         let forName = idData.slice(0, idData.indexOf(","));
         let forUnitPrice = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
-        let forSizeWeight = idData.slice(idData.indexOf(":") + 1, idData.indexOf(";"));
-        let forType = idData.slice(idData.indexOf(";") + 1);
+        let forSize = idData.slice(idData.indexOf(":") + 1, idData.indexOf(";"));
+        let forUnit = idData.slice(idData.indexOf(";") + 1);
         //document.getElementById("itemName").value = forQty;
 
         //const addBtn = document.getElementById('add_new');
@@ -111,7 +108,7 @@ function setStock() {
 
         const template = `
             <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label fw-semibold text-secondary">
                         <i class="bi bi-receipt" style="color:#60BF4F"></i> Item Name
                     </label>
@@ -119,42 +116,34 @@ function setStock() {
                 </div>
 
                 <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">
-                        <i class="bi bi-box" style="color:#60BF4F"></i> Quantity
-                    </label>
+                    <label class="form-label fw-semibold text-secondary">Quantity</label>
                     <input type="number" name="qty[]" class="form-control shadow-sm">
                 </div>
 
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">
-                        <i class="bi bi-tag" style="color:#60BF4F"></i> Unit Price
-                    </label>
+                <div class="col-md-1">
+                    <label class="form-label fw-semibold text-secondary">Unit Price</label>
                     <input type="text" name="unitPrice[]" class="form-control shadow-sm" value="${forUnitPrice}" readonly>
                 </div>
 
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">
-                        <i class="bi bi-weight" style="color:#60BF4F"></i> Size/Weight
-                    </label>
-                    <input type="text" name="sizeWeigth[]" class="form-control shadow-sm" value="${forSizeWeight}" readonly>
+                    <label class="form-label fw-semibold text-secondary">Size</label>
+                    <input type="text" name="size[]" class="form-control shadow-sm" value="${forSize}" readonly>
                 </div>
 
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">
-                        <i class="bi bi-weight text-success"></i> Type
-                    </label>
+                    <label class="form-label fw-semibold text-secondary">Unit</label>
+                    <input type="text" name="unit[]" class="form-control shadow-sm" value="${forUnit}" readonly>
+                </div>
 
-                    <select name="typeSelect[]" class="form-select shadow-sm placeType">
-                        <option selected disabled>Select Type</option>
-                        <option value="Consumable" selected>Consumable</option>
-                        <option value="Non-Consumable">Non-Consumable</option>
-                    </select>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold text-secondary">Type</label>
+                    <input type="text" name="typeSelect[]" class="form-control shadow-sm" value="Consumable" readonly>
                 </div>
                 
 
                 <div class="col-md-1 align-items-start">
                     <label class="form-label fw-semibold text-secondary">Remove</label>
-                    <button type="button" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
+                    <button type="button" class="btn btn-outline-danger remove-btn">
                         <i class="bi bi-x-circle"></i>
                     </button>
                 </div>
@@ -186,8 +175,8 @@ function setEquipment() {
         var idData = get.options[get.selectedIndex].value;
         let forName = idData.slice(0, idData.indexOf(","));
         let forUnitPrice = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
-        let forSizeWeight = idData.slice(idData.indexOf(":") + 1, idData.indexOf(";"));
-        let forType = idData.slice(idData.indexOf(";") + 1);
+        let forSize = idData.slice(idData.indexOf(":") + 1, idData.indexOf(";"));
+        let forUnit = idData.slice(idData.indexOf(";") + 1);
         //document.getElementById("itemName").value = forQty;
 
         //const addBtn = document.getElementById('add_new');
@@ -196,44 +185,34 @@ function setEquipment() {
 
         const template = `
             <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
-                <div class="col-md-4">
-                    <label class="form-label fw-semibold text-secondary">
-                        <i class="bi bi-receipt" style="color:#60BF4F"></i> Item Name
-                    </label>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-secondary">Item Name</label>
                     <input type="text" name="itemName[]" class="form-control shadow-sm" value="${forName}" readonly>
                 </div>
 
                 <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">
-                        <i class="bi bi-box" style="color:#60BF4F"></i> Quantity
-                    </label>
+                    <label class="form-label fw-semibold text-secondary">Quantity</label>
                     <input type="number" name="qty[]" class="form-control shadow-sm">
                 </div>
 
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">
-                        <i class="bi bi-tag" style="color:#60BF4F"></i> Unit Price
-                    </label>
+                <div class="col-md-1">
+                    <label class="form-label fw-semibold text-secondary">Unit Price</label>
                     <input type="text" name="unitPrice[]" class="form-control shadow-sm" value="${forUnitPrice}" readonly>
                 </div>
 
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">
-                        <i class="bi bi-weight" style="color:#60BF4F"></i> Size/Weight
-                    </label>
-                    <input type="text" name="sizeWeigth[]" class="form-control shadow-sm" value="${forSizeWeight}" readonly>
+                    <label class="form-label fw-semibold text-secondary">Size/Weight</label>
+                    <input type="text" name="size[]" class="form-control shadow-sm" value="${forSize}" readonly>
                 </div>
 
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">
-                        <i class="bi bi-weight text-success"></i> Type
-                    </label>
-                    <select name="typeSelect[]" class="form-select shadow-sm placeType">
-                        <option selected disabled>Select Type</option>
-                        <option value="Consumable">Consumable</option>
-                        <option value="Non-Consumable" selected>Non-Consumable</option>
-                    </select>
+                    <label class="form-label fw-semibold text-secondary">Size/Weight</label>
+                    <input type="text" name="unit[]" class="form-control shadow-sm" value="${forUnit}" readonly>
+                </div>
 
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold text-secondary">Type</label>
+                    <input type="text" name="typeSelect[]" class="form-control shadow-sm" value="Non-Consumable" readonly>
                 </div>
                 
 

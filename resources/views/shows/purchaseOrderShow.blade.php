@@ -100,7 +100,7 @@
                 @if ($poData->status == 'Approved')
                     <form action="{{ route('Stock.store') }}" method="POST" class="{{ $poData->status }} h-100">
                         @csrf
-
+                        
                         <div class="card-modern p-4 gap-2 cust-sticky mb-2 h-50 overflow-auto">
                             <h5 class="fw-bold mb-3 text-success">Delivery Details</h5>
                             <div class="row g-3">
@@ -151,13 +151,14 @@
                         </div>
 
 
-                        {{-- table --}}
+                        {{-- input arrived qty table --}}
                         <div class="h-50 overflow-auto">
                             <table class="modern-table">
                                 <thead>
                                     <tr>
                                         <th>Item Name</th>
-                                        <th>Size/Weight</th>
+                                        <th>Size</th>
+                                        <th>Unit</th>
                                         <th>Qty</th>
                                         <th>Type</th>
                                         <th>Unit Price</th>
@@ -169,11 +170,21 @@
                                 </thead>
                                 <tbody>
                                     @if ($poItemData->isEmpty())
-                                        <tr>
-                                            <td colspan="7" class="text-center text-muted py-4">
-                                                No supplies available.
-                                            </td>
-                                        </tr>
+                                        @if($poData->status == 'Approved')
+                                            <tr>
+                                                <td colspan="8" class="text-center text-muted py-4">
+                                                    No supplies available.
+                                                </td>
+                                            </tr>
+                                            
+                                        @else
+                                            <tr>
+                                                <td colspan="7" class="text-center text-muted py-4">
+                                                    No supplies available.
+                                                </td>
+                                            </tr>
+                                        @endif
+                                       
                                     @else
                                         @foreach ($poItemData as $row)
                                             <tr>
@@ -210,7 +221,8 @@
                                                 @endif
 
 
-                                                <td>{{ $row->sizeWeight }}</td>
+                                                <td>{{ $row->size }}</td>
+                                                <td>{{ $row->unit }}</td>
                                                 <td>{{ $row->qty }}</td>
                                                 <td>
                                                     <span
