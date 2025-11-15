@@ -56,11 +56,11 @@
                             <label for="payment" class="form-label">Total Payment</label>
                             <input type="text" class="form-control" id="totalPayment" readonly name="total" value="{{ old('total') }}">
 
-                            <input type="text" id="setPricePkg" name="setPricePkg" readonly value="{{ old('setPricePkg') }}">
-                            <input type="text" id="setPriceChap" name="setPriceChap" readonly value="{{ old('setPriceChap') }}">
+                            <input type="text" id="setPricePkg" name="setPricePkg" readonly value="{{ old('setPricePkg') }}" hidden>
+                            <input type="text" id="setPriceChap" name="setPriceChap" readonly value="{{ old('setPriceChap') }}" hidden>
 
-                            <input type="text" id="setIdPkg" readonly name="pkgId" value="{{ old('pkgId') }}">
-                            <input type="text" id="setIdChap" readonly name="chapId" value="{{ old('chapId') }}">
+                            <input type="text" id="setIdPkg" readonly name="pkgId" value="{{ old('pkgId') }}" hidden>
+                            <input type="text" id="setIdChap" readonly name="chapId" value="{{ old('chapId') }}" hidden>
                         </div>
                         <div class="col-md-3">
                             <label for="payment" class="form-label">Payment</label>

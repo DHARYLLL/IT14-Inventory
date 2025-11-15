@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        /* para dili ma add inif migrate fresh
         Schema::create('package_inclusions', function (Blueprint $table) {
             $table->id();
             $table->string('pkg_inclusion', 100);
@@ -22,6 +23,7 @@ return new class extends Migration
 
             $table->unique(['pkg_inclusion', 'package_id']);
         });
+        */
     }
 
     /**

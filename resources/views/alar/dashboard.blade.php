@@ -37,7 +37,7 @@
                 <h5>This Month Average Spending</h5>
                 <div class="card-content">
                     <i class="bi bi-cash-coin"></i>
-                    <span class="count">{{ $getAv }}</span>
+                    <span class="count">₱{{ number_format($getAv, 2) }}</span>
                 </div>
             </div>
         </div>
@@ -67,8 +67,8 @@
                                     @else
                                         @foreach ($logData as $row)
                                             <tr>
-                                                <td>{{ $row->action }}</td>
-                                                <td>{{ $row->action_date }}</td>
+                                                <td>{{ $row->transaction }}</td>
+                                                <td>{{ $row->tx_date }}</td>
                                                 <td>{{ $row->logToEmp->emp_fname }}</td>
                                             </tr>
                                         @endforeach
@@ -89,20 +89,22 @@
                                     <tr>
                                         <th>Item Name</th>
                                         <th>Quantity</th>
-                                        <th>Size/Weight</th>
+                                        <th>Size</th>
+                                        <th>Unit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if ($lowStockData->isEmpty())
                                         <tr>
-                                            <td colspan="3" class="text-center text-muted">No data available</td>
+                                            <td colspan="4" class="text-center text-muted">No data available</td>
                                         </tr>
                                     @else
                                         @foreach ($lowStockData as $row)
                                             <tr>
                                                 <td>{{ $row->item_name }}</td>
                                                 <td>{{ $row->item_qty }}</td>
-                                                <td>{{ $row->size_weight }}</td>
+                                                <td>{{ $row->item_size }}</td>
+                                                <td>{{ $row->item_unit }}</td>
                                             </tr>
                                         @endforeach
                                     @endif

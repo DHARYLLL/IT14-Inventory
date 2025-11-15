@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        /* para dili ma add inif migrate fresh
         Schema::create('chapel_equipment', function (Blueprint $table) {
             $table->id();
 
@@ -24,6 +25,7 @@ return new class extends Migration
 
             $table->timestamps();
         });
+        */
     }
 
     /**

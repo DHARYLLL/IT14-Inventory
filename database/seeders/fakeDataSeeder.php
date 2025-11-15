@@ -133,28 +133,6 @@ class fakeDataSeeder extends Seeder
             'max_cap' => 20
         ]);
 
-        ChapStock::create([
-            'chap_id' => 1,
-            'stock_id' => 9,
-            'stock_used' => 1
-        ]);
-
-        ChapEquipment::create([
-            'chap_id' => 1,
-            'eq_id' => 6,
-            'eq_used' => 1
-        ]);
-        ChapEquipment::create([
-            'chap_id' => 1,
-            'eq_id' => 7,
-            'eq_used' => 2
-        ]);
-        ChapEquipment::create([
-            'chap_id' => 1,
-            'eq_id' => 8,
-            'eq_used' => 1
-        ]);
-
 
 
     }

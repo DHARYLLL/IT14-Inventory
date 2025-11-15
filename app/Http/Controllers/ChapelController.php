@@ -184,7 +184,8 @@ class ChapelController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $chapData = Chapel::findOrFail($id)->get();
+        return view('functions/chapelEdit', ['chapData' => $chapData]);
     }
 
     /**

@@ -8,15 +8,13 @@
 
 
 <div class="d-flex align-items-center justify-content-between p-2 mb-0 cust-h-heading">
-    <div class="input-group" style="max-width: 600px; border-radius: 10px; overflow: hidden;">
-        <input type="text" id="searchInput" class="form-control" placeholder="Search Purchase Order"
-            style="border-radius: 0; border: none;">
+    <div class="input-group cust-searchbar">
+        <input type="text" id="searchInput" class="form-control sb-border" placeholder="Search Purchase Order">
         <button class="btn" id="clearSearch"
             style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
     </div>
 
-    <a href="{{ route('Purchase-Order.create') }}" class="btn btn-custom d-flex align-items-center gap-2 px-3 py-2"
-        style="background-color: #28a745; color: white; white-space: nowrap;">
+    <a href="{{ route('Purchase-Order.create') }}" class="cust-btn cust-btn-primary max-h">
         <i class="bi bi-plus-lg"></i><span>New Purchase Order</span>
     </a>
 
