@@ -13,16 +13,17 @@ return new class extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->string('item_name', 100);
-            $table->smallInteger('item_qty')->nullable();
-            $table->string('item_size', 20)->nullable();
-            $table->string('item_unit', 20);
+            $table->string('item_name', 100)->unique();
+            $table->smallInteger('item_qty');
+            $table->string('item_size', 20);
             $table->decimal('item_unit_price', 8,2);
+            $table->smallInteger('item_qty_set')->nullable();
+            $table->smallInteger('item_total_qty')->nullable();
             $table->string('item_type', 15);
 
             $table->timestamps();
 
-            $table->unique(['item_name', 'item_size', 'item_unit']);
+            $table->unique(['item_name', 'item_size']);
         });
     }
 

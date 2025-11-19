@@ -17,6 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('pkg_id')->nullable();
             $table->foreign('pkg_id')->references('id')->on('packages')->onUpdate('cascade')->nullOnDelete();
 
+            $table->unsignedBigInteger('prep_id')->nullable();
+            $table->foreign('prep_id')->references('id')->on('embalming')->onUpdate('cascade')->nullOnDelete();
+
             $table->unsignedBigInteger('stock_id')->nullable();
             $table->foreign('stock_id')->references('id')->on('stocks')->onUpdate('cascade')->nullOnDelete();
 

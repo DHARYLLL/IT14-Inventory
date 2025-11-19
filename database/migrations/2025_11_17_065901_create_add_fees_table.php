@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chapels', function (Blueprint $table) {
+        Schema::create('add_fees', function (Blueprint $table) {
             $table->id();
-            $table->string('chap_name', 50);
-            $table->string('chap_room', 10);
-            $table->decimal('chap_price', 8,2);
-            $table->string('chap_status', 15);  
+            $table->string('fee_name', 50)->unique();
+            $table->decimal('fee_price', 8,2);
 
+            $table->unsignedBigInteger('jo_id')->nullable();
+            $table->foreign('jo_id')->references('id')->on('job_orders')->onUpdate('cascade');
             $table->timestamps();
-
-            $table->unique(['chap_name', 'chap_room']);
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chapels');
+        Schema::dropIfExists('add_fees');
     }
 };

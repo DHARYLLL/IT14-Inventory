@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pkg_equipment', function (Blueprint $table) {
+        Schema::create('add_equipment', function (Blueprint $table) {
             $table->id();
-
-            $table->unsignedBigInteger('pkg_id')->nullable();
-            $table->foreign('pkg_id')->references('id')->on('packages')->onUpdate('cascade')->nullOnDelete();
+            
+            $table->unsignedBigInteger('jod_id');
+            $table->foreign('jod_id')->references('id')->on('job_ord_details')->onUpdate('cascade')->onDelete('cascade');
 
             $table->unsignedBigInteger('eq_id')->nullable();
             $table->foreign('eq_id')->references('id')->on('equipments')->onUpdate('cascade')->nullOnDelete();
 
-            $table->smallInteger('eq_used');
+            $table->smallInteger('eq_dpl');
 
             $table->timestamps();
         });
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pkg_equipment');
+        Schema::dropIfExists('add_equipment');
     }
 };

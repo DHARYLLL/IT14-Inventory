@@ -11,8 +11,7 @@ class Chapel extends Model
         'chap_name',
         'chap_room',
         'chap_price',
-        'chap_status',
-        'max_cap',
+        'chap_status'
     ];
 
     public function chapToSvcReq() {

@@ -164,9 +164,23 @@
                             </div>
 
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                                <li class="px-3 py-2 text-muted small">Logged in as: @yield('name')</li>
+                                <li class="px-3 py-2 text-muted small">
+                                    Logged in as: {{session('empRole')}} {{--@yield('name')--}}
+                                </li>
                                 <li>
                                     <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    @if(session("empRole") != 'sadmin')
+                                        <form action="{{ route('Employee.edit', session("loginId")) }}" method="POST">
+                                            @csrf
+                                            @method('get')
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                <i class="bi bi-box-arrow-right"></i>Profile
+                                            </button>
+                                    </form>
+                                    @endif
+                                    
                                 </li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ChapelController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\employeeController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LogController;
@@ -96,11 +97,13 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::resource('Receipt', receiptController::class);
     Route::resource('Pkg-Stock', pkgStockController::class);
     Route::resource('Pkg-Equipment', pkgEquipmentController::class);
+    Route::resource('Employee', employeeController::class);
 
     //new
     Route::resource('Set-Item-Equipment', setStoEqToPkgController::class);
 
-
+    // Update password
+    Route::put('/Employee/{id}/update', [LoginController::class, 'changePassword'])->name('updatePassword');
     // Logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 

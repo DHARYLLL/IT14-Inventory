@@ -10,6 +10,7 @@ class PkgEquipment extends Model
     protected $fillable = [
         'pkg_id',
         'eq_id',
+        'prep_id',
         'eq_used'
     ];
 

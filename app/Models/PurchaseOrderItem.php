@@ -9,9 +9,10 @@ class PurchaseOrderItem extends Model
     protected $table = 'purchase_order_items';
     protected $fillable = [
         'item',
-        'qty',
         'size',
-        'unit',
+        'qty',
+        'qty_set',
+        'qty_total',
         'unit_price',
         'total_amount',
         'qty_arrived',

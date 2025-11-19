@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        /*
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
             $table->string('client_name', 100);
@@ -27,6 +28,7 @@ return new class extends Migration
 
             $table->timestamps();
         });
+        */
     }
 
     /**

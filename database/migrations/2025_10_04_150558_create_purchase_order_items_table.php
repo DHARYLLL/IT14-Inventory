@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('purchase_order_items', function (Blueprint $table) {
             $table->id();
             $table->string('item', 100);
-            $table->smallInteger('qty');
             $table->string('size', 20);
-            $table->string('unit', 20);
+            $table->smallInteger('qty');
+            $table->smallInteger('qty_set');
+            $table->smallInteger('qty_total');
             $table->decimal('unit_price', 8,2);
             $table->decimal('total_amount', 8,2);
             $table->smallInteger('qty_arrived')->nullable();

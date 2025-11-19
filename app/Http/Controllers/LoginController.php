@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,7 +22,7 @@ class LoginController extends Controller
     }
 
     public function login(Request $request){
-       $request->validate([
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
@@ -31,6 +32,7 @@ class LoginController extends Controller
         if($user){
             if(Hash::check($request->password,$user->emp_password)){
                 $request->session()->put('loginId', $user->id);
+                $request->session()->put('empRole', $user->emp_role);
                 $request->session()->regenerate();
                 return redirect(route('dashboard.index'));
             }else{
@@ -40,6 +42,48 @@ class LoginController extends Controller
             return back()->with('fail', 'Invalid credentials. Please try again')->withInput();
         }
         return $user;
+    }
+
+    public function changePassword(Request $request, String $id){
+        $request->validate([
+            'curPass' => 'required|max:30',
+            'newPass' => 'required|max:30',
+            'confPass' => 'required|max:30'
+        ], [
+            'curPass.required' => 'This field is required.',
+            'curPass' => '30 character limit reached.',
+
+            'newPass.required' => 'This field is required.',
+            'newPass' => '30 character limit reached.',
+
+            'confPass.required' => 'This field is required.',
+            'confPass' => '30 character limit reached.'
+        ]);
+        $user = Employee::where('id', $id)->first();
+
+        if (Hash::check($request->curPass,$user->emp_password)) {
+            
+            if ($request->newPass == $request->confPass) {
+                
+                Employee::findOrFail($id)->update([
+                    'emp_password' => Hash::make($request->newPass)
+                ]);
+
+                Log::create([
+                    'transaction' => 'Update',
+                    'tx_desc' => 'Change Password | ID: ' . $id,
+                    'emp_id' => session('loginId')
+                ]);
+
+                return back()->with('promt-s', 'Updated Successfully.');
+            } else {
+                return back()->with('promt-a', 'Password did not match.')->withInput();
+            }
+
+        }else{
+            return back()->with('promt', 'Incorrect Password.')->withInput();
+        }
+
     }
 
     public function logout(Request $request){

@@ -10,6 +10,7 @@ class PkgStock extends Model
     protected $fillable = [
         'pkg_id',
         'stock_id',
+        'prep_id',
         'stock_used'
     ];
 

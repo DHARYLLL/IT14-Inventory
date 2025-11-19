@@ -11,22 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services_requests', function (Blueprint $table) {
+        Schema::create('job_ord_details', function (Blueprint $table) {
             $table->id();
             $table->string('dec_name', 100);
             $table->date('dec_born_date');
             $table->date('dec_died_date');
             $table->string('dec_cause_of_death', 100);
-            $table->string('dec_mom_name', 100);
-            $table->string('dec_fr_name', 100);
-            $table->date('svc_startDate')->nullable();
-            $table->date('svc_endDate')->nullable();
-            $table->string('svc_wakeLoc', 150);
-            $table->string('svc_churchLoc', 150);
-            $table->string('svc_burialLoc', 150);
-            $table->string('svc_equipment_status', 15);
-            $table->date('svc_deploy_date')->nullable();
-            $table->date('svc_return_date')->nullable();
+            //$table->date('jod_startDate')->nullable();
+            //$table->date('jod_endDate')->nullable();
+            $table->string('jod_wakeLoc', 150);
+            $table->string('jod_burialLoc', 150);
+            $table->string('jod_eq_stat', 15);
+            $table->date('jod_deploy_date')->nullable();
+            $table->date('jod_return_date')->nullable();
 
             $table->unsignedBigInteger('pkg_id');
             $table->foreign('pkg_id')->references('id')->on('packages')->onUpdate('cascade');
@@ -34,7 +31,6 @@ return new class extends Migration
             $table->unsignedBigInteger('chap_id')->nullable();
             $table->foreign('chap_id')->references('id')->on('chapels')->onUpdate('cascade');
 
-            
             $table->timestamps();
         });
     }
@@ -44,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('services_requests');
+        Schema::dropIfExists('job_ord_details');
     }
 };
