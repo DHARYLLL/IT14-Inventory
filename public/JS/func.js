@@ -32,8 +32,8 @@ if (document.getElementById('add_new')) {
             </div>
 
             <div class="col-md-1">
-                <label class="form-label fw-semibold text-secondary">Unit Price</label>
-                <input type="text" name="unitPrice[]" class="form-control shadow-sm">
+                <label class="form-label fw-semibold text-secondary">Qty. per Set/Box</label>
+                <input type="number" name="qtySet[]" class="form-control shadow-sm">
             </div>
 
             <div class="col-md-2">
@@ -42,8 +42,8 @@ if (document.getElementById('add_new')) {
             </div>
 
             <div class="col-md-2">
-                <label class="form-label fw-semibold text-secondary">Unit</label>
-                <input type="text" name="unit[]" class="form-control shadow-sm">
+                <label class="form-label fw-semibold text-secondary">Price per Unit</label>
+                <input type="text" name="unitPrice[]" class="form-control shadow-sm">
             </div>
 
             <div class="col-md-2">
@@ -98,10 +98,7 @@ function setStock() {
     if (get) {
         var idData = get.options[get.selectedIndex].value;
         let forName = idData.slice(0, idData.indexOf(","));
-        let forUnitPrice = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
-        let forSize = idData.slice(idData.indexOf(":") + 1, idData.indexOf(";"));
-        let forUnit = idData.slice(idData.indexOf(";") + 1);
-        //document.getElementById("itemName").value = forQty;
+        let forSize = idData.slice(idData.indexOf(",") + 1);
 
         //const addBtn = document.getElementById('add_new');
         const pasteHere = document.getElementById('pasteHere');
@@ -121,8 +118,8 @@ function setStock() {
                 </div>
 
                 <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">Unit Price</label>
-                    <input type="text" name="unitPrice[]" class="form-control shadow-sm" value="${forUnitPrice}" readonly>
+                    <label class="form-label fw-semibold text-secondary">Qty. per Set/Box</label>
+                    <input type="number" name="qtySet[]" class="form-control shadow-sm">
                 </div>
 
                 <div class="col-md-2">
@@ -131,8 +128,8 @@ function setStock() {
                 </div>
 
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">Unit</label>
-                    <input type="text" name="unit[]" class="form-control shadow-sm" value="${forUnit}" readonly>
+                    <label class="form-label fw-semibold text-secondary">Price per Unit</label>
+                    <input type="text" name="unitPrice[]" class="form-control shadow-sm">
                 </div>
 
                 <div class="col-md-2">
@@ -174,9 +171,8 @@ function setEquipment() {
     if (get) {
         var idData = get.options[get.selectedIndex].value;
         let forName = idData.slice(0, idData.indexOf(","));
-        let forUnitPrice = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
-        let forSize = idData.slice(idData.indexOf(":") + 1, idData.indexOf(";"));
-        let forUnit = idData.slice(idData.indexOf(";") + 1);
+        let forSize = idData.slice(idData.indexOf(",") + 1);
+
         //document.getElementById("itemName").value = forQty;
 
         //const addBtn = document.getElementById('add_new');
@@ -196,8 +192,8 @@ function setEquipment() {
                 </div>
 
                 <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">Unit Price</label>
-                    <input type="text" name="unitPrice[]" class="form-control shadow-sm" value="${forUnitPrice}" readonly>
+                    <label class="form-label fw-semibold text-secondary">Qty. per Set/Box</label>
+                    <input type="number" name="qtySet[]" class="form-control shadow-sm">
                 </div>
 
                 <div class="col-md-2">
@@ -206,8 +202,8 @@ function setEquipment() {
                 </div>
 
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">Size/Weight</label>
-                    <input type="text" name="unit[]" class="form-control shadow-sm" value="${forUnit}" readonly>
+                    <label class="form-label fw-semibold text-secondary">Price per Unit</label>
+                    <input type="text" name="unitPrice[]" class="form-control shadow-sm">
                 </div>
 
                 <div class="col-md-2">

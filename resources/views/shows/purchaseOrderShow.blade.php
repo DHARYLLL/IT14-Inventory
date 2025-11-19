@@ -47,16 +47,11 @@
                                     <input type="text" class="form-control col" value="{{ $poData->delivered_date }}"
                                         readonly>
                                 </div>
-                                <div class="d-flex align-items-center">
-                                    <label class="col-4">Total</label>
-                                    <span class="mx-2">:</span>
-                                    <input type="text" class="form-control col"
-                                        value="{{ $poItemData->sum('total_amount') }}" readonly>
-                                </div>
                             </div>
                         </div>
                     </div>
                     <hr>
+                    {{-- IF status is pending | IF has Invoice data--}}
                     <div class="row">
                         <div class="col-md-12">
                             @if ($poData->status == 'Pending')
@@ -70,6 +65,55 @@
                                     </div>
                                 </form>
                             @endif
+
+                            @if($poData->status == 'Approved')
+                                <div class="row g-3">
+                                    {{-- Invoice Number --}}
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-semibold text-secondary">Invoice Number</label>
+                                        <input type="text" class="form-control modern-input" name="inv_num1" id="inv_num1"
+                                            value="{{ old('inv_num') }}">
+                                        @error('inv_num')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                    {{-- Invoice Date --}}
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-semibold text-secondary">Invoice Date</label>
+                                        <input type="date" class="form-control modern-input" name="inv_date1" id="inv_date1"
+                                            value="{{ old('inv_date1') }}">
+                                        @error('inv_date1')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                    {{-- Delivery Date --}}
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-semibold text-secondary">Delivery Date</label>
+                                        <input type="date" class="form-control modern-input" name="del_date1" id="del_date1"
+                                            value="{{ old('del_date1') }}">
+                                        @error('del_date1')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                    {{-- Total --}}
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-semibold text-secondary">Total</label>
+                                        <input type="text" class="form-control modern-input" name="total1" id="total1"
+                                            value="{{ old('total1') }}">
+                                        <input type="hidden" name="po_id" value="{{ $poData->id }}">
+                                        @error('total1')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                    {{-- Submit --}}
+                                    <div class="col-12 text-center mt-4">
+                                        <button class="btn btn-green w-50" type="submit">
+                                            <i class="bi bi-truck"></i> Delivered
+                                        </button>
+                                    </div>
+                                </div>
+                            @endif
+
                             @if ($invData)
                                 <div class="d-flex flex-column gap-2">
                                     <div class="d-flex align-items-center">
@@ -86,7 +130,7 @@
                                     <div class="d-flex align-items-center">
                                         <label class="col-4">Total</label>
                                         <span class="mx-2">:</span>
-                                        <input type="text" class="form-control col" value="{{ $invData->total }}" readonly>
+                                        <input type="text" class="form-control col" value="₱{{ $invData->total }}" readonly>
                                     </div>
                                 </div>
                             @endif
@@ -95,9 +139,10 @@
                 </div>
             </div>
 
-
+            {{-- Show table --}}
             <div class="col col-9 h-100">
                 @if ($poData->status == 'Approved')
+                    {{-- IF status is approved --}}
                     <form action="{{ route('Stock.store') }}" method="POST" class="{{ $poData->status }} h-100">
                         @csrf
                         
@@ -107,16 +152,14 @@
                                 {{-- Invoice Number --}}
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-secondary">Invoice Number</label>
-                                    <input type="text" class="form-control modern-input" name="inv_num"
+                                    <input type="text" class="form-control modern-input" name="inv_num" id="inv_num"
                                         value="{{ old('inv_num') }}">
-                                    @error('inv_num')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
+                                    
                                 </div>
                                 {{-- Invoice Date --}}
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-secondary">Invoice Date</label>
-                                    <input type="date" class="form-control modern-input" name="inv_date"
+                                    <input type="date" class="form-control modern-input" name="inv_date" id="inv_date"
                                         value="{{ old('inv_date') }}">
                                     @error('inv_date')
                                         <small class="text-danger">{{ $message }}</small>
@@ -125,7 +168,7 @@
                                 {{-- Delivery Date --}}
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-secondary">Delivery Date</label>
-                                    <input type="date" class="form-control modern-input" name="del_date"
+                                    <input type="date" class="form-control modern-input" name="del_date" id="del_date"
                                         value="{{ old('del_date') }}">
                                     @error('del_date')
                                         <small class="text-danger">{{ $message }}</small>
@@ -134,7 +177,7 @@
                                 {{-- Total --}}
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-secondary">Total</label>
-                                    <input type="text" class="form-control modern-input" name="total"
+                                    <input type="text" class="form-control modern-input" name="total" id="total"
                                         value="{{ old('total') }}">
                                     <input type="hidden" name="po_id" value="{{ $poData->id }}">
                                     @error('total')
@@ -188,23 +231,6 @@
                                     @else
                                         @foreach ($poItemData as $row)
                                             <tr>
-                                                {{--
-                                                @if ($row->type == 'Consumable')
-                                                    <td>
-                                                        {{ $row->item }}
-                                                        <input type="text" name="stockId[]" value="{{ $row->stock_id }}"
-                                                            hidden>
-                                                    </td>
-                                                @endif
-                                                @if ($row->type == 'Non-Consumable')
-                                                    <td>
-                                                        {{ $row->item }}
-                                                        <input type="text" name="eqId[]" value="{{ $row->eq_id }}"
-                                                            hidden>
-                                                    </td>
-                                                @endif
-                                                --}}
-
                                                 @if ($row->type == 'Consumable')
                                                     <td>
                                                         {{ $row->item }}
@@ -234,35 +260,6 @@
                                                 <td>₱{{ number_format($row->unit_price, 2) }}</td>
                                                 <td>₱{{ number_format($row->total_amount, 2) }}</td>
                                                 @if ($poData->status == 'Approved')
-                                                    {{--
-                                                    @if ($row->type == 'Consumable')
-
-
-                                                        <td>
-                                                            <input type="number" class="form-control qty-input" name="stoQtyArrived[]"
-                                                                placeholder="Qty Arrived"
-                                                                value="{{ old('stoQtyArrived.' . $loop->index) }}">
-                                                            @error('stoQtyArrived.' . $loop->index)
-                                                                <small class="text-danger">{{ $message }}</small>
-                                                            @enderror
-                                                        </td>
-
-                                                    @endif
-                                                    @if ($row->type == 'Non-Consumable')
-
-                                                        <td>
-                                                            <input type="number" class="form-control qty-input" name="eqQtyArrived[]"
-                                                                placeholder="Qty Arrived"
-                                                                value="{{ old('eqQtyArrived.' . $loop->index) }}">
-                                                            @error('eqQtyArrived.' . $loop->index)
-                                                                <small class="text-danger">{{ $message }}</small>
-                                                            @enderror
-                                                        </td>
-
-                                                    @endif
-                                                    --}}
-
-
                                                     <td>
                                                         <input type="number" class="form-control qty-input" name="qtyArrived[]" placeholder="Qty Arrived" value="{{ old('qtyArrived.' . $loop->index) }}">
                                                         @error('qtyArrived.' . $loop->index)
@@ -279,14 +276,14 @@
                         
                     </form>
                 @else
-                    {{-- table --}}
+                    {{-- show this table IF status is pending  --}}
                     <div class="bg-white rounded border overflow-hidden" style="min-height: 70vh">
                         <table class="table table-hover mb-0">
                             <thead>
                                 <tr class="table-light">
                                     <th class="fw-semibold">Item Name</th>
-                                    <th class="fw-semibold">Size/Weight</th>
                                     <th class="fw-semibold">Qty</th>
+                                    <th class="fw-semibold">Total Qty.</th>
                                     <th class="fw-semibold">Type</th>
                                     <th class="fw-semibold">Unit Price</th>
                                     <th class="fw-semibold">Total Amount</th>
@@ -306,11 +303,11 @@
                                     @foreach ($poItemData as $row)
                                         <tr>
                                             <td>{{ $row->item }}</td>
-                                            <td>{{ $row->sizeWeight }}</td>
                                             <td>{{ $row->qty }}</td>
+                                            <td>{{ $row->qty_total }}</td>
                                             <td>{{ $row->type }}</td>
-                                            <td>{{ $row->unit_price }}</td>
-                                            <td>{{ $row->total_amount }}</td>
+                                            <td>₱ {{ $row->unit_price }}</td>
+                                            <td>₱ {{ $row->total_amount }}</td>
                                             @if ($poData->status == 'Delivered')
                                                 <td>
                                                     {{ $row->qty_arrived }}
@@ -318,6 +315,12 @@
                                             @endif
                                         </tr>
                                     @endforeach
+
+                                    {{-- SHOW TOTAL --}}
+                                    <tr>
+                                        <td colspan="5" style="font-style: normal;" class="text-end">Total:</td>
+                                        <td>₱ {{ $poItemData->sum('total_amount') }}</td>
+                                    </tr>
                                 @endif
                             </tbody>
                         </table>
@@ -325,11 +328,7 @@
                 @endif
             </div>
         </div>
-
-
-        
     </div>
-
 
 
 @endsection

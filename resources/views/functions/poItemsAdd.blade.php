@@ -34,7 +34,7 @@
                                     <option selected disabled>Select supplier</option>
                                     @foreach ($supData as $supp)
                                         <option value="{{ $supp->id }}" {{ old('supp') == $supp->id ? 'selected' : '' }}>
-                                            {{ $supp->id }} {{ $supp->fname }} {{ $supp->mname }} {{ $supp->lname }}
+                                            {{ $supp->company_name }} | {{ $supp->fname }} {{ $supp->mname }} {{ $supp->lname }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -61,8 +61,8 @@
                                                 <option value="" selected disabled>Select Item</option>
                                                 @foreach ($stoData as $row)
                                                     <option
-                                                        value="{{ $row->item_name }},{{ $row->item_unit_price }}:{{ $row->item_size }};{{ $row->item_unit }}">
-                                                        {{ $row->item_name }} | Size: {{ $row->item_size }} | Unit: {{ $row->unit }} | {{ $row->item_type }}</option>
+                                                        value="{{ $row->item_name }},{{ $row->item_size }}">
+                                                        {{ $row->item_name }} | Size: {{ $row->item_size }} | {{ $row->item_qty }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -82,8 +82,8 @@
                                                 <option value="" selected disabled>Select Item</option>
                                                 @foreach ($eqData as $row)
                                                     <option
-                                                        value="{{ $row->eq_name }},{{ $row->eq_unit_price }}:{{ $row->eq_size }};{{ $row->eq_unit }}">
-                                                        {{ $row->eq_name }} | Size: {{ $row->eq_size }} | Unit: {{ $row->eq_unit }} | {{ $row->eq_type }}</option>
+                                                        value="{{ $row->eq_name }},{{ $row->eq_size }}">
+                                                        {{ $row->eq_name }} | Size: {{ $row->eq_size }} | {{ $row->eq_available }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -103,9 +103,9 @@
                         @php
                             $oldItems = old('itemName', ['']);
                             $oldQtys = old('qty', ['']);
-                            $oldunitPrices = old('unitPrice', ['']);
+                            $oldqtySet = old('qtySet', ['']);
                             $oldsize = old('size', ['']);
-                            $oldunit = old('unit', ['']);
+                            $oldunitPrice = old('unitPrice', ['']);
                             $oldType = old('typeSelect', ['']);
                         @endphp
                         @foreach ($oldItems as $i => $item)
@@ -113,7 +113,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label fw-semibold text-secondary">Item Name</label>
                                     <input type="text" name="itemName[]" value="{{ $item }}"
-                                        class="form-control shadow-sm">
+                                        class="form-control shadow-sm" {{ $item ? 'readonly' : '' }}>
                                     @error("itemName.$i")
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -127,43 +127,48 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-1">
-                                    <label class="form-label fw-semibold text-secondary">Unit Price</label>
-                                    <input type="text" name="unitPrice[]" value="{{ $oldunitPrices[$i] ?? '' }}"
+                                    <label class="form-label fw-semibold text-secondary">Qty. per Set/Box</label>
+                                    <input type="number" name="qtySet[]" value="{{ $oldqtySet[$i] ?? '' }}"
                                         class="form-control shadow-sm">
-                                    @error("unitPrice.$i")
+                                    @error("qtySet.$i")
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label fw-semibold text-secondary">Size</label>
                                     <input type="text" name="size[]" value="{{ $oldsize[$i] ?? '' }}"
-                                        class="form-control shadow-sm">
+                                        class="form-control shadow-sm" {{ $oldsize ? 'readonly' : '' }}>
                                     @error("size.$i")
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label fw-semibold text-secondary">Unit</label>
-                                    <input type="text" name="unit[]" value="{{ $oldunit[$i] ?? '' }}"
+                                    <label class="form-label fw-semibold text-secondary">Price per Unit</label>
+                                    <input type="text" name="unitPrice[]" value="{{ $oldunitPrice[$i] ?? '' }}"
                                         class="form-control shadow-sm">
-                                    @error("unit.$i")
+                                    @error("unitPrice.$i")
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label fw-semibold text-secondary">Type</label>
-                                    <select name="typeSelect[]" class="form-select shadow-sm placeType">
-                                        <option value="">Select Type</option>
-                                        <option value="Consumable"
-                                            {{ ($oldType[$i] ?? '') === 'Consumable' ? 'selected' : '' }}>Consumable
-                                        </option>
-                                        <option value="Non-Consumable"
-                                            {{ ($oldType[$i] ?? '') === 'Non-Consumable' ? 'selected' : '' }}>
-                                            Non-Consumable</option>
-                                    </select>
-                                    @error("typeSelect.$i")
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
+                                    @if($oldType[$i])
+                                        <input type="text" name="typeSelect[]" class="form-control shadow-sm" value="{{ $oldType[$i] }}" readonly>
+                                    @else
+                                        <select name="typeSelect[]" class="form-select shadow-sm placeType">
+                                            <option value="">Select Type</option>
+                                            <option value="Consumable"
+                                                {{ ($oldType[$i] ?? '') === 'Consumable' ? 'selected' : '' }}>Consumable
+                                            </option>
+                                            <option value="Non-Consumable"
+                                                {{ ($oldType[$i] ?? '') === 'Non-Consumable' ? 'selected' : '' }}>
+                                                Non-Consumable</option>
+                                        </select>
+                                        @error("typeSelect.$i")
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    @endif
+                                    
                                 </div>
                                 <div class="col-md-1 align-items-start">
                                     <label class="form-label fw-semibold text-secondary">Remove</label>

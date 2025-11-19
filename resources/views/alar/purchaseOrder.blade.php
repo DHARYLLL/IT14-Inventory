@@ -54,9 +54,10 @@
                             <td>{{ $row->delivered_date }}</td>
                             <td>
                                 <div class="d-flex justify-content-center align-items-center gap-2">
-                                    <a href="{{ route('Purchase-Order.show', $row->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="View"
-                                        class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye"></i></a>
+                                    
                                     @if ($row->status == 'Pending')
+                                        <a href="{{ route('Purchase-Order.show', $row->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"
+                                            class="btn btn-outline-success btn-md"><i class="bi bi-pencil-square"></i></a>
                                         <form action="{{ route('Purchase-Order.destroy', $row->id) }}" method="POST"
                                             class="m-0">
                                             @csrf
@@ -66,6 +67,14 @@
                                                     title="Delete"></i>
                                             </button>
                                         </form>
+                                    @endif
+                                    @if($row->status == 'Approved')
+                                        <a href="{{ route('Purchase-Order.showApproved', $row->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"
+                                            class="btn btn-outline-success btn-md"><i class="bi bi-pencil-square"></i></a>
+                                    @endif
+                                    @if($row->status == 'Delivered')
+                                        <a href="{{ route('Purchase-Order.showDelivered', $row->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="View"
+                                            class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye"></i></a>
                                     @endif
                                 </div>
                             </td>

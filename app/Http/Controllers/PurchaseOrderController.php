@@ -13,6 +13,7 @@ use App\Models\Stock;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Pest\ArchPresets\Strict;
 
 class PurchaseOrderController extends Controller
 {
@@ -31,9 +32,9 @@ class PurchaseOrderController extends Controller
      */
     public function create()
     {
-        $stoData = Stock::all();
+        $stoData = Stock::orderBy('item_name', 'asc')->get();
         $supData = Supplier::all();
-        $eqData = Equipment::all();
+        $eqData = Equipment::orderBy('eq_name', 'asc')->get();
         return view('functions/poItemsAdd', ['supData' => $supData, 'stoData' => $stoData, 'eqData' => $eqData]);
     }
 
@@ -47,7 +48,7 @@ class PurchaseOrderController extends Controller
             'qty.*' => "required|integer|min:1",
             'unitPrice.*' => "required|numeric|min:1",
             'size.*' => "required",
-            'unit.*' => "required",
+            'qtySet.*' => "required|integer|min:1",
             'typeSelect.*' => "required",
             'supp' => "required"
         ],  [
@@ -56,7 +57,10 @@ class PurchaseOrderController extends Controller
             'itemName.*.max' => '5 - 100 Characters only.',
             'qty.*.required' => 'This field is required.',
             'qty.*.min' => 'Quantity must be 1 or more.',
-            'qty.*.integer' => 'Number only.',
+            'qty.*.required' => 'This field is required.',
+            'qtySet.*.min' => 'Quantity must be 1 or more.',
+            'qtySet.*.integer' => 'Number only.',
+            'qtySet.*.required' => 'This field is required.',
             'unitPrice.*.required' => 'This field is required.',
             'unitPrice.*.numeric' => 'Number only.',
             'size.*.required' => 'This field is required.',
@@ -65,34 +69,32 @@ class PurchaseOrderController extends Controller
             'supp.required' => "This field is required."
         ]);
 
-
-        $qty = $request->qty;
-        $unitPrice = $request->unitPrice;
         $item = $request->itemName;
+        $qty = $request->qty;
+        $qtySet = $request->qtySet;
         $size = $request->size;
-        $unit = $request->unit;
+        $unitPrice = $request->unitPrice;
         $type = $request->typeSelect;
 
-        $newItems = array();
-        $newItemUnitPrice = array();
+        $newItem = array();     
         $newItemSize = array();
-        $newItemUnit = array();
+        $newItemUnitPrice = array();
         $newItemType = array();
-
-        $newEquipment = array();
-        $newEquipmentUnitPrice = array();
+        
+        $newEquipment = array();  
         $newEquipmentSize = array();
-        $newEquipmentUnit = array();
+        $newEquipmentUnitPrice = array();
         $newEquipmentType = array();
-        //dd(stockModel::where('item_name', '=', $item[0])->get());
+        
+        //dd($item, $qty, $qtySet, $size, $unitPrice, $type);
+        //dd($qty[0] * ($qtySet[0] = 0 ? 1 : $qtySet[0]));
         
         // Check if stocks exists in the stocks and equipment table
         for ($i = 0; $i < count($item); $i++) {
             if ($type[$i] == "Consumable") {
-                if (Stock::where('item_name', '=', $item[$i])->where('item_size', '=', $size[$i])->where('item_unit', '=', $unit[$i])->doesntExist()) {
-                    array_push($newItems, $item[$i]);
+                if (Stock::where('item_name', '=', $item[$i])->where('item_size', '=', $size[$i])->doesntExist()) {
+                    array_push($newItem, $item[$i]);
                     array_push($newItemSize, $size[$i]);
-                    array_push($newItemUnit, $unit[$i]);
                     array_push($newItemUnitPrice, $unitPrice[$i]);
                     array_push($newItemType, $type[$i]);
                 }
@@ -100,24 +102,25 @@ class PurchaseOrderController extends Controller
 
             if ($type[$i] == "Non-Consumable") {
 
-                if (Equipment::where('eq_name', '=', $item[$i])->where('eq_size', '=', $size[$i])->where('eq_unit', '=', $unit[$i])->doesntExist()) {
+                if (Equipment::where('eq_name', '=', $item[$i])->where('eq_size', '=', $size[$i])->doesntExist()) {
 
                     array_push($newEquipment, $item[$i]);
                     array_push($newEquipmentSize, $size[$i]);
-                    array_push($newEquipmentUnit, $unit[$i]);
                     array_push($newEquipmentUnitPrice, $unitPrice[$i]);
                     array_push($newEquipmentType, $type[$i]);
                 }
             }
         }
+        //dd($newItem, $newItemSize, $newItemUnitPrice, $newItemType);
+        //dd($newEquipment, $newEquipmentSize, $newEquipmentUnitPrice, $newEquipmentType);
+
         // Create record for new stocks and in stocks table
-        if (count($newItems)) {
-            for ($i = 0; $i < count($newItems); $i++) {
+        if (count($newItem)) {
+            for ($i = 0; $i < count($newItem); $i++) {
                 Stock::create([
-                    'item_name' => $newItems[$i],
+                    'item_name' => $newItem[$i],
                     'item_qty' => 0,
                     'item_size' => $newItemSize[$i],
-                    'item_unit' => $newItemUnit[$i],
                     'item_unit_price' => $newItemUnitPrice[$i],
                     'item_type' => $newItemType[$i]
                 ]);
@@ -131,7 +134,6 @@ class PurchaseOrderController extends Controller
                     'eq_type' => $newEquipmentType[$i],
                     'eq_available' => 0,
                     'eq_size' => $newEquipmentSize[$i],
-                    'eq_unit' => $newEquipmentUnit[$i],
                     'eq_unit_price' => $newEquipmentUnitPrice[$i],
                     'eq_in_use' => 0
                 ]);
@@ -153,12 +155,13 @@ class PurchaseOrderController extends Controller
         for ($i = 0; $i < count($item); $i++) {
 
             if ($type[$i] == "Consumable") {
-                $getStock = Stock::where('item_name', '=', $item[$i])->where('item_size', '=', $size[$i])->where('item_unit', '=', $unit[$i])->first();
+                $getStock = Stock::where('item_name', '=', $item[$i])->where('item_size', '=', $size[$i])->first();
                 PurchaseOrderItem::create([
                     'item' => $item[$i],
                     'qty' => $qty[$i],
+                    'qty_set' => $qtySet[$i],
+                    'qty_total' => $qty[$i] * ($qtySet[$i] == 0 ? 1 : $qtySet[$i]),
                     'size' => $size[$i],
-                    'unit' => $unit[$i],
                     'unit_price' => $unitPrice[$i],
                     'total_amount' => $qty[$i] * $unitPrice[$i],
                     'type' => $type[$i],
@@ -168,12 +171,13 @@ class PurchaseOrderController extends Controller
             }
 
             if ($type[$i] == "Non-Consumable") {
-                $getEquipment = Equipment::where('eq_name', '=', $item[$i])->where('eq_size', '=', $size[$i])->where('eq_unit', '=', $unit[$i])->first();
+                $getEquipment = Equipment::where('eq_name', '=', $item[$i])->where('eq_size', '=', $size[$i])->first();
                 PurchaseOrderItem::create([
                     'item' => $item[$i],
                     'qty' => $qty[$i],
                     'size' => $size[$i],
-                    'unit' => $unit[$i],
+                    'qty_set' => $qtySet[$i],
+                    'qty_total' => $qty[$i] * ($qtySet[$i] == 0 ? 1 : $qtySet[$i]),
                     'unit_price' => $unitPrice[$i],
                     'total_amount' => $qty[$i] * $unitPrice[$i],
                     'type' => $type[$i],
@@ -203,6 +207,113 @@ class PurchaseOrderController extends Controller
         $poItemData = PurchaseOrderItem::where('po_id', '=', $id)->get();
         $invData = Invoice::where('po_id', '=', $id)->first();
         return view('shows/purchaseOrderShow', ['poData' => $poData, 'poItemData' => $poItemData, 'invData' => $invData]);
+    }
+
+    public function showApprove(String $id)
+    {
+        $poData = PurchaseOrder::findOrFail($id);
+        $poItemData = PurchaseOrderItem::where('po_id', '=', $id)->get();
+        $invData = Invoice::where('po_id', '=', $id)->first();
+        return view('functions/purchaseOrderEditApprove', ['poData' => $poData, 'poItemData' => $poItemData, 'invData' => $invData]);
+    }
+
+    public function storeApprove(Request $request, String $id)
+    {
+        
+        $request->validate([
+            'inv_num' => 'required',
+            'inv_date' => 'required',
+            'qtyArrived.*' => 'required|integer|min:1|max:999',
+            'del_date' => 'required',
+            'total' => 'required|numeric|min:1|max:999999'
+        ], [
+            'inv_num.required' => 'This field is required.',
+            'inv_date.required' => 'This field is required.',
+            'del_date.required' => 'This field is required.',
+            'total.numeric' => 'Number Only.',
+            'total.min' => 'Total must be 1 or more',
+            'total.max' => '6 digits is the max.',
+            'qtyArrived.*.required' => 'This field is required.',
+            'qtyArrived.*.min' => 'Quantity must be 1 or more.',
+            'qtyArrived.*.max' => '4 digits is the max.'
+        ]);
+        
+
+
+        $items = PurchaseOrderItem::where('po_id', '=', $request->po_id)->get();
+        //$stock = stockModel::where()->first;
+
+        $getId = $request->stockId;
+        $getEqId = $request->eqId;
+        $getType = $request->type;
+
+        $getArrivedQty = $request->qtyArrived;
+        
+        Invoice::create([
+            'invoice_number' => $request->inv_num,
+            'invoice_date' => $request->inv_date,
+            'total' => $request->total,
+            'po_id' => $request->po_id
+        ]);
+        
+
+
+        for ($i=0; $i < count($getId); $i++) { 
+
+            if($getType[$i] == 'Consumable'){
+                $stock = Stock::where('id', '=', $getId[$i])->first();
+                Stock::findOrFail($stock->id)->update([
+                    'item_qty' => $stock->item_qty + $getArrivedQty[$i]
+                ]);
+                PurchaseOrderItem::where('stock_id', '=' , $getId[$i])->where('qty_arrived', '=' , null)->orderBy('id', "ASC")->take(1)->update([
+                    'qty_arrived' => $getArrivedQty[$i]
+                ]);
+            }
+                
+            if($getType[$i] == 'Non-Consumable'){
+                $eq = Equipment::where('id', '=', $getId[$i])->first();
+                Equipment::findOrFail($eq->id)->update([
+                    'eq_available' => $eq->eq_available + $getArrivedQty[$i]
+                ]);
+                PurchaseOrderItem::where('eq_id', '=' , $getId[$i])->where('qty_arrived', '=' , null)->orderBy('id', "ASC")->take(1)->update([
+                    'qty_arrived' => $getArrivedQty[$i]
+                ]);
+            }
+            
+            
+
+        }
+        
+        PurchaseOrder::findOrFail($request->po_id)->update([
+            'status' => "Delivered",
+            'delivered_date' => $request->del_date
+        ]);
+
+        $invId = Invoice::orderBy('id', 'desc')->take(1)->value('id');
+
+        Log::create([
+            'transaction' => 'Create',
+            'tx_desc' => 'Created Invoice | ID: ' . $invId,
+            'emp_id' => session('loginId')
+        ]);
+
+        Log::create([
+            'transaction' => 'Added',
+            'tx_desc' => 'Added Stock from Po | ID: ' . $request->po_id,
+            'emp_id' => session('loginId')
+        ]);
+
+
+        return redirect()->back();
+
+    }
+
+    public function showDelivered(String $id)
+    {
+        $poData = PurchaseOrder::findOrFail($id);
+        $poItemData = PurchaseOrderItem::where('po_id', '=', $id)->get();
+        $invData = Invoice::where('po_id', '=', $id)->first();
+        return view('shows/purchaseOrderShowDelivered', ['poData' => $poData, 'poItemData' => $poItemData, 'invData' => $invData]);
     }
 
     /**

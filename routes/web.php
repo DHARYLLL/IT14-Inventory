@@ -84,6 +84,10 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware(AuthCheck::class)->group(function(){
     //Resource
     Route::resource('Purchase-Order', PurchaseOrderController::class);
+    Route::get('Purchase-Order/{id}/Get', [PurchaseOrderController::class, 'showApprove'])->name('Purchase-Order.showApproved');
+    Route::put('Purchase-Order/{id}/Store', [PurchaseOrderController::class, 'storeApprove'])->name('Purchase-Order.storeApproved');
+    Route::get('Purchase-Order/{id}/Get', [PurchaseOrderController::class, 'showDelivered'])->name('Purchase-Order.showDelivered');
+
     Route::resource('Purchase-Order-Item', PurchaseOrderItem::class);
     Route::resource('Invoice', InvoiceController::class);
     Route::resource('Equipment', EquipmentController::class);

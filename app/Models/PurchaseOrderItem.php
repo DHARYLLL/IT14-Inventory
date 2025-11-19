@@ -22,8 +22,13 @@ class PurchaseOrderItem extends Model
         'eq_id'
     ];
 
-    public function purchaseOrder()
+    public function poToEq()
     {
-        return $this->belongsTo(PurchaseOrder::class, 'po_id');
+        return $this->belongsTo(Equipment::class, 'eq_id');
+    }
+
+    public function poToSto()
+    {
+        return $this->belongsTo(Stock::class, 'stock_id');
     }
 }
