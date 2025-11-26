@@ -19,11 +19,13 @@ return new class extends Migration
             $table->decimal('jo_total', 8,2);
             $table->string('jo_status', 15);
             $table->date('jo_start_date');
+            $table->time('jo_start_time');
+            $table->time('jo_end_time');
             
             $table->unsignedBigInteger('emp_id')->nullable();
             $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();
 
-            $table->unsignedBigInteger('jod_id');
+            $table->unsignedBigInteger('jod_id')->nullable();
             $table->foreign('jod_id')->references('id')->on('job_ord_details')->onUpdate('cascade')->onDelete('cascade');
 
             $table->unsignedBigInteger('svc_id')->nullable();

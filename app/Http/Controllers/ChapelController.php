@@ -44,92 +44,18 @@ class ChapelController extends Controller
                             Rule::unique('chapels', 'chap_name')
                             ->where('chap_room', $request->chapRoom)],
             'chapRoom' => 'required|max:10|unique:chapels,chap_room',
-            'chapPrice' => 'required|numeric|min:1|max:999999.99',
-            'maxCap' => 'required|integer|min:1|max:999',
-            'stockQty.*' => 'required|integer|min:1|max:999',
-            'eqName.*' => 'required',
-            'eqQty.*' => 'required|integer|min:1|max:999',
+            'chapPrice' => 'required|numeric|min:1|max:999999.99'
         ], [
             'chapName.required' => 'This field is required',
-            'chapName.unique' => 'Name & Room is already added.',
-            'chapRoom.unique' => 'Room is already added.',
+            'chapName.unique' => 'Name already added.',
+            'chapRoom.unique' => 'Room is already occupied.',
             'chapRoom.required' => 'This field is required',
-            'maxCap.required' => 'This field is required',
-            'maxCap.min' => 'Max capacity must be 1 or more.',
-            'maxCap.max' => 'Max 3 digit reached.',
+
             'chapPrice.required' => 'This field is required.',
             'chapPrice.numeric' => 'Number only.',
             'chapPrice.min' => 'Price must be 1 or more.',
             'chapPrice.max' => '6 digit price reached.',
-            'stockQty.*.required' => 'This field is required.',
-            'stockQty.*.min' => 'Item quantity must be 1 or more.',
-            'stockQty.*.max' => '6 digit item quantity reached.',
-            'eqQty.*.required' => 'This field is required.',
-            'eqQty.*.min' => 'Equipment quantity must be 1 or more.',
-            'eqQty.*.max' => '6 digit equipment quantity reached.'
         ]);
-
-
-        $eq = $request->equipment;
-        $eqQty = $request->eqQty;
-        $sto = $request->stock;
-        $stoQty = $request->stockQty;
-
-        if ($eq == null && $sto == null) {
-            return redirect()->back()->with('emptyEq', 'Must have atleast 1 equipment or item.')->withInput();
-        }
-
-        //get all equipment in request
-        $equipmentErrors = [];
-
-        if ($eq !== null) {
-            for ($i = 0; $i < count($eq); $i++) {
-                $equipmentId = $eq[$i];
-                $requestedQty = (int) $eqQty[$i];
-
-                $equipment = Equipment::find($equipmentId);
-
-                if (!$equipment) {
-                    $equipmentErrors["equipment.$i"] = "Equipment item not found.";
-                    continue;
-                }
-
-                if ($requestedQty > $equipment->eq_available) {
-                    $equipmentErrors["eqQty.$i"] = "Requested quantity ($requestedQty) exceeds available equipment ({$equipment->eq_available}).";
-                }
-            }
-
-            if (!empty($equipmentErrors)) {
-                return back()->withErrors($equipmentErrors)->withInput();
-            }
-        }
-
-
-        $StoErrors = [];
-
-        if ($sto != null) {
-            for ($i = 0; $i < count($sto); $i++) {
-                $stockId = $sto[$i];
-                $requestedQty = (int) $stoQty[$i];
-
-                // Get stock from DB
-                $stock = Stock::find($stockId); // replace with your actual Stock model
-
-                if (!$stock) {
-                    $StoErrors["stock.$i"] = "Stock item not found.";
-                    continue;
-                }
-
-                if ($requestedQty > $stock->item_qty) {
-                    $StoErrors["stockQty.$i"] = "Requested quantity ({$requestedQty}) exceeds available stock ({$stock->item_qty}).";
-                }
-            }
-
-            if (!empty($StoErrors)) {
-                return back()->withErrors($StoErrors)->withInput();
-            }
-
-        }
 
         Chapel::create([
             'chap_name' => $request->chapName,
@@ -139,28 +65,7 @@ class ChapelController extends Controller
             'max_cap' => $request->maxCap
         ]);
 
-
         $getChap = Chapel::orderBy('id', 'desc')->take(1)->value('id');
-
-        if ($eq != null) {
-            for ($i = 0; $i < count($eq); $i++) {
-                ChapEquipment::create([
-                    'chap_id' => $getChap,
-                    'eq_id' => $eq[$i],
-                    'eq_used' => $eqQty[$i]
-                ]);
-            }
-        }
-
-        if ($sto != null) {
-            for ($i = 0; $i < count($sto); $i++) {
-                ChapStock::create([
-                    'chap_id' => $getChap,
-                    'stock_id' => $sto[$i],    
-                    'stock_used' => $stoQty[$i]
-                ]);
-            }
-        }
 
         Log::create([
             'transaction' => 'Added',
@@ -168,7 +73,7 @@ class ChapelController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Chapel.index'));
+        return redirect()->back()->with('promt-s', 'Added Successfully.');
     }
 
     /**
@@ -184,7 +89,7 @@ class ChapelController extends Controller
      */
     public function edit(string $id)
     {
-        $chapData = Chapel::findOrFail($id)->get();
+        $chapData = Chapel::findOrFail($id);
         return view('functions/chapelEdit', ['chapData' => $chapData]);
     }
 
@@ -193,7 +98,45 @@ class ChapelController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'chapName' =>  ['required',
+                            'min:5',
+                            'max:50',
+                            Rule::unique('chapels', 'chap_name')
+                            ->where('chap_room', $request->chapRoom)
+            ],
+            'chapRoom' => "required|min:1|max:10|unique:chapels,chap_room",
+            'chapPrice' => "required|numeric|min:1|max:999999.99"
+        ],  [
+            'chapName.required' => 'This field is required.',
+            'chapName.min' => '5 - 50 Characters only.',
+            'chapName.max' => '5 - 50 Characters only.',
+            'chapName.unique' => 'Name already added.',
+
+            'chapRoom.required' => 'This field is required.',
+            'chapRoom.min' => '1 - 10 Characters only.',
+            'chapRoom.max' => '1 - 10 Characters only.',
+            'chapRoom.unique' => 'Room already occupied.',
+
+            'chapPrice.required' => 'This field is required.',
+            'chapPrice.numeric' => 'Number only.',
+            'chapPrice.min' => 'Amount must be 1 or more.',
+            'chapPrice.max' => '6 digits limit reached.',
+        ]);
+
+        Chapel::findOrFail($id)->update([
+            'chap_name' => $request->chapName,
+            'chap_room' => $request->chapRoom,
+            'chap_price' => $request->chapPrice,
+        ]);
+
+        Log::create([
+            'transaction' => 'Updated',
+            'tx_desc' => 'Update Chapel | ID: ' . $id,
+            'emp_id' => session('loginId')
+        ]);
+
+        return redirect()->back()->with('promt-s', 'Updated Sucessfuly');
     }
 
     /**

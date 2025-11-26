@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('invoice_number', 50);
-            $table->date('invoice_date');
+            $table->string('invoice_number', 50)->nullable();
+            $table->date('invoice_date')->nullable();
             $table->decimal('total', 8,2);
 
             $table->unsignedBigInteger('po_id')->nullable();

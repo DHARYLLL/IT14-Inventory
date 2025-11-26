@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="{{ asset('CSS/style.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    
     <link rel="stylesheet" href="{{ asset('CSS/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/purchaseOrder.css') }}">
 
@@ -67,6 +69,14 @@
                     </li>
 
                     <li class="nav-list">
+                        <a href="{{ route('Stock-Out.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Stock-Out.*') ? 'active' : '' }}">
+                            <i class="bi bi-gear"></i>
+                            <span>Stock Out</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-list">
                         <a href="{{ route('Package.index') }}"
                             class="nav-link-custom {{ request()->routeIs('Package.*') ? 'active' : '' }}">
                             <i class="bi bi-receipt"></i>
@@ -79,6 +89,22 @@
                             class="nav-link-custom {{ request()->routeIs('Chapel.*') ? 'active' : '' }}">
                             <i class="bi bi-receipt"></i>
                             <span>Chapel</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-list">
+                        <a href="{{ route('Vehicle.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Vehicle.*') ? 'active' : '' }}">
+                            <i class="bi bi-receipt"></i>
+                            <span>Vehicle</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-list">
+                        <a href="{{ route('Embalmer.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Embalmer.*') ? 'active' : '' }}">
+                            <i class="bi bi-receipt"></i>
+                            <span>Embalmer</span>
                         </a>
                     </li>
 
@@ -99,18 +125,10 @@
                     </li>
 
                     <li class="nav-list">
-                        <a href="{{ route('Service-Request.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Service-Request.*') ? 'active' : '' }}">
+                        <a href="{{ route('Job-Order.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Job-Order.*') ? 'active' : '' }}">
                             <i class="bi bi-receipt"></i>
-                            <span>Service Request</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-list">
-                        <a href="{{ route('Receipt.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Receipt.*') ? 'active' : '' }}">
-                            <i class="bi bi-receipt"></i>
-                            <span>Receipts</span>
+                            <span>Job Order</span>
                         </a>
                     </li>
 

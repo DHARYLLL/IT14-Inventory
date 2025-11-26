@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('eq_id')->references('id')->on('equipments')->onUpdate('cascade')->nullOnDelete();
 
             $table->smallInteger('eq_dpl');
+            $table->decimal('eq_add_fee', 8,2);
 
             $table->timestamps();
         });

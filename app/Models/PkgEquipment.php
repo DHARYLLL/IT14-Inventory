@@ -21,4 +21,8 @@ class PkgEquipment extends Model
     public function pkgEqToEq() {
         return $this->belongsTo(Equipment::class, 'eq_id');
     }
+
+    public function pkgEqToTempEq() {
+        return $this->hasOne(TempEquipment::class, 'pkg_eq_id');
+    }
 }

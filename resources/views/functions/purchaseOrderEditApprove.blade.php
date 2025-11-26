@@ -89,7 +89,7 @@
                                     <div class="col-md-12">
                                         <label class="form-label fw-semibold text-secondary">Total</label>
                                         <input type="text" class="form-control modern-input" name="total"
-                                            value="{{ old('total') }}">
+                                            value="{{ old('total' , $poItemData->sum('total_amount')) }}">
                                         <input type="hidden" name="po_id" value="{{ $poData->id }}">
                                         @error('total')
                                             <small class="text-danger">{{ $message }}</small>
@@ -97,7 +97,7 @@
                                     </div>
                                     {{-- Submit --}}
                                     <div class="col-12 text-center mt-4">
-                                        <button class="btn btn-green w-50" type="submit">
+                                        <button class="cust-btn cust-btn-primary w-100" type="submit">
                                             <i class="bi bi-truck"></i> Delivered
                                         </button>
                                     </div>
@@ -184,7 +184,8 @@
                                             <td>₱{{ number_format($row->total_amount, 2) }}</td>
                                             @if ($poData->status == 'Approved')
                                                 <td>
-                                                    <input type="number" class="form-control qty-input" name="qtyArrived[]" placeholder="Qty Arrived" value="{{ old('qtyArrived.' . $loop->index) }}">
+                                                    <input type="number" class="form-control qty-input" name="qtyArrived[]" placeholder="Qty Arrived" 
+                                                        value="{{ old('qtyArrived.' . $loop->index) }}">
                                                     @error('qtyArrived.' . $loop->index)
                                                         <small class="text-danger">{{ $message }}</small>
                                                     @enderror

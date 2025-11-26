@@ -13,9 +13,27 @@ class jobOrder extends Model
         'jo_dp',
         'jo_total',
         'jo_status',
+        'jo_start_date',
+        'jo_start_time',
+        'jo_end_time',
         'emp_id',
         'jod_id',
         'svc_id'
-
     ];
+
+    public function joToEmp(){
+        return $this->belongsTo(Employee::class, 'emp_id');
+    }
+
+    public function joToJod(){
+        return $this->belongsTo(jobOrderDetails::class, 'jod_id');
+    }
+
+    public function joToSvcReq(){
+        return $this->belongsTo(ServiceRequest::class, 'svc_id');
+    }
+
+    public function joToBurrAsst(){
+        return $this->hasOne(BurialAssistance::class, 'jo_id');
+    }
 }

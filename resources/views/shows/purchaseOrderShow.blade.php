@@ -5,16 +5,15 @@
 @section('content')
 
 @section('head', 'Purchase Order')
-@section('name', 'Staff')
 <link rel="stylesheet" href="{{ asset('CSS/POshow.css') }}">
 
 
-<div class="d-flex align-items-center justify-content-end cust-h-heading">
-    <a href="{{ route('Purchase-Order.index') }}" class="btn btn-outline-success d-flex align-items-center gap-2"><i
-            class="bi bi-arrow-left"></i>
-        <span>Back</span>
-    </a>
-</div>
+    <div class="d-flex align-items-center justify-content-end cust-h-heading">
+        <a href="{{ route('Purchase-Order.index') }}" class="btn btn-outline-success d-flex align-items-center gap-2"><i
+                class="bi bi-arrow-left"></i>
+            <span>Back</span>
+        </a>
+    </div>
 
     <div class="cust-h">
         
@@ -55,6 +54,15 @@
                     <div class="row">
                         <div class="col-md-12">
                             @if ($poData->status == 'Pending')
+
+                                <form action="{{ route('Purchase-Order.export', $poData->id) }}" method="post">
+                                    @csrf
+                                    
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <button class="btn btn-approve-custom w-75" type="submit">Export</button>
+                                    </div>
+                                </form>
+
                                 <form action="{{ route('Purchase-Order.update', $poData->id) }}" method="post"
                                     class="{{ $poData->status }}">
                                     @csrf
@@ -64,75 +72,6 @@
                                         <button class="btn btn-approve-custom w-75" type="submit">Approve</button>
                                     </div>
                                 </form>
-                            @endif
-
-                            @if($poData->status == 'Approved')
-                                <div class="row g-3">
-                                    {{-- Invoice Number --}}
-                                    <div class="col-md-12">
-                                        <label class="form-label fw-semibold text-secondary">Invoice Number</label>
-                                        <input type="text" class="form-control modern-input" name="inv_num1" id="inv_num1"
-                                            value="{{ old('inv_num') }}">
-                                        @error('inv_num')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                    {{-- Invoice Date --}}
-                                    <div class="col-md-12">
-                                        <label class="form-label fw-semibold text-secondary">Invoice Date</label>
-                                        <input type="date" class="form-control modern-input" name="inv_date1" id="inv_date1"
-                                            value="{{ old('inv_date1') }}">
-                                        @error('inv_date1')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                    {{-- Delivery Date --}}
-                                    <div class="col-md-12">
-                                        <label class="form-label fw-semibold text-secondary">Delivery Date</label>
-                                        <input type="date" class="form-control modern-input" name="del_date1" id="del_date1"
-                                            value="{{ old('del_date1') }}">
-                                        @error('del_date1')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                    {{-- Total --}}
-                                    <div class="col-md-12">
-                                        <label class="form-label fw-semibold text-secondary">Total</label>
-                                        <input type="text" class="form-control modern-input" name="total1" id="total1"
-                                            value="{{ old('total1') }}">
-                                        <input type="hidden" name="po_id" value="{{ $poData->id }}">
-                                        @error('total1')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                    {{-- Submit --}}
-                                    <div class="col-12 text-center mt-4">
-                                        <button class="btn btn-green w-50" type="submit">
-                                            <i class="bi bi-truck"></i> Delivered
-                                        </button>
-                                    </div>
-                                </div>
-                            @endif
-
-                            @if ($invData)
-                                <div class="d-flex flex-column gap-2">
-                                    <div class="d-flex align-items-center">
-                                        <label class="col-4">Invoice number</label>
-                                        <span class="mx-2">:</span>
-                                        <input type="text" class="form-control col" value="{{ $invData->invoice_number }}" readonly>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <label class="col-4">Invoice Date</label>
-                                        <span class="mx-2">:</span>
-                                        <input type="text" class="form-control col" value="{{ $invData->invoice_date }}"
-                                            readonly>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <label class="col-4">Total</label>
-                                        <span class="mx-2">:</span>
-                                        <input type="text" class="form-control col" value="₱{{ $invData->total }}" readonly>
-                                    </div>
-                                </div>
                             @endif
                         </div>
                     </div>

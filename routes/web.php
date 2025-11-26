@@ -3,11 +3,14 @@
 use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BurialAssistanceController;
 use App\Http\Controllers\ChapelController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmbalmerController;
 use App\Http\Controllers\employeeController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\JobOrderController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PackageController;
@@ -20,8 +23,11 @@ use App\Http\Controllers\receiptController;
 use App\Http\Controllers\ServiceRequestController;
 use App\Http\Controllers\setStoEqToPkgController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\VehicleController;
 use App\Http\Middleware\AuthCheck;
+use App\Models\embalming;
 use App\Models\Invoice;
 use App\Models\Package;
 use App\Models\PurchaseOrderItem;
@@ -83,10 +89,12 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(AuthCheck::class)->group(function(){
     //Resource
+    
     Route::resource('Purchase-Order', PurchaseOrderController::class);
     Route::get('Purchase-Order/{id}/Get', [PurchaseOrderController::class, 'showApprove'])->name('Purchase-Order.showApproved');
     Route::put('Purchase-Order/{id}/Store', [PurchaseOrderController::class, 'storeApprove'])->name('Purchase-Order.storeApproved');
-    Route::get('Purchase-Order/{id}/Get', [PurchaseOrderController::class, 'showDelivered'])->name('Purchase-Order.showDelivered');
+    Route::get('Purchase-Order/{id}/Show-Delivered', [PurchaseOrderController::class, 'showDelivered'])->name('Purchase-Order.showDelivered');
+    Route::post('Purchase-Order/{id}/Export', [PurchaseOrderController::class, 'exportPo'])->name('Purchase-Order.export');
 
     Route::resource('Purchase-Order-Item', PurchaseOrderItem::class);
     Route::resource('Invoice', InvoiceController::class);
@@ -98,10 +106,30 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::resource('Stock', StockController::class);
     Route::resource('Log', LogController::class);
     Route::resource('Chapel', ChapelController::class);
-    Route::resource('Receipt', receiptController::class);
+    //Route::resource('Receipt', receiptController::class);
     Route::resource('Pkg-Stock', pkgStockController::class);
     Route::resource('Pkg-Equipment', pkgEquipmentController::class);
     Route::resource('Employee', employeeController::class);
+
+    
+    Route::resource('Vehicle', VehicleController::class);
+    Route::resource('Embalmer', EmbalmerController::class);
+    Route::get('Embalmer/{id}/Remove-Item', [EmbalmerController::class, 'addRemoveStoEq'])->name('Embalmer.addRemItem');
+    Route::post('Embalmer/store/Add-Item', [EmbalmerController::class, 'addSto'])->name('Embalmer.addItem');
+    Route::post('Embalmer/store/Add-Equipment', [EmbalmerController::class, 'addEq'])->name('Embalmer.addEq');
+    Route::delete('Embalmer/{id}}/Remove-Stock', [EmbalmerController::class, 'removeSto'])->name('Embalmer.removeItem');
+    Route::delete('Embalmer/{id}/Remove-Equipment', [EmbalmerController::class, 'removeEq'])->name('Embalmer.removeEq');
+
+    
+    Route::resource('Job-Order', JobOrderController::class);
+    Route::get('Job-Order/{id}/Show-Deploy-Items', [JobOrderController::class, 'showDeployItems'])->name('Job-Order.showDeploy');
+    Route::get('Job-Order/{id}/Show-Return-Items', [JobOrderController::class, 'showReturnItems'])->name('Job-Order.showReturn');
+    Route::put('Job-Order/{id}/Deploy', [JobOrderController::class, 'deployItems'])->name('Job-Order.deploy');
+    Route::put('Job-Order/{id}/Return', [JobOrderController::class, 'returnItems'])->name('Job-Order.return');
+    Route::get('Job-Order/{id}/Apply-Burial-Assistance', [JobOrderController::class, 'applyBurAsst'])->name('Job-Order.apply');
+
+    Route::resource('Burial-Assistance', BurialAssistanceController::class);
+    Route::resource('Stock-Out', StockOutController::class);
 
     //new
     Route::resource('Set-Item-Equipment', setStoEqToPkgController::class);

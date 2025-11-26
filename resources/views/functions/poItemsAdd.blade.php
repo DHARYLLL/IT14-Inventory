@@ -137,7 +137,7 @@
                                 <div class="col-md-2">
                                     <label class="form-label fw-semibold text-secondary">Size</label>
                                     <input type="text" name="size[]" value="{{ $oldsize[$i] ?? '' }}"
-                                        class="form-control shadow-sm" {{ $oldsize ? 'readonly' : '' }}>
+                                        class="form-control shadow-sm">
                                     @error("size.$i")
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror

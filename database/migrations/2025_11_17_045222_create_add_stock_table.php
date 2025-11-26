@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('stock_id')->references('id')->on('stocks')->onUpdate('cascade')->nullOnDelete();
 
             $table->smallInteger('stock_dpl');
+            $table->decimal('stock_add_fee', 8,2);
             
             $table->timestamps();
         });

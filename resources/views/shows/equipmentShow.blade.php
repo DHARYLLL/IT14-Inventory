@@ -3,7 +3,6 @@
 
 @section('content')
 @section('head', 'Equipment View')
-@section('name', 'Staff')
 
 <div class="d-flex align-items-center justify-content-end m-2">
     <a href="{{ route('Equipment.index') }}" class="btn btn-green d-flex align-items-center gap-2 px-3">

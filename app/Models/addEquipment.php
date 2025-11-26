@@ -8,8 +8,13 @@ class addEquipment extends Model
 {
     protected $table = 'add_equipment';
     protected $fillable = [
-        'pkg_id',
+        'jod_id',
         'eq_id',
-        'eq_dpl'
+        'eq_dpl',
+        'eq_add_fee'
     ];
+
+    public function addEqToEq(){
+        return $this->belongsTo(Equipment::class, 'eq_id');
+    }
 }

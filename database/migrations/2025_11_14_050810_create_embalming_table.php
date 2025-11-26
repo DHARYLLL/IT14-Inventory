@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('embalming', function (Blueprint $table) {
             $table->id();
-            $table->string('embalmer_name', 50)->unique();
+            $table->string('embalmer_name', 50);
             $table->decimal('prep_price', 8,2);
             $table->timestamps();
+
+            $table->unique('embalmer_name');
         });
     }
 

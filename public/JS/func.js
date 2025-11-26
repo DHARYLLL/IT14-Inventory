@@ -155,8 +155,6 @@ function setStock() {
 
 }
 
-
-
 // get equipment
 
 function setEquipment() {
@@ -289,27 +287,41 @@ function checkInputEq() {
         return;
     }
 
-    const selectedOption = get.options[get.selectedIndex];
-    const nameData = selectedOption.text.trim();
-    const idData = selectedOption.value.split(",")[0];
+    var idData = get.options[get.selectedIndex].value;
+    let forId = idData.slice(0, idData.indexOf(","));
+    let forName = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
+    let forSize = idData.slice(idData.indexOf(":") + 1, idData.indexOf(";"));
+    let forAvail = idData.slice(idData.indexOf(";") + 1);
 
     const wrapper = document.createElement('div');
     wrapper.classList.add('row', 'g-2', 'align-items-start', 'mb-2', 'added-item');
 
     wrapper.innerHTML = `
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label class="form-label fw-semibold text-secondary">Equipment</label>
-            <input type="text" class="form-control" name="eqName[]" value="${nameData}" readonly>
-            <input type="text" name="equipment[]" value="${idData}" hidden>
+            <input type="text" class="form-control" name="eqName[]" value="${forName}" readonly>
+            <input type="text" name="equipment[]" value="${forId}" hidden>
         </div>
-        <div class="col-md-3">
-            <label class="form-label fw-semibold text-secondary">Qty</label>
-            <input type="number" class="form-control" name="eqQty[]" placeholder="Qty">
+        <div class="col-md-4">
+            <label class="form-label fw-semibold text-secondary">Size</label>
+            <input type="text" class="form-control" name="eqSize[]" value="${forSize}" readonly>     
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
+            <label class="form-label fw-semibold text-secondary">In Stock</label>
+            <input type="text" class="form-control" name="eqAvail[]"  value="${forAvail}" readonly>
+        </div>
+        <div class="col-md-5">
+            <label class="form-label fw-semibold text-secondary">Qty.</label>
+            <input type="number" class="form-control" name="eqQty[]">     
+        </div>
+        <div class="col-md-5">
+            <label class="form-label fw-semibold text-secondary">Qty. per Set/Unit</label>
+            <input type="number" class="form-control" name="eqQtySet[]">     
+        </div>
+        <div class="col-md-2">
             <label class="form-label fw-semibold text-secondary">Remove</label>
             <button type="button" class="btn btn-outline-danger w-100 remove-eq">
-                <i class="bi bi-x-circle"></i> Remove
+                <i class="bi bi-x-circle"></i>
             </button>
         </div>
     `;
@@ -353,28 +365,41 @@ function checkInputSto() {
         return;
     }
 
-    const selectedOption = get.options[get.selectedIndex];
-    const nameData = selectedOption.text.trim();
-    const idData = selectedOption.value.split(",")[0];
+    
+    var idData = get.options[get.selectedIndex].value;
+    let forId = idData.slice(0, idData.indexOf(","));
+    let forName = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
+    let forSize = idData.slice(idData.indexOf(":") + 1, idData.indexOf(";"));
+    let forAvail = idData.slice(idData.indexOf(";") + 1);
 
     const wrapper = document.createElement('div');
     wrapper.classList.add('row', 'g-2', 'align-items-start', 'mb-2', 'added-item');
 
     wrapper.innerHTML = `
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label class="form-label fw-semibold text-secondary">Stock</label>
-            <input type="text" class="form-control" name="itemName[]" value="${nameData}" readonly>
-            <input type="text" name="stock[]" value="${idData}" hidden>
+            <input type="text" class="form-control" name="itemName[]" value="${forName}" readonly>
+            <input type="text" name="stock[]" value="${forId}" hidden>
         </div>
-        <div class="col-md-3">
-            <label class="form-label fw-semibold text-secondary">Stock Qty</label>
-            <input type="number" class="form-control" name="stockQty[]" placeholder="Stock Qty">
+        <div class="col-md-4">
+            <label class="form-label fw-semibold text-secondary">Size</label>
+            <input type="text" class="form-control" name="stoSize[]" value="${forSize}" readonly>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
+            <label class="form-label fw-semibold text-secondary">In Stock</label>
+            <input type="text" class="form-control" name="stoAvail[]" value="${forAvail}" readonly>
+        </div>
+        <div class="col-md-5">
+            <label class="form-label fw-semibold text-secondary">Qty.</label>
+            <input type="number" class="form-control" name="stockQty[]" value="{{ $oldQtys[$i] ?? '' }}">
+        </div>
+        <div class="col-md-5">
+            <label class="form-label fw-semibold text-secondary">Qty. per Set/Unit</label>
+            <input type="number" class="form-control" name="stockQtySet[]" value="{{ $oldQtySet[$i] ?? '' }}">
+        </div>
+        <div class="col-md-2">
             <label class="form-label fw-semibold text-secondary">Remove</label>
-            <button type="button" class="btn btn-outline-danger w-100 remove-sto">
-                <i class="bi bi-x-circle"></i> Remove
-            </button>
+            <button type="button" class="btn btn-outline-danger w-100 remove-sto"><i class="bi bi-x-circle"></i> </button>
         </div>
     `;
 

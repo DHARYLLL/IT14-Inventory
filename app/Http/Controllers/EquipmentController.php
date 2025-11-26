@@ -68,17 +68,42 @@ class EquipmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Equipment $equipment)
-    {
-        //
+    public function edit(string $id)
+    {   
+        $eqData = Equipment::findOrFail($id);
+        return view('functions/equipmentEdit', ['eqData' => $eqData]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Equipment $equipment)
+    public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'eqName' => "required|min:5|max:100",
+            'size' => "required|min:1|max:20"
+        ],  [
+            'eqName.required' => 'This field is required.',
+            'eqName.min' => '5 - 100 Characters only.',
+            'eqName.max' => '5 - 100 Characters only.',
+
+            'size.required' => 'This field is required.',
+            'size.min' => '1 - 20 Characters only.',
+            'size.max' => '1 - 20 Characters only.',
+        ]);
+
+        Equipment::findOrFail($id)->update([
+            'eq_name' => $request->eqName,
+            'eq_size' => $request->size
+        ]);
+
+        Log::create([
+            'transaction' => 'Updated',
+            'tx_desc' => 'Update Equipment | ID: ' . $id,
+            'emp_id' => session('loginId')
+        ]);
+        return redirect()->back()->with('promt-s', 'Updated Successfully.');
+
     }
 
     /**

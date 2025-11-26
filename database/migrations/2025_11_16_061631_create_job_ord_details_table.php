@@ -17,8 +17,7 @@ return new class extends Migration
             $table->date('dec_born_date');
             $table->date('dec_died_date');
             $table->string('dec_cause_of_death', 100);
-            //$table->date('jod_startDate')->nullable();
-            //$table->date('jod_endDate')->nullable();
+            $table->string('jod_days_of_wake', 3);
             $table->string('jod_wakeLoc', 150);
             $table->string('jod_burialLoc', 150);
             $table->string('jod_eq_stat', 15);

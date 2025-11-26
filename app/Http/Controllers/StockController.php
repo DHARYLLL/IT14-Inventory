@@ -232,21 +232,20 @@ class StockController extends Controller
     {
         $request->validate([
             'itemName' => "required|min:5|max:100",
-            'unitPrice' => "required|numeric|min:1",
-            'sizeWeight.*' => "required"
+            'size' => "required|min:1|max:20"
         ],  [
-            'itemName.*.required' => 'This field is required.',
-            'itemName.*.min' => '5 - 100 Characters only.',
-            'itemName.*.max' => '5 - 100 Characters only.',
-            'unitPrice.*.required' => 'This field is required.',
-            'unitPrice.*.numeric' => 'Number only.',
-            'sizeWeigth.*.required' => 'This field is required.'
+            'itemName.required' => 'This field is required.',
+            'itemName.min' => '5 - 100 Characters only.',
+            'itemName.max' => '5 - 100 Characters only.',
+
+            'size.required' => 'This field is required.',
+            'size.min' => '1 - 20 Characters only.',
+            'size.max' => '1 - 20 Characters only.',
         ]);
 
         Stock::findOrFail($id)->update([
             'item_name' => $request->itemName,
-            'size_weight' => $request->sizeWeight,
-            'item_unit_price' => $request->unitPrice
+            'item_size' => $request->size,
         ]);
 
         Log::create([

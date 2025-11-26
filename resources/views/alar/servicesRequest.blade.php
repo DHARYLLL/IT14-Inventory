@@ -9,7 +9,7 @@
     @session('promt')
         <h2 class="fw-semibold bg-danger-subtle">{{ $value }}</h2>
     @endsession
-    <div class="input-group" style="max-width: 600px; border-radius: 10px; overflow: hidden;">
+    <div class="input-group cust-searchbar">
         <input type="text" id="searchInput" class="form-control" placeholder="Search Service Request"
             style="border-radius: 0; border: none;">
         <button class="btn" id="clearSearch"
@@ -62,7 +62,7 @@
                         <td class="text-center align-middle">
                             <div class="d-flex justify-content-center align-items-center gap-2">
                                 <a href="{{ route('Service-Request.show', $row->id) }}"
-                                    class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="View">
                                     <i class="fi fi-rr-eye"></i>
                                 </a>

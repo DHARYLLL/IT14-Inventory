@@ -11,8 +11,10 @@ use App\Models\Log;
 use App\Models\PurchaseOrderItem;
 use App\Models\Stock;
 use App\Models\Supplier;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Pest\ArchPresets\Strict;
 
 class PurchaseOrderController extends Controller
@@ -221,15 +223,29 @@ class PurchaseOrderController extends Controller
     {
         
         $request->validate([
-            'inv_num' => 'required',
-            'inv_date' => 'required',
+            'inv_num' => 'required|integer',
+            'inv_date' => [
+                'required',
+                Rule::date()->beforeOrEqual(today())
+            ],
             'qtyArrived.*' => 'required|integer|min:1|max:999',
-            'del_date' => 'required',
+            'del_date' => [
+                'required',
+                Rule::date()->afterOrEqual('inv_date'),
+                Rule::date()->beforeOrEqual(today()),
+            ],
             'total' => 'required|numeric|min:1|max:999999'
         ], [
             'inv_num.required' => 'This field is required.',
+            'inv_num.integer' => 'Number only.',
+
             'inv_date.required' => 'This field is required.',
+            'inv_date.before_or_equal' => 'Date must be before or equal today.',
+
             'del_date.required' => 'This field is required.',
+            'del_date.after_or_equal' => 'Date must be equal or after invoice date.',
+            'del_date.before_or_equal' => 'Date must be before or equal today.',
+
             'total.numeric' => 'Number Only.',
             'total.min' => 'Total must be 1 or more',
             'total.max' => '6 digits is the max.',
@@ -237,8 +253,6 @@ class PurchaseOrderController extends Controller
             'qtyArrived.*.min' => 'Quantity must be 1 or more.',
             'qtyArrived.*.max' => '4 digits is the max.'
         ]);
-        
-
 
         $items = PurchaseOrderItem::where('po_id', '=', $request->po_id)->get();
         //$stock = stockModel::where()->first;
@@ -304,7 +318,7 @@ class PurchaseOrderController extends Controller
         ]);
 
 
-        return redirect()->back();
+        return redirect(route('Purchase-Order.showDelivered', $request->po_id));
 
     }
 
@@ -341,7 +355,20 @@ class PurchaseOrderController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back();
+        return redirect(route('Purchase-Order.showApproved', $id));
+    }
+
+    public function exportPo(String $id)
+    {
+        //dd('hello');
+        $poItemData = PurchaseOrderItem::where('po_id', $id)->get();
+
+        //return view('pdfTemp/purchaseOrderTemplate', ['poItemData' => $poItemData]);
+        $data = ['poItemData' => $poItemData];
+        
+        $pdf = Pdf::loadView('pdfTemp.purchaseOrderTemplate', $data);
+        return $pdf->download(date('d-m-Y').'-purchase-order.pdf');
+        
     }
 
     /**
@@ -357,4 +384,5 @@ class PurchaseOrderController extends Controller
         ]);
         return redirect()->back()->with('success', 'Deleted Successfully');
     }
+
 }

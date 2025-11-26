@@ -12,8 +12,7 @@ class jobOrderDetails extends Model
         'dec_born_date',
         'dec_died_date',
         'dec_cause_of_death',
-        'jod_startDate',
-        'jod_endDate',
+        'jod_days_of_wake',
         'jod_wakeLoc',
         'jod_burialLoc',
         'jod_eq_stat',
@@ -22,4 +21,12 @@ class jobOrderDetails extends Model
         'pkg_id',
         'chap_id'
     ];
+
+    public function jodToPkg(){
+        return $this->belongsTo(Package::class, 'pkg_id');
+    }
+
+    public function jodToChap(){
+        return $this->belongsTo(Chapel::class, 'chap_id');
+    }
 }

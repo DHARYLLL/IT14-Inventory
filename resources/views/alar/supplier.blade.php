@@ -3,10 +3,16 @@
 
 @section('content')
     @section('head', 'Supplier')
-    @section('name', 'Staff')
 
-    <div class="d-flex align-items-center justify-content-end p-0 cust-h-heading">
-        <button class="btn btn-green d-flex align-items-center gap-2" type="button" data-bs-toggle="modal"
+    <div class="d-flex align-items-center justify-content-between p-0 cust-h-heading">
+
+        <div class="input-group cust-searchbar">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search Service Request"
+                style="border-radius: 0; border: none;">
+            <button class="btn" id="clearSearch"
+                style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
+        </div>
+        <button class="cust-btn cust-btn-primary" type="button" data-bs-toggle="modal"
             data-bs-target="#NewSupplierModal"><i class="bi bi-plus-lg"></i><span>Add Supplier</span>
         </button>
     </div>
@@ -24,7 +30,7 @@
                     <th class="fw-semibold text-center">Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tableBody">
                 @if ($suppliers->isEmpty())
                     <tr>
                         <td colspan="6" class="text-center text-secondary py-3">No New Suppliers.</td>
@@ -40,7 +46,7 @@
                             <td>{{ $supplier->company_address }}</td>
                             <td class="align-middle">
                                 <div class="d-flex justify-content-center align-items-center gap-2">
-                                    <button type="button" class="btn btn-outline-success btn-md" data-bs-toggle="modal"
+                                    <button type="button" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="modal"
                                         data-bs-target="#EditSupplierModal{{ $supplier->id }}">
                                         <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top"
                                             title="Edit"></i>
@@ -48,7 +54,7 @@
                                     <form action="{{ route('supplier.destroy', $supplier->id) }}" method="POST" class="m-0">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger btn-md">
+                                        <button type="submit" class="cust-btn cust-btn-danger-secondary  btn-md">
                                             <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top"
                                                 title="Delete"></i>
                                         </button>

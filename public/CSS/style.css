@@ -433,6 +433,13 @@ body {
     border-radius: 8px;
     border: 1px solid #ced4da;
     transition: box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.form-select:hover,
+.form-control:hover {
+    box-shadow: 0 0 0 3px rgba(96, 191, 79, 0.2);
+    border-color: #60BF4F;
 }
 
 .form-control:focus,
@@ -479,6 +486,28 @@ body {
 .cust-h {
     height: 90%;
 }
+
+.cust-h-form {
+    height: 90%;
+}
+
+.cust-h-submit {
+    height: 10%;
+}
+
+.cust-full-h {
+    height: 100%;
+    overflow: auto;
+}
+
+.cust-form-bg {
+    display: block;
+    background-color: white;
+    height:90%;
+    width: 100%;
+    border-radius: 20px;
+}
+
 .cust-sticky {
     position: sticky;
     top: 0;
@@ -519,6 +548,8 @@ body {
     background-color: white;
     border: 1px #60BF4F solid;
     color: #60BF4F;
+    box-shadow: 0 0 0 3px rgba(96, 191, 79, 0.2);
+    border-color: #60BF4F;
 }
 
 .cust-btn-secondary {
@@ -533,6 +564,8 @@ body {
 .cust-btn-secondary:hover {
     background-color: #60BF4F;
     color: white;
+    box-shadow: 0 0 0 3px rgba(96, 191, 79, 0.2);
+    border-color: #60BF4F;
 }
 
 .cust-btn-danger-primary {
@@ -543,6 +576,13 @@ body {
     color: white;
     width: fit-content;
     height: fit-content;
+}
+
+.cust-btn-danger-primary:hover {
+    background-color: white;
+    color: #bf4f4f;
+    box-shadow: 0 0 0 3px #ff9b9b;
+    border-color: #bf4f4f;
 }
 
 .cust-btn-danger-secondary {
@@ -557,12 +597,19 @@ body {
 .cust-btn-danger-secondary:hover {
     background-color: #bf4f4f;
     color: white;
+    box-shadow: 0 0 0 3px #bf4f4f;
+    border-color: #bf4f4f;
 }
 
 .cust-searchbar {
     max-width: 40%;
     border-radius: 10px; 
     overflow: hidden;
+}
+
+.cust-searchbar:hover {
+    box-shadow: 0 0 0 3px rgba(96, 191, 79, 0.2);
+    border-color: #60BF4F;
 }
 
 .sb-border {
@@ -591,5 +638,17 @@ body {
 
 .h-80 {
     height: 80%;
+}
+
+.cust-time {
+    border: .5px #ced4da solid;
+    cursor: pointer;
+    border-radius: 10px;
+    height: 3rem;
+    width: 100%;
+}
+.cust-time:hover {
+    box-shadow: 0 0 0 3px rgba(96, 191, 79, 0.2);
+    border-color: #60BF4F;
 }
 /* Si gar nag butang ani hahahaha (end)*/

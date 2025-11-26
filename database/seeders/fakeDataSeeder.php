@@ -15,6 +15,7 @@ use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
 use App\Models\Stock;
 use App\Models\Supplier;
+use App\Models\vehicle;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -178,6 +179,22 @@ class fakeDataSeeder extends Seeder
             'chap_room' => '101',
             'chap_price' => 2000,
             'chap_status' => 'Available'
+        ]);
+
+        vehicle::create([
+            'driver_name' => 'Example driver',
+            'driver_contact_number' => '09970647935',
+            'veh_price' => 1500,
+            'veh_brand' => 'Nissan',
+            'veh_plate_no' => '123XXX'
+        ]);
+
+        vehicle::create([
+            'driver_name' => 'Example driver 2',
+            'driver_contact_number' => '09970647931',
+            'veh_price' => 1500,
+            'veh_brand' => 'Nissan',
+            'veh_plate_no' => '123XXX'
         ]);
 
 

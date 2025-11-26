@@ -54,8 +54,12 @@
                         <td>{{ $row->eq_unit_price }}</td>
                         <td>{{ $row->eq_available }}</td>
                         <td>{{ $row->eq_in_use }}</td>
-                        <td class="text-center">
-                            <a href="{{ route('Equipment.show', $row->id) }}" class="btn btn-outline-success btn-md"
+                        <td class="d-flex">
+                            <a href="{{ route('Equipment.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" 
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="{{ route('Equipment.show', $row->id) }}" class="cust-btn cust-btn-secondary btn-md"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                                 <i class="fi fi-rr-eye"></i>
                             </a>

@@ -7,8 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Chapel;
 use App\Models\ChapEquipment;
 use App\Models\ChapStock;
+use App\Models\embalming;
 use App\Models\Employee;
 use App\Models\Equipment;
+use App\Models\jobOrder;
 use App\Models\Log;
 use App\Models\Package;
 use App\Models\PkgEquipment;
@@ -17,6 +19,7 @@ use App\Models\Receipt;
 use App\Models\Stock;
 use App\Models\SvsEquipment;
 use App\Models\SvsStock;
+use App\Models\vehicle;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -39,11 +42,10 @@ class ServiceRequestController extends Controller
      */
     public function create()
     {
-        $pkgData = Package::all();
-        $svcReqData = ServiceRequest::all();
-        $chapData = Chapel::all();
+        $vehData = vehicle::all();
+        $embalmData = embalming::all();
 
-        return view('functions/servicesRequestAdd', ['pkgData' => $pkgData, 'svcReqData' => $svcReqData, 'chapData' => $chapData]);
+        return view('functions/servicesRequestAdd', ['vehData' => $vehData, 'embalmData' => $embalmData]);
     }
 
     /**
@@ -51,86 +53,97 @@ class ServiceRequestController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'package' => 'required',
+        $request->validate([ 
             'clientName' => 'required',
             'clientConNum' => 'required',
-            'startDate' => [
+            'vehicle' => 'required',
+            'svcDate' => [
                 'required',
                 Rule::date()->afterOrEqual(today())
             ],
-            'endDate' => 'required|date|after:startDate',
-            'wakeLoc' => 'required',
-            'churhcLoc' => 'required',
-            'burialLoc' => 'required',
-            'decName' => 'required',
-            'decBorn' => 'required',
-            'decDied' => 'required|date|after:decBorn',
-            'decCOD' => 'required',
-            'decFName' => 'required',
-            'decMName' => 'required',
-            'payment' => 'required|integer|min:1|max:999999'
+            'payment' => 'required|integer|min:1|max:999999',
+            'total' => 'required|integer|min:1|max:999999',
+            'timeStart' => 'required',
+            'timeEnd' => 'required'
+            
         ], [
-            'package.required' => 'This field is required.',
             'clientName.required' => 'This field is required.',
             'clientConNum.required' => 'This field is required.',
-            'startDate.required' => 'This field is required.',
-            'startDate.after' => 'The start date must be today or after.',
-            'endDate.required' => 'This field is required.',
-            'endDate.after' => 'The end date must be after start date.',
-            'wakeLoc.required' => 'This field is required.',
-            'churhcLoc.required' => 'This field is required.',
-            'burialLoc.required' => 'This field is required.',
-            'decName.required' => 'This field is required.',
-            'decBorn.required' => 'This field is required.',
-            'decDied.required' => 'This field is required.',
-            'decDied.after' => 'The died date must be after born date.',
-            'decCOD.required' => 'This field is required.',
-            'decFName.required' => 'This field is required.',
-            'decMName.required' => 'This field is required.',
+            'svcDate.required' => 'This field is required.',
+            'svcDate.after_or_equal' => 'The start date must be today or after.',
+            'vehicle.required' => 'This field is required.',
+
             'payment.required' => 'This field is required.',
-            'payment.number' => 'Number only.',
+            'payment.integer' => 'Number only.',
             'payment.min' => 'Payment must be 1 or more',
-            'payment.max' => '6 digits is the max.'
+            'payment.max' => '6 digits is the max.',
+
+            'total.required' => 'This field is required.',
+            'total.integer' => 'Number only.',
+            'total.min' => 'Total must be 1 or more',
+            'total.max' => '6 digits is the max.',
+
+            'timeStart.required' => 'This field is required.',
+            'timeEnd.required' => 'This field is required.',
+            
         ]);
+
+        //dd('hello');
+
+        // validate time
+        $start = Carbon::parse($request->jo_start_time);
+        $end   = Carbon::parse($request->jo_end_time);
+
+        if ($end->lt($start)) { // lt = less than
+            return back()->with('promt-f', 'End time must be after start time.')->withInput();
+        }
+
+        dd('hello');
 
         ServiceRequest::create([
-            'dec_name' => $request->decName,
-            'dec_born_date' => $request->decBorn,
-            'dec_died_date' => $request->decDied,
-            'dec_cause_of_death' => $request->decCOD,
-            'dec_mom_name' => $request->decMName,
-            'dec_fr_name' => $request->decFName,
-            'svc_startDate' => $request->startDate,
-            'svc_endDate' => $request->endDate,
-            'svc_wakeLoc' => $request->wakeLoc,
-            'svc_churchLoc' => $request->churhcLoc,
-            'svc_burialLoc' => $request->burialLoc,
-            'svc_equipment_status' => 'Pending',
-            'pkg_id' => $request->pkgId,
-            'chap_id' => $request->chapId
+            'svc_name' => 'test',
+            'svc_amount' => $request->total,
+            'veh_id' => $request->setVehId,
+            'prep_id' => $request->setEmbalmId
         ]);
 
-        $getId = ServiceRequest::orderBy('id', 'desc')->take(1)->value('id');
+        $svcId = ServiceRequest::orderBy('id', 'desc')->take(1)->value('id');
 
-        Receipt::create([
+        jobOrder::create([
             'client_name' => $request->clientName,
             'client_contact_number' => $request->clientConNum,
-            'rcpt_status' => 'Pending',
-            'paid_amount' => $request->payment,
-            'total_payment' => $request->total,
+            'jo_dp' => $request->payment,
+            'jo_total' => $request->total,
+            'jo_status' => $request->payment >= $request->total ? 'Paid' : 'Pending',
+            'jo_start_date' => $request->svcDate,
+            'jo_start_time' => $request->timeStart,
+            'jo_end_time' => $request->timeEnd,
             'emp_id' => session('loginId'),
-            'svc_id' => $getId
+            'svc_id' => $svcId
         ]);
 
+        $joId = jobOrder::orderBy('id', 'desc')->take(1)->value('id');
+
+        /*
+        $startTime = Carbon::parse($request->timeStart)->format('g:i A');
+        $endTime   = Carbon::parse($request->timeEnd)->format('g:i A');
+
+        to convert military time to standard time
+        {{ \Carbon\Carbon::parse($job->jo_start_time)->format('g:i A') }}
+        {{ \Carbon\Carbon::parse($job->jo_end_time)->format('g:i A') }}
+        */
+        //dd($startTime, $endTime);
+
+        
         Log::create([
             'transaction' => 'Create',
-            'tx_desc' => 'Created Service Request | ID: ' . $getId,
+            'tx_desc' => 'Created Service Request | ID: ' . $joId,
             'emp_id' => session('loginId')
         ]);
 
 
-        return redirect(route('Service-Request.show', $getId));
+        return redirect(route('Service-Request.show', $joId));
+        
     }
 
     /**
@@ -138,10 +151,8 @@ class ServiceRequestController extends Controller
      */
     public function show(String $id)
     {
-        $svcReqData = ServiceRequest::findOrFail($id);
-        $pkgStoData = PkgStock::where('pkg_id', '=', $svcReqData->pkg_id )->get();
-        $pkgEqData = PkgEquipment::where('pkg_id', '=', $svcReqData->pkg_id)->get();
-        return view('shows/serviceRequestShow', ['svcReqData' => $svcReqData, 'pkgStoData' => $pkgStoData, 'pkgEqData' => $pkgEqData]);
+        $joData = jobOrder::findOrFail($id);
+        return view('shows/serviceRequestShow', ['joData' => $joData]);
     }
 
     /**
@@ -175,10 +186,6 @@ class ServiceRequestController extends Controller
                 ]);
             }
 
-            ServiceRequest::findOrFail($id)->update([
-                'svc_equipment_status' => 'Returned',
-                'svc_return_date' => Carbon::now()->format('Y-m-d')
-            ]);
 
             Log::create([
                 'transaction' => 'Returned',
@@ -217,11 +224,6 @@ class ServiceRequestController extends Controller
                     'item_qty' => $stoData->item_qty - $data->stock_used
                 ]);
             }
-
-            ServiceRequest::findOrFail($id)->update([
-                'svc_equipment_status' => 'Deployed',
-                'svc_deploy_date' => Carbon::now()->format('Y-m-d')
-            ]);
 
             Log::create([
                 'transaction' => 'Deployed',

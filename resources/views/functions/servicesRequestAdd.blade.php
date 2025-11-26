@@ -1,113 +1,24 @@
 @extends('layouts.layout')
-@section('title', 'Add Service Request')
+@section('title', 'Create Service Request')
 
 @section('content')
-@section('head', 'Add Services Request')
-@section('name', 'Staff')
+@section('head', 'Create Services Request')
 
 {{-- Card Form Container --}}
     <div class="cust-h-content-func">
         <div class="card bg-white border-0 rounded-3">
             <div class="card-body">
                 
-                <h4 class="form-title mb-4">Service Request Form</h4>
-                
                 <form action="{{ route('Service-Request.store') }}" method="post">
                     @csrf
 
-
-                    {{-- Package --}}
                     <div class="row">
                         <div class="col-md-12">
-                            <h5 class="cust-sub-title">Packages and Payment:</h5>
+                            <h4 class="form-title mb-4">Service Request Form</h4>
                         </div>
-
-                        <div class="col-md-6">
-                            <label for="package" class="form-label">Package</label>
-                            <select name="package" id="package" class="form-select" onchange="PricePkg()">
-                                <option value="">Select Package</option>
-                                @foreach ($pkgData as $data)
-                                    <option value="{{ $data->id }},{{ $data->pkg_price }}" {{ old('package') == $data->id.','.$data->pkg_price ? 'selected' : '' }}>
-                                        {{ $data->pkg_name }} | Price: ₱{{ $data->pkg_price }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('package')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-6">
-                            <label for="chapel" class="form-label">Chapel</label>
-                            <select name="chapel" id="chapel" class="form-select" onchange="PriceChap()">
-                                <option value="">None</option>
-
-                                @foreach ($chapData as $data)
-                                    <option value="{{ $data->id }},{{ $data->chap_price }}" {{ old('chapel') == $data->id.','.$data->chap_price ? 'selected' : '' }}>
-                                        {{ $data->chap_name }} - Room {{ $data->chap_room }} | Price: ₱{{ $data->chap_price }}
-                                    </option>
-                                @endforeach
-                        
-                            </select>
-                        
-                        </div>
-
-
-                        <div class="col-md-3">
-                            <label for="payment" class="form-label">Total Payment</label>
-                            <input type="text" class="form-control" id="totalPayment" readonly name="total" value="{{ old('total') }}">
-
-                            <input type="text" id="setPricePkg" name="setPricePkg" readonly value="{{ old('setPricePkg') }}" hidden>
-                            <input type="text" id="setPriceChap" name="setPriceChap" readonly value="{{ old('setPriceChap') }}" hidden>
-
-                            <input type="text" id="setIdPkg" readonly name="pkgId" value="{{ old('pkgId') }}" hidden>
-                            <input type="text" id="setIdChap" readonly name="chapId" value="{{ old('chapId') }}" hidden>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="payment" class="form-label">Payment</label>
-                            <input type="text" class="form-control" name="payment" value="{{ old('payment') }}">
-                            @error('payment')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
                     </div>
-
-                    {{-- Custom Script for Payment --}}
-                    <script>
-                        function PricePkg(){
-                            var getPkg = document.getElementById('package');
-
-                            var getChap = document.getElementById('setPriceChap').value;                    
-
-                            var pkgData = getPkg.options[getPkg.selectedIndex].value;
-                            let forId = pkgData.slice(0, pkgData.indexOf(","));
-                            let forPrice = pkgData.slice(pkgData.indexOf(",") + 1);
-
-                            document.getElementById('setPricePkg').value = forPrice;
-                            document.getElementById('setIdPkg').value = forId;
-                            document.getElementById('totalPayment').value = Number(forPrice) + Number(getChap);
-                        }
-
-                        function PriceChap() {
-                            var getChap = document.getElementById('chapel');
-
-                            var getPkg = document.getElementById('setPricePkg').value;
-
-                            var chapData = getChap.options[getChap.selectedIndex].value;
-                            let forId = chapData.slice(0, chapData.indexOf(","));
-                            let forPrice = chapData.slice(chapData.indexOf(",") + 1);
-
-                            document.getElementById('setPriceChap').value = forPrice;
-                            document.getElementById('setIdChap').value = forId;
-                            document.getElementById('totalPayment').value = Number(forPrice) + Number(getPkg);
-                        }
-
-                    </script>
-
-
-
                     {{-- Client Info --}}
-                    <div class="row mt-3">
+                    <div class="row mt-4">
                         <div class="col-md-12">
                             <h5 class="cust-sub-title">Client Info:</h5>
                         </div>
@@ -131,123 +42,144 @@
 
                     </div>
 
-
-                    {{-- Deceased Info --}}
-                    <div class="row mt-3">
+                    {{-- Services --}}
+                    <div class="row mt-4">
                         <div class="col-md-12">
-                            <h5 class="cust-sub-title">Deceased Info:</h5>
+                            <h5 class="cust-sub-title">Services:</h5>
                         </div>
+
+                        <div class="col-md-5">
+                            <label for="embalm" class="form-label">embalm</label>
+                            <select name="embalm" id="embalm" class="form-select" onchange="PriceEmbalm()">
+                                <option value="">Select Embalmer</option>
+                                @foreach ($embalmData as $data)
+                                    <option value="{{ $data->id }},{{ $data->prep_price }}" {{ old('embalm') == $data->id.','. $data->prep_price ? 'selected' : '' }}>
+                                        {{ $data->embalmer_name }} | Price: ₱{{ $data->prep_price }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('embalm')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-5">
+                            <label for="vehicle" class="form-label">Vehicle:</label>
+                            <select name="vehicle" id="vehicle" class="form-select" onchange="PriceVeh()">
+                                <option value="">None</option>
+
+                                @foreach ($vehData as $data)
+                                    <option value="{{ $data->id }},{{ $data->veh_price }}" {{ old('vehicle') == $data->id.','.$data->veh_price ? 'selected' : '' }}>
+                                        {{ $data->driver_name }} | Price: ₱{{ $data->veh_price }}
+                                    </option>
+                                @endforeach
                         
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="" class="form-label">Name</label>
-                                    <input type="text" name="decName" placeholder="Deceased Full Name" class="form-control" value="{{ old('decName') }}">
-                                    @error('decName')
-                                        <div class="text-danger small mt-1">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="form-label">Born</label>
-                                    <input type="date" name="decBorn" class="form-control" value="{{ old('decBorn') }}">
-                                    @error('decBorn')
-                                        <div class="text-danger small mt-1">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="form-label">Died</label>
-                                    <input type="date" name="decDied" class="form-control" value="{{ old('decDied') }}">
-                                    @error('decDied')
-                                        <div class="text-danger small mt-1">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="" class="form-label">Cause of Death</label>
-                                    <input type="text" name="decCOD" class="form-control" placeholder="Deceasd Cause of Death" value="{{ old('decCOD') }}">
-                                    @error('decCOD')
-                                        <div class="text-danger small mt-1">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
+                            </select>
+                            @error('vehicle')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        
+                        </div>    
 
-                        <div class="col-md-12">
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <label for="" class="form-label">Father Name</label>
-                                    <input type="text" name="decFName" class="form-control" placeholder="Deceased Father Name" value="{{ old('decFName') }}">
-                                    @error('decFName')
-                                        <div class="text-danger small mt-1">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="" class="form-label">Mother Maiden Name</label>
-                                    <input type="text" name="decMName" class="form-control" placeholder="Deceased Mother Maiden Name" value="{{ old('decMName') }}">
-                                    @error('decMName')
-                                        <div class="text-danger small mt-1">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+                    </div> 
 
 
-                    {{-- Dates --}}
-                    <div class="row mt-3">
+                    {{-- Date --}}
+                    <div class="row mt-4">
 
                         <div class="col-md-12">
                             <h5 class="cust-sub-title">Date:</h5>
                         </div>
-                        <div class="col-md-6">
-                            <label for="startDate" class="form-label">Start Date</label>
-                            <input type="date" name="startDate" id="startDate" class="form-control"
-                                value="{{ old('startDate') }}">
-                            @error('startDate')
+
+                        <div class="col-md-4">
+                            <label for="svcDate" class="form-label">Service Date</label>
+                            <input type="date" name="svcDate" class="form-control"
+                                value="{{ old('svcDate') }}">
+                            @error('svcDate')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-6">
-                            <label for="endDate" class="form-label">End Date</label>
-                            <input type="date" name="endDate" id="endDate" class="form-control" value="{{ old('endDate') }}">
-                            @error('endDate')
+
+                        <div class="col-md-2">
+                            <label for="timeStart" class="form-label">Start Time</label>
+                            <input type="time" class="cust-time" name="timeStart" value="{{ old('timeStart') }}">
+                            @error('timeStart')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                            @session('promt-f')
+                                <div class="text-danger small mt-1">{{ $value }}</div>
+                            @endsession
+                        </div>
+                        <div class="col-md-2">
+                            <label for="timeEnd" class="form-label">End Time</label>
+                            <input type="time" class="cust-time" name="timeEnd" value="{{ old('timeEnd') }}">
+                            @error('timeEnd')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
 
-
-                    {{-- Locations --}}
+                    {{-- Payment --}}
                     <div class="row mt-4">
-
                         <div class="col-md-12">
-                            <h5 class="cust-sub-title">Location:</h5>
+                            <h5 class="cust-sub-title">Payment:</h5>
                         </div>
+                        <div class="col-md-3">
+                            <label for="payment" class="form-label">Total</label>
+                            <input type="text" class="form-control" id="totalPayment" name="total" value="{{ old('total') }}">
+                            @error('total')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                            
 
-                        <div class="col-md-4">
-                            <label for="wakeLoc" class="form-label">Wake Location</label>
-                            <input type="text" name="wakeLoc" id="wakeLoc" class="form-control" value="{{ old('wakeLoc') }}">
-                            @error('wakeLoc')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
+                            <input type="text" id="setEmbalmPrice" name="setEmbalmPrice" readonly value="{{ old('setEmbalmPrice') }}" >
+                            <input type="text" id="setVehPrice" name="setVehPrice" readonly value="{{ old('setVehPrice') }}" >
+
+                            <input type="text" id="setEmbalmId" readonly name="setEmbalmId" value="{{ old('setEmbalmId') }}" >
+                            <input type="text" id="setVehId" readonly name="setVehId" value="{{ old('setVehId') }}" >
                         </div>
-                        <div class="col-md-4">
-                            <label for="churhcLoc" class="form-label">Church Location</label>
-                            <input type="text" name="churhcLoc" id="churhcLoc" class="form-control"
-                                value="{{ old('churhcLoc') }}">
-                            @error('churhcLoc')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-4">
-                            <label for="burialLoc" class="form-label">Burial Location</label>
-                            <input type="text" name="burialLoc" id="burialLoc" class="form-control"
-                                value="{{ old('burialLoc') }}">
-                            @error('burialLoc')
+                        <div class="col-md-3">
+                            <label for="payment" class="form-label">Down Payment</label>
+                            <input type="text" class="form-control" name="payment" value="{{ old('payment') }}">
+                            @error('payment')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
+
+
+                    {{-- Custom Script for Payment --}}
+                    <script>
+                        function PriceEmbalm(){
+                            var getEmbalm = document.getElementById('embalm');
+
+                            var getChap = document.getElementById('setVehPrice').value;                    
+
+                            var pkgData = getEmbalm.options[getEmbalm.selectedIndex].value;
+                            let forId = pkgData.slice(0, pkgData.indexOf(","));
+                            let forPrice = pkgData.slice(pkgData.indexOf(",") + 1);
+
+                            document.getElementById('setEmbalmPrice').value = forPrice;
+                            document.getElementById('setEmbalmId').value = forId;
+                            document.getElementById('totalPayment').value = Number(forPrice) + Number(getChap);
+                        }
+
+                        function PriceVeh() {
+                            var getVeh = document.getElementById('vehicle');
+
+                            var getPkg = document.getElementById('setEmbalmPrice').value;
+
+                            var chapData = getVeh.options[getVeh.selectedIndex].value;
+                            let forId = chapData.slice(0, chapData.indexOf(","));
+                            let forPrice = chapData.slice(chapData.indexOf(",") + 1);
+
+                            document.getElementById('setVehPrice').value = forPrice;
+                            document.getElementById('setVehId').value = forId;
+                            document.getElementById('totalPayment').value = Number(forPrice) + Number(getPkg);
+                        }
+
+                    </script>
+
 
                    
 
@@ -261,7 +193,7 @@
                         </div>
 
                         <div class="col col-auto">
-                            <a href="{{ route('Service-Request.index') }}" class="cust-btn cust-btn-secondary"><i
+                            <a href="{{ route('Job-Order.index') }}" class="cust-btn cust-btn-secondary"><i
                                 class="bi bi-arrow-left"></i>
                                 <span>Cancel</span>
                             </a>
@@ -283,81 +215,3 @@
     </div>
 
 @endsection
-
-{{-- Inline styling for this file  
-        SAGDAI SA NI IDELETE RA KUNG NA BALHIN NA NINYO HAHAHAH --}}
-<style>
-.card-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.card-form {
-    background: #ffffff;
-    border-radius: 20px;
-    border: 1px solid #e9ecef;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    padding: 40px;
-    width: 100%;
-    max-width: 1000px;
-}
-
-.form-title {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #333;
-    border-bottom: 3px solid #60BF4F;
-    display: inline-block;
-    padding-bottom: 6px;
-}
-
-.btn-custom {
-    background-color: #60BF4F;
-    color: white;
-    font-weight: 600;
-    border-radius: 10px;
-    padding: 10px 20px;
-    border: none;
-    transition: 0.2s ease;
-}
-
-.btn-custom:hover {
-    background-color: #4ca63d;
-    box-shadow: 0 4px 10px rgba(96, 191, 79, 0.3);
-}
-
-.btn-custom-outline {
-    border: 1px solid #60BF4F;
-    color: #60BF4F;
-    border-radius: 10px;
-    padding: 8px 18px;
-    font-weight: 600;
-    background-color: transparent;
-    transition: 0.2s ease;
-}
-
-.btn-custom-outline:hover {
-    background-color: #60BF4F;
-    color: white;
-}
-
-.form-label {
-    font-weight: 600;
-    color: #333;
-}
-
-.form-control,
-.form-select {
-    border-radius: 10px;
-    border: 1px solid #dee2e6;
-    box-shadow: none;
-}
-
-.added-item {
-    background: #f8fdf8;
-    border: 1px solid #d9f3d9;
-    padding: 12px 15px;
-    border-radius: 10px;
-}
-</style>
