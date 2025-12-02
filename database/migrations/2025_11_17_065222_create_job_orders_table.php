@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('client_name', 100);
             $table->string('client_contact_number', 11);     
+            $table->string('client_address', 150);     
             $table->decimal('jo_dp', 8,2);
             $table->decimal('jo_total', 8,2);
             $table->string('jo_status', 15);

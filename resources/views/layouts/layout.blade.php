@@ -189,14 +189,16 @@
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
-                                    @if(session("empRole") != 'sadmin')
+                                    @if(session("empRole") == 'sadmin')
+                                        <a href="{{ route('Employee.index') }}" class="dropdown-item"><i class="bi bi-person-fill-gear"></i> Employees</a>
+                                    @else
                                         <form action="{{ route('Employee.edit', session("loginId")) }}" method="POST">
                                             @csrf
                                             @method('get')
-                                            <button type="submit" class="dropdown-item text-danger">
-                                                <i class="bi bi-box-arrow-right"></i>Profile
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="bi bi-person"></i> Profile
                                             </button>
-                                    </form>
+                                        </form>
                                     @endif
                                     
                                 </li>

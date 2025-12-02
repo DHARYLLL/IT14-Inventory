@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Log;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -34,6 +35,12 @@ class LoginController extends Controller
                 $request->session()->put('loginId', $user->id);
                 $request->session()->put('empRole', $user->emp_role);
                 $request->session()->regenerate();
+                Log::create([
+                    'transaction' => 'Login',
+                    'tx_desc' => 'Login User',
+                    'tx_date' => Carbon::now(),
+                    'emp_id' => session('loginId')
+                ]);
                 return redirect(route('dashboard.index'));
             }else{
                 return back()->with('fail', 'Invalid credentials. Please try again')->withInput();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Log;
 use App\Models\vehicle;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -76,6 +77,7 @@ class VehicleController extends Controller
         Log::create([
             'transaction' => 'Added',
             'tx_desc' => 'Added New Vehicle | ID: ' . $vehId,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
@@ -154,6 +156,7 @@ class VehicleController extends Controller
         Log::create([
             'transaction' => 'Edited',
             'tx_desc' => 'Edited Vehicle | ID: ' . $id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 

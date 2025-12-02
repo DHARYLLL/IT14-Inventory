@@ -21,6 +21,7 @@ use App\Models\SvsEquipment;
 use App\Models\SvsStock;
 use App\Models\vehicle;
 use Carbon\Carbon;
+use Faker\Provider\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -138,6 +139,7 @@ class ServiceRequestController extends Controller
         Log::create([
             'transaction' => 'Create',
             'tx_desc' => 'Created Service Request | ID: ' . $joId,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
@@ -161,6 +163,26 @@ class ServiceRequestController extends Controller
     public function edit(ServiceRequest $serviceRequest)
     {
         //
+    }
+
+    public function payBalance(Request $request, String $id)
+    {
+        $request->validate([
+            'payment' => 'required|numeric|min:1|max:999999.99'
+        ], [
+            'payment.required' => 'This field is required.',
+            'payment.numeric' => 'Number only.',
+            'payment.min' => 'Amount must be 1 or more.',
+            'payment.max' => '6 digits limit reached.'
+        ]);
+       
+        $getDp = jobOrder::select('jo_dp', 'jo_total')->where('svc_id', $id)->first();
+        jobOrder::findOrFail($id)->update([
+            'jo_dp' => $getDp->jo_dp + $request->payment,
+            'jo_status' => ($request->payment >= ($getDp->jo_total - $getDp->jo_dp )) ? 'Paid' : 'Pending'
+        ]);
+
+        return redirect()->back()->with('promt-s', 'Payment Successfull.');
     }
 
     /**
@@ -190,6 +212,7 @@ class ServiceRequestController extends Controller
             Log::create([
                 'transaction' => 'Returned',
                 'tx_desc' => 'Returned Equipment from Service Request | ID: ' . $id,
+                'tx_date' => Carbon::now(),
                 'emp_id' => session('loginId')
             ]);
 
@@ -228,12 +251,14 @@ class ServiceRequestController extends Controller
             Log::create([
                 'transaction' => 'Deployed',
                 'tx_desc' => 'Deployed Stock from Service Request | ID: ' . $id,
+                'tx_date' => Carbon::now(),
                 'emp_id' => session('loginId')
             ]);
 
             Log::create([
                 'transaction' => 'Deployed',
                 'tx_desc' => 'Deployed Equipment from Service Request | ID: ' . $id,
+                'tx_date' => Carbon::now(),
                 'emp_id' => session('loginId')
             ]);
 
@@ -252,6 +277,7 @@ class ServiceRequestController extends Controller
         Log::create([
             'transaction' => 'Deleted',
             'tx_desc' => 'Deleted Service Request | ID: ' . $id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
         return redirect()->back()->with('success', 'Deleted Succesfully');

@@ -429,16 +429,7 @@ if (searchInput && clearSearch) {
         const rows = document.querySelectorAll("#tableBody tr");
 
         rows.forEach(row => {
-            /*
-            const col1 = row.cells[0].innerText.toLowerCase();
-            const col2 = row.cells[1].innerText.toLowerCase();
-            const col3 = row.cells[2].innerText.toLowerCase();
-            if (col1.includes(filter) || col2.includes(filter) || col3.includes(filter)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-            */
+
             const cells = Array.from(row.cells);
             const match = cells.some(cell => cell.innerText.toLowerCase().includes(filter));
             row.style.display = match ? '' : 'none';

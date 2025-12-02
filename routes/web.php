@@ -98,10 +98,18 @@ Route::middleware(AuthCheck::class)->group(function(){
 
     Route::resource('Purchase-Order-Item', PurchaseOrderItem::class);
     Route::resource('Invoice', InvoiceController::class);
+
     Route::resource('Equipment', EquipmentController::class);
+    
     Route::resource('Service-Request', ServiceRequestController::class);
+    Route::put('Service-Request/{id}/Pay-Balance', [ServiceRequestController::class, 'payBalance'])->name('Service-Request.payBalance');
     //Route::put('Service-Request/{$id}/Deploy-Equipment', [ServiceRequestController::class, 'deploy'])->name('Service-Request.deploy');
     Route::resource('Package', PackageController::class);
+    
+    Route::get('Package/{id}/Remove-Item', [PackageController::class, 'addRemoveItem'])->name('Package.addRemItem');
+
+
+
     Route::resource('Package-Inclusion', packageInclusionController::class);
     Route::resource('Stock', StockController::class);
     Route::resource('Log', LogController::class);
@@ -109,8 +117,10 @@ Route::middleware(AuthCheck::class)->group(function(){
     //Route::resource('Receipt', receiptController::class);
     Route::resource('Pkg-Stock', pkgStockController::class);
     Route::resource('Pkg-Equipment', pkgEquipmentController::class);
+    
     Route::resource('Employee', employeeController::class);
-
+    Route::get('Employyee/{id}/Employee-Edit', [employeeController::class, 'editEmp'])->name('Employee.editEmp');
+    Route::post('Employyee/{id}/Employee-Reset-Password', [employeeController::class, 'resetPassword'])->name('Employee.resetPass');
     
     Route::resource('Vehicle', VehicleController::class);
     Route::resource('Embalmer', EmbalmerController::class);
@@ -129,6 +139,7 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::get('Job-Order/{id}/Apply-Burial-Assistance', [JobOrderController::class, 'applyBurAsst'])->name('Job-Order.apply');
 
     Route::resource('Burial-Assistance', BurialAssistanceController::class);
+    Route::get('Burial-Assistance/{id}/Back', [BurialAssistanceController::class, 'burrAsstBack'])->name('Burial-Assistance.back');
     Route::resource('Stock-Out', StockOutController::class);
 
     //new

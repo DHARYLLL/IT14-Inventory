@@ -53,7 +53,8 @@ class JobOrderController extends Controller
     {
         $request->validate([
             'package' => 'required',
-            'clientName' => 'required',
+            'clientName' => 'required|max:100',
+            'address' => 'required|max:150',
             'clientConNum' => 'required|integer|digits:11',
             'svcDate' => [
                 'required',
@@ -79,13 +80,19 @@ class JobOrderController extends Controller
 
             'itemName.*' => 'required',
             'stockQty.*' => 'required|integer|min:1|max:999',
+            'stofee.*' => 'required|numeric|min:1|max:999999.99',
             'eqName.*' => 'required',
             'eqQty.*' => 'required|integer|min:1|max:999',
+            'eqfee.*' => 'required|numeric|min:1|max:999999.99',
             'wakeDay' => 'required|integer|min:1|max:999'
         ], [
             'package.required' => 'This field is required.',
 
             'clientName.required' => 'This field is required.',
+            'clientName.max' => '100 charaters limit reached.',
+            
+            'address.required' => 'This field is required.',
+            'address.max' => '150 charaters limit reached.',
 
             'clientConNum.required' => 'This field is required.',
             'clientConNum.integer' => 'Number only.',
@@ -118,19 +125,30 @@ class JobOrderController extends Controller
 
             'stockQty.*.required' => 'This field is required.',
             'stockQty.*.min' => 'Item quantity must be 1 or more.',
-            'stockQty.*.max' => '3 digit item quantity reached.',
+            'stockQty.*.max' => '3 digits limit reached.',
+
+            'stofee.*.required' => 'This field is required.',
+            'stofee.*.numeric' => 'Numer only.',
+            'stofee.*.min' => 'Amount must be 1 or more.',
+            'stofee.*.max' => '6 digits limit reached.',
+
             'eqQty.*.required' => 'This field is required.',
             'eqQty.*.min' => 'Equipment quantity must be 1 or more.',
-            'eqQty.*.max' => '3 digit limit reached.',
+            'eqQty.*.max' => '3 digits limit reached.',
+
+            'eqfee.*.required' => 'This field is required.',
+            'eqfee.*.numeric' => 'Numer only.',
+            'eqfee.*.min' => 'Amount must be 1 or more.',
+            'eqfee.*.max' => '6 digits limit reached.',
 
             'wakeDay.required' => 'This field is required.',
             'wakeDay.min' => 'Day must be 1 or more.',
-            'wakeDay.max' => '3 digit limit reached.',
+            'wakeDay.max' => '3 digits limit reached.',
 
             'pkgPrice.required' => 'This field is required.',
             'pkgPrice.numeric' => 'Number only.',
-            'pkgPrice.min' => 'Price must be 1 or more.',
-            'pkgPrice.max' => '6 digit limit reached.'
+            'pkgPrice.min' => 'Amount must be 1 or more.',
+            'pkgPrice.max' => '6 digits limit reached.'
         ]);
 
         $start = Carbon::parse($request->jo_svc_date. ' ' .$request->jo_start_time);
@@ -142,8 +160,15 @@ class JobOrderController extends Controller
 
         $eq = $request->equipment;
         $eqQty = $request->eqQty;
+        $eqFee = $request->eqfee;
         $sto = $request->stock;
         $stoQty = $request->stockQty;
+        $stoFee = $request->stofee; 
+
+        $sumEqFee = array();
+        $sumStoFee = array();
+
+        
 
         //get all equipment in request and rpovide error
         $equipmentErrors = [];
@@ -151,6 +176,7 @@ class JobOrderController extends Controller
             for ($i = 0; $i < count($eq); $i++) {
                 $equipmentId = $eq[$i];
                 $requestedQty = (int) $eqQty[$i];
+                array_push($sumEqFee, (float) $eqFee[$i]);
 
                 $equipment = Equipment::find($equipmentId);
 
@@ -173,6 +199,7 @@ class JobOrderController extends Controller
             for ($i = 0; $i < count($sto); $i++) {
                 $stockId = $sto[$i];
                 $requestedQty = (int) $stoQty[$i];
+                array_push($sumStoFee, (float) $stoFee[$i]);
 
                 // Get stock from DB
                 $stock = Stock::find($stockId); // replace with your actual Stock model
@@ -190,6 +217,9 @@ class JobOrderController extends Controller
                 return back()->withErrors($StoErrors)->withInput();
             }
         }
+
+        $eqTotal = array_sum($sumEqFee);
+        $stoTotal = array_sum($sumStoFee);
 
         //dd($request->payment >= $request->total ? 'paid' : 'not paid');
         jobOrderDetails::create([
@@ -212,6 +242,7 @@ class JobOrderController extends Controller
                 addEquipment::create([
                     'jod_id' => $jodId,
                     'eq_id' => $eq[$i],
+                    'eq_add_fee' => $eqFee[$i],
                     'eq_dpl' => $eqQty[$i]
                 ]);
             }
@@ -222,6 +253,7 @@ class JobOrderController extends Controller
                 addStock::create([
                     'jod_id' => $jodId,
                     'stock_id' => $sto[$i],    
+                    'stock_add_fee' => $stoFee[$i],
                     'stock_dpl' => $stoQty[$i]
                 ]);
             }
@@ -230,8 +262,9 @@ class JobOrderController extends Controller
         jobOrder::create([
             'client_name' => $request->clientName,
             'client_contact_number' => $request->clientConNum,
+            'client_address' => $request->address,
             'jo_dp' => $request->payment,
-            'jo_total' => $request->total,
+            'jo_total' => $request->total + ($eqTotal + $stoTotal),
             'jo_status' => $request->payment >= $request->total ? 'Paid' : 'Pending',
             'jo_start_date' => $request->svcDate,
             'jo_start_time' => $request->timeStart,
@@ -245,6 +278,7 @@ class JobOrderController extends Controller
         Log::create([
             'transaction' => 'Create',
             'tx_desc' => 'Created New Job Order | ID: ' . $joId,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
@@ -390,6 +424,7 @@ class JobOrderController extends Controller
         Log::create([
             'transaction' => 'Deploy',
             'tx_desc' => 'Deployed Equipment from Job Order | ID: ' . $id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
@@ -481,10 +516,10 @@ class JobOrderController extends Controller
         Log::create([
             'transaction' => 'Return',
             'tx_desc' => 'Returned Equipment from Job Order | ID: ' . $jo->id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
-
-        return redirect()->back()->with('promt-s', 'Returned Successfuly.');
+        return redirect(route('Job-Order.show', $jo->id))->with('promt-s', 'Returned Successfuly.');
     }
 
     public function applyBurAsst(string $id)

@@ -9,10 +9,19 @@ class stockOut extends Model
     protected $table = 'stock_outs';
     protected $fillable = [
         'reason',
-        'so_qty',
         'so_date',
-        'stock_id',
-        'eq_id',
         'emp_id'
     ];
+
+    public function soToSoi() {
+        return $this->hasMany(StoOutItems::class, 'so_id');
+    }
+
+    public function soToSoe() {
+        return $this->hasMany(StoOutEquipment::class, 'so_id');
+    }
+
+    public function soToEmp() {
+        return $this->belongsTo(Employee::class, 'emp_id');
+    }
 }

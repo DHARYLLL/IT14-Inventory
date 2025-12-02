@@ -10,6 +10,7 @@ class jobOrder extends Model
     protected $fillable = [
         'client_name',
         'client_contact_number',
+        'client_address',
         'jo_dp',
         'jo_total',
         'jo_status',

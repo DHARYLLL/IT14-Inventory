@@ -14,7 +14,7 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <h4 class="form-title mb-4">Service Request Form</h4>
+                            <h4 class="cust-sub-title mb-4">Service Request Form</h4>
                         </div>
                     </div>
                     {{-- Client Info --}}
@@ -23,7 +23,7 @@
                             <h5 class="cust-sub-title">Client Info:</h5>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="clientName" class="form-label">Client Name</label>
                             <input type="text" name="clientName" id="clientName" class="form-control"
                                 placeholder="Enter Full Name" value="{{ old('clientName') }}">
@@ -31,7 +31,15 @@
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" name="address" class="form-control"
+                                value="{{ old('address') }}">
+                            @error('address')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-4">
                             <label for="clientConNum" class="form-label">Contact Number</label>
                             <input type="text" name="clientConNum" id="clientConNum" class="form-control" placeholder="09..."
                                 value="{{ old('clientConNum') }}">
@@ -132,11 +140,11 @@
                             @enderror
                             
 
-                            <input type="text" id="setEmbalmPrice" name="setEmbalmPrice" readonly value="{{ old('setEmbalmPrice') }}" >
-                            <input type="text" id="setVehPrice" name="setVehPrice" readonly value="{{ old('setVehPrice') }}" >
+                            <input type="text" id="setEmbalmPrice" name="setEmbalmPrice" readonly value="{{ old('setEmbalmPrice') }}" hidden>
+                            <input type="text" id="setVehPrice" name="setVehPrice" readonly value="{{ old('setVehPrice') }}" hidden>
 
-                            <input type="text" id="setEmbalmId" readonly name="setEmbalmId" value="{{ old('setEmbalmId') }}" >
-                            <input type="text" id="setVehId" readonly name="setVehId" value="{{ old('setVehId') }}" >
+                            <input type="text" id="setEmbalmId" readonly name="setEmbalmId" value="{{ old('setEmbalmId') }}" hidden>
+                            <input type="text" id="setVehId" readonly name="setVehId" value="{{ old('setVehId') }}" hidden>
                         </div>
                         <div class="col-md-3">
                             <label for="payment" class="form-label">Down Payment</label>

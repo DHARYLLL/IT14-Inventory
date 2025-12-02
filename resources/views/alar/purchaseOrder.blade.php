@@ -57,12 +57,12 @@
                                     
                                     @if ($row->status == 'Pending')
                                         <a href="{{ route('Purchase-Order.show', $row->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"
-                                            class="btn btn-outline-success btn-md"><i class="bi bi-pencil-square"></i></a>
+                                            class="cust-btn cust-btn-secondary btn-md"><i class="bi bi-pencil-square"></i></a>
                                         <form action="{{ route('Purchase-Order.destroy', $row->id) }}" method="POST"
                                             class="m-0">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-outline-danger btn-md">
+                                            <button type="submit" class="cust-btn cust-btn-danger-secondary btn-md">
                                                 <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top"
                                                     title="Delete"></i>
                                             </button>
@@ -70,11 +70,11 @@
                                     @endif
                                     @if($row->status == 'Approved')
                                         <a href="{{ route('Purchase-Order.showApproved', $row->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"
-                                            class="btn btn-outline-success btn-md"><i class="bi bi-pencil-square"></i></a>
+                                            class="cust-btn cust-btn-secondary btn-md"><i class="bi bi-pencil-square"></i></a>
                                     @endif
                                     @if($row->status == 'Delivered')
                                         <a href="{{ route('Purchase-Order.showDelivered', $row->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="View"
-                                            class="btn btn-outline-success btn-md"><i class="fi fi-rr-eye"></i></a>
+                                            class="cust-btn cust-btn-secondary btn-md"><i class="fi fi-rr-eye"></i></a>
                                     @endif
                                 </div>
                             </td>

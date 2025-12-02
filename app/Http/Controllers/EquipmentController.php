@@ -44,13 +44,12 @@ class EquipmentController extends Controller
         ]);
 
         $getEq = Equipment::orderBy('id','desc')->take(1)->value('id');
-        $empId = Employee::orderBy('id','desc')->take(1)->value('id');
 
         Log::create([
-            'action' => 'Added',
-            'from' => 'Added Equipment | ID: ' . $getEq,
-            'action_date' => Carbon::now()->format('Y-m-d'),
-            'emp_id' => $empId
+            'transaction' => 'Added',
+            'tx_desc' => 'Added Equipment | ID: ' . $getEq,
+            'tx_date' => Carbon::now(),
+            'emp_id' => session('loginId')
         ]);
 
         return redirect(route('Equipment.index'));
@@ -100,6 +99,7 @@ class EquipmentController extends Controller
         Log::create([
             'transaction' => 'Updated',
             'tx_desc' => 'Update Equipment | ID: ' . $id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
         return redirect()->back()->with('promt-s', 'Updated Successfully.');

@@ -21,7 +21,7 @@
                             <h5 class="cust-sub-title">Packages and Payment:</h5>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="package" class="form-label">Package</label>
                             <select name="package" id="package" class="form-select" onchange="PricePkg()">
                                 <option value="">Select Package</option>
@@ -35,7 +35,7 @@
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="chapel" class="form-label">Chapel</label>
                             <select name="chapel" id="chapel" class="form-select" onchange="PriceChap()">
                                 <option value="">None</option>
@@ -51,7 +51,7 @@
                         
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="vehicle" class="form-label">Vehicle:</label>
                             <select name="vehicle" id="vehicle" class="form-select">
                                 <option value="">None</option>
@@ -69,8 +69,9 @@
                         
                         </div>
 
+                        <div class="w-100 mb-2"></div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label for="payment" class="form-label">Total Payment</label>
                             <input type="text" class="form-control" id="totalPayment" readonly name="total" value="{{ old('total') }}">
 
@@ -80,9 +81,9 @@
                             <input type="text" id="setIdPkg" readonly name="pkgId" value="{{ old('pkgId') }}" hidden>
                             <input type="text" id="setIdChap" readonly name="chapId" value="{{ old('chapId') }}" hidden>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label for="payment" class="form-label">Payment</label>
-                            <input type="text" class="form-control" name="payment" value="{{ old('payment') }}">
+                            <input type="text" class="form-control" name="payment" value="{{ old('payment', 0) }}">
                             @error('payment')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
@@ -125,12 +126,12 @@
 
 
                     {{-- Client Info --}}
-                    <div class="row mt-3">
+                    <div class="row mt-4">
                         <div class="col-md-12">
                             <h5 class="cust-sub-title">Client Info:</h5>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="clientName" class="form-label">Client Name</label>
                             <input type="text" name="clientName" id="clientName" class="form-control"
                                 placeholder="Enter Full Name" value="{{ old('clientName') }}">
@@ -138,7 +139,15 @@
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" name="address" class="form-control"
+                                value="{{ old('address') }}">
+                            @error('address')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-4">
                             <label for="clientConNum" class="form-label">Contact Number</label>
                             <input type="text" name="clientConNum" id="clientConNum" class="form-control" placeholder="09..."
                                 value="{{ old('clientConNum') }}">
@@ -151,35 +160,38 @@
 
 
                     {{-- Deceased Info --}}
-                    <div class="row mt-3">
+                    <div class="row mt-4">
                         <div class="col-md-12">
                             <h5 class="cust-sub-title">Deceased Info:</h5>
                         </div>
                         
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="" class="form-label">Name</label>
                                     <input type="text" name="decName" placeholder="Deceased Full Name" class="form-control" value="{{ old('decName') }}">
                                     @error('decName')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="" class="form-label">Born</label>
                                     <input type="date" name="decBorn" class="form-control" value="{{ old('decBorn') }}">
                                     @error('decBorn')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="" class="form-label">Died</label>
                                     <input type="date" name="decDied" class="form-control" value="{{ old('decDied') }}">
                                     @error('decDied')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-12">
+
+                                <div class="w-100 mb-2"></div>
+
+                                <div class="col-md-4">
                                     <label for="" class="form-label">Cause of Death</label>
                                     <input type="text" name="decCOD" class="form-control" placeholder="Deceasd Cause of Death" value="{{ old('decCOD') }}">
                                     @error('decCOD')
@@ -193,7 +205,7 @@
 
 
                     {{-- Dates --}}
-                    <div class="row mt-3">
+                    <div class="row mt-4">
 
                         <div class="col-md-12">
                             <h5 class="cust-sub-title">Date:</h5>
@@ -207,7 +219,9 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="w-100 mb-2"></div>
+
+                        <div class="col-md-4">
                             <label for="timeStart" class="form-label">Start Time</label>
                             <input type="time" class="cust-time" name="timeStart" value="{{ old('timeStart') }}">
                             @error('timeStart')
@@ -217,7 +231,7 @@
                                 <div class="text-danger small mt-1">{{ $value }}</div>
                             @endsession
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <label for="timeEnd" class="form-label">End Time</label>
                             <input type="time" class="cust-time" name="timeEnd" value="{{ old('timeEnd') }}">
                             @error('timeEnd')
@@ -225,7 +239,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <label for="wakeDay" class="form-label">Days of Wake</label>
                             <input type="number" class="cust-time" name="wakeDay" value="{{ old('wakeDay') }}">
                             @error('wakeDay')
@@ -260,24 +274,28 @@
                     </div>
 
                     {{-- Add additional new item and equipment --}}
-                    <div class="row" style="height: 500px;">
+                    <div class="row mt-4" style="height: 400;">
+
+                        <div class="col-md-12">
+                            <h5 class="cust-sub-title">Additional Item and Equipment:</h5>
+                        </div>
 
                         <div class="col-md-6 h-100 overflow-auto">
                             {{-- Stock --}}
                             <div class="col-12">
                                 <label for="stock" class="form-label">Stock</label>
                                 <div class="d-flex gap-2 align-items-center">
-                                    <select name="" id="stock" class="form-select w-50" onchange="getQtySto()">
+                                    <select name="" id="stock" class="form-select w-50" onchange="getQtyStoAdd()">
                                         <option value="">Select Stock</option>
                                         @foreach ($stoData as $data)
-                                            <option value="{{ $data->id }},{{ $data->item_qty }}">
+                                            <option value="{{ $data->id }},{{ $data->item_name }} | {{ $data->item_size }}:{{ $data->item_qty }}">
                                                 {{ $data->id }} — {{ $data->item_name }} {{ $data->size_weight }}
                                             </option>
                                         @endforeach
                                     </select>
                                     <input type="text" id="sto" class="form-control w-25" readonly placeholder="Available">
                                     
-                                    <button type="button" id="add_sto" onclick="checkInputSto()" class="cust-btn cust-btn-primary">Add Stock</button>
+                                    <button type="button" id="add_sto" onclick="checkInputStoAdd()" class="cust-btn cust-btn-primary">Add Stock</button>
                                 </div>
                             </div>
 
@@ -287,14 +305,16 @@
                                     $oldItems = old('itemName', ['']);
                                     $oldQtys = old('stockQty', ['']);
                                     $oldStock = old('stock', ['']);
+                                    $oldQtyAvail = old('stockQtyAvail', ['']);
+                                    $oldStoFee = old('stofee', ['']);
                                 @endphp
 
                                 @if(!empty(array_filter($oldItems)))
 
                                     @foreach($oldItems as $i => $item)
 
-                                        <div class="row g-2 align-items-start mb-2 added-item">
-                                            <div class="col-md-6">
+                                        <div class="row g-2 align-items-start mb-2 added-item mt-1">
+                                            <div class="col-md-8">
                                                 <label class="form-label fw-semibold text-secondary">Stock</label>
                                                 <input type="text" class="form-control" name="itemName[]" value="{{ $item }}" readonly>
                                                 <input type="text" name="stock[]" value="{{ $oldStock[$i] ?? '' }}" hidden>
@@ -302,18 +322,32 @@
                                                     <small class="text-danger">{{ $message }}</small>
                                                 @enderror 
                                             </div>
-                                            <div class="col-md-3">
-                                                <label class="form-label fw-semibold text-secondary">Stock Qty</label>
-                                                <input type="number" class="form-control" name="stockQty[]" placeholder="Stock Qty" value="{{ $oldQtys[$i] ?? '' }}">
+
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold text-secondary">Qty Avail</label>
+                                                <input type="number" class="form-control" name="stockQtyAvail[]" value="{{ $oldQtyAvail[$i] ?? '' }}" readonly>
+                                                @error("stockQtyAvail.$i")
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold text-secondary">Qty Used</label>
+                                                <input type="number" class="form-control" name="stockQty[]" value="{{ $oldQtys[$i] ?? '' }}">
                                                 @error("stockQty.$i")
                                                     <small class="text-danger">{{ $message }}</small>
                                                 @enderror
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold text-secondary">Fee</label>
+                                                <input type="text" class="form-control" name="stofee[]" value="{{ $oldStoFee[$i] ?? '' }}">
+                                                @error("stofee.$i")
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
                                                 <label class="form-label fw-semibold text-secondary">Remove</label>
                                                 <button type="button" class="btn btn-outline-danger w-100 remove-sto">
-                                                    <i class="bi bi-x-circle"></i> Remove
-                                                </button>
+                                                    <i class="bi bi-x-circle"></i></button>
                                             </div>
                                         </div>
 
@@ -332,16 +366,16 @@
                             <div class="col-12">
                                 <label for="equipment" class="form-label">Equipment</label>
                                 <div class="d-flex gap-2 align-items-center">
-                                    <select name="" id="equipment" class="form-select w-50" onchange="getQty()">
+                                    <select name="" id="equipment" class="form-select w-50" onchange="getQtyAdd()">
                                         <option value="">Select Equipment</option>
                                         @foreach ($eqData as $data)
-                                            <option value="{{ $data->id }},{{ $data->eq_available }}">
+                                            <option value="{{ $data->id }},{{ $data->eq_name }} | {{ $data->eq_size }}:{{ $data->eq_available }}">
                                                 {{ $data->id }} — {{ $data->eq_name }}
                                             </option>
                                         @endforeach
                                     </select>
                                     <input type="text" id="avail" class="form-control w-25" readonly placeholder="Available">
-                                    <button type="button" id="add_eq" onclick="checkInputEq()" class="cust-btn cust-btn-primary">Add Equipment</button>
+                                    <button type="button" id="add_eq" onclick="checkInputEqAdd()" class="cust-btn cust-btn-primary">Add Equipment</button>
                                 </div>
                             </div>
                             <div id="addEquipment" class="col-12 mt-3">
@@ -350,6 +384,8 @@
                                     $oldEq = old('eqName', ['']);
                                     $oldEqQtys = old('eqQty', ['']);
                                     $oldEqId = old('equipment', ['']);
+                                    $oldEqQtyAvail = old('eqQtyAvail', ['']);
+                                    $oldEqFee = old('eqfee', ['']);
                                 @endphp
 
                                 @if(!empty(array_filter($oldEq)))
@@ -358,7 +394,7 @@
 
                                         <div class="row g-2 align-items-start mb-2 added-item">
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-8">
                                                 <label class="form-label fw-semibold text-secondary">Equipment</label>
                                                 <input type="text" class="form-control" name="eqName[]" value="{{ $item }}" readonly>
                                                 <input type="text" name="equipment[]" value="{{ $oldEqId[$i] ?? '' }}" hidden>
@@ -366,18 +402,33 @@
                                                     <small class="text-danger">{{ $message }}</small>
                                                 @enderror
                                             </div>
-                                            <div class="col-md-3">
-                                                <label class="form-label fw-semibold text-secondary">Qty</label>
-                                                <input type="number" class="form-control" name="eqQty[]" placeholder="Qty" value="{{ $oldEqQtys[$i] ?? '' }}">     
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold text-secondary">Qty Avail</label>
+                                                <input type="number" class="form-control" name="eqQtyAvail[]" placeholder="Qty" value="{{ $oldEqQtyAvail[$i] ?? '' }}" readonly>     
+                                                @error("eqQtyAvail.$i")
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold text-secondary">Qty Used</label>
+                                                <input type="number" class="form-control" name="eqQty[]" value="{{ $oldEqQtys[$i] ?? '' }}">     
                                                 @error("eqQty.$i")
                                                     <small class="text-danger">{{ $message }}</small>
                                                 @enderror
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold text-secondary">Fee</label>
+                                                <input type="text" class="form-control" name="eqfee[]" value="{{ $oldEqFee[$i] ?? '' }}">     
+                                                @error("eqFee.$i")
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-md-4">
                                                 <label class="form-label fw-semibold text-secondary">Remove</label>
                                                 <button type="button" class="btn btn-outline-danger w-100 remove-eq">
-                                                    <i class="bi bi-x-circle"></i> Remove
-                                                </button>
+                                                    <i class="bi bi-x-circle"></i></button>
                                             </div>
 
                                         </div>
@@ -394,12 +445,141 @@
 
                     </div>
 
+                    <script>
+                        // for items
+                        function getQtyStoAdd() {
+                            const get = document.getElementById('stock');
+                            const stoInput = document.getElementById("sto");
+
+                            if (get && stoInput) {
+                                const idData = get.options[get.selectedIndex].value;
+                                const forQty = idData.slice(idData.indexOf(":") + 1);
+                                stoInput.value = forQty;
+                            } else if (stoInput) {
+                                stoInput.value = '';
+                            }
+                        }
+                        function checkInputStoAdd() {
+                            const input = document.getElementById("sto");
+                            const get = document.getElementById('stock');
+                            if (!input || !get) return;
+
+                            if (input.value.trim() === "") {
+                                alert("Input is empty");
+                                return;
+                            }
+
+                            var idData = get.options[get.selectedIndex].value;
+                            let forId = idData.slice(0, idData.indexOf(","));
+                            let forName = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
+                            let forAvail = idData.slice(idData.indexOf(":") + 1);
+                            const wrapper = document.createElement('div');
+                            wrapper.classList.add('row', 'g-2', 'align-items-start', 'mb-2', 'added-item', 'mt-1');
+
+                            wrapper.innerHTML = `
+                                <div class="col-md-8">
+                                    <label class="form-label fw-semibold text-secondary">Stock</label>
+                                    <input type="text" class="form-control" name="itemName[]" value="${forName}" readonly>
+                                    <input type="text" name="stock[]" value="${forId}" hidden>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-secondary">In Stock</label>
+                                    <input type="text" class="form-control" name="stockQtyAvail[]" value="${forAvail}" readonly>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-secondary">Qty.</label>
+                                    <input type="number" class="form-control" name="stockQty[]">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-secondary">Fee</label>
+                                    <input type="text" class="form-control" name="stofee[]">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-secondary">Remove</label>
+                                    <button type="button" class="btn btn-outline-danger w-100 remove-sto"><i class="bi bi-x-circle"></i> </button>
+                                </div>
+                            `;
+
+                            document.getElementById('addStock').appendChild(wrapper);
+                        }
+
+
+
+                        // for equipment
+
+                        function getQtyAdd() {
+                            const get = document.getElementById('equipment');
+                            const availInput = document.getElementById("avail");
+
+                            if (get && availInput) {
+                                const idData = get.options[get.selectedIndex].value;
+                                const forQty = idData.slice(idData.indexOf(":") + 1);
+                                availInput.value = forQty;
+                            } else if (availInput) {
+                                availInput.value = '';
+                            }
+                        }
+
+                        function checkInputEqAdd() {
+                            const input = document.getElementById("avail");
+                            const get = document.getElementById('equipment');
+                            if (!input || !get) return;
+
+                            if (input.value.trim() === "") {
+                                alert("Input is empty");
+                                return;
+                            }
+
+                            var idData = get.options[get.selectedIndex].value;
+                            let forId = idData.slice(0, idData.indexOf(","));
+                            let forName = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
+                            let forAvail = idData.slice(idData.indexOf(":") + 1);
+                            const wrapper = document.createElement('div');
+                            wrapper.classList.add('row', 'g-2', 'align-items-start', 'mb-2', 'added-item');
+
+                            wrapper.innerHTML = `
+                                <div class="col-md-8">
+                                    <label class="form-label fw-semibold text-secondary">Equipment</label>
+                                    <input type="text" class="form-control" name="eqName[]" value="${forName}" readonly>
+                                    <input type="text" name="equipment[]" value="${forId}" hidden>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-secondary">Qty Avail</label>
+                                    <input type="number" class="form-control" name="eqQtyAvail[]" value="${forAvail}" readonly>     
+                                </div>
+
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-secondary">Qty Used</label>
+                                    <input type="number" class="form-control" name="eqQty[]">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-secondary">Fee</label>
+                                    <input type="text" class="form-control" name="eqfee[]">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-secondary">Remove</label>
+                                    <button type="button" class="btn btn-outline-danger w-100 remove-eq">
+                                        <i class="bi bi-x-circle"></i>
+                                    </button>
+                                </div>
+                            `;
+
+                            document.getElementById('addEquipment').appendChild(wrapper);
+                        }
+
+                    </script>
+
                     {{-- Submit --}}
                     <div class="row justify-content-end mt-4">
                         {{-- Display Error --}}
                         <div class="col col-auto">
-                            @session('promt')
+                            @session('promt-f')
                                 <div class="text-danger small mt-1">{{ $value }}</div>
+                            @endsession
+                             @session('promt-s')
+                                <div class="text-success small mt-1">{{ $value }}</div>
                             @endsession
                         </div>
 

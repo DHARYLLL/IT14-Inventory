@@ -11,20 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stock_outs', function (Blueprint $table) {
+        Schema::create('sto_out_equipment', function (Blueprint $table) {
             $table->id();
-            $table->string('reason', 100);
-            $table->date('so_date');
-            /*
-            $table->smallInteger('so_qty');
-            $table->unsignedBigInteger('stock_id')->nullable();
-            $table->foreign('stock_id')->references('id')->on('stocks')->onUpdate('cascade');
+
+            $table->unsignedBigInteger('so_id')->nullable();
+            $table->foreign('so_id')->references('id')->on('stock_outs')->onUpdate('cascade');
 
             $table->unsignedBigInteger('eq_id')->nullable();
             $table->foreign('eq_id')->references('id')->on('equipments')->onUpdate('cascade');
-            */
-            $table->unsignedBigInteger('emp_id')->nullable();
-            $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade');
+
+            $table->smallInteger('so_qty');
 
             $table->timestamps();
         });
@@ -35,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stock_outs');
+        Schema::dropIfExists('sto_out_equipment');
     }
 };

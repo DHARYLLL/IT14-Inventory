@@ -8,7 +8,9 @@ use App\Models\Log;
 use App\Models\PkgEquipment;
 use App\Models\PkgStock;
 use App\Models\Stock;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class EmbalmerController extends Controller
 {
@@ -281,15 +283,33 @@ class EmbalmerController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
+            'embalmName' => [
+                'required',
+                'max:50',
+                Rule::unique('vehicles', 'driver_name')
+                ->where('veh_plate_no', $request->plateNo)
+                ->ignore($id)
+            ],
+            'embalmPrice' => 'required|numeric|min:1|max:999999.99|',
             'util.*' => 'required|integer|min:1|max:999',
             'eqUtil.*' => 'required|integer|min:1|max:999'  
         ], [
+            'embalmName.required' => 'This field is required.',
+            'embalmName.unique' => 'Name is already added.',
+            'embalmName.max' => '4 digits is the max.',
+
+            'embalmPrice.required' => 'This field is required.',
+            'embalmPrice.numeric' => 'Number only.',
+            'embalmPrice.min' => 'Price must be 1 or more.',
+            'embalmPrice.max' => '6 digits limit reached.',
+
             'util.*.required' => 'This field is required.',
             'util.*.min' => 'Quantity must be 1 or more.',
-            'util.*.max' => '4 digits is the max.',
+            'util.*.max' => '4 digits limit reached.',
+
             'eqUtil.*.required' => 'This field is required.',
             'eqUtil.*.min' => 'Quantity must be 1 or more.',
-            'eqUtil.*.max' => '4 digits is the max.'
+            'eqUtil.*.max' => '4 digits limit reached.'
         ]);
 
         $getEqId = $request->eqId;
@@ -314,11 +334,17 @@ class EmbalmerController extends Controller
                 ]);
             }
         }
+
+        embalming::findOrFail($id)->update([
+            'embalmer_name' => $request->embalmName,
+            'prep_price' => $request->embalmPrice
+        ]);
         
 
         Log::create([
             'transaction' => 'Updated',
             'tx_desc' => 'Updated Items Used To Embalmer | ID: ' . $id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 

@@ -43,7 +43,7 @@
 
                     </div>
 
-                    <div class="row h-65">
+                    <div class="row h-65 mt-2">
 
                         <div class="col-md-6 h-100 overflow-auto">
                             {{-- Stock --}}
@@ -155,11 +155,9 @@
 
                         {{-- Submit Button --}}
                         <div class="col col-auto ">
-                        
-                            <button type="submit" class="cust-btn cust-btn-primary"><i class="bi bi-send"></i>
+                            <button type="submit" class="cust-btn cust-btn-primary"><i class="bi bi-floppy px-2"></i>
                                 Save
-                            </button>
-                        
+                            </button>      
                         </div>
                     </div>
                     

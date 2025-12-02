@@ -6,6 +6,9 @@ use App\Models\Equipment;
 use App\Models\Log;
 use App\Models\Stock;
 use App\Models\stockOut;
+use App\Models\StoOutEquipment;
+use App\Models\StoOutItems;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class StockOutController extends Controller
@@ -35,6 +38,7 @@ class StockOutController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'reason' => 'required|max:100',
             'itemName.*' => 'required',
             'stockQty.*' => 'required|integer|min:1|max:999',
             'stockQtySet.*' => 'required|integer|min:1|max:999',
@@ -42,6 +46,9 @@ class StockOutController extends Controller
             'eqQty.*' => 'required|integer|min:1|max:999',
             'eqQtySet.*' => 'required|integer|min:1|max:999'
         ], [
+            'reason.required' => 'This field is required.',
+            'reason.max' => '100 digits limit reached.',
+
             'stockQty.*.required' => 'This field is required.',
             'stockQty.*.min' => 'Item quantity must be 1 or more.',
             'stockQty.*.max' => '3 digits limit reached.',
@@ -74,7 +81,6 @@ class StockOutController extends Controller
 
         //get all equipment in request
         $allErrors = [];
-        $StoErrors = [];
 
         if ($sto != null) {
             for ($i = 0; $i < count($sto); $i++) {
@@ -98,8 +104,6 @@ class StockOutController extends Controller
             }
             */
         }
-
-        $equipmentErrors = [];
 
         if ($eq !== null) {
             for ($i = 0; $i < count($eq); $i++) {
@@ -127,27 +131,50 @@ class StockOutController extends Controller
             return back()->withErrors($allErrors)->withInput();
         }
 
+        stockOut::create([
+            'reason' => $request->reason,
+            'so_date' => Carbon::today()->toDateString(),
+            'emp_id' => session('loginId') 
+        ]);
+
+        $soId = stockOut::orderBy('id', 'desc')->take(1)->value('id');
+
         if ($sto !== null) {
             for ($i = 0; $i < count($sto); $i++) {
                 $getStoQty = Stock::select('id', 'item_qty')->where('id', $sto[$i])->first();
                 Stock::find($sto[$i])->update([
                     'item_qty' => $getStoQty->item_qty - ($stoQty[$i] * max(1, $stoQtySet[$i]))
                 ]); 
+
+                StoOutItems::create([
+                    'so_id' => $soId,
+                    'stock_id' => $sto[$i],
+                    'so_qty' => $stoQty[$i] * max(1, $stoQtySet[$i])
+                ]);
+
             }
         }
 
         if ($eq !== null) {
             for ($i = 0; $i < count($eq); $i++) {
-                $getEqQty = Equipment::select('id', 'eq_available')->where('id', $sto[$i])->first();
+                $getEqQty = Equipment::select('id', 'eq_available')->where('id', $eq[$i])->first();
                 Equipment::find($eq[$i])->update([
                     'eq_available' => $getEqQty->eq_available - ($eqQty[$i] * max(1, $eqQtySet[$i]))
                 ]); 
+
+                StoOutEquipment::create([
+                    'so_id' => $soId,
+                    'eq_id' => $eq[$i],
+                    'so_qty' => $eqQty[$i] * max(1, $eqQtySet[$i])
+                ]);
             }
         }
-
+        
+        
         Log::create([
             'transaction' => 'Stock Out',
-            'tx_desc' => 'Stock out | Items:'. count($sto) . ' | Equipment: '. count($eq),
+            'tx_desc' => 'Stock out | Items: '. max(0, count($sto ?? [])) . ' | Equipment: '. max(0, count($eq ?? [])),
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId') 
         ]);
 
@@ -159,7 +186,10 @@ class StockOutController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $soData = stockOut::findOrFail($id);
+        $soStoData = StoOutItems::where('so_id', $id)->get();
+        $soEqData =StoOutEquipment::where('so_id', $id)->get();
+        return view('shows/stockOutShow', ['soData' => $soData, 'soStoData' => $soStoData, 'soEqData' => $soEqData]);
     }
 
     /**

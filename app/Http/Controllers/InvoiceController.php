@@ -45,14 +45,13 @@ class InvoiceController extends Controller
             'delivered_date' => Carbon::now()->format('Y-m-d')
         ]);
 
-        $empId = Employee::orderBy('id','desc')->take(1)->value('id');
         $invId = Invoice::orderBy('id','desc')->take(1)->value('id');
 
         Log::create([
-            'action' => 'Create',
-            'from' => 'Created Invoice | ID: ' . $invId,
-            'action_date' => Carbon::now()->format('Y-m-d'),
-            'emp_id' => $empId
+            'transaction' => 'Create',
+            'tx_desc' => 'Created Invoice | ID: ' . $invId,
+            'tx_date' => Carbon::now(),
+            'emp_id' => session('loginId')
         ]);
 
         return redirect()->back();

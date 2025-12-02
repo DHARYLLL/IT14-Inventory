@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('item_name', 100)->unique();
             $table->smallInteger('item_qty');
             $table->string('item_size', 20);
+            /*
             $table->decimal('item_unit_price', 8,2);
             $table->smallInteger('item_qty_set')->nullable();
             $table->smallInteger('item_total_qty')->nullable();
+            */
             $table->string('item_type', 15);
 
             $table->timestamps();

@@ -5,7 +5,7 @@
     @section('head', 'Embalmers')
 
     <div class="d-flex align-items-center justify-content-between p-2 mb-0 cust-h-heading">
-    <div class="input-group" style="max-width: 600px; border-radius: 10px; overflow: hidden;">
+    <div class="input-group cust-searchbar">
         <input type="text" id="searchInput" class="form-control" placeholder="Search Embalmer"
             style="border-radius: 0; border: none;">
         <button class="btn" id="clearSearch"

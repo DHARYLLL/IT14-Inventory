@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BAClientInfos;
+use App\Models\BAFatherInfos;
+use App\Models\BAMotherInfos;
+use App\Models\BAOtherInfos;
 use App\Models\BurialAssistance;
 use App\Models\jobOrder;
+use App\Models\jobOrderDetails;
 use App\Models\Log;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -32,19 +38,31 @@ class BurialAssistanceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'civilStatus' => 'required|max:20',
+            'cliLname' => 'required|max:20',
+            'cliFname' => 'required|max:50',
+            'cliMname' => 'required|max:20',
+            'civilStatus' => 'required',
             'religion' => 'required|max:50',
+            'address' => 'required|max:150',
             'birthDate' => [
                 'required',
                 Rule::date()->beforeOrEqual(today())
             ],
-            'address' => 'required|max:150',
             'gender' => 'required',
             'rotd' => 'required|max:50',
             'amount' => 'required|numeric|min:1|max:999999'
+            
         ], [
+            'cliLname.required' => 'This field is required.',
+            'cliLname.max' => '20 character limit reached.',
+
+            'cliFname.required' => 'This field is required.',
+            'cliFname.max' => '50 character limit reached.',
+
+            'cliMname.required' => 'This field is required.',
+            'cliMname.max' => '20 character limit reached.',
+
             'civilStatus.required' => 'This field is required.',
-            'civilStatus.max' => '20 character limit reached.',
 
             'religion.required' => 'This field is required.',
             'religion.max' => '50 character limit reached.',
@@ -64,11 +82,95 @@ class BurialAssistanceController extends Controller
             'amount.numeric' => 'Number only.',
             'amount.min' => 'Amount must be 1 or more',
             'amount.max' => '6 digit limit reached.',
-
         ]);
+        //dd('hello');
+        $getTotal = jobOrder::select('id', 'jod_id', 'jo_dp', 'jo_total')->where('id', $request->joId)->first();
+        $getStat = jobOrderDetails::select('id', 'jod_eq_stat')->where('id', $getTotal->jod_id)->first();
 
-        $getTotal = jobOrder::select('jo_dp', 'jo_total')->where('id', $request->joId)->first();
-        if (($getTotal->jo_dp - $getTotal->jo_total) <= $request->amount)
+
+        // validate for mother info
+        if ($request->filled('motherLname') || $request->filled('motherFname') || $request->filled('motherMname') ||
+            $request->filled('momCivilStatus') || $request->filled('momReligion')) {
+            $request->validate([
+                'motherLname' => 'required|max:20',
+                'motherFname' => 'required|max:50',
+                'motherMname' => 'required|max:20',
+                'momCivilStatus' => 'required',
+                'momReligion' => 'required|max:50',
+            ], [
+                'motherLname.required' => 'This field is required.',
+                'motherLname.max' => '20 character limit reached.',
+
+                'motherFname.required' => 'This field is required.',
+                'motherFname.max' => '50 character limit reached.',
+
+                'motherMname.required' => 'This field is required.',
+                'motherMname.max' => '20 character limit reached.',
+
+                'momCivilStatus.required' => 'This field is required.',
+
+                'momReligion.required' => 'This field is required.',
+                'momReligion.max' => '50 character limit reached.',
+            ]);
+        }
+        // validate for father info
+        if ($request->filled('fatherFname') || $request->filled('fatherMname') || $request->filled('fatherLname') ||
+            $request->filled('fatherCivilStatus') || $request->filled('fatherReligion')) {
+            $request->validate([
+                'fatherLname' => 'required|max:20',
+                'fatherFname' => 'required|max:50',
+                'fatherMname' => 'required|max:20',
+                'fatherCivilStatus' => 'required',
+                'fatherReligion' => 'required|max:50',
+            ], [
+                'fatherLname.required' => 'This field is required.',
+                'fatherLname.max' => '20 character limit reached.',
+
+                'fatherFname.required' => 'This field is required.',
+                'fatherFname.max' => '50 character limit reached.',
+
+                'fatherMname.required' => 'This field is required.',
+                'fatherMname.max' => '20 character limit reached.',
+
+                'fatherCivilStatus.required' => 'This field is required.',
+
+                'fatherReligion.required' => 'This field is required.',
+                'fatherReligion.max' => '50 character limit reached.',
+            ]);
+        }
+        //validate other info
+        if ($request->filled('otherFname') || $request->filled('otherMname') || $request->filled('otherLname') ||
+            $request->filled('otherCivilStatus') || $request->filled('otherReligion') || $request->filled('relationship')) {
+            $request->validate([
+                'otherLname' => 'required|max:20',
+                'otherFname' => 'required|max:50',
+                'otherMname' => 'required|max:20',
+                'otherCivilStatus' => 'required',
+                'otherReligion' => 'required|max:50',
+                'relationship' => 'required|max:50',
+            ], [
+                'otherLname.required' => 'This field is required.',
+                'otherLname.max' => '20 character limit reached.',
+
+                'otherFname.required' => 'This field is required.',
+                'otherFname.max' => '50 character limit reached.',
+
+                'otherMname.required' => 'This field is required.',
+                'otherMname.max' => '20 character limit reached.',
+
+                'otherCivilStatus.required' => 'This field is required.',
+
+                'otherReligion.required' => 'This field is required.',
+                'otherReligion.max' => '50 character limit reached.',
+
+                'relationship.required' => 'This field is required.',
+                'relationship.max' => '50 character limit reached.',
+            ]);
+        }
+
+        //dd(($getTotal->jo_total - $getTotal->jo_dp) <= $request->amount);
+        //dd($getStat->jod_eq_stat);
+        if (($getTotal->jo_total - $getTotal->jo_dp) <= $request->amount)
         {
             jobOrder::findOrFail($request->joId)->update([
                 'jo_status' => 'Paid'
@@ -76,23 +178,77 @@ class BurialAssistanceController extends Controller
         }
         
         BurialAssistance::create([
+            'amount' => $request->amount,
+            'jo_id' => $request->joId,
+        ]);
+
+        $burAsstId = BurialAssistance::orderBy('id', 'desc')->take(1)->value('id');
+
+        BAClientInfos::create([
+            'cli_fname' => $request->cliFname,
+            'cli_mname' => $request->cliMname,
+            'cli_lname' => $request->cliLname,
             'civil_status' => $request->civilStatus,
             'religion' => $request->religion,
             'address' => $request->address,
             'birthdate' => $request->birthDate,
             'gender' => $request->gender,
             'rel_to_the_dec' => $request->rotd,
-            'amount' => $request->amount,
-            'jo_id' => $request->joId,
+            'bur_asst_id' => $burAsstId
         ]);
+        
+        if ($request->filled('motherLname') || $request->filled('motherFname') || $request->filled('motherMname')) {
+            BAMotherInfos::create([
+                'fname' => $request->motherFname,
+                'mname' => $request->motherMname,
+                'lname' => $request->motherLname,
+                'civil_status' => $request->momCivilStatus,
+                'religion' => $request->momReligion,
+                'bur_asst_id' => $burAsstId
+            ]);
+        }
+
+        if ($request->filled('fatherFname') || $request->filled('fatherMname') || $request->filled('fatherLname')) {     
+            BAFatherInfos::create([
+                'fname' => $request->fatherFname,
+                'mname' => $request->fatherMname,
+                'lname' => $request->fatherLname,
+                'civil_status' => $request->fatherCivilStatus,
+                'religion' => $request->fatherReligion,
+                'bur_asst_id' => $burAsstId
+            ]);
+        }
+
+        if ($request->filled('otherFname') || $request->filled('otherMname') || $request->filled('otherLname')) {      
+            BAOtherInfos::create([
+                'fname' => $request->otherFname,
+                'mname' => $request->otherMname,
+                'lname' => $request->otherLname,
+                'civil_status' => $request->otherCivilStatus,
+                'religion' => $request->otherReligion,
+                'relationship'=> $request->relationship,
+                'bur_asst_id' => $burAsstId
+            ]);
+        }
 
         Log::create([
             'transaction' => 'Apply',
-            'tx_desc' => 'Apllied for Burial Assistance at Job Order | ID: ' . $request->joId,
+            'tx_desc' => 'Applied GL at Job Order | ID: ' . $request->joId,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Job-Order.showDeploy', $request->joId))->with('promt', 'Applied Successfuly');
+        if ($getStat->jod_eq_stat == 'Pending') {
+            return redirect(route('Job-Order.showDeploy', $request->joId))->with('promt-s', 'Applied Successfuly');
+        }
+        if ($getStat->jod_eq_stat == 'Deployed') {
+            return redirect(route('Job-Order.showReturn', $request->joId))->with('promt-s', 'Applied Successfuly');
+        }
+        if ($getStat->jod_eq_stat == 'Returned') {
+            return redirect(route('Job-Order.show', $request->joId))->with('promt-s', 'Applied Successfuly');
+        }
+
+        
     }
 
     /**
@@ -100,7 +256,25 @@ class BurialAssistanceController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $burrAsstData = BurialAssistance::findOrFail($id);
+        return view('shows/burialAssistanceShow', ['burrAsstData' => $burrAsstData]);
+    }
+
+    public function burrAsstBack(string $id)
+    {
+        $joData = jobOrder::select('id', 'jod_id')->where('id', $id)->first();
+        $jodData = jobOrderDetails::select('id', 'jod_eq_stat')->where('id', $joData->jod_id)->first();
+
+        if ($jodData->jod_eq_stat == 'Pending') {
+            return redirect(route('Job-Order.showDeploy', $joData->id));
+        }
+        if ($jodData->jod_eq_stat == 'Deployed') {
+            return redirect(route('Job-Order.showReturn', $joData->id));
+        }
+        if ($jodData->jod_eq_stat == 'Returned') {
+            return redirect(route('Job-Order.show', $joData->id));
+        }
+
     }
 
     /**
@@ -125,19 +299,27 @@ class BurialAssistanceController extends Controller
             'payAmount.max' => '6 digit limit reached.'
         ]);
 
-        $getDp = jobOrder::select('id', 'jo_dp')->where('id', $id)->first();
+        
+
+        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total')->where('id', $id)->first();
+        //$getStat = jobOrderDetails::select('id', 'jod_eq_stat')->where('id', $getDp->svc_id)->first();
+        //dd(($request->payAmount + $getDp->jo_dp + $request->burAssistAmount) >= $getDp->jo_total ? 'Paid' : 'Pending');
+
         jobOrder::findOrFail($id)->update([
             'jo_dp' => $getDp->jo_dp + $request->payAmount,
-            'jo_status' => 'Paid'
+            'jo_status' => ($request->payAmount + $getDp->jo_dp + $request->burAssistAmount) >= $getDp->jo_total ? 'Paid' : 'Pending'
         ]);
 
         Log::create([
             'transaction' => 'Pay',
             'tx_desc' => 'Payed for Job Order| ID: ' . $id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId') 
         ]);
 
-        return redirect(route('Job-Order.show', $id))->with('promt-s', 'Balance has been Paid Successfully.');
+
+        return redirect()->back()->with('promt-s', 'Paid Successfully.');
+    
     }
 
     /**

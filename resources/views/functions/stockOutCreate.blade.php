@@ -6,7 +6,7 @@
 @section('content')
 
     {{-- Main Card --}}
-    <div class="cust-h">
+    <div class="cust-h-full">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body h-100">
                 <form action="{{ route('Stock-Out.store') }}" method="POST" id="form" class="h-100">
@@ -143,8 +143,17 @@
                     </div>
                     --}}
 
-                    <div class="row h-75">
-                        <div class="col-md-6 h-100 overflow-auto">
+                    <div class="row cust-h-form">
+
+                        <div class="col-md-12 h-25">
+                            <label for="" class="form-label">Reason for Stock-out</label>
+                            <input type="text" class="form-control" name="reason" value="{{ old('reason') }}">
+                            @error('reason')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6 h-75 overflow-auto">
 
                             <div class="row">
                                 {{-- Stock --}}
@@ -161,7 +170,7 @@
                                         </select>
                                         <input type="text" id="sto" class="form-control w-25" readonly placeholder="Available" hidden>
                                 
-                                        <button type="button" id="add_sto" onclick="checkInputSto()" class="btn btn-green"><i
+                                        <button type="button" id="add_sto" onclick="checkInputSto()" class="cust-btn cust-btn-primary"><i
                                                 class="bi bi-plus-circle"></i>
                                             Add Stock
                                         </button>
@@ -223,7 +232,7 @@
 
                         </div>
 
-                        <div class="col-md-6 h-100 overflow-auto">
+                        <div class="col-md-6 h-75 overflow-auto">
 
                             <div class="row">
                                 {{-- Equipment --}}
@@ -239,10 +248,7 @@
                                             @endforeach
                                         </select>
                                         <input type="text" id="avail" class="form-control w-25" readonly placeholder="Available" hidden>
-                                        @session('emptyEq')
-                                                <div class="text-danger small mt-1">{{ $value }}</div>
-                                        @endsession
-                                        <button type="button" id="add_eq" onclick="checkInputEq()" class="btn btn-green"><i
+                                        <button type="button" id="add_eq" onclick="checkInputEq()" class="cust-btn cust-btn-primary"><i
                                                 class="bi bi-plus-circle"></i>
                                             Add Equipment
                                         </button>
@@ -316,6 +322,9 @@
                         <div class="col col-auto">
                              @session('promt')
                                 <div class="text-success small mt-1">{{ $value }}</div>
+                            @endsession
+                            @session('emptyEq')
+                                <div class="text-danger small mt-1">{{ $value }}</div>
                             @endsession
                         </div>
 

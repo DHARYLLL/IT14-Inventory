@@ -5,15 +5,15 @@
     @section('head', 'Vehicles')
 
     <div class="d-flex align-items-center justify-content-between p-2 mb-0 cust-h-heading">
-    <div class="input-group cust-searchbar">
-        <input type="text" id="searchInput" class="form-control" placeholder="Search Vehicle"
-            style="border-radius: 0; border: none;">
-        <button class="btn" id="clearSearch"
-            style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
-    </div>
-    <div>
-        <a href="{{ route('Vehicle.create') }}" class="cust-btn cust-btn-primary"><i class="bi bi-plus-lg"></i> <span>Add Vehicle</span></a>
-    </div>
+        <div class="input-group cust-searchbar">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search Vehicle"
+                style="border-radius: 0; border: none;">
+            <button class="btn" id="clearSearch"
+                style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
+        </div>
+        <div>
+            <a href="{{ route('Vehicle.create') }}" class="cust-btn cust-btn-primary"><i class="bi bi-plus-lg"></i> <span>Add Vehicle</span></a>
+        </div>
     </div>
 
 

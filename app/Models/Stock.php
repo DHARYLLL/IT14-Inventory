@@ -11,9 +11,11 @@ class Stock extends Model
         'item_name',
         'item_qty',
         'item_size',
+        /*
         'item_unit_price',
         'item_qty_set',
         'item_total_qty',
+        */
         'item_type'
     ];
 

@@ -46,6 +46,82 @@
         <div class="bottom-section">
             <div class="row g-3">
 
+                {{-- Schedule --}}
+                <div class="col-md-12">
+                    <div class="dashboard-box">
+                        <h5>Schedule</h5>
+                        <div class="placeholder-box overflow-auto">
+                            <table class="table table-borderless table-hover placeholder-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Client</th>
+                                        <th>Contact #</th>
+                                        <th>Start date</th>
+                                        <th>Start time</th>
+                                        <th>Equipment</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if ($jobOrdData->isEmpty())
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">No schedule available</td>
+                                        </tr>
+                                    @else
+                                        @foreach ($jobOrdData as $row)
+                                            <tr>
+                                                <td>{{ $row->client_name }}</td>
+                                                <td>{{ $row->client_contact_number }}</td>
+                                                <td>{{ $row->jo_start_date }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($row->jo_start_time)->format('g:i A') }}</td>
+                                                <td>{{ $row->joToJod->jod_eq_stat }}</td>
+                                                <td>
+                                                    @if($row->jod_id)
+                                                        @if($row->joToJod->jod_eq_stat == 'Pending')
+                                                            <a href="{{ route('Job-Order.showDeploy', $row->id) }}"
+                                                                class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Deploy">
+                                                                <i class="bi bi-box-arrow-up"></i>
+                                                            </a>
+                                                        @endif 
+                                                        @if($row->joToJod->jod_eq_stat == 'Deployed')
+                                                            <a href="{{ route('Job-Order.showReturn', $row->id) }}"
+                                                                class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Return">
+                                                                <i class="bi bi-box-arrow-in-down"></i>
+                                                            </a>
+                                                        @endif 
+                                                        @if($row->joToJod->jod_eq_stat == 'Returned')
+                                                            <a href="{{ route('Job-Order.show', $row->id) }}"
+                                                                class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                                <i class="fi fi-rr-eye"></i>                              
+                                                            </a>
+                                                        @endif 
+                                                    @endif
+                                                    @if($row->svc_id)
+                                                        @if($row->jo_status == 'Paid')
+                                                            <a href="{{ route('Service-Request.show', $row->id) }}"
+                                                                class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                                <i class="fi fi-rr-eye"></i>
+                                                            </a>
+                                                        @else
+                                                            <a href="{{ route('Service-Request.show', $row->id) }}"
+                                                                class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Review">
+                                                                <i class="bi bi-list-ul"></i>
+                                                            </a>
+                                                        @endif
+
+                                                        
+                                                    @endif
+
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Recent Activity -->
                 <div class="col-md-6">
                     <div class="dashboard-box">
@@ -113,6 +189,8 @@
                         </div>
                     </div>
                 </div>
+
+                
 
             </div>
         </div>

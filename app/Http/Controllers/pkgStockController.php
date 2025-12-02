@@ -6,6 +6,7 @@ use App\Models\Log;
 use App\Models\Package;
 use App\Models\PkgStock;
 use App\Models\Stock;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class pkgStockController extends Controller
@@ -40,20 +41,28 @@ class pkgStockController extends Controller
             'utilQty.min' => 'Must be 1 or more.',
             'utilQty.max' => '6 digit max reached.',
         ]);
-
-        PkgStock::create([
-            'pkg_id' => $request->pkgId,
-            'stock_id' => $request->stoAdd,
-            'stock_used' => $request->utilQty
-        ]);
+        $getQty = PkgStock::select('id', 'stock_used')->where('stock_id', $request->stoAdd)->where('pkg_id', $request->pkgId)->first();
+ 
+        if ($getQty) {
+            PkgStock::findOrFail($getQty->id)->update([
+                'stock_used' => $getQty->stock_used + $request->utilQty
+            ]);
+        } else {
+            PkgStock::create([
+                'pkg_id' => $request->pkgId,
+                'stock_id' => $request->stoAdd,
+                'stock_used' => $request->utilQty
+            ]);
+        }
 
         Log::create([
             'transaction' => 'Added',
             'tx_desc' => 'Added New Item (ID: '. $request->stoAdd .') to Package (ID: ' . $request->pkgId . ')',
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-sto', 'Added Successfully.');
+        return redirect()->back()->with('promt-s', 'Added Successfully.');
     }
 
     /**
@@ -94,10 +103,11 @@ class pkgStockController extends Controller
         Log::create([
             'transaction' => 'Updated',
             'tx_desc' => 'Updated Utilize Qty. from Package | ID: ' . $pkgId,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-sto', 'Updated Successfully.');
+        return redirect()->back()->with('promt-s', 'Updated Successfully.');
     }
 
     /**
@@ -112,9 +122,10 @@ class pkgStockController extends Controller
         Log::create([
             'transaction' => 'Deleted',
             'tx_desc' => 'Deleted Item (ID: '. $id .') from Package | ID: ' . $pkgId,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-sto', 'Deleted Successfully.');
+        return redirect()->back()->with('promt-s', 'Deleted Successfully.');
     }
 }

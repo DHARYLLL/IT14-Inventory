@@ -193,6 +193,7 @@ class PurchaseOrderController extends Controller
         Log::create([
             'transaction' => 'Create',
             'tx_desc' => 'Created Purchase Order | ID: ' . $po,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
@@ -308,12 +309,14 @@ class PurchaseOrderController extends Controller
         Log::create([
             'transaction' => 'Create',
             'tx_desc' => 'Created Invoice | ID: ' . $invId,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
         Log::create([
             'transaction' => 'Added',
             'tx_desc' => 'Added Stock from Po | ID: ' . $request->po_id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
@@ -352,6 +355,7 @@ class PurchaseOrderController extends Controller
         Log::create([
             'transaction' => 'Approved',
             'tx_desc' => 'Approved Purchase Order | ID: ' . $id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
@@ -380,6 +384,7 @@ class PurchaseOrderController extends Controller
         Log::create([
             'transaction' => 'Deleted',
             'tx_desc' => 'Delted Purchase Order | ID: ' . $id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
         return redirect()->back()->with('success', 'Deleted Successfully');

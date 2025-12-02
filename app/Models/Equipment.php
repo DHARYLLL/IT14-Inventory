@@ -12,9 +12,11 @@ class Equipment extends Model
         'eq_type',
         'eq_available',
         'eq_size',
+        /*
         'eq_qty_set',
         'eq_total_qty',
         'eq_unit_price',
+        */
         'eq_in_use'
     ];
 

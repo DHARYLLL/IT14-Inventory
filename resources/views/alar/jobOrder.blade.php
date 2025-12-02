@@ -29,6 +29,7 @@
                 <th class="fw-semibold">Client</th>
                 <th class="fw-semibold">Contact #</th>
                 <th class="fw-semibold">Status</th>
+                <th class="fw-semibold">Type</th>
                 <th class="fw-semibold">Start Date</th>
                 <th class="fw-semibold">Employee</th>
                 <th class="fw-semibold">Action</th>
@@ -51,6 +52,7 @@
                         <td>{{ $row->client_name ?? '—' }}</td>
                         <td>{{ $row->client_contact_number ?? '—' }}</td>
                         <td>{{ $row->jo_status }}</td>
+                        <td>{{ $row->jod_id ? 'Package' : 'Service' }}</td>
                         <td>{{ $row->jo_start_date }}</td>
                         <td>{{ $row->joToEmp->emp_fname }} {{ $row->joToEmp->emp_lname }}</td>
                         <td class="text-center align-middle">
@@ -69,12 +71,27 @@
                                             <i class="bi bi-box-arrow-in-down"></i>
                                         </a>
                                     @endif 
+                                    @if($row->joToJod->jod_eq_stat == 'Returned')
+                                        <a href="{{ route('Job-Order.show', $row->id) }}"
+                                            class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                            <i class="fi fi-rr-eye"></i>                              
+                                        </a>
+                                    @endif 
                                 @endif
                                 @if($row->svc_id)
-                                    <a href="{{ route('Service-Request.show', $row->id) }}"
-                                        class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Review">
-                                        <i class="bi bi-list-ul"></i>
-                                    </a>
+                                    @if($row->jo_status == 'Paid')
+                                        <a href="{{ route('Service-Request.show', $row->id) }}"
+                                            class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                            <i class="fi fi-rr-eye"></i>
+                                        </a>
+                                    @else
+                                        <a href="{{ route('Service-Request.show', $row->id) }}"
+                                            class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Review">
+                                            <i class="bi bi-list-ul"></i>
+                                        </a>
+                                    @endif
+
+                                    
                                 @endif
 
 

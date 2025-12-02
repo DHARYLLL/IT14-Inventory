@@ -18,9 +18,21 @@ class StockController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $stoData = Stock::paginate(5);
+        //$stoData = Stock::paginate(5);
+        $query = Stock::query();
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('item_name', 'LIKE', "%{$search}%")
+                ->orWhere('item_size', 'LIKE', "%{$search}%")
+                ->orWhere('id', 'LIKE', "%{$search}%");
+        });
+    }
+
+        $stoData = $query->paginate(10)->appends($request->only('search'));
         return view('alar.stock', ['stoData' => $stoData]);
     }
 
@@ -195,12 +207,14 @@ class StockController extends Controller
         Log::create([
             'transaction' => 'Create',
             'tx_desc' => 'Created Invoice | ID: ' . $invId,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
         Log::create([
             'transaction' => 'Added',
             'tx_desc' => 'Added Stock from Po | ID: ' . $request->po_id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
@@ -251,6 +265,7 @@ class StockController extends Controller
         Log::create([
             'transaction' => 'Updated',
             'tx_desc' => 'Update Stock | ID: ' . $id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 

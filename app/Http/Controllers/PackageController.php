@@ -13,6 +13,7 @@ use App\Models\PkgStock;
 use App\Models\Stock;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use PhpParser\Node\Expr\Cast\String_;
 
 class PackageController extends Controller
@@ -153,10 +154,12 @@ class PackageController extends Controller
                 ]);
             }
         }
+        
 
         Log::create([
             'transaction' => 'Added',
             'tx_desc' => 'Added Package | ID: ' . $getPkg,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
@@ -188,29 +191,87 @@ class PackageController extends Controller
         return view('functions/packageEdit', ['pkgData' => $pkgData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'eqData' => $eqData, 'stoData' => $stoData]);
     }
 
+    public function addRemoveItem(String $id)
+    {
+        $pkgData = Package::findOrFail($id);
+        $pkgEqData = PkgEquipment::where('pkg_id', '=', $id)->get();
+        $pkgStoData = PkgStock::where('pkg_id', '=', $id)->get();
+        $eqData = Equipment::all();
+        $stoData = Stock::all();
+        return view('functions/packageAddRemoveItem', ['pkgData' => $pkgData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'eqData' => $eqData, 'stoData' => $stoData]);
+    }
+
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, String $id)
     {
         $request->validate([
-            'pkgName' => 'required|max:50|unique:packages,pkg_name'
+            'pkgName' => [
+                'required',
+                'max:50',
+                Rule::unique('packages', 'pkg_name')
+                ->where('pkg_price', $request->plateNo)
+                ->ignore($id)
+            ],
+            'pkgPrice' => 'required|numeric|min:1|max:999999.99',
+            'eqUtil.*'  => 'required|integer|min:1|max:999',
+            'stoUtil.*'  => 'required|integer|min:1|max:999'
         ], [
             'pkgName.required' => 'This field is required.',
             'pkgName.unique' => 'Package name is already added.',
-            'pkgName.max' => 'Max 50 character reached.'
+            'pkgName.max' => 'Max 50 character reached.',
+
+            'pkgPrice.required' => 'This field is required.',
+            'pkgPrice.numeric' => 'Number only.',
+            'pkgPrice.min' => 'Price must be 1 or more.',
+            'pkgPrice.max' => '6 digit price reached.',
+
+            'stoUtil.*.required' => 'This field is required.',
+            'stoUtil.*.min' => 'Quantity must be 1 or more.',
+            'stoUtil.*.max' => '3 digits limit reached.',
+
+            'eqUtil.*.required' => 'This field is required.',
+            'eqUtil.*.min' => 'Quantity must be 1 or more.',
+            'eqUtil.*.max' => '3 digits limit reached.',
         ]);
+
+        //dd('hello');
+        $stoId = $request->pkgStoId;
+        $stoQty = $request->stoUtil;
+        
+        $eqId = $request->pkgEqId;
+        $eqQty = $request->eqUtil;
+
         Package::findOrFail($id)->update([
-            'pkg_name' => $request->pkgName
+            'pkg_name' => $request->pkgName,
+            'pkg_price' => $request->pkgPrice
         ]);
+
+        if ($stoId != null) {
+            for ($i=0; $i < count($stoId); $i++) { 
+                PkgStock::findOrFail($stoId[$i])->update([
+                    'stock_used' => $stoQty[$i]
+                ]);
+            }
+        }
+
+        if ($eqId != null) {
+            for ($i=0; $i < count($eqId); $i++) { 
+                PkgEquipment::findOrFail($eqId[$i])->update([
+                    'eq_used' => $eqQty[$i]
+                ]);
+            }
+        }
 
         Log::create([
             'transaction' => 'Update',
             'tx_desc' => 'Updated Package name | ID: ' . $id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt', 'Updated Sucessfuly');
+        return redirect()->back()->with('promt-s', 'Updated Sucessfuly');
     }
 
     /**
@@ -222,6 +283,7 @@ class PackageController extends Controller
         Log::create([
             'transaction' => 'Deleted',
             'tx_desc' => 'Delted Package | ID: ' . $id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
         

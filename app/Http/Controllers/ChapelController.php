@@ -70,6 +70,7 @@ class ChapelController extends Controller
         Log::create([
             'transaction' => 'Added',
             'tx_desc' => 'Added Chapel | ID: ' . $getChap,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
@@ -133,6 +134,7 @@ class ChapelController extends Controller
         Log::create([
             'transaction' => 'Updated',
             'tx_desc' => 'Update Chapel | ID: ' . $id,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 

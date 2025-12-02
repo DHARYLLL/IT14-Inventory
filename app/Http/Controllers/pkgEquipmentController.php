@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Log;
 use App\Models\PkgEquipment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class pkgEquipmentController extends Controller
@@ -39,19 +40,29 @@ class pkgEquipmentController extends Controller
             'eqUtilQty.max' => '6 digit max reached.',
         ]);
 
-        PkgEquipment::create([
-            'pkg_id' => $request->pkgId,
-            'eq_id' => $request->eqAdd,
-            'eq_used' => $request->eqUtilQty
-        ]);
+        $getQty = PkgEquipment::select('id', 'eq_used')->where('pkg_id', $request->pkgId)->where('eq_id', $request->eqAdd)->first();
+        
+        if ($getQty) {
+            PkgEquipment::findOrFail($getQty->id)->update([
+                'eq_used' => $getQty->eq_used + $request->eqUtilQty
+            ]);
+        } else {
+            PkgEquipment::create([
+                'pkg_id' => $request->pkgId,
+                'eq_id' => $request->eqAdd,
+                'eq_used' => $request->eqUtilQty
+            ]);
+        }
+       
 
         Log::create([
             'transaction' => 'Added',
             'tx_desc' => 'Added New Equipment (ID: '. $request->eqAdd .') to Package (ID: ' . $request->pkgId . ')',
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-eq', 'Added Successfully.');
+        return redirect()->back()->with('promt-s', 'Added Successfully.');
     }
 
     /**
@@ -92,10 +103,11 @@ class pkgEquipmentController extends Controller
         Log::create([
             'transaction' => 'Updated',
             'tx_desc' => 'Updated Utilize Qty. from Package | ID: ' . $pkgId,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-eq', 'Updated Successfully.');
+        return redirect()->back()->with('promt-s', 'Updated Successfully.');
     }
 
     /**
@@ -109,9 +121,10 @@ class pkgEquipmentController extends Controller
         Log::create([
             'transaction' => 'Deleted',
             'tx_desc' => 'Deleted Equipment (ID: '. $id .') from Package | ID: ' . $pkgId,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-eq', 'Deleted Successfully.');
+        return redirect()->back()->with('promt-s', 'Deleted Successfully.');
     }
 }
