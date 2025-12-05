@@ -8,6 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
     <script defer src="{{ secure_asset('js/func.js') }}"></script>
+    
 
     <!-- Custom JS -->
     <script defer src="{{ secure_asset('js/func.js') }}"></script>
