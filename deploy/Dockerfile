@@ -41,3 +41,4 @@ EXPOSE 80
 
 # Start PHP-FPM and Nginx in foreground
 CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
+
