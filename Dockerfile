@@ -10,21 +10,20 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Install Node.js (required for Vite)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
+
 WORKDIR /var/www
 
 # Copy app files
 COPY . .
 
-# Install PHP dependencies
+# Install backend dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Install Node (required for Vite)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs
-
-# Build frontend assets
+# Install frontend dependencies and build assets
 RUN npm install && npm run build
-
 
 # Create cache tables migration (skip sqlite error)
 RUN php artisan cache:table 2>/dev/null || true && \
@@ -40,5 +39,4 @@ RUN php artisan storage:link
 
 EXPOSE 8080
 
-# Start Laravel without pre-clearing cache (will clear on first run)
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
