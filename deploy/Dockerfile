@@ -38,12 +38,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
-# Clear Laravel caches
-RUN php artisan config:clear \
-    && php artisan cache:clear \
-    && php artisan view:clear \
-    && php artisan route:clear
-
 # Create .htaccess if missing
 RUN if [ ! -f "/var/www/html/public/.htaccess" ]; then \
     echo 'Creating .htaccess file'; \
