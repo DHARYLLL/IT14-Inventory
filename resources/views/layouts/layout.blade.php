@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
-    <script defer src="{{ asset('JS/func.js') }}"></script>
+    <script defer src="{{ asset('js/func.js') }}"></script>
 
     <!-- Flaticon uIcons -->
     <link rel="stylesheet"
@@ -15,16 +15,16 @@
     <link rel="stylesheet"
         href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-straight/css/uicons-regular-straight.css">
 
-    <link rel="stylesheet" href="{{ asset('CSS/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
     
-    <link rel="stylesheet" href="{{ asset('CSS/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset('CSS/purchaseOrder.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/purchaseOrder.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('CSS/layout.css') }}">
-    <link rel="stylesheet" href="{{ asset('CSS/equipment.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/equipment.css') }}">
     <link rel="stylesheet" href="{{ asset('css/supplier.css') }}">
     <link rel="stylesheet" href="{{ asset('css/stockEdit.css') }}">
 
