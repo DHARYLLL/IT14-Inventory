@@ -167,3 +167,13 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::delete('/supplier/{supplier}/delete', [SupplierController::class, 'destroy'])->name('supplier.destroy');
     Route::put('/Supplier/{supplier}/update', [SupplierController::class, 'update'])->name('supplier.update');
 });
+
+Route::get('/test-assets', function() {
+    return response()->json([
+        'css_exists' => file_exists(public_path('css/style.css')),
+        'css_path' => public_path('css/style.css'),
+        'files_in_css' => scandir(public_path('css')),
+        'public_path' => public_path(),
+        'base_path' => base_path(),
+    ]);
+});
