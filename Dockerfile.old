@@ -1,8 +1,8 @@
-FROM php:8.2-cli
+FROM php:8.2-fpm
 
-# Install system dependencies
+# Install system packages
 RUN apt-get update && apt-get install -y \
-    git curl unzip libpq-dev libonig-dev libzip-dev zip \
+    git curl unzip libpq-dev libonig-dev libzip-dev zip nginx \
     libpng-dev libjpeg-dev libfreetype6-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip gd bcmath
@@ -10,33 +10,27 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Install Node.js (required for Vite)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs
-
+# Set working directory
 WORKDIR /var/www
 
-# Copy app files
+# Copy application code
 COPY . .
 
-# Install backend dependencies
-RUN composer install --no-dev --optimize-autoloader
-
-# Install frontend dependencies and build assets
-RUN npm install && npm run build
-
-# Create cache tables migration (skip sqlite error)
-RUN php artisan cache:table 2>/dev/null || true && \
-    php artisan session:table 2>/dev/null || true && \
-    php artisan queue:table 2>/dev/null || true
+# Install PHP dependencies
+RUN composer install --optimize-autoloader --no-dev
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/public
+RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache /var/www/public
 
-# Create storage link
-RUN php artisan storage:link
+# Create storage symlink
+RUN php artisan storage:link || true
 
-EXPOSE 8080
+# Copy Nginx config
+COPY deploy/nginx.conf /etc/nginx/nginx.conf
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx and PHP-FPM
+CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
