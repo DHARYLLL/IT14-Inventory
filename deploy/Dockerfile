@@ -3,10 +3,10 @@ FROM php:8.2-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    zip unzip git curl libzip-dev libpng-dev libonig-dev libxml2-dev
+    zip unzip git curl libzip-dev libpng-dev libonig-dev libxml2-dev libpq-dev
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql
+# Install PHP extensions (add pdo_pgsql)
+RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql
 
 # Enable apache modules
 RUN a2enmod rewrite
