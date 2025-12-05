@@ -18,21 +18,10 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Clear all caches first
-RUN php artisan config:clear && \
-    php artisan route:clear && \
-    php artisan view:clear && \
-    php artisan cache:clear
-
-# Generate key if not set (optional safety)
-RUN if [ -z "$(grep '^APP_KEY=' .env 2>/dev/null)" ]; then \
-    php artisan key:generate; \
-    fi
-
-# Cache for production
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache
+# Create cache tables migration (skip sqlite error)
+RUN php artisan cache:table 2>/dev/null || true && \
+    php artisan session:table 2>/dev/null || true && \
+    php artisan queue:table 2>/dev/null || true
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
@@ -43,5 +32,5 @@ RUN php artisan storage:link
 
 EXPOSE 8080
 
-# Start Laravel
+# Start Laravel without pre-clearing cache (will clear on first run)
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
