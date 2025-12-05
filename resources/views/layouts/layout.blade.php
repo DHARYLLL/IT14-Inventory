@@ -5,12 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--<meta http-equiv="X-UA-Compatible" content="ie=edge">-->
     <title>@yield('title')</title>
 
 
     <!-- Custom JS -->
-    <script defer src="{{ asset('js/func.js') }}"></script>
+    <script defer src="{{ asset('JS/func.js') }}"></script>
 
     <!-- Flaticon uIcons -->
     <link rel="stylesheet"
@@ -19,13 +19,13 @@
         href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-straight/css/uicons-regular-straight.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/purchaseOrder.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/equipment.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/supplier.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/stockEdit.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/purchaseOrder.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/equipment.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/supplier.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/stockEdit.css') }}">
 
     <!-- Bootstrap CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">

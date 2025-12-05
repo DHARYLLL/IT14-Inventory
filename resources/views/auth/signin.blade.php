@@ -1,5 +1,5 @@
 @extends('layouts.authLayout')
-@section('title', 'ALAR Memorial - Sing In')
+@section('title', 'ALAR Memorial - Sign In')
 
 <body>
     <div class="login-container">
