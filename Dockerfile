@@ -1,4 +1,13 @@
-FROM php:8.2-fpm
+# Stage 1 - Build Frontend (Vite)
+FROM node:18 AS frontend
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Stage 2 - Backend (Laravel + PHP + Composer)
+FROM php:8.2-fpm AS backend
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -13,6 +22,9 @@ WORKDIR /var/www
 # Copy app files
 COPY . .
 
+# Copy built frontend from Stage 1
+COPY --from=frontend /app/public/dist ./public/dist
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
@@ -21,4 +33,4 @@ RUN php artisan config:clear && \
     php artisan route:clear && \
     php artisan view:clear
 
-CMD php artisan serve --host=0.0.0.0 --port=8080
+CMD ["php-fpm"]
