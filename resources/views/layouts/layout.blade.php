@@ -10,7 +10,7 @@
 
 
     <!-- Custom JS -->
-    <script defer src="{{ secure_asset('js/func.js') }}"></script>
+    <script defer src="{{ asset('js/func.js') }}"></script>
 
     <!-- Flaticon uIcons -->
     <link rel="stylesheet"
@@ -19,13 +19,13 @@
         href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-straight/css/uicons-regular-straight.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ secure_asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset('css/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset('css/purchaseOrder.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset('css/layout.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset('css/equipment.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset('css/supplier.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset('css/stockEdit.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/purchaseOrder.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/equipment.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/supplier.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/stockEdit.css') }}">
 
     <!-- Bootstrap CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
