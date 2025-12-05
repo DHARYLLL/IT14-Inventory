@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Set working directory
 WORKDIR /var/www
 
 # Copy application code
@@ -18,9 +19,9 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev
 
-# Set correct permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+# Set permissions
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/public
+RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache /var/www/public
 
 # Create storage symlink
 RUN php artisan storage:link || true
@@ -28,7 +29,8 @@ RUN php artisan storage:link || true
 # Copy Nginx config
 COPY deploy/nginx.conf /etc/nginx/nginx.conf
 
+# Expose port 80
 EXPOSE 80
 
-# Start PHP-FPM and Nginx
-CMD service nginx start && php-fpm
+# Start Nginx and PHP-FPM
+CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
