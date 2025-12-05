@@ -18,6 +18,14 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
+# Install Node (required for Vite)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
+
+# Build frontend assets
+RUN npm install && npm run build
+
+
 # Create cache tables migration (skip sqlite error)
 RUN php artisan cache:table 2>/dev/null || true && \
     php artisan session:table 2>/dev/null || true && \
