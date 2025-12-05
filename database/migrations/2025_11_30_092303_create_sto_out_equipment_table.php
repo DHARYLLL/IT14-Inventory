@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('so_id')->nullable();
-            $table->foreign('so_id')->references('id')->on('stock_outs')->onUpdate('cascade');
+            $table->foreign('so_id')->references('id')->on('stock_outs')->onUpdate('cascade')->onDelete('cascade');
 
             $table->unsignedBigInteger('eq_id')->nullable();
             $table->foreign('eq_id')->references('id')->on('equipments')->onUpdate('cascade');

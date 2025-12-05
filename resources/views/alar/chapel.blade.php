@@ -46,7 +46,7 @@
                             <td>{{ $row->chap_status }}</td>
                             <td>₱ {{ $row->chap_price }}</td>
                             <td>
-                                <a href="{{ route('Chapel.edit', $row->id) }}" class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                <a href="{{ route('Chapel.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
                             </td>

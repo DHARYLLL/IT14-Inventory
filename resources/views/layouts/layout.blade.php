@@ -47,15 +47,27 @@
                     <li class="nav-list">
                         <a href="{{ route('dashboard.index') }}"
                             class="nav-link-custom {{ request()->routeIs('dashboard.*') ? 'active' : '' }}">
-                            <i class="bi bi-house-door"></i>
                             <span>Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-list">
+                        <a href="{{ route('Job-Order.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Job-Order.*') || request()->routeIs('Service-Request.*') ? 'active' : '' }}">
+                            <span>Job Order</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-list">
+                        <a href="{{ route('Purchase-Order.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Purchase-Order.*') ? 'active' : '' }}">
+                            <span>Purchase Order</span>
                         </a>
                     </li>
 
                     <li class="nav-list">
                         <a href="{{ route('Stock.index') }}"
                             class="nav-link-custom {{ request()->routeIs('Stock.*') ? 'active' : '' }}">
-                            <i class="bi bi-box-seam"></i>
                             <span>Stock</span>
                         </a>
                     </li>
@@ -63,23 +75,13 @@
                     <li class="nav-list">
                         <a href="{{ route('Equipment.index') }}"
                             class="nav-link-custom {{ request()->routeIs('Equipment.*') ? 'active' : '' }}">
-                            <i class="bi bi-gear"></i>
                             <span>Equipment</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-list">
-                        <a href="{{ route('Stock-Out.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Stock-Out.*') ? 'active' : '' }}">
-                            <i class="bi bi-gear"></i>
-                            <span>Stock Out</span>
                         </a>
                     </li>
 
                     <li class="nav-list">
                         <a href="{{ route('Package.index') }}"
                             class="nav-link-custom {{ request()->routeIs('Package.*') ? 'active' : '' }}">
-                            <i class="bi bi-receipt"></i>
                             <span>Package</span>
                         </a>
                     </li>
@@ -87,72 +89,41 @@
                     <li class="nav-list">
                         <a href="{{ route('Chapel.index') }}"
                             class="nav-link-custom {{ request()->routeIs('Chapel.*') ? 'active' : '' }}">
-                            <i class="bi bi-receipt"></i>
                             <span>Chapel</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-list">
-                        <a href="{{ route('Vehicle.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Vehicle.*') ? 'active' : '' }}">
-                            <i class="bi bi-receipt"></i>
-                            <span>Vehicle</span>
                         </a>
                     </li>
 
                     <li class="nav-list">
                         <a href="{{ route('Embalmer.index') }}"
                             class="nav-link-custom {{ request()->routeIs('Embalmer.*') ? 'active' : '' }}">
-                            <i class="bi bi-receipt"></i>
                             <span>Embalmer</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-list">
+                        <a href="{{ route('Vehicle.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Vehicle.*') ? 'active' : '' }}">
+                            <span>Vehicle</span>
                         </a>
                     </li>
 
                     <li class="nav-list">
                         <a href="{{ route('supplier.index') }}"
                             class="nav-link-custom {{ request()->routeIs('supplier.*') ? 'active' : '' }}">
-                            <i class="bi bi-truck"></i>
                             <span>Supplier</span>
                         </a>
                     </li>
 
                     <li class="nav-list">
-                        <a href="{{ route('Purchase-Order.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Purchase-Order.*') ? 'active' : '' }}">
-                            <i class="bi bi-receipt"></i>
-                            <span>Purchase Order</span>
+                        <a href="{{ route('Stock-Out.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Stock-Out.*') ? 'active' : '' }}">
+                            <span>Stock Out</span>
                         </a>
                     </li>
 
-                    <li class="nav-list">
-                        <a href="{{ route('Job-Order.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Job-Order.*') ? 'active' : '' }}">
-                            <i class="bi bi-receipt"></i>
-                            <span>Job Order</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-list">
-                        <a href="{{ route('Log.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Log.*') ? 'active' : '' }}">
-                            <i class="bi bi-journal-text"></i>
-                            <span>Log</span>
-                        </a>
-                    </li>
                 </ul>
             </nav>
 
-            {{-- Logout Button
-            <div class="mt-auto p-3 border-top">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit"
-                        class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2">
-                        <i class="bi bi-box-arrow-right"></i>
-                        <span>Logout</span>
-                    </button>
-                </form>
-            </div> --}}
         </aside>
         {{-- Main Content --}}
         <div class="main-content flex-fill d-flex flex-column h-100" style="width: 85%;">
@@ -164,16 +135,6 @@
                     </div>
 
                     <div class="d-flex align-items-center gap-3">
-                        {{--
-                        <button class="btn btn-link text-decoration-none d-flex align-items-center text-dark gap-2">
-                            <div>@yield('name')</div>
-                            <i class="bi bi-chevron-down"></i>
-                        </button>
-
-                        <button class="btn btn-link text-dark p-2">
-                            <i class="bi bi-bell fs-5"></i>
-                        </button>
-                        --}}
                         <div class="dropdown">
                             <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center dropdown-toggle"
                                 id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false"
@@ -189,6 +150,9 @@
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
+                                    @if(session("empRole") == 'admin')
+                                        <a href="{{ route('Employee.create') }}" class="dropdown-item"><i class="bi bi-plus-lg"></i> <span>Add Employee</span></a>
+                                    @endif
                                     @if(session("empRole") == 'sadmin')
                                         <a href="{{ route('Employee.index') }}" class="dropdown-item"><i class="bi bi-person-fill-gear"></i> Employees</a>
                                     @else
@@ -201,6 +165,12 @@
                                         </form>
                                     @endif
                                     
+                                </li>
+                                <li>
+                                    <a href="{{ route('Log.index') }}"   class="dropdown-item"><i class="bi bi-journal-text"></i> <span>Log</span></a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
                                 </li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">

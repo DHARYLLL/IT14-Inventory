@@ -198,7 +198,7 @@ class PurchaseOrderController extends Controller
         ]);
 
         return redirect(route('Purchase-Order.index', $po))
-            ->with('success', 'Purchase Order has been Successfully created!');;
+            ->with('success', 'Created successfully!');
     }
 
     /**
@@ -365,10 +365,11 @@ class PurchaseOrderController extends Controller
     public function exportPo(String $id)
     {
         //dd('hello');
+        $poData = PurchaseOrder::findOrFail($id);
         $poItemData = PurchaseOrderItem::where('po_id', $id)->get();
 
         //return view('pdfTemp/purchaseOrderTemplate', ['poItemData' => $poItemData]);
-        $data = ['poItemData' => $poItemData];
+        $data = ['poItemData' => $poItemData, 'poData' => $poData];
         
         $pdf = Pdf::loadView('pdfTemp.purchaseOrderTemplate', $data);
         return $pdf->download(date('d-m-Y').'-purchase-order.pdf');

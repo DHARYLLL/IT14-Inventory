@@ -36,11 +36,11 @@
                     </tr>
                 @else
                     @foreach ($stoData as $row)
-                        <tr>
+                        <tr class="{{ $row->item_qty <= 10 ? 'cust-warning' : ''}}">
                             <td>{{ $row->id }}</td>
                             <td>{{ $row->item_name }}</td>
                             <td>{{ $row->item_size}}</td>
-                            <td class="{{ $row->item_qty <= 10 ? 'bg-warning-subtle' : ''}}">{{ $row->item_qty }}</td>
+                            <td>{{ $row->item_qty }}</td>
                             <td>
                                 <a href="{{ route('Stock.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" 
                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">

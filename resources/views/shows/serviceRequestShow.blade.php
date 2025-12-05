@@ -5,8 +5,8 @@
 @section('head', 'Show Services Request')
 
     {{-- table --}}
-    <div class="cust-h">
-        <div class="row cust-h-form p-3">
+    <div class="cust-h-100">
+        <div class="row h-100 p-3">
             
             <div class="col col-12 h-100 overflow-auto">
 
@@ -21,11 +21,11 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-semibold">Contact number</label>
-                        <p>Contact Number: {{ $joData->client_contact_number }}</p>
+                        <p>{{ $joData->client_contact_number }}</p>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-semibold">Address</label>
-                        <p>address</p>
+                        <p>{{ $joData->client_address }}</p>
                     </div>
                     
                 </div>
@@ -95,7 +95,7 @@
                                 @method('put')
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <label class="form-label fw-semibold">Balance</label>
+                                        <label class="form-label fw-semibold">Balance  <span class="text-danger">*</span></label>
                                         <input type="text" class="form-input" name="payment" value="{{ old('payment', $joData->jo_total - $joData->jo_dp) }}">
                                         @error('payment')
                                             <div class="text-danger small mt-1">{{ $message }}</div>
@@ -122,23 +122,24 @@
                 </div>
 
                 
+                {{-- Submit --}}
+                <div class="row justify-content-end mt-4">
+                    <div class="col col-auto">
+                        @session('promt-s')
+                            <div class="text-success small mt-1">{{ $value }}</div>
+                        @endsession
+                    </div>
+                    <div class="col col-auto">
+                        <a href="{{ route('Job-Order.index') }}" class="cust-btn cust-btn-secondary"><i
+                            class="bi bi-arrow-left"></i>
+                            <span>Back</span>
+                        </a>
+                    </div>
+                </div>
+
             </div>
 
         </div>
 
-        {{-- Submit --}}
-        <div class="row justify-content-end">
-            <div class="col col-auto">
-                @session('promt-s')
-                    <div class="text-success small mt-1">{{ $value }}</div>
-                @endsession
-            </div>
-            <div class="col col-auto">
-                <a href="{{ route('Job-Order.index') }}" class="cust-btn cust-btn-secondary"><i
-                    class="bi bi-arrow-left"></i>
-                    <span>Back</span>
-                </a>
-            </div>
-        </div>
     </div>
 @endsection

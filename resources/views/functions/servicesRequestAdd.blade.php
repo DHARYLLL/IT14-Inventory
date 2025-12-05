@@ -24,7 +24,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="clientName" class="form-label">Client Name</label>
+                            <label for="clientName" class="form-label">Client Name <span class="text-danger">*</span></label>
                             <input type="text" name="clientName" id="clientName" class="form-control"
                                 placeholder="Enter Full Name" value="{{ old('clientName') }}">
                             @error('clientName')
@@ -32,7 +32,7 @@
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="address" class="form-label">Address</label>
+                            <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
                             <input type="text" name="address" class="form-control"
                                 value="{{ old('address') }}">
                             @error('address')
@@ -40,7 +40,7 @@
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="clientConNum" class="form-label">Contact Number</label>
+                            <label for="clientConNum" class="form-label">Contact Number <span class="text-danger">*</span></label>
                             <input type="text" name="clientConNum" id="clientConNum" class="form-control" placeholder="09..."
                                 value="{{ old('clientConNum') }}">
                             @error('clientConNum')
@@ -100,7 +100,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="svcDate" class="form-label">Service Date</label>
+                            <label for="svcDate" class="form-label">Service Date <span class="text-danger">*</span></label>
                             <input type="date" name="svcDate" class="form-control"
                                 value="{{ old('svcDate') }}">
                             @error('svcDate')
@@ -109,7 +109,7 @@
                         </div>
 
                         <div class="col-md-2">
-                            <label for="timeStart" class="form-label">Start Time</label>
+                            <label for="timeStart" class="form-label">Start Time <span class="text-danger">*</span></label>
                             <input type="time" class="cust-time" name="timeStart" value="{{ old('timeStart') }}">
                             @error('timeStart')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
@@ -148,7 +148,7 @@
                         </div>
                         <div class="col-md-3">
                             <label for="payment" class="form-label">Down Payment</label>
-                            <input type="text" class="form-control" name="payment" value="{{ old('payment') }}">
+                            <input type="text" class="form-control" name="payment" value="{{ old('payment', 0) }}">
                             @error('payment')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror

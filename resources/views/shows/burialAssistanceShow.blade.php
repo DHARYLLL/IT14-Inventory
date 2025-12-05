@@ -2,7 +2,7 @@
 @section('title', 'Burial Assistance')
 
 @section('content')
-    @section('head', '')
+    @section('head', 'Show Burial Assistance')
 
     <div class="cust-h-content-func">
         <div class="card bg-white border-0 rounded-3">

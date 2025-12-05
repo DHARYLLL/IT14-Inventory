@@ -22,7 +22,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="package" class="form-label">Package</label>
+                            <label for="package" class="form-label">Package <span class="text-danger">*</span></label>
                             <select name="package" id="package" class="form-select" onchange="PricePkg()">
                                 <option value="">Select Package</option>
                                 @foreach ($pkgData as $data)
@@ -34,6 +34,23 @@
                             @error('package')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label for="vehicle" class="form-label">Vehicle <span class="text-danger">*</span></label>
+                            <select name="vehicle" id="vehicle" class="form-select">
+                                <option value="">None</option>
+
+                                @foreach ($vehData as $data)
+                                    <option value="{{ $data->id }}" {{ old('vehicle') == $data->id ? 'selected' : '' }}>
+                                        {{ $data->driver_name }} | Model: {{ $data->veh_brand }}
+                                    </option>
+                                @endforeach
+                        
+                            </select>
+                            @error('vehicle')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        
                         </div>
                         <div class="col-md-4">
                             <label for="chapel" class="form-label">Chapel</label>
@@ -51,23 +68,6 @@
                         
                         </div>
 
-                        <div class="col-md-4">
-                            <label for="vehicle" class="form-label">Vehicle:</label>
-                            <select name="vehicle" id="vehicle" class="form-select">
-                                <option value="">None</option>
-
-                                @foreach ($vehData as $data)
-                                    <option value="{{ $data->id }}" {{ old('vehicle') == $data->id ? 'selected' : '' }}>
-                                        {{ $data->driver_name }} | Model: {{ $data->veh_brand }}
-                                    </option>
-                                @endforeach
-                        
-                            </select>
-                            @error('vehicle')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        
-                        </div>
 
                         <div class="w-100 mb-2"></div>
 
@@ -82,7 +82,7 @@
                             <input type="text" id="setIdChap" readonly name="chapId" value="{{ old('chapId') }}" hidden>
                         </div>
                         <div class="col-md-4">
-                            <label for="payment" class="form-label">Payment</label>
+                            <label for="payment" class="form-label">Payment <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="payment" value="{{ old('payment', 0) }}">
                             @error('payment')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
@@ -132,7 +132,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="clientName" class="form-label">Client Name</label>
+                            <label for="clientName" class="form-label">Client Name <span class="text-danger">*</span></label>
                             <input type="text" name="clientName" id="clientName" class="form-control"
                                 placeholder="Enter Full Name" value="{{ old('clientName') }}">
                             @error('clientName')
@@ -140,7 +140,7 @@
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="address" class="form-label">Address</label>
+                            <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
                             <input type="text" name="address" class="form-control"
                                 value="{{ old('address') }}">
                             @error('address')
@@ -148,7 +148,7 @@
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="clientConNum" class="form-label">Contact Number</label>
+                            <label for="clientConNum" class="form-label">Contact Number <span class="text-danger">*</span></label>
                             <input type="text" name="clientConNum" id="clientConNum" class="form-control" placeholder="09..."
                                 value="{{ old('clientConNum') }}">
                             @error('clientConNum')
@@ -168,21 +168,21 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label for="" class="form-label">Name</label>
+                                    <label for="" class="form-label">Name <span class="text-danger">*</span></label>
                                     <input type="text" name="decName" placeholder="Deceased Full Name" class="form-control" value="{{ old('decName') }}">
                                     @error('decName')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="" class="form-label">Born</label>
+                                    <label for="" class="form-label">Born <span class="text-danger">*</span></label>
                                     <input type="date" name="decBorn" class="form-control" value="{{ old('decBorn') }}">
                                     @error('decBorn')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="" class="form-label">Died</label>
+                                    <label for="" class="form-label">Died <span class="text-danger">*</span></label>
                                     <input type="date" name="decDied" class="form-control" value="{{ old('decDied') }}">
                                     @error('decDied')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
@@ -192,7 +192,7 @@
                                 <div class="w-100 mb-2"></div>
 
                                 <div class="col-md-4">
-                                    <label for="" class="form-label">Cause of Death</label>
+                                    <label for="" class="form-label">Cause of Death <span class="text-danger">*</span></label>
                                     <input type="text" name="decCOD" class="form-control" placeholder="Deceasd Cause of Death" value="{{ old('decCOD') }}">
                                     @error('decCOD')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
@@ -211,7 +211,7 @@
                             <h5 class="cust-sub-title">Date:</h5>
                         </div>
                         <div class="col-md-4">
-                            <label for="svcDate" class="form-label">Service Date</label>
+                            <label for="svcDate" class="form-label">Service Date <span class="text-danger">*</span></label>
                             <input type="date" name="svcDate" class="form-control"
                                 value="{{ old('svcDate') }}">
                             @error('svcDate')
@@ -222,7 +222,15 @@
                         <div class="w-100 mb-2"></div>
 
                         <div class="col-md-4">
-                            <label for="timeStart" class="form-label">Start Time</label>
+                            <label for="wakeDay" class="form-label">Days of Wake <span class="text-danger">*</span></label>
+                            <input type="number" class="cust-time" name="wakeDay" value="{{ old('wakeDay') }}">
+                            @error('wakeDay')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="timeStart" class="form-label">Start Time <span class="text-danger">*</span></label>
                             <input type="time" class="cust-time" name="timeStart" value="{{ old('timeStart') }}">
                             @error('timeStart')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
@@ -239,13 +247,6 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
-                            <label for="wakeDay" class="form-label">Days of Wake</label>
-                            <input type="number" class="cust-time" name="wakeDay" value="{{ old('wakeDay') }}">
-                            @error('wakeDay')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
                     </div>
 
 
@@ -257,14 +258,14 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="wakeLoc" class="form-label">Wake Location</label>
+                            <label for="wakeLoc" class="form-label">Wake Location <span class="text-danger">*</span></label>
                             <input type="text" name="wakeLoc" id="wakeLoc" class="form-control" value="{{ old('wakeLoc') }}">
                             @error('wakeLoc')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="burialLoc" class="form-label">Burial Location</label>
+                            <label for="burialLoc" class="form-label">Burial Location <span class="text-danger">*</span></label>
                             <input type="text" name="burialLoc" id="burialLoc" class="form-control"
                                 value="{{ old('burialLoc') }}">
                             @error('burialLoc')

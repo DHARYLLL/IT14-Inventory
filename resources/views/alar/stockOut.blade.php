@@ -26,6 +26,7 @@
                     <th class="fw-semibold">Stock out Date</th>
                     <th class="fw-semibold">Item Qty.</th>
                     <th class="fw-semibold">Equipment Qty.</th>
+                    <th class="fw-semibold">Status</th>
                     <th class="fw-semibold">Employee</th>
                     <th class="fw-semibold">Action</th>
                 </tr>
@@ -40,11 +41,12 @@
                     </tr>
                 @else
                     @foreach ($stoOutData as $row)
-                        <tr>
+                        <tr  class="{{ $row->status == 'Cancelled' ? 'cust-disabled' : '' }}">
                             <td>{{ $row->reason }}</td>
                             <td>{{ $row->so_date }}</td>
                             <td>{{ $row->soToSoi->count() }}</td>
                             <td>{{ $row->soToSoe->count() }}</td>
+                            <td>{{ $row->status ?? 'N/A' }}</td>
                             <td>{{ $row->soToEmp->emp_fname }} {{ $row->soToEmp->emp_lname }}</td>
                             <td>
                                 <a href="{{ route('Stock-Out.show', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">

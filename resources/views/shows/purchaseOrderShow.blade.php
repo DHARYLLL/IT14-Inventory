@@ -9,7 +9,7 @@
 
 
     <div class="d-flex align-items-center justify-content-end cust-h-heading">
-        <a href="{{ route('Purchase-Order.index') }}" class="btn btn-outline-success d-flex align-items-center gap-2"><i
+        <a href="{{ route('Purchase-Order.index') }}" class="cust-btn cust-btn-secondary d-flex align-items-center gap-2"><i
                 class="bi bi-arrow-left"></i>
             <span>Back</span>
         </a>

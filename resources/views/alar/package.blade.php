@@ -12,7 +12,7 @@
         <button class="btn" id="clearSearch"
             style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
     </div>
-    <a href="{{ route('Package.create') }}" class="btn btn-green d-flex align-items-center gap-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Package"
+    <a href="{{ route('Package.create') }}" class="cust-btn cust-btn-primary d-flex align-items-center gap-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Package"
         style="white-space: nowrap;">
         <i class="bi bi-plus-lg"></i><span>Add Package</span>
     </a>
@@ -51,17 +51,20 @@
                             <td class="text-center col col-md-2">
                                 <div class="d-inline-flex justify-content-center gap-2">
                                     <a href="{{ route('Package.edit', $row->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"
-                                        class="btn btn-outline-success btn-md d-flex align-items-center justify-content-center">
+                                        class="cust-btn cust-btn-secondary btn-md">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
-                                    <form action="{{ route('Package.destroy', $row->id) }}" method="POST" class="m-0">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"
-                                            class="btn btn-outline-danger btn-md d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
+                                    @if(session("empRole") == 'sadmin' || session("empRole") == 'admin')
+                                        <form action="{{ route('Package.destroy', $row->id) }}" method="POST" class="m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"
+                                                class="cust-btn cust-btn-danger-secondary btn-md">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                    
                                 </div>
                             </td>
                         </tr>

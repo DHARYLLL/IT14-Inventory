@@ -44,10 +44,9 @@ class BurialAssistanceController extends Controller
             'civilStatus' => 'required',
             'religion' => 'required|max:50',
             'address' => 'required|max:150',
-            'birthDate' => [
-                'required',
-                Rule::date()->beforeOrEqual(today())
-            ],
+            'birthDate' => 
+                'required|date|before_or_equal:'. Carbon::now()->subYear(18)->format('Y-m-d')
+            ,
             'gender' => 'required',
             'rotd' => 'required|max:50',
             'amount' => 'required|numeric|min:1|max:999999'
@@ -68,7 +67,7 @@ class BurialAssistanceController extends Controller
             'religion.max' => '50 character limit reached.',
 
             'birthDate.required' => 'This field is required.',
-            'birthDate.before_or_equal' => 'Date cannot be after today.',
+            'birthDate.before_or_equal' => 'Must be 18 years or above.',
 
             'address.required' => 'This field is required.',
             'address.max' => '150 character limit reached.',

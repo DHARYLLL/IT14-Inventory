@@ -10,7 +10,7 @@
     {{-- Header section --}}
     <div class="d-flex align-items-center justify-content-end p-2 mb-0 cust-h-heading">
         <div class="d-flex align-items-center gap-2">
-            <a href="{{ route('Purchase-Order.index') }}" class="btn btn-green d-flex align-items-center gap-2 px-3">
+            <a href="{{ route('Purchase-Order.index') }}" class="cust-btn cust-btn-secondary d-flex align-items-center gap-2 px-3">
                 <i class="bi bi-arrow-left"></i>
                 <span>Cancel</span>
             </a>
@@ -28,7 +28,7 @@
                         <div class="row align-items-end mb-4">
                             <div class="col-md-6">
                                 <label for="supp" class="form-label fw-semibold text-secondary">
-                                    Supplier
+                                    Supplier <span class="text-danger">*</span>
                                 </label>
                                 <select class="form-select shadow-sm" name="supp" id="supp">
                                     <option selected disabled>Select supplier</option>
@@ -43,10 +43,10 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 d-flex justify-content-md-end gap-2 mt-3 mt-md-0">
-                                <button class="btn btn-outline-success" type="button" id="add_new">
+                                <button class="cust-btn cust-btn-secondary" type="button" id="add_new">
                                     <i class="bi bi-plus-circle"></i> Add More
                                 </button>
-                                <button class="btn btn-green text-white px-4" type="submit">
+                                <button class="cust-btn cust-btn-primary" type="submit">
                                     <i class="bi bi-send"></i> Submit
                                 </button>
                             </div>
@@ -68,7 +68,7 @@
                                         </div>
                                     </div>
                                     <div class="col col-4">
-                                        <button class="btn btn-outline-success" type="button" onclick="setStock()">
+                                        <button class="cust-btn cust-btn-secondary" type="button" onclick="setStock()">
                                             <i class="bi bi-plus-circle"></i> Add Item
                                         </button>
                                     </div>
@@ -89,7 +89,7 @@
                                         </div>
                                     </div>
                                     <div class="col col-4">
-                                        <button class="btn btn-outline-success" type="button" onclick="setEquipment()">
+                                        <button class="cust-btn cust-btn-secondary" type="button" onclick="setEquipment()">
                                             <i class="bi bi-plus-circle"></i> Add Equipment
                                         </button>
                                     </div>
@@ -111,7 +111,7 @@
                         @foreach ($oldItems as $i => $item)
                             <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
                                 <div class="col-md-3">
-                                    <label class="form-label fw-semibold text-secondary">Item Name</label>
+                                    <label class="form-label fw-semibold text-secondary">Item Name <span class="text-danger">*</span></label>
                                     <input type="text" name="itemName[]" value="{{ $item }}"
                                         class="form-control shadow-sm" {{ $item ? 'readonly' : '' }}>
                                     @error("itemName.$i")
@@ -119,7 +119,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-1">
-                                    <label class="form-label fw-semibold text-secondary">Quantity</label>
+                                    <label class="form-label fw-semibold text-secondary">Quantity <span class="text-danger">*</span></label>
                                     <input type="number" name="qty[]" value="{{ $oldQtys[$i] ?? '' }}"
                                         class="form-control shadow-sm">
                                     @error("qty.$i")
@@ -127,7 +127,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-1">
-                                    <label class="form-label fw-semibold text-secondary">Qty. per Set/Box</label>
+                                    <label class="form-label fw-semibold text-secondary">Qty. Set/Box <span class="text-danger">*</span></label>
                                     <input type="number" name="qtySet[]" value="{{ $oldqtySet[$i] ?? '' }}"
                                         class="form-control shadow-sm">
                                     @error("qtySet.$i")
@@ -135,7 +135,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                    <label class="form-label fw-semibold text-secondary">Size <span class="text-danger">*</span></label>
                                     <input type="text" name="size[]" value="{{ $oldsize[$i] ?? '' }}"
                                         class="form-control shadow-sm">
                                     @error("size.$i")
@@ -143,7 +143,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label fw-semibold text-secondary">Price per Unit</label>
+                                    <label class="form-label fw-semibold text-secondary">Price per Unit <span class="text-danger">*</span></label>
                                     <input type="text" name="unitPrice[]" value="{{ $oldunitPrice[$i] ?? '' }}"
                                         class="form-control shadow-sm">
                                     @error("unitPrice.$i")
@@ -151,7 +151,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label fw-semibold text-secondary">Type</label>
+                                    <label class="form-label fw-semibold text-secondary">Type <span class="text-danger">*</span></label>
                                     @if($oldType[$i])
                                         <input type="text" name="typeSelect[]" class="form-control shadow-sm" value="{{ $oldType[$i] }}" readonly>
                                     @else

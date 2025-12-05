@@ -283,7 +283,7 @@ class JobOrderController extends Controller
         ]);
 
         //return redirect(route('Service-Request.show', $jodId));
-        return redirect(route('Job-Order.index'));
+        return redirect(route('Job-Order.index'))->with('success', 'Created successfully!');
         
     }
 

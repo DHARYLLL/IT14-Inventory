@@ -14,10 +14,17 @@
         <button class="btn" id="clearSearch"
             style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
     </div>
-    <a href="{{ route('Service-Request.create') }}" class="cust-btn cust-btn-primary"><i
-            class="bi bi-plus-lg"></i> <span>Service</span></a>
-    <a href="{{ route('Job-Order.create') }}" class="cust-btn cust-btn-primary"><i
-            class="bi bi-plus-lg"></i> <span>Package</span></a>
+    <div class="row">
+        <div class="col col-auto">
+            <a href="{{ route('Service-Request.create') }}" class="cust-btn cust-btn-primary"><i
+                class="bi bi-plus-lg"></i> <span>Service</span></a>
+        </div>
+        <div class="col col-auto">
+            <a href="{{ route('Job-Order.create') }}" class="cust-btn cust-btn-primary"><i
+                class="bi bi-plus-lg"></i> <span>Package</span></a>
+        </div>
+    </div>
+    
 </div>
 
 {{-- table --}}

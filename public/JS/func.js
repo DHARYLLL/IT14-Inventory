@@ -22,33 +22,33 @@ if (document.getElementById('add_new')) {
     const template = `
         <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
             <div class="col-md-3">
-                <label class="form-label fw-semibold text-secondary">Item Name</label>
+                <label class="form-label fw-semibold text-secondary">Item Name <span class="text-danger">*</span></label>
                 <input type="text" name="itemName[]" class="form-control shadow-sm">
             </div>
 
             <div class="col-md-1">
-                <label class="form-label fw-semibold text-secondary">Quantity</label>
+                <label class="form-label fw-semibold text-secondary">Quantity <span class="text-danger">*</span></label>
                 <input type="number" name="qty[]" class="form-control shadow-sm">
             </div>
 
             <div class="col-md-1">
-                <label class="form-label fw-semibold text-secondary">Qty. per Set/Box</label>
-                <input type="number" name="qtySet[]" class="form-control shadow-sm">
+                <label class="form-label fw-semibold text-secondary">Qty. per Set/Box <span class="text-danger">*</span></label>
+                <input type="number" name="qtySet[]" value="1" class="form-control shadow-sm">
             </div>
 
             <div class="col-md-2">
-                <label class="form-label fw-semibold text-secondary">Size</label>
+                <label class="form-label fw-semibold text-secondary">Size <span class="text-danger">*</span></label>
                 <input type="text" name="size[]" class="form-control shadow-sm">
             </div>
 
             <div class="col-md-2">
-                <label class="form-label fw-semibold text-secondary">Price per Unit</label>
+                <label class="form-label fw-semibold text-secondary">Price per Unit <span class="text-danger">*</span></label>
                 <input type="text" name="unitPrice[]" class="form-control shadow-sm">
             </div>
 
             <div class="col-md-2">
                 <label class="form-label fw-semibold text-secondary">
-                    <i class="bi bi-weight text-success"></i> Type
+                    <i class="bi bi-weight text-success"></i> Type <span class="text-danger">*</span>
                 </label>
 
                 <select name="typeSelect[]" class="form-select shadow-sm placeType">
@@ -113,13 +113,13 @@ function setStock() {
                 </div>
 
                 <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">Quantity</label>
+                    <label class="form-label fw-semibold text-secondary">Quantity <span class="text-danger">*</span></label>
                     <input type="number" name="qty[]" class="form-control shadow-sm">
                 </div>
 
                 <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">Qty. per Set/Box</label>
-                    <input type="number" name="qtySet[]" class="form-control shadow-sm">
+                    <label class="form-label fw-semibold text-secondary">Qty. per Set/Box <span class="text-danger">*</span></label>
+                    <input type="number" name="qtySet[]" value="1" class="form-control shadow-sm">
                 </div>
 
                 <div class="col-md-2">
@@ -128,7 +128,7 @@ function setStock() {
                 </div>
 
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">Price per Unit</label>
+                    <label class="form-label fw-semibold text-secondary">Price per Unit <span class="text-danger">*</span></label>
                     <input type="text" name="unitPrice[]" class="form-control shadow-sm">
                 </div>
 
@@ -185,13 +185,13 @@ function setEquipment() {
                 </div>
 
                 <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">Quantity</label>
+                    <label class="form-label fw-semibold text-secondary">Quantity <span class="text-danger">*</span></label>
                     <input type="number" name="qty[]" class="form-control shadow-sm">
                 </div>
 
                 <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">Qty. per Set/Box</label>
-                    <input type="number" name="qtySet[]" class="form-control shadow-sm">
+                    <label class="form-label fw-semibold text-secondary">Qty. per Set/Box <span class="text-danger">*</span></label>
+                    <input type="number" name="qtySet[]" value="1" class="form-control shadow-sm">
                 </div>
 
                 <div class="col-md-2">
@@ -200,7 +200,7 @@ function setEquipment() {
                 </div>
 
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">Price per Unit</label>
+                    <label class="form-label fw-semibold text-secondary">Price per Unit <span class="text-danger">*</span></label>
                     <input type="text" name="unitPrice[]" class="form-control shadow-sm">
                 </div>
 
@@ -312,11 +312,11 @@ function checkInputEq() {
         </div>
         <div class="col-md-5">
             <label class="form-label fw-semibold text-secondary">Qty.</label>
-            <input type="number" class="form-control" name="eqQty[]">     
+            <input type="number" class="form-control" name="eqQty[]" value="1">     
         </div>
         <div class="col-md-5">
             <label class="form-label fw-semibold text-secondary">Qty. per Set/Unit</label>
-            <input type="number" class="form-control" name="eqQtySet[]">     
+            <input type="number" class="form-control" name="eqQtySet[]" value="1">     
         </div>
         <div class="col-md-2">
             <label class="form-label fw-semibold text-secondary">Remove</label>
@@ -391,11 +391,11 @@ function checkInputSto() {
         </div>
         <div class="col-md-5">
             <label class="form-label fw-semibold text-secondary">Qty.</label>
-            <input type="number" class="form-control" name="stockQty[]" value="{{ $oldQtys[$i] ?? '' }}">
+            <input type="number" class="form-control" name="stockQty[]" value="1">
         </div>
         <div class="col-md-5">
             <label class="form-label fw-semibold text-secondary">Qty. per Set/Unit</label>
-            <input type="number" class="form-control" name="stockQtySet[]" value="{{ $oldQtySet[$i] ?? '' }}">
+            <input type="number" class="form-control" name="stockQtySet[]" value="1">
         </div>
         <div class="col-md-2">
             <label class="form-label fw-semibold text-secondary">Remove</label>

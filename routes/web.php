@@ -140,7 +140,9 @@ Route::middleware(AuthCheck::class)->group(function(){
 
     Route::resource('Burial-Assistance', BurialAssistanceController::class);
     Route::get('Burial-Assistance/{id}/Back', [BurialAssistanceController::class, 'burrAsstBack'])->name('Burial-Assistance.back');
+    
     Route::resource('Stock-Out', StockOutController::class);
+    Route::get('Stock-Out/{id}/Cancel', [StockOutController::class, 'cancelSO'])->name('Stock-Out.cancel');
 
     //new
     Route::resource('Set-Item-Equipment', setStoEqToPkgController::class);

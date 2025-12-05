@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('jo_status', 15);
             $table->date('jo_start_date');
             $table->time('jo_start_time');
-            $table->time('jo_end_time');
+            $table->time('jo_end_time')->nullable();
             
             $table->unsignedBigInteger('emp_id')->nullable();
             $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();

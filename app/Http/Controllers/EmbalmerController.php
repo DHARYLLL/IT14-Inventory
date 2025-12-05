@@ -156,7 +156,7 @@ class EmbalmerController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt', 'Added Successfully.');
+        return redirect(route('Embalmer.index'))->with('success', 'Created successfully!');
     }
 
     /**

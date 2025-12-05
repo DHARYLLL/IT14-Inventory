@@ -37,7 +37,7 @@
 
                                         <div class="col-md-5">
 
-                                            <label for="utilQty" class="form-label w-75">Utlize Qty.</label>
+                                            <label for="utilQty" class="form-label w-75">Use Qty.</label>
                                             <input type="number" class="form-control w-75" name="utilQty" value="{{ old('utilQty') }}">
                                             @error('utilQty')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
@@ -68,7 +68,7 @@
                                             <th class="fw-semibold">Item</th>
                                             <th class="fw-semibold">Size</th>
                                             <th class="fw-semibold">Qty.</th>
-                                            <th class="fw-semibold">Utilize</th>
+                                            <th class="fw-semibold">Used</th>
                                             <th class="fw-semibold">Action</th>
                                         </tr>
                                     </thead>
@@ -128,7 +128,7 @@
                                         </div>
 
                                         <div class="col-md-5">
-                                            <label for="eqUtilQty" class="form-label w-75">Utlize Qty.</label>
+                                            <label for="eqUtilQty" class="form-label w-75">Use Qty.</label>
                                             <input type="number" class="form-control w-75" name="eqUtilQty" value="{{ old('eqUtilQty') }}">
                                             @error('eqUtilQty')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
@@ -159,7 +159,7 @@
                                             <th class="fw-semibold">Equipment</th>
                                             <th class="fw-semibold">Size</th>
                                             <th class="fw-semibold">Qty.</th>
-                                            <th class="fw-semibold">Utilize</th>
+                                            <th class="fw-semibold">Used</th>
                                             <th class="fw-semibold text-center">Action</th>
                                         </tr>
                                     </thead>

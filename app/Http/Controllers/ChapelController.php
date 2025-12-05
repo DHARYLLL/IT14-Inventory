@@ -61,7 +61,6 @@ class ChapelController extends Controller
             'chap_name' => $request->chapName,
             'chap_room' => $request->chapRoom,
             'chap_price' => $request->chapPrice,
-            'chap_status' => 'Available',
             'max_cap' => $request->maxCap
         ]);
 
@@ -74,7 +73,7 @@ class ChapelController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-s', 'Added Successfully.');
+        return redirect(route('Chapel.index'))->with('success', 'Created successfully!');
     }
 
     /**
@@ -146,6 +145,13 @@ class ChapelController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Chapel::findOrFail($id)->delete();
+        Log::create([
+            'transaction' => 'Deleted',
+            'tx_desc' => 'Deleted Chapel | ID: ' . $id,
+            'tx_date' => Carbon::now(),
+            'emp_id' => session('loginId')
+        ]);
+        return redirect(route('Chapel.index'))->with('success', 'Deleted Successfully!');
     }
 }

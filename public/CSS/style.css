@@ -549,6 +549,15 @@ body {
     border: 1px green solid;
 }
 
+.cust-disabled td{
+    background-color: #c0c0c0 !important; 
+    color: white !important;
+}
+
+.cust-warning td{
+    background-color: #fff7b7 !important;
+}
+
 .cust-btn {
     cursor: pointer;
     text-decoration: none;

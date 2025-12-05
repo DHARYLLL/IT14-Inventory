@@ -18,7 +18,7 @@ class StockOutController extends Controller
      */
     public function index()
     {
-        $stoOutData = stockOut::all();
+        $stoOutData = stockOut::orderByRaw("CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END")->get();
         return (view('alar/stockOut', ['stoOutData' => $stoOutData]));
     }
 
@@ -178,7 +178,7 @@ class StockOutController extends Controller
             'emp_id' => session('loginId') 
         ]);
 
-        return redirect()->back()->with('promt', 'Items Stock Out Successfully.');
+        return redirect(route('Stock-Out.index'))->with('success', 'Stock-out successfully!');
     }
 
     /**
@@ -208,11 +208,50 @@ class StockOutController extends Controller
         //
     }
 
+    public function cancelSO(string $id)
+    {
+        $soData = stockOut::findOrFail($id)->update([
+            'status' => 'Cancelled'
+        ]);
+        $soEqData = StoOutEquipment::where('so_id', $id)->get();
+        $soStoData = StoOutItems::where('so_id', $id)->get();
+
+        $eqQty = [];
+        $stoQty = [];
+
+        if (!$soEqData->isEmpty()) {
+            
+            foreach ($soEqData as $row) {
+                $eqQty[$row->eq_id] = $row->so_qty;
+            }
+            $addEq = Equipment::select('id', 'eq_available', 'eq_in_use')->whereIn('id', array_keys($eqQty))->get();
+            foreach ($addEq as $equipment) {
+                $equipment->update([
+                    'eq_available' => $equipment->eq_available + $eqQty[$equipment->id]
+                ]);
+            }
+        }
+        if (!$soStoData->isEmpty()) {
+            foreach ($soStoData as $row) {
+                $stoQty[$row->stock_id] = $row->so_qty;
+            }
+            $addStocks = Stock::select('id', 'item_qty')->whereIn('id', array_keys($stoQty))->get();
+            foreach ($addStocks as $stock) {
+                $stock->update([
+                    'item_qty' => $stock->item_qty + $stoQty[$stock->id]
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('promt-s', 'Stock-out has been Cancelled.');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        stockOut::findOrFail($id)->delete();
+        return redirect(route('Stock-Out.index'))->with('success', 'Deleted successfully!');
     }
 }

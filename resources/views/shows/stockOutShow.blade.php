@@ -1,8 +1,8 @@
 @extends('layouts.layout')
-@section('title', 'Service Request')
+@section('title', 'Stock out')
 
 @section('content')
-@section('head', 'Show Services Request')
+@section('head', 'Show Stock out')
 
     {{-- table --}}
     <div class="cust-h">
@@ -15,14 +15,56 @@
                     <div class="col-md-12 mb-2">
                         <h5 class="cust-sub-title">Stock-out Details:</h5>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <label class="form-label fw-semibold">Reason</label>
                         <p>{{ $soData->reason }}</p>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label class="form-label fw-semibold">Stock-out Date:</label>
                         <p>{{ $soData->so_date }}</p>
                     </div>
+                    @if($soData->status == 'Cancelled')
+                        <div class="col-md-2">
+                            <label class="form-label fw-semibold">Status</label>
+                            <p>{{ $soData->status }}</p>
+                        </div>
+                    @endif
+                    @if(session("empRole") == 'sadmin' || session("empRole") == 'admin')
+                        
+                        @if($soData->status == 'Cancelled')
+                            <div class="col-md-2">
+                                <label class="form-label fw-semibold">Delete</label>
+                                <form action="{{ route('Stock-Out.destroy', $soData->id) }}" method="POST" class="m-0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"
+                                        class="cust-btn cust-btn-danger-secondary btn-md">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        @else
+                            <div class="col-md-2">
+                                <label class="form-label fw-semibold">Cancel Stock-out</label>
+                                <a href="{{ route('Stock-Out.cancel', $soData->id) }}" class="cust-btn cust-btn-danger-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel">
+                                    <i class="bi bi-x-circle"></i> Cancel</a>
+                                
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-semibold">Delete</label>
+                                <form action="{{ route('Stock-Out.destroy', $soData->id) }}" method="POST" class="m-0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"
+                                        class="cust-btn cust-btn-danger-secondary btn-md">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                        
+                    @endif
+                    
                     
                 </div>
 
@@ -40,8 +82,8 @@
                                     </div>
 
                                     @if($soStoData->isEmpty())
-                                        <div class="row mt-1 mx-0">
-                                            <div class="col-md-12">No stock-out item.</div>
+                                        <div class="row mt-1 mx-0 justify-content-center">
+                                            <div class="col col-auto">No stock-out item.</div>
                                         </div>
                                     @else
                                         @foreach($soStoData as $row)
@@ -67,8 +109,8 @@
                                     </div>
 
                                     @if($soEqData->isEmpty())
-                                        <div class="row mt-1 mx-0">
-                                            <div class="col-md-12">No stock-out equipment.</div>
+                                        <div class="row mt-1 mx-0 justify-content-center">
+                                            <div class="col col-auto">No stock-out equipment.</div>
                                         </div>
                                     @else
                                         @foreach($soEqData as $row)

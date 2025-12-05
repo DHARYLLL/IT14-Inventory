@@ -57,12 +57,14 @@ class ServiceRequestController extends Controller
         $request->validate([ 
             'clientName' => 'required',
             'clientConNum' => 'required',
-            'vehicle' => 'required',
+            'address' => 'required|max:150',
+            'vehicle' => 'required_without:embalm',
+            'embalm'  => 'required_without:vehicle',
             'svcDate' => [
                 'required',
                 Rule::date()->afterOrEqual(today())
             ],
-            'payment' => 'required|integer|min:1|max:999999',
+            'payment' => 'required|integer|min:0|max:999999',
             'total' => 'required|integer|min:1|max:999999',
             'timeStart' => 'required',
             'timeEnd' => 'required'
@@ -72,7 +74,12 @@ class ServiceRequestController extends Controller
             'clientConNum.required' => 'This field is required.',
             'svcDate.required' => 'This field is required.',
             'svcDate.after_or_equal' => 'The start date must be today or after.',
-            'vehicle.required' => 'This field is required.',
+
+            'vehicle.required_without' => 'Select at least one: vehicle or embalm.',
+            'embalm.required_without'  => 'Select at least one: vehicle or embalm.',
+
+            'address.required' => 'This field is required.',
+            'address.max' => '150 charaters limit reached.',
 
             'payment.required' => 'This field is required.',
             'payment.integer' => 'Number only.',
@@ -99,11 +106,7 @@ class ServiceRequestController extends Controller
             return back()->with('promt-f', 'End time must be after start time.')->withInput();
         }
 
-        dd('hello');
-
         ServiceRequest::create([
-            'svc_name' => 'test',
-            'svc_amount' => $request->total,
             'veh_id' => $request->setVehId,
             'prep_id' => $request->setEmbalmId
         ]);
@@ -113,6 +116,7 @@ class ServiceRequestController extends Controller
         jobOrder::create([
             'client_name' => $request->clientName,
             'client_contact_number' => $request->clientConNum,
+            'client_address' => $request->address,
             'jo_dp' => $request->payment,
             'jo_total' => $request->total,
             'jo_status' => $request->payment >= $request->total ? 'Paid' : 'Pending',
@@ -144,7 +148,7 @@ class ServiceRequestController extends Controller
         ]);
 
 
-        return redirect(route('Service-Request.show', $joId));
+        return redirect(route('Service-Request.show', $joId))->with('promt-s', 'Requested Successfully.');
         
     }
 

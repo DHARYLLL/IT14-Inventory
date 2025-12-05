@@ -31,7 +31,7 @@
 
                     </div>
 
-                    <div class="row h-65">
+                    <div class="row h-65 mt-4">
 
                         <div class="col-md-6 h-100 overflow-auto">
                             {{-- Stock --}}
@@ -111,7 +111,7 @@
                                         @endforeach
                                     </select>
                                     <input type="text" id="avail" class="form-control w-25" readonly placeholder="Available">
-                                    <button type="button" id="add_eq" onclick="checkInputEqyAddEmbalm()" class="cust-btn cust-btn-primary">Add Equipment</button>
+                                    <button type="button" id="add_eq" onclick="checkInputEqyAddEmbalm()" class="cust-btn cust-btn-primary">Add Equip.</button>
                                 </div>
                             </div>
                             <div id="addEquipment" class="col-12 mt-3">

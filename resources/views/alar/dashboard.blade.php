@@ -50,8 +50,8 @@
                 <div class="col-md-12">
                     <div class="dashboard-box">
                         <h5>Schedule</h5>
-                        <div class="placeholder-box overflow-auto">
-                            <table class="table table-borderless table-hover placeholder-table mb-0">
+                        <div class="placeholder-box overflow-auto " style="height: 500px;">
+                            <table class="table table-borderless table-hover placeholder-table mb-0" >
                                 <thead>
                                     <tr>
                                         <th>Client</th>
@@ -74,7 +74,7 @@
                                                 <td>{{ $row->client_contact_number }}</td>
                                                 <td>{{ $row->jo_start_date }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($row->jo_start_time)->format('g:i A') }}</td>
-                                                <td>{{ $row->joToJod->jod_eq_stat }}</td>
+                                                <td>{{ $row->joToJod->jod_eq_stat ?? 'N/A'}}</td>
                                                 <td>
                                                     @if($row->jod_id)
                                                         @if($row->joToJod->jod_eq_stat == 'Pending')

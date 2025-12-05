@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('chap_name', 50);
             $table->string('chap_room', 10);
-            $table->decimal('chap_price', 8,2);
-            $table->string('chap_status', 15);  
+            $table->decimal('chap_price', 8,2);  
 
             $table->timestamps();
 

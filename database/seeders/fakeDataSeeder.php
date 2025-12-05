@@ -144,8 +144,8 @@ class fakeDataSeeder extends Seeder
 
         // new package
         Package::create([
-            'pkg_name' => 'Embalming',
-            'pkg_price' => 4000
+            'pkg_name' => 'Uggoy',
+            'pkg_price' => 17000
         ]);
 
         PkgStock::create([
@@ -177,8 +177,7 @@ class fakeDataSeeder extends Seeder
         Chapel::create([
             'chap_name' => 'Chapel of Rest',
             'chap_room' => '101',
-            'chap_price' => 2000,
-            'chap_status' => 'Available'
+            'chap_price' => 2000
         ]);
 
         vehicle::create([

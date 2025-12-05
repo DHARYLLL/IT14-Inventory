@@ -113,7 +113,7 @@
                                         @endforeach
                                     </select>
                                     <input type="text" id="avail" class="form-control w-25" readonly placeholder="Available">
-                                    <button type="button" id="add_eq" onclick="checkInputEqAddPkg()" class="cust-btn cust-btn-primary">Add Equipment</button>
+                                    <button type="button" id="add_eq" onclick="checkInputEqAddPkg()" class="cust-btn cust-btn-primary">Add Equip.</button>
                                 </div>
                             </div>
                             <div id="addEquipment" class="col-12 mt-3">

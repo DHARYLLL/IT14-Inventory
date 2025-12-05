@@ -211,7 +211,7 @@ class PackageController extends Controller
                 'required',
                 'max:50',
                 Rule::unique('packages', 'pkg_name')
-                ->where('pkg_price', $request->plateNo)
+                ->where('pkg_price', $request->pkgPrice)
                 ->ignore($id)
             ],
             'pkgPrice' => 'required|numeric|min:1|max:999999.99',

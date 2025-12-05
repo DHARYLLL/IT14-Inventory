@@ -10,6 +10,7 @@ class stockOut extends Model
     protected $fillable = [
         'reason',
         'so_date',
+        'status',
         'emp_id'
     ];
 

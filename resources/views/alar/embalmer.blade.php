@@ -41,7 +41,7 @@
                             <td>{{ $row->embalmer_name }}</td>
                             <td>₱{{ $row->prep_price }}</td>
                             <td>
-                                <a href="{{ route('Embalmer.edit', $row->id) }}" class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                <a href="{{ route('Embalmer.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
                             </td>
