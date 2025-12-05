@@ -1,34 +1,24 @@
 FROM php:8.2-fpm
 
-# Install system packages
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl unzip libpq-dev libonig-dev libzip-dev zip nginx \
-    libpng-dev libjpeg-dev libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip gd bcmath
+    git curl unzip libpq-dev libonig-dev libzip-dev zip \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Copy application code
+# Copy app files
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --no-dev --optimize-autoloader
 
-# Set correct permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+# Laravel setup
+RUN php artisan config:clear && \
+    php artisan route:clear && \
+    php artisan view:clear
 
-# Create storage symlink
-RUN php artisan storage:link || true
-
-# Copy Nginx config
-COPY deploy/nginx.conf /etc/nginx/nginx.conf
-
-EXPOSE 80
-
-# Start PHP-FPM and Nginx
-CMD service nginx start && php-fpm
+CMD ["php-fpm"]
