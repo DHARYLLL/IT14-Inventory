@@ -1,36 +1,37 @@
-FROM php:8.2-fpm
+# PHP with Apache
+FROM php:8.2-apache
 
-# Install system packages
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl unzip libpq-dev libonig-dev libzip-dev zip nginx \
-    libpng-dev libjpeg-dev libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip gd bcmath
+    zip unzip git curl libzip-dev libpng-dev libonig-dev libxml2-dev
 
-# Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql
 
-# Set working directory
-WORKDIR /var/www
+# Enable apache modules
+RUN a2enmod rewrite
+
+# Set Apache DocumentRoot to /public
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 
 # Copy application code
-COPY . .
+COPY . /var/www/html
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install PHP dependencies
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --no-dev --optimize-autoloader
+RUN php artisan config:clear \
+ && php artisan cache:clear \
+ && php artisan route:clear \
+ && php artisan view:clear \
+ && php artisan config:cache
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/public
-RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache /var/www/public
+# Set permissions (important)
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Create storage symlink
-RUN php artisan storage:link || true
-
-# Copy Nginx config
-COPY deploy/nginx.conf /etc/nginx/nginx.conf
-
-# Expose port 80
 EXPOSE 80
-
-# Start Nginx and PHP-FPM
-CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
