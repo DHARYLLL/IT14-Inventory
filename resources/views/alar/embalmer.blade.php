@@ -8,8 +8,7 @@
     <div class="input-group cust-searchbar">
         <input type="text" id="searchInput" class="form-control" placeholder="Search Embalmer"
             style="border-radius: 0; border: none;">
-        <button class="btn" id="clearSearch"
-            style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
+        <button class="cust-btn cust-btn-search" id="clearSearch">Clear</button>
     </div>
     <div>
         <a href="{{ route('Embalmer.create') }}" class="cust-btn cust-btn-primary"><i class="bi bi-plus-lg"></i> <span>Add Embalmer</span></a>
@@ -24,7 +23,7 @@
                 <tr class="table-white">
                     <th class="fw-semibold">Name</th>
                     <th class="fw-semibold">Service Price</th>
-                    <th class="fw-semibold">Action</th>
+                    <th class="col col-md-2 fw-semibold text-center">Action</th>
                 </tr>
             </thead>
 
@@ -40,11 +39,44 @@
                         <tr>
                             <td>{{ $row->embalmer_name }}</td>
                             <td>₱{{ $row->prep_price }}</td>
-                            <td>
-                                <a href="{{ route('Embalmer.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
+                            <td class="text-center col col-md-2">
+                                <div class="d-inline-flex justify-content-center gap-2">
+                                    
+                                    <a href="{{ route('Embalmer.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+
+                                    @if(session("empRole") == 'sadmin' || session("empRole") == 'admin')
+                                        <!-- Delte Button -->
+                                        <button type="button" class="cust-btn cust-btn-danger-secondary" data-bs-toggle="modal" data-bs-target="#delete{{ $row->id }}">
+                                        <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
+                                        </button>
+                                    @endif
+                                    
+                                </div>
                             </td>
+                            <!-- Delete Modal -->
+                            <div class="modal fade" id="delete{{ $row->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="delete{{ $row->id }}Label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="delete{{ $row->id }}Label">Delete Embalmer</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="{{ route('Embalmer.destroy', $row->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <div class="modal-body">
+                                            Are you sure you want to Delete {{ $row->embalmer_name }}?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="cust-btn cust-btn-danger-primary">Delete</button>
+                                        </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </tr>
                     @endforeach
                 @endif

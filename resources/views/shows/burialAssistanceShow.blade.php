@@ -26,12 +26,12 @@
 
                              <div class="col-md-3">
                                 <label for="" class="form-label">Address:</label>
-                                <p>{{ $burrAsstData->burAsstToJo->joToJod->jod_wakeLoc }}</p>
+                                <p>{{ $burrAsstData->burAsstToJo->client_address }}</p>
                             </div>
 
                             <div class="col-md-3">
                                 <label for="amount" class="form-label">Amount:</label>
-                                <p>{{ $burrAsstData->amount }}</p>
+                                <p>₱{{ $burrAsstData->amount }}</p>
                             </div>
 
                         </div>

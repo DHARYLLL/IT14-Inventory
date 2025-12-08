@@ -48,7 +48,7 @@ class LoginController extends Controller
         }else{
             return back()->with('fail', 'Invalid credentials. Please try again')->withInput();
         }
-        return $user;
+        return back()->with('fail', 'Invalid credentials. Please try again')->withInput();
     }
 
     public function changePassword(Request $request, String $id){
@@ -90,7 +90,7 @@ class LoginController extends Controller
         }else{
             return back()->with('promt', 'Incorrect Password.')->withInput();
         }
-
+        return back()->with('promt', 'Employee not found.')->withInput();
     }
 
     public function logout(Request $request){

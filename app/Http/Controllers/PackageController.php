@@ -45,86 +45,88 @@ class PackageController extends Controller
         $request->validate([
             'pkg_name' => 'required|unique:packages,pkg_name',
             'pkgPrice' => 'required|numeric|min:1|max:999999.99',
+
             'itemName.*' => 'required',
             'stockQty.*' => 'required|integer|min:1|max:999',
+            'stockQtySet.*' => 'required|integer|min:1|max:999',
             'eqName.*' => 'required',
-            'eqQty.*' => 'required|integer|min:1|max:999'     
+            'eqQty.*' => 'required|integer|min:1|max:999',
+            'eqQtySet.*' => 'required|integer|min:1|max:999'  
         ], [
             'pkg_name.required' => 'This field is required',
             'pkg_inclusion.*.required' => 'This field is required',
+
             'stockQty.*.required' => 'This field is required.',
             'stockQty.*.min' => 'Item quantity must be 1 or more.',
-            'stockQty.*.max' => '6 digit item quantity reached.',
+            'stockQty.*.max' => '3 digits limit reached.',
+
+            'stockQtySet.*.required' => 'This field is required.',
+            'stockQtySet.*.min' => 'Item quantity must be 1 or more.',
+            'stockQtySet.*.max' => '3 digits limit reached.',
+
             'eqQty.*.required' => 'This field is required.',
             'eqQty.*.min' => 'Equipment quantity must be 1 or more.',
-            'eqQty.*.max' => '6 digit equipment quantity reached.',
-            'pkgPrice.required' => 'This field is required.',
-            'pkgPrice.numeric' => 'Number only.',
-            'pkgPrice.min' => 'Price must be 1 or more.',
-            'pkgPrice.max' => '6 digit price reached.'
+            'eqQty.*.max' => '3 digits limit reached.',
+
+            'eqQtySet.*.required' => 'This field is required.',
+            'eqQtySet.*.min' => 'Equipment quantity must be 1 or more.',
+            'eqQtySet.*.max' => '3 digits limit reached.'
         ]);
 
 
         //Get equpment and stock requests
         $eq = $request->equipment;
         $eqQty = $request->eqQty;
+        $eqQtySet = $request->eqQtySet;
+
         $sto = $request->stock;
         $stoQty = $request->stockQty;
+        $stoQtySet = $request->stockQtySet;
 
         if ($eq == null && $sto == null) {
             return redirect()->back()->with('emptyEq', 'Must have atleast 1 equipment or item.')->withInput();
         }
 
         //get all equipment in request
-        $equipmentErrors = [];
-
-        if ($eq !== null) {
-            for ($i = 0; $i < count($eq); $i++) {
-                $equipmentId = $eq[$i];
-                $requestedQty = (int) $eqQty[$i];
-
-                $equipment = Equipment::find($equipmentId);
-
-                if (!$equipment) {
-                    $equipmentErrors["equipment.$i"] = "Equipment item not found.";
-                    continue;
-                }
-
-                if ($requestedQty > $equipment->eq_available) {
-                    $equipmentErrors["eqQty.$i"] = "Requested quantity ($requestedQty) exceeds available equipment ({$equipment->eq_available}).";
-                }
-            }
-
-            if (!empty($equipmentErrors)) {
-                return back()->withErrors($equipmentErrors)->withInput();
-            }
-        }
-
-
-        $StoErrors = [];
+        $allErrors = [];
 
         if ($sto != null) {
             for ($i = 0; $i < count($sto); $i++) {
                 $stockId = $sto[$i];
-                $requestedQty = (int) $stoQty[$i];
-
+                $requestedQty = (int) $stoQty[$i] * max(1, $stoQtySet[$i]);
                 // Get stock from DB
                 $stock = Stock::find($stockId); // replace with your actual Stock model
 
                 if (!$stock) {
-                    $StoErrors["stock.$i"] = "Stock item not found.";
+                    $allErrors["stock.$i"] = "Stock item not found.";
                     continue;
                 }
 
                 if ($requestedQty > $stock->item_qty) {
-                    $StoErrors["stockQty.$i"] = "Requested quantity ({$requestedQty}) exceeds available stock ({$stock->item_qty}).";
+                    $allErrors["stockQty.$i"] = "Requested quantity ({$requestedQty}) exceeds available stock ({$stock->item_qty}).";
                 }
             }
+        }
 
-            if (!empty($StoErrors)) {
-                return back()->withErrors($StoErrors)->withInput();
+        if ($eq !== null) {
+            for ($i = 0; $i < count($eq); $i++) {
+                $equipmentId = $eq[$i];
+                $requestedQty = (int) $eqQty[$i] * max(1, $eqQtySet[$i]);
+
+                $equipment = Equipment::find($equipmentId);
+
+                if (!$equipment) {
+                    $allErrors["equipment.$i"] = "Equipment item not found.";
+                    continue;
+                }
+
+                if ($requestedQty > $equipment->eq_available) {
+                    $allErrors["eqQty.$i"] = "Requested quantity ($requestedQty) exceeds available equipment ({$equipment->eq_available}).";
+                }
             }
-
+        }
+        if (!empty($allErrors)) {
+            return back()->withErrors($allErrors)->withInput();
         }
 
         Package::create([
@@ -140,7 +142,8 @@ class PackageController extends Controller
                 PkgEquipment::create([
                     'pkg_id' => $getPkg,
                     'eq_id' => $eq[$i],
-                    'eq_used' => $eqQty[$i]
+                    'eq_used' => $eqQty[$i],
+                    'eq_used_set' => $eqQtySet[$i]
                 ]);
             }
         }
@@ -150,7 +153,8 @@ class PackageController extends Controller
                 PkgStock::create([
                     'pkg_id' => $getPkg,
                     'stock_id' => $sto[$i],    
-                    'stock_used' => $stoQty[$i]
+                    'stock_used' => $stoQty[$i],
+                    'stock_used_set' => $stoQtySet[$i]
                 ]);
             }
         }
@@ -163,7 +167,7 @@ class PackageController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Package.index'))->with('promt', 'Created Sucessfully');
+        return redirect(route('Package.index'))->with('success', 'Created Sucessfully!');
     }
 
     /**
@@ -193,12 +197,19 @@ class PackageController extends Controller
 
     public function addRemoveItem(String $id)
     {
-        $pkgData = Package::findOrFail($id);
-        $pkgEqData = PkgEquipment::where('pkg_id', '=', $id)->get();
-        $pkgStoData = PkgStock::where('pkg_id', '=', $id)->get();
+        $pkgId = Package::where('id', $id)->take(1)->value('id');
         $eqData = Equipment::all();
         $stoData = Stock::all();
-        return view('functions/packageAddRemoveItem', ['pkgData' => $pkgData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'eqData' => $eqData, 'stoData' => $stoData]);
+
+        $leEqData = PkgEquipment::where('pkg_id', $pkgId)->get();
+        $leStoData = PkgStock::where('pkg_id', $pkgId)->get();
+
+        $pluckedEqData = PkgEquipment::where('pkg_id', $pkgId)->pluck('eq_id');
+        $pluckedStoData = PkgStock::where('pkg_id', $pkgId)->pluck('stock_id');
+
+        $eqData = Equipment::whereNotIn('id', $pluckedEqData)->get();
+        $stoData = Stock::whereNotIn('id', $pluckedStoData)->get();
+        return view('functions/packageAddRemoveItem', ['pkgId' => $pkgId, 'leEqData' => $leEqData, 'leStoData' => $leStoData, 'eqData' => $eqData, 'stoData' => $stoData]);
     }
 
     /**
@@ -215,8 +226,11 @@ class PackageController extends Controller
                 ->ignore($id)
             ],
             'pkgPrice' => 'required|numeric|min:1|max:999999.99',
-            'eqUtil.*'  => 'required|integer|min:1|max:999',
-            'stoUtil.*'  => 'required|integer|min:1|max:999'
+
+            'qty.*' => 'required|integer|min:1|max:999',
+            'qtySet.*' => 'required|integer|min:1|max:999',
+            'eqQty.*' => 'required|integer|min:1|max:999',
+            'eqQtySet.*' => 'required|integer|min:1|max:999',  
         ], [
             'pkgName.required' => 'This field is required.',
             'pkgName.unique' => 'Package name is already added.',
@@ -227,39 +241,51 @@ class PackageController extends Controller
             'pkgPrice.min' => 'Price must be 1 or more.',
             'pkgPrice.max' => '6 digit price reached.',
 
-            'stoUtil.*.required' => 'This field is required.',
-            'stoUtil.*.min' => 'Quantity must be 1 or more.',
-            'stoUtil.*.max' => '3 digits limit reached.',
+            'qty.*.required' => 'This field is required.',
+            'qty.*.min' => 'Quantity must be 1 or more.',
+            'qty.*.max' => '3 digits limit reached.',
 
-            'eqUtil.*.required' => 'This field is required.',
-            'eqUtil.*.min' => 'Quantity must be 1 or more.',
-            'eqUtil.*.max' => '3 digits limit reached.',
+            'qtySet.*.required' => 'This field is required.',
+            'qtySet.*.min' => 'Quantity must be 1 or more.',
+            'qtySet.*.max' => '3 digits limit reached.',
+
+            'eqQty.*.required' => 'This field is required.',
+            'eqQty.*.min' => 'Quantity must be 1 or more.',
+            'eqQty.*.max' => '3 digits limit reached.',
+
+            'eqQtySet.*.required' => 'This field is required.',
+            'eqQtySet.*.min' => 'Quantity must be 1 or more.',
+            'eqQtySet.*.max' => '3 digits limit reached.'
         ]);
 
         //dd('hello');
-        $stoId = $request->pkgStoId;
-        $stoQty = $request->stoUtil;
+        $getEqId = $request->eqId;
+        $getStoId = $request->stoId;
         
-        $eqId = $request->pkgEqId;
-        $eqQty = $request->eqUtil;
+        $getEqQty = $request->eqQty;
+        $getEqQtySet = $request->eqQtySet;
+        $getStoQty = $request->qty;
+        $getStoQtySet = $request->qtySet;
 
         Package::findOrFail($id)->update([
             'pkg_name' => $request->pkgName,
             'pkg_price' => $request->pkgPrice
         ]);
 
-        if ($stoId != null) {
-            for ($i=0; $i < count($stoId); $i++) { 
-                PkgStock::findOrFail($stoId[$i])->update([
-                    'stock_used' => $stoQty[$i]
+        if ($getEqQty != null) {
+            for ($i=0; $i < count($getEqId); $i++) { 
+                PkgEquipment::findOrFail($getEqId[$i])->update([
+                    'eq_used' => $getEqQty[$i],
+                    'eq_used_set' => $getEqQtySet[$i],
                 ]);
             }
         }
 
-        if ($eqId != null) {
-            for ($i=0; $i < count($eqId); $i++) { 
-                PkgEquipment::findOrFail($eqId[$i])->update([
-                    'eq_used' => $eqQty[$i]
+        if ($getStoQty != null) {
+            for ($i=0; $i < count($getStoId); $i++) { 
+                PkgStock::findOrFail($getStoId[$i])->update([
+                    'stock_used' => $getStoQty[$i],
+                    'stock_used_set' => $getStoQtySet[$i]
                 ]);
             }
         }
@@ -271,7 +297,7 @@ class PackageController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-s', 'Updated Sucessfuly');
+        return redirect()->back()->with('success', 'Updated Sucessfuly!');
     }
 
     /**
@@ -287,6 +313,6 @@ class PackageController extends Controller
             'emp_id' => session('loginId')
         ]);
         
-        return redirect()->back()->with('promt', 'Deleted Successfully');
+        return redirect()->back()->with('success', 'Deleted Successfully!');
     }
 }

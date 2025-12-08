@@ -63,6 +63,17 @@ class fakeDataSeeder extends Seeder
             'emp_role' => 'staff'
         ]);
 
+        Employee::create([
+            'emp_fname' => 'Aureliano',
+            'emp_mname' => 'Espina',
+            'emp_lname' => '09198337182',
+            'emp_contact_number' => '12345678910',
+            'emp_address' => 'Compostela Davao de oro',
+            'emp_email' => 'alarmemorial@alar.com',
+            'emp_password' => Hash::make('alar'),
+            'emp_role' => 'admin'
+        ]);
+
         Supplier::create([
             'fname' => 'Gar Christian',
             'mname' => 'P',
@@ -117,28 +128,33 @@ class fakeDataSeeder extends Seeder
         PkgStock::create([
             'pkg_id' => 1,
             'stock_id' => 2,
-            'stock_used' => 2
+            'stock_used' => 2,
+            'stock_used_set' => 1,
         ]);
         PkgStock::create([
             'pkg_id' => 1,
             'stock_id' => 9,
-            'stock_used' => 1
+            'stock_used' => 1,
+            'stock_used_set' => 1,
         ]);
 
         PkgEquipment::create([
             'pkg_id' => 1,
             'eq_id' => 1,
-            'eq_used' => 1
+            'eq_used' => 1,
+            'eq_used_set' => 1
         ]);
         PkgEquipment::create([
             'pkg_id' => 1,
             'eq_id' => 2,
-            'eq_used' => 1
+            'eq_used' => 1,
+            'eq_used_set' => 1
         ]);
         PkgEquipment::create([
             'pkg_id' => 1,
             'eq_id' => 5,
-            'eq_used' => 25
+            'eq_used' => 25,
+            'eq_used_set' => 1
         ]);
         //end
 
@@ -151,25 +167,29 @@ class fakeDataSeeder extends Seeder
         PkgStock::create([
             'pkg_id' => 2,
             'stock_id' => 10,
-            'stock_used' => 2
+            'stock_used' => 2,
+            'stock_used_set' => 1,
         ]);
 
         PkgStock::create([
             'pkg_id' => 2,
             'stock_id' => 11,
-            'stock_used' => 2
+            'stock_used' => 2,
+            'stock_used_set' => 1,
         ]);
 
         PkgEquipment::create([
             'pkg_id' => 2,
             'eq_id' => 9,
-            'eq_used' => 1
+            'eq_used' => 1,
+            'eq_used_set' => 1
         ]);
 
         PkgEquipment::create([
             'pkg_id' => 2,
             'eq_id' => 10,
-            'eq_used' => 1
+            'eq_used' => 1,
+            'eq_used_set' => 1
         ]);
 
         //end
@@ -183,17 +203,13 @@ class fakeDataSeeder extends Seeder
         vehicle::create([
             'driver_name' => 'Example driver',
             'driver_contact_number' => '09970647935',
-            'veh_price' => 1500,
-            'veh_brand' => 'Nissan',
-            'veh_plate_no' => '123XXX'
+            'veh_price' => 1500
         ]);
 
         vehicle::create([
             'driver_name' => 'Example driver 2',
             'driver_contact_number' => '09970647931',
-            'veh_price' => 1500,
-            'veh_brand' => 'Nissan',
-            'veh_plate_no' => '123XXX'
+            'veh_price' => 1500
         ]);
 
 

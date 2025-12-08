@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AddWake;
 use App\Models\BAClientInfos;
 use App\Models\BAFatherInfos;
 use App\Models\BAMotherInfos;
@@ -169,13 +170,18 @@ class BurialAssistanceController extends Controller
 
         //dd(($getTotal->jo_total - $getTotal->jo_dp) <= $request->amount);
         //dd($getStat->jod_eq_stat);
-        if (($getTotal->jo_total - $getTotal->jo_dp) <= $request->amount)
+        $addWakeTotal = 0;
+        if ($request->addWakeId != null) {
+            $getWake = AddWake::where('id', $request->addWakeId)->first();
+            $addWakeTotal = $getWake->day * $getWake->fee;
+        }
+
+        if ((($getTotal->jo_total + $addWakeTotal) - $getTotal->jo_dp) <= $request->amount)
         {
             jobOrder::findOrFail($request->joId)->update([
                 'jo_status' => 'Paid'
             ]);
         }
-        
         BurialAssistance::create([
             'amount' => $request->amount,
             'jo_id' => $request->joId,
@@ -238,15 +244,15 @@ class BurialAssistanceController extends Controller
         ]);
 
         if ($getStat->jod_eq_stat == 'Pending') {
-            return redirect(route('Job-Order.showDeploy', $request->joId))->with('promt-s', 'Applied Successfuly');
+            return redirect(route('Job-Order.showDeploy', $request->joId))->with('success', 'Applied Successfuly!');
         }
         if ($getStat->jod_eq_stat == 'Deployed') {
-            return redirect(route('Job-Order.showReturn', $request->joId))->with('promt-s', 'Applied Successfuly');
+            return redirect(route('Job-Order.showReturn', $request->joId))->with('success', 'Applied Successfuly!');
         }
         if ($getStat->jod_eq_stat == 'Returned') {
-            return redirect(route('Job-Order.show', $request->joId))->with('promt-s', 'Applied Successfuly');
+            return redirect(route('Job-Order.show', $request->joId))->with('success', 'Applied Successfuly!');
         }
-
+        return redirect(route('dashboard.index'));
         
     }
 
@@ -273,7 +279,7 @@ class BurialAssistanceController extends Controller
         if ($jodData->jod_eq_stat == 'Returned') {
             return redirect(route('Job-Order.show', $joData->id));
         }
-
+        return redirect(route('dashboard.index'));
     }
 
     /**
@@ -289,36 +295,7 @@ class BurialAssistanceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
-            'payAmount' => 'required|numeric|min:1|max:999999' 
-        ], [
-            'payAmount.required' => 'This field is required.',
-            'payAmount.numeric' => 'Number only.',
-            'payAmount.min' => 'Amount must be 1 or more.',
-            'payAmount.max' => '6 digit limit reached.'
-        ]);
-
-        
-
-        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total')->where('id', $id)->first();
-        //$getStat = jobOrderDetails::select('id', 'jod_eq_stat')->where('id', $getDp->svc_id)->first();
-        //dd(($request->payAmount + $getDp->jo_dp + $request->burAssistAmount) >= $getDp->jo_total ? 'Paid' : 'Pending');
-
-        jobOrder::findOrFail($id)->update([
-            'jo_dp' => $getDp->jo_dp + $request->payAmount,
-            'jo_status' => ($request->payAmount + $getDp->jo_dp + $request->burAssistAmount) >= $getDp->jo_total ? 'Paid' : 'Pending'
-        ]);
-
-        Log::create([
-            'transaction' => 'Pay',
-            'tx_desc' => 'Payed for Job Order| ID: ' . $id,
-            'tx_date' => Carbon::now(),
-            'emp_id' => session('loginId') 
-        ]);
-
-
-        return redirect()->back()->with('promt-s', 'Paid Successfully.');
-    
+        //
     }
 
     /**

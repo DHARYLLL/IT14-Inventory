@@ -617,7 +617,7 @@ body {
 .cust-btn-danger-primary:hover {
     background-color: white;
     color: #bf4f4f;
-    box-shadow: 0 0 0 3px #ff9b9b;
+    box-shadow: 0 0 0 3px #ffcaca;
     border-color: #bf4f4f;
 }
 
@@ -638,6 +638,12 @@ body {
     border-color: #bf4f4f;
 }
 
+.cust-btn-search {
+    background-color: #b3e6cc; 
+    color: black; 
+    border: none;
+}
+
 .cust-plain-bg {
     background-color: white;
     width: 100%;
@@ -648,6 +654,10 @@ body {
     max-width: 40%;
     border-radius: 10px; 
     overflow: hidden;
+}
+
+.cust-min-w {
+    width: min-content;
 }
 
 .cust-searchbar:hover {
@@ -681,6 +691,10 @@ body {
 
 .h-80 {
     height: 80%;
+}
+
+.h-90 {
+    height: 90%;
 }
 
 .cust-time {

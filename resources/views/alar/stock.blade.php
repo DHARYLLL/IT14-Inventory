@@ -4,14 +4,15 @@
 @section('content')
     @section('head', 'Stocks')
 
-    <div class="d-flex align-items-center justify-content-between p-2 mb-0 cust-h-heading">
+    <form method="GET" action="{{ route('Stock.index') }}" class="d-flex align-items-center justify-content-between p-2 mb-0 cust-h-heading">
         <div class="input-group cust-searchbar">
-            <input type="text" id="searchInput" class="form-control" placeholder="Search Stock"
-                style="border-radius: 0; border: none;">
-            <button class="btn" id="clearSearch"
-                style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
+            <input type="text" name="search" id="searchInput"
+                class="form-control" style="border-radius: 0; border: none;"
+                placeholder="Search Stock"
+                value="{{ request('search') }}">
+            <button class="cust-btn cust-btn-search">Search</button>
         </div>
-    </div>
+    </form>
 
 
     {{-- Stock Table --}}
@@ -64,7 +65,7 @@
                     </li>
                     @for ($i = 1; $i <= $stoData->lastPage(); $i++)
                         <li class="page-item {{ $stoData->currentPage() == $i ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $stoData->url($i) }}">{{ $i }}</a>
+                            <a class="page-link" href="{{ $stoData->appends(request()->query())->url($i) }}">{{ $i }}</a>
                         </li>
                     @endfor
                     <li class="page-item {{ $stoData->currentPage() == $stoData->lastPage() ? 'disabled' : '' }}">

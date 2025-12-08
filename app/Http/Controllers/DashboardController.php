@@ -23,7 +23,7 @@ class DashboardController extends Controller
         $noStockData = Stock::where('item_qty', '=', 0)->get();
         $logData = Log::latest()->take(10)->get();
 
-        $jobOrdData = jobOrder::where('jo_start_date', '=', Carbon::today())->orderBy('jo_start_time', 'asc')->get();
+        $jobOrdData = jobOrder::where('jo_start_date', '=', Carbon::today())->orderBy('jo_start_date', 'desc')->get();
 
         $getValue = Invoice::select('total')->whereMonth('invoice_date', date('m'))->get();
         $set = array();

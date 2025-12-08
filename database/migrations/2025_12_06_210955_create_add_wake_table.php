@@ -11,22 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        /*
-        Schema::create('add_stock', function (Blueprint $table) {
+        Schema::create('add_wake', function (Blueprint $table) {
             $table->id();
+            $table->smallInteger('day');
+            $table->decimal('fee', 8,2);
 
             $table->unsignedBigInteger('jod_id');
             $table->foreign('jod_id')->references('id')->on('job_ord_details')->onUpdate('cascade')->onDelete('cascade');
 
-            $table->unsignedBigInteger('stock_id')->nullable();
-            $table->foreign('stock_id')->references('id')->on('stocks')->onUpdate('cascade')->nullOnDelete();
-
-            $table->smallInteger('stock_dpl');
-            $table->decimal('stock_add_fee', 8,2);
-            
             $table->timestamps();
         });
-        */
     }
 
     /**
@@ -34,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('add_stock');
+        Schema::dropIfExists('add_wake');
     }
 };

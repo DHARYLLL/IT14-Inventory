@@ -46,7 +46,7 @@ class PurchaseOrderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'itemName.*' => "required|min:5|max:100",
+            'itemName.*' => "required|max:100",
             'qty.*' => "required|integer|min:1",
             'unitPrice.*' => "required|numeric|min:1",
             'size.*' => "required",
@@ -55,8 +55,7 @@ class PurchaseOrderController extends Controller
             'supp' => "required"
         ],  [
             'itemName.*.required' => 'This field is required.',
-            'itemName.*.min' => '5 - 100 Characters only.',
-            'itemName.*.max' => '5 - 100 Characters only.',
+            'itemName.*.max' => '100 Characters limit reached.',
             'qty.*.required' => 'This field is required.',
             'qty.*.min' => 'Quantity must be 1 or more.',
             'qty.*.required' => 'This field is required.',
@@ -198,7 +197,7 @@ class PurchaseOrderController extends Controller
         ]);
 
         return redirect(route('Purchase-Order.index', $po))
-            ->with('success', 'Created successfully!');
+            ->with('success', 'Sumbitted Successfully!');
     }
 
     /**
@@ -293,9 +292,7 @@ class PurchaseOrderController extends Controller
                 PurchaseOrderItem::where('eq_id', '=' , $getId[$i])->where('qty_arrived', '=' , null)->orderBy('id', "ASC")->take(1)->update([
                     'qty_arrived' => $getArrivedQty[$i]
                 ]);
-            }
-            
-            
+            }        
 
         }
         
@@ -321,7 +318,7 @@ class PurchaseOrderController extends Controller
         ]);
 
 
-        return redirect(route('Purchase-Order.showDelivered', $request->po_id));
+        return redirect(route('Purchase-Order.showDelivered', $request->po_id))->with('success', 'Delivered Successfully!');
 
     }
 
@@ -359,7 +356,7 @@ class PurchaseOrderController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Purchase-Order.showApproved', $id));
+        return redirect(route('Purchase-Order.showApproved', $id))->with('success', 'Approved Successfully!');
     }
 
     public function exportPo(String $id)
@@ -388,7 +385,7 @@ class PurchaseOrderController extends Controller
             'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
-        return redirect()->back()->with('success', 'Deleted Successfully');
+        return redirect()->back()->with('success', 'Deleted Successfully!');
     }
 
 }

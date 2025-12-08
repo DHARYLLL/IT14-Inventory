@@ -46,93 +46,124 @@
                     <div class="row h-65 mt-2">
 
                         <div class="col-md-6 h-100 overflow-auto">
+                            
                             {{-- Stock --}}
-                            <table class="table table-hover align-middle mb-0">
-                            <thead class="table-success text-secondary" >
-                                <tr>
-                                    <th class="fw-semibold">Item</th>
-                                    <th class="fw-semibold">Size</th>
-                                    <th class="fw-semibold">Qty.</th>
-                                    <th class="fw-semibold">Utilize</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @session('promt')
-                                    <tr>
-                                        <td colspan="5" class="text-center" style="font-style: normal;"><div class="text-success small mt-1">{{ $value }}</div></td>
-                                    </tr>
-                                @endsession
-                                @if ($leStoData->isEmpty())
-                                    <tr>
-                                        <td colspan="5" class="text-center text-secondary py-3">No Items Included.</td>
-                                    </tr>
-                                @else
-                                    {{-- Get stock --}}
-                                    @foreach ($leStoData as $row)
-                                        <tr>
-                                            <td>{{ $row->pkgStoToSto->item_name }}</td>
-                                            <td>{{ $row->pkgStoToSto->item_size }}</td>
-                                            <td>{{ $row->pkgStoToSto->item_qty }}</td>
-                                            <td>
-                                                <input type="text" name="stoId[]" value="{{ $row->id }}" hidden>
-                                                <input type="number" class="form-control w-75" name="util[]" value="{{ $row->stock_used }}">
-                                                @error('util.' . $loop->index)
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5 class="cust-sub-title">Items:</h5>
+                                </div>
+                                <div class="col-md-12">
+                                    @if($leStoData->isEmpty())
+                                        <div class="row">
+                                            <div class="col-md-12 text-center text-secondary">No Items Included.</div>
+                                        </div>
+                                    @else
+                                        @foreach($leStoData as $row)
+                                            <div class="row mt-2 cust-white-bg mx-1">
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-semibold text-secondary">Name</label>
+                                                    <p>{{ $row->pkgStoToSto->item_name }}</p>
+                                                    <input type="text" name="stoId[]" value="{{ $row->id }}" hidden>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <p>{{ $row->pkgStoToSto->item_size }}</p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label fw-semibold text-secondary">In stock</label>
+                                                    <p>{{ $row->pkgStoToSto->item_qty }}</p>
+                                                </div>
+                                                <div class="col-md-12 mb-1">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-semibold text-secondary">Total Qty.</label>
+                                                            <p>{{ $row->stock_used * $row->stock_used_set }}</p>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-semibold text-secondary">Qty.</label>
+                                                            <input type="number" class="form-control" name="qty[]" value="{{ old('qty.'.$loop->index, $row->stock_used) }}">
+                                                            @error('qty.' . $loop->index)
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                            <input type="number" class="form-control" name="qtySet[]" value="{{ old('qtySet.'.$loop->index, $row->stock_used_set) }}">
+                                                            @error('qtySet.' . $loop->index)
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
+                                            </div>
+                                        @endforeach
+                                        
+                                    @endif
+                                </div>
+
+                            </div>
 
                         </div>
 
                         <div class="col-md-6 h-100 overflow-auto">
 
                             {{-- Equipment --}}
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-success text-secondary" >
-                                    <tr>
-                                        <th class="fw-semibold">Equipment</th>
-                                        <th class="fw-semibold">Size</th>
-                                        <th class="fw-semibold">Qty.</th>
-                                        <th class="fw-semibold">Utilize</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @session('promt')
-                                        <tr>
-                                            <td colspan="5" class="text-center" style="font-style: normal;"><div class="text-success small mt-1">{{ $value }}</div></td>
-                                        </tr>
-                                    @endsession
-                                    @if ($leEqData->isEmpty())
-                                        <tr>
-                                            <td colspan="5" class="text-center text-secondary py-3">No Equipment Included.</td>
-                                        </tr>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5 class="cust-sub-title">Equipment:</h5>
+                                </div>
+                                <div class="col-md-12">
+                                    @if($leEqData->isEmpty())
+                                        <div class="row">
+                                            <div class="col-md-12 text-center text-secondary">No Items Included.</div>
+                                        </div>
                                     @else
-                                        @foreach ($leEqData as $row)
-                                            <tr>
-                                                <td>{{ $row->pkgEqToEq->eq_name }}</td>
-                                                <td>{{ $row->pkgEqToEq->eq_size }}</td>
-                                                <td>{{ $row->pkgEqToEq->eq_available }}</td>
-                                                <td>
+                                        @foreach($leEqData as $row)
+                                            <div class="row mt-2 cust-white-bg mx-1">
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-semibold text-secondary">Name</label>
+                                                    <p>{{ $row->pkgEqToEq->eq_name }}</p>
                                                     <input type="text" name="eqId[]" value="{{ $row->id }}" hidden>
-                                                    <input type="number" class="form-control w-75" name="eqUtil[]" value="{{ $row->eq_used }}">
-                                                    @error('eqUtil.' . $loop->index)
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                                    
-                                                </td>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <p>{{ $row->pkgEqToEq->eq_size }}</p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label fw-semibold text-secondary">Available</label>
+                                                    <p>{{ $row->pkgEqToEq->eq_available }}</p>
+                                                </div>
+                                                <div class="col-md-12 mb-1">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-semibold text-secondary">Total Qty.</label>
+                                                            <p>{{ $row->eq_used * $row->eq_used_set }}</p>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-semibold text-secondary">Qty.</label>
+                                                            <input type="number" class="form-control" name="eqQty[]" value="{{ old('eqQty.'.$loop->index, $row->eq_used) }}">
+                                                            @error('eqQty.' . $loop->index)
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                            <input type="number" class="form-control" name="eqQtySet[]" value="{{ old('eqQtySet.'.$loop->index, $row->eq_used_set) }}">
+                                                            @error('eqQtySet.' . $loop->index)
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 
-                                            </tr>
+                                            </div>
                                         @endforeach
-                                    @endif
                                         
-                                </tbody>
-                            </table>
+                                    @endif
+                                </div>
 
+                            </div>
                         </div>
 
                     </div>

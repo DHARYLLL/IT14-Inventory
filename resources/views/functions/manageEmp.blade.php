@@ -52,9 +52,12 @@
                                             <td>{{ $row->emp_contact_number }}</td>
                                             <td>{{ $row->emp_address }}</td>
                                             <td>
-                                                <a href="{{ route('Employee.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </a>
+                                                @if($row->emp_role != 'sadmin')
+                                                    <a href="{{ route('Employee.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                    </a>
+                                                @endif
+                                                
                                             </td>
                                         </tr>
                                     @endforeach

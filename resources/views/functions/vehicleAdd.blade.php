@@ -2,7 +2,7 @@
 @section('title', 'Vehicle')
 
 @section('content')
-    @section('head', 'Add Vehicle')
+    @section('head', 'Add Driver')
 
     <div class="cust-full-h">
 
@@ -14,7 +14,7 @@
                 {{-- Show Details --}}
                 <div class="row cust-h-form justify-content-start align-items-start">
                     <div class="col-md-12 h-10">
-                        <h3 class="fw-semibold text-success mb-4">Edit Vehicle Details</h3>
+                        <h3 class="fw-semibold text-success mb-4">Add Driver</h3>
                     </div>
                     <div class="col-md-12 cust-h">
 
@@ -37,31 +37,7 @@
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
-
-                            
-                        </div>
-
-                        <div class="row mt-2">
-                            <div class="col-md-12">
-                                <h4 class="cust-sub-title">Vehicle Info:</h4>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Brand</label>
-                                <input type="text" class="form-control" name="brand" value="{{ old('brand') }}">
-                                @error('brand')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Plate Number</label>
-                                <input type="text" class="form-control" name="plateNo" value="{{ old('plateNo') }}">
-                                @error('plateNo')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
+                             
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Price</label>
                                 <input type="text" class="form-control" name="price" value="{{ old('price') }}">
@@ -69,9 +45,8 @@
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
-
+                            
                         </div>
-
                     </div>
                     
                 </div>

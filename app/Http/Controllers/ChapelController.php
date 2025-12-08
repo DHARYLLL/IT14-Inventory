@@ -73,7 +73,7 @@ class ChapelController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Chapel.index'))->with('success', 'Created successfully!');
+        return redirect(route('Chapel.index'))->with('success', 'Created Successfully!');
     }
 
     /**
@@ -100,22 +100,25 @@ class ChapelController extends Controller
     {
         $request->validate([
             'chapName' =>  ['required',
-                            'min:5',
                             'max:50',
                             Rule::unique('chapels', 'chap_name')
                             ->where('chap_room', $request->chapRoom)
+                            ->ignore($id)
             ],
-            'chapRoom' => "required|min:1|max:10|unique:chapels,chap_room",
+            'chapRoom' => ['required',
+                            'max:10',
+                            Rule::unique('chapels', 'chap_name')
+                            ->where('chap_room', $request->chapRoom)
+                            ->ignore($id)
+            ],
             'chapPrice' => "required|numeric|min:1|max:999999.99"
         ],  [
             'chapName.required' => 'This field is required.',
-            'chapName.min' => '5 - 50 Characters only.',
-            'chapName.max' => '5 - 50 Characters only.',
+            'chapName.max' => '50 characters limit reached.',
             'chapName.unique' => 'Name already added.',
 
             'chapRoom.required' => 'This field is required.',
-            'chapRoom.min' => '1 - 10 Characters only.',
-            'chapRoom.max' => '1 - 10 Characters only.',
+            'chapRoom.max' => '10 characters limit reached.',
             'chapRoom.unique' => 'Room already occupied.',
 
             'chapPrice.required' => 'This field is required.',
@@ -137,7 +140,7 @@ class ChapelController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-s', 'Updated Sucessfuly');
+        return redirect()->back()->with('success', 'Updated Successfuly!');
     }
 
     /**

@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        /*
         Schema::create('add_fees', function (Blueprint $table) {
             $table->id();
             $table->string('fee_name', 50)->unique();
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->foreign('jo_id')->references('id')->on('job_orders')->onUpdate('cascade');
             $table->timestamps();
         });
+        */
     }
 
     /**

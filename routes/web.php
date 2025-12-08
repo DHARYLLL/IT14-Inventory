@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddWakeController;
 use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -34,54 +35,6 @@ use App\Models\PurchaseOrderItem;
 use App\Models\ServiceRequest;
 use Illuminate\Support\Facades\Auth;
 
-// ====================
-// Guest Routes (Login & Register)
-// ====================
-/*
-Route::middleware('guest')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('login');
-    });
-
-    // Login
-    Route::get('/signin', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/signin', [LoginController::class, 'login'])->name('login.post');
-
-    // Register
-    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
-});
-
-// ====================
-// Authenticated Routes
-// ====================
-Route::middleware('auth')->group(function () {
-    // Logout
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
-    // After login, redirect to Purchase Order
-    Route::get('/PurchaseOrder', [PurchaseOrderController::class, 'index'])->name('purchaseOrder.index');
-
-    // Other pages
-    Route::get('/Dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::get('/Equipment', [EquipmentController::class, 'index'])->name('equipment.index');
-    Route::get('/Stock', [StockController::class, 'index'])->name('stock.index');
-    Route::get('/Supplier', [SupplierController::class, 'index'])->name('supplier.index');
-
-    // Data routes
-    Route::post('/PurchaseOrderItems', [PurchaseOrderItemController::class, 'store'])->name('POItems.store');
-    Route::post('/Supplier', [SupplierController::class, 'store'])->name('supplier.store');
-    Route::delete('/supplier/{supplier}/delete', [SupplierController::class, 'destroy'])->name('supplier.destroy');
-    Route::put('/Supplier/{supplier}/update', [SupplierController::class, 'update'])->name('supplier.update');
-});
-*/
-
-/*
-Route::get('/', function () {
-    return view('alar/dashboard');
-});
-*/
-
 Route::get('/', [LoginController::class, 'set'])->name('setLogin');
 Route::get('/login', [LoginController::class, 'loginPage'])->name('showLogin');
 Route::post('/', [LoginController::class, 'login'])->name('login');
@@ -103,15 +56,16 @@ Route::middleware(AuthCheck::class)->group(function(){
     
     Route::resource('Service-Request', ServiceRequestController::class);
     Route::put('Service-Request/{id}/Pay-Balance', [ServiceRequestController::class, 'payBalance'])->name('Service-Request.payBalance');
+    Route::put('Service-Request/{id}/Update-Schedule', [ServiceRequestController::class, 'updateSchedule'])->name('Service-Request.updateSchedule');
     //Route::put('Service-Request/{$id}/Deploy-Equipment', [ServiceRequestController::class, 'deploy'])->name('Service-Request.deploy');
     Route::resource('Package', PackageController::class);
     
     Route::get('Package/{id}/Remove-Item', [PackageController::class, 'addRemoveItem'])->name('Package.addRemItem');
 
-
-
     Route::resource('Package-Inclusion', packageInclusionController::class);
+
     Route::resource('Stock', StockController::class);
+
     Route::resource('Log', LogController::class);
     Route::resource('Chapel', ChapelController::class);
     //Route::resource('Receipt', receiptController::class);
@@ -137,6 +91,11 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::put('Job-Order/{id}/Deploy', [JobOrderController::class, 'deployItems'])->name('Job-Order.deploy');
     Route::put('Job-Order/{id}/Return', [JobOrderController::class, 'returnItems'])->name('Job-Order.return');
     Route::get('Job-Order/{id}/Apply-Burial-Assistance', [JobOrderController::class, 'applyBurAsst'])->name('Job-Order.apply');
+    Route::put('Job-Order/{id}/Schedule', [JobOrderController::class, 'applySched'])->name('Job-Order.sched');
+    Route::put('Job-Order/{id}/RA', [JobOrderController::class, 'updateRA'])->name('Job-Order.raUpdate');
+    Route::put('Job-Order/{id}/Pay', [JobOrderController::class, 'payAmount'])->name('Job-Order.pay');
+
+    Route::resource('Add-Wake', AddWakeController::class);
 
     Route::resource('Burial-Assistance', BurialAssistanceController::class);
     Route::get('Burial-Assistance/{id}/Back', [BurialAssistanceController::class, 'burrAsstBack'])->name('Burial-Assistance.back');
@@ -152,17 +111,11 @@ Route::middleware(AuthCheck::class)->group(function(){
     // Logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    // After login, redirect to Purchase Order
-    //Route::get('/PurchaseOrder', [PurchaseOrderController::class, 'index'])->name('purchaseOrder.index');
-
     // Other pages
     Route::get('/Dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    //Route::get('/Equipment', [EquipmentController::class, 'index'])->name('equipment.index');
-    //Route::get('/Stock', [StockController::class, 'index'])->name('stock.index');
     Route::get('/Supplier', [SupplierController::class, 'index'])->name('supplier.index');
 
     // Data routes
-    //Route::post('/PurchaseOrderItems', [PurchaseOrderItemController::class, 'store'])->name('POItems.store');
     Route::post('/Supplier', [SupplierController::class, 'store'])->name('supplier.store');
     Route::delete('/supplier/{supplier}/delete', [SupplierController::class, 'destroy'])->name('supplier.destroy');
     Route::put('/Supplier/{supplier}/update', [SupplierController::class, 'update'])->name('supplier.update');

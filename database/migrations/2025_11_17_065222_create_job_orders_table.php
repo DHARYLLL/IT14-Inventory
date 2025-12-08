@@ -15,13 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('client_name', 100);
             $table->string('client_contact_number', 11);     
-            $table->string('client_address', 150);     
+            $table->string('client_address', 150);    
+            $table->boolean('ra')->nullable(); 
             $table->decimal('jo_dp', 8,2);
             $table->decimal('jo_total', 8,2);
             $table->string('jo_status', 15);
-            $table->date('jo_start_date');
-            $table->time('jo_start_time');
-            $table->time('jo_end_time')->nullable();
+            $table->date('jo_start_date')->nullable();
+            $table->time('jo_embalm_time')->nullable();
+            $table->date('jo_burial_date')->nullable();
+            $table->time('jo_burial_time')->nullable();
             
             $table->unsignedBigInteger('emp_id')->nullable();
             $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();

@@ -50,15 +50,15 @@
                     <td>{{ $row->qty_set }}</td>
                     <td>{{ $row->qty_total }}</td>
                     <td>{{ $row->type }}</td>
-                    <td>₱ {{ $row->unit_price }}</td>
-                    <td>₱ {{ $row->total_amount }}</td>
+                    <td>{{ $row->unit_price }}</td>
+                    <td>{{ $row->total_amount }}</td>
                 </tr>
             @endforeach
 
             {{-- SHOW TOTAL --}}
             <tr>
                 <td colspan="6">Total:</td>
-                <td>₱ {{ $poItemData->sum('total_amount') }}</td>
+                <td>{{ $poItemData->sum('total_amount') }}</td>
             </tr>
         </tbody>
     </table>

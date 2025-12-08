@@ -5,7 +5,7 @@
 @section('head', 'Equipment View')
 
 <div class="d-flex align-items-center justify-content-end m-2">
-    <a href="{{ route('Equipment.index') }}" class="btn btn-green d-flex align-items-center gap-2 px-3">
+    <a href="{{ route('Equipment.index') }}" class="cust-btn cust-btn-secondary">
         <i class="bi bi-arrow-left"></i>
         <span>Back</span>
     </a>

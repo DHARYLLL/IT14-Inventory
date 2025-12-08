@@ -47,7 +47,7 @@
                             @if($joData->joToBurrAsst)
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">Total Payment</label>
-                                    <p>₱{{ $joData->jo_total }}</p>
+                                    <p>₱{{ $joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total }}</p>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">Burial Asst.</label>
@@ -63,13 +63,13 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">Balance</label>
-                                    <p>₱{{ $joData->jo_total - ($joData->joToBurrAsst ? ($joData->joToBurrAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
+                                    <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->joToBurrAsst ? ($joData->joToBurrAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
                                 </div>
                                 
                             @else
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">Total Payment</label>
-                                    <p>₱{{ $joData->jo_total }}</p>
+                                    <p>₱{{ $joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total }}</p>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">Down Payment</label>
@@ -77,7 +77,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">Balance</label>
-                                    <p>₱{{ $joData->jo_total - ($joData->joToBurrAsst ? ($joData->joToBurrAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
+                                    <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->joToBurrAsst ? ($joData->joToBurrAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
                                 </div>
                                 @session('promt-s')
                                     <div class="col-md-12">
@@ -89,61 +89,6 @@
 
                         </div>
 
-                        <div class="row mt-4 cust-white-bg mx-1">
-                            <div class="col-md-12">
-                                <h5 class="cust-sub-title">Deceased Info:</h5>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Deceased Name</label>
-                                <p>{{ $jodData->dec_name }}</p>
-                            </div>
-                            <div class="w-100"></div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Birth Date</label>
-                                <p>{{ $jodData->dec_born_date }}</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Died Date</label>
-                                <p>{{ $jodData->dec_died_date }}</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Casue of Death</label>
-                                <p>{{ $jodData->dec_cause_of_death }}</p>
-                            </div>
-
-                        </div>
-
-                        
-
-                    </div>
-
-                    {{-- Right --}}
-                    <div class="col-md-6">
-
-                        <div class="row cust-white-bg mx-1">
-                            <div class="col-md-12">
-                                <h5 class="cust-sub-title">Job Order Details:</h5>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Start Date</label>
-                                <p>{{ $joData->jo_start_date }}</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Start Time</label>
-                                <p>{{ $joData->jo_start_time }}</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">End Time</label>
-                                <p>{{ $joData->jo_end_time }}</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Days of Wake</label>
-                                <p>{{ $jodData->jod_days_of_wake }}</p>
-                            </div>
-                        </div>
-
                         @if($joData->jo_status != 'Paid')
                             <div class="row cust-white-bg mx-1 mt-4">
 
@@ -152,21 +97,22 @@
                                 </div>
                     
                                 <div class="col-md-12">                           
-                                    <form action="{{ route('Burial-Assistance.update', $joData->id) }}" method="POST">
+                                    <form action="{{ route('Job-Order.pay', $joData->id) }}" method="POST">
                                         @csrf
                                         @method('put')
                                     
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <label for="payAmount" class="form-label fw-semibold text-secondary">Amount</label>
-                                                <input type="text" name="burAssistAmount" value="{{ $joData->joToBurrAsst ? ($joData->joToBurrAsst->amount) : 0 }}" hidden>
+                                                <label for="payAmount" class="form-label fw-semibold text-secondary">Amount <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="payAmount" 
-                                                    value="{{ old('payAmount') ? old('payAmount') : $joData->jo_total - 
-                                                    ($joData->joToBurrAsst ? ($joData->joToBurrAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}">
+                                                    value="{{ old('payAmount', 
+                                                            ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - 
+                                                            ($joData->joToBurrAsst ? ($joData->joToBurrAsst->amount + $joData->jo_dp) : $joData->jo_dp)) 
+                                                        }}">
                                                 @error('payAmount')
                                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                                 @enderror
-                                                
+                                                <input type="text" name="addWakeId" value="{{ $joData->joTojod->jodToAddWake->id ?? '' }}" hidden>
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="" class="form-label fw-semibold text-secondary">Pay Balance</label>
@@ -188,16 +134,294 @@
 
                         <div class="row mt-4 cust-white-bg mx-1">
                             <div class="col-md-12">
+                                <h5 class="cust-sub-title">Deceased Info:</h5>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Deceased Name</label>
+                                <p>{{ $jodData->dec_name }}</p>
+                            </div>
+      
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Birth Date</label>
+                                <p>{{ \Carbon\Carbon::parse($jodData->dec_born_date)->format('d/M/Y') }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Died Date</label>
+                                <p>{{ \Carbon\Carbon::parse($jodData->dec_died_date)->format('d/M/Y') }}</p>
+                            </div>
+
+                        </div>
+
+                        
+
+                    </div>
+
+                    {{-- Right --}}
+                    <div class="col-md-6">
+
+                        <div class="row cust-white-bg mx-1">
+                            <div class="col-md-12">
+                                <h5 class="cust-sub-title">Job Order Details:</h5>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Days of Wake</label>
+                                <p>{{ $jodData->jod_days_of_wake }}</p>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Service Date</label>
+                                <p>{{ \Carbon\Carbon::parse($joData->jo_start_date)->format('d/M/Y')}}</p>
+                            </div>
+
+                            <div class="w-100"></div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Burial Date</label>
+                                <p>{{ \Carbon\Carbon::parse($joData->jo_burial_date)->format('d/M/Y') }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Burial Time</label>
+                                <p>{{ $joData->jo_burial_time ? \Carbon\Carbon::parse($joData->jo_burial_time)->format('g:i A') : 'No sched.' }}</p>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Embalm Time</label>
+                                <p>{{ $joData->jo_embalm_time ? \Carbon\Carbon::parse($joData->jo_embalm_time)->format('g:i A') : 'No sched.' }}</p>
+                            </div>
+
+                            @if($joData->joToJod->jodToAddWake)
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Add. Wake Days</label>
+                                    <p>{{ $joData->joToJod->jodToAddWake->day }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Total Fee</label>
+                                    <p>₱{{ $joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Add. Wake</label>
+
+                                    <div class="row">
+                                        <div class="col col-auto">
+                                             <!-- Button trigger modal for edit wake days -->
+                                            <button type="button" class="cust-btn cust-btn-secondary" data-bs-toggle="modal" data-bs-target="#wakeDayEdit">
+                                            <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i> 
+                                            </button>
+                                        </div>
+                                        <div class="col col-auto">
+                                            <!-- Delete button -->
+                                            <button type="button" class="cust-btn cust-btn-danger-secondary" data-bs-toggle="modal" data-bs-target="#wakeDayDelete">
+                                            <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i> 
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            @endif
+
+
+                            <div class="w-100"></div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Assign Schedule</label>
+                                <!-- Button trigger modal for assign schedule -->
+                                <button type="button" class="cust-btn cust-btn-primary" data-bs-toggle="modal" data-bs-target="#applySched">
+                                Schedule
+                                </button>
+                            </div>
+
+                            @if(!$joData->joToJod->jodToAddWake)
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Assign Schedule</label>
+                                    <!-- Button trigger modal for adding wake days -->
+                                    <button type="button" class="cust-btn cust-btn-primary" data-bs-toggle="modal" data-bs-target="#wakeDay">
+                                    Add wake
+                                    </button>
+                                </div>
+                            @endif
+
+                            
+                            
+                        </div>
+
+                        <!-- Modal for schedule -->
+                        <div class="modal fade" id="applySched" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="applySchedLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="applySchedLabel">Assign Schedule</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="{{ route('Job-Order.sched', $joData->id) }}" method="POST">
+                                        @csrf
+                                        @method('put')
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-semibold">Burial Time <span class="text-danger">*</span></label>
+                                                    <input type="time" class="cust-time" name="burialTime" value="{{ old('burialTime', $joData->jo_burial_time ?? '') }}">
+                                                    @error('burialTime')
+                                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                                        <script>
+                                                            document.addEventListener("DOMContentLoaded", function () {
+                                                                var modal = new bootstrap.Modal(document.getElementById('applySched'));
+                                                                modal.show();
+                                                            });
+                                                        </script>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-semibold">Embalm Time</label>
+                                                    <input type="time" class="cust-time" name="embalmTime" value="{{ old('embalmTime', $joData->jo_embalm_time ?? '') }}">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="cust-btn cust-btn-primary">update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal for wake -->
+                        <div class="modal fade" id="wakeDay" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="wakeDayLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="wakeDayLabel">Additional Wake</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="{{ route('Add-Wake.store') }}" method="POST">
+                                        @csrf
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-semibold">Additional Days <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" name="addDays" value="{{ old('addDays', 1) }}">
+                                                    @error('addDays')
+                                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                                    @enderror
+                                                    <input type="text" name="jodId" value="{{ $joData->joToJod->id }}" hidden>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-semibold">Fee per Day <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" name="addFeeDays" value="{{ old('addFeeDays', 1000) }}">
+                                                    @error('addFeeDays')
+                                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                                    @enderror
+                                                    @if($errors->has('addDays') || $errors->has('addFeeDays'))
+                                                        <script>
+                                                            document.addEventListener("DOMContentLoaded", function () {
+                                                                var modal = new bootstrap.Modal(document.getElementById('wakeDay'));
+                                                                modal.show();
+                                                            });
+                                                        </script>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="text" name="burrAsstId" value="{{$joData->joToBurrAsst ? $joData->joToBurrAsst->id : '' }}" hidden>
+                                            <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="cust-btn cust-btn-primary">Add</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal for wake Edit -->
+                        <div class="modal fade" id="wakeDayEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="wakeDayEditLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="wakeDayEditLabel">Edit Additional Wake</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="{{ $joData->joToJod->jodToAddWake ? route('Add-Wake.update', $joData->joToJod->jodToAddWake->id) : '' }}" method="POST">
+                                        @csrf
+                                        @method('put')
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-semibold">Additional Days <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" name="days" value="{{ $joData->joToJod->jodToAddWake ? old('days', $joData->joToJod->jodToAddWake->day) : '' }}">
+                                                    @error('days')
+                                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                                    @enderror
+                                                    <input type="text" name="jodId" value="{{ $joData->joToJod->id }}" hidden>
+                                                    <input type="text" name="joId" value="{{ $joData->id }}" hidden>
+                                                    <input type="text" name="burrAsstId" value="{{$joData->joToBurrAsst ? $joData->joToBurrAsst->id : '' }}" hidden>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-semibold">Fee per Day <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" name="feeDays" value="{{ $joData->joToJod->jodToAddWake ? old('feeDays', $joData->joToJod->jodToAddWake->fee) : '' }}">
+                                                    @error('feeDays')
+                                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                                    @enderror
+                                                    @if($errors->has('days') || $errors->has('feeDays'))
+                                                        <script>
+                                                            document.addEventListener("DOMContentLoaded", function () {
+                                                                var modal = new bootstrap.Modal(document.getElementById('wakeDayEdit'));
+                                                                modal.show();
+                                                            });
+                                                        </script>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="cust-btn cust-btn-primary">Update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal for wake Delete -->
+                        <div class="modal fade" id="wakeDayDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="wakeDayDeleteLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="wakeDayDeleteLabel">Delete</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="{{ $joData->joToJod->jodToAddWake ? route('Add-Wake.destroy', $joData->joToJod->jodToAddWake->id) : '' }}" method="POST">
+                                        @csrf
+                                        @method('delete')
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to Delete the additional wake?</p>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="cust-btn cust-btn-danger-primary">Delete</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 cust-white-bg mx-1">
+                            <div class="col-md-12">
                                 <h5 class="cust-sub-title">Location:</h5>
                             </div>
 
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Wake Location</label>
-                                <p>{{ $jodData->jod_wakeLoc }}</p>
+                                <p>{{ $joData->client_address ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Burial Location</label>
-                                <p>{{ $jodData->jod_burialLoc }}</p>
+                                <p>{{ $jodData->jod_burialLoc ?? 'N/A' }}</p>
                             </div>
                         </div>
 
@@ -227,74 +451,6 @@
                     <form action="{{ route('Job-Order.deploy', $jodData->id) }}" method="POST">
                         @csrf
                         @method('put')
-
-                        {{-- Additional Items and Equipment --}}
-                        <div class="row mt-4 cust-white-bg">
-                            <div class="col-md-12">
-                                <h5 class="cust-sub-title">Additional Items and Equipment:</h5>
-                            </div>
-
-                            <div class="col-md-6">
-                                <h4>Additional Item:</h4>
-                                <div class="row cust-underline">
-                                    <div class="col col-3">Name</div>
-                                    <div class="col col-3">Size</div>
-                                    <div class="col col-3">Add. Fee</div>
-                                    <div class="col col-3">Qty. Used</div>
-                                </div>
-                                @if($addStoData->isEmpty())
-                                    <div class="row mt-1 justify-content-center">
-                                        <div class="col col-auto">No additional item.</div>
-                                    </div>
-                                @else
-                                    @foreach($addStoData as $row)
-                                        <div class="row mt-1 cust-underline-secondary">
-                                            <div class="col col-3">{{ $row->addStoToSto->item_name }}</div>
-                                            <div class="col col-3">{{ $row->addStoToSto->item_size }}</div>
-                                            <div class="col col-3">{{ $row->stock_add_fee }}</div>
-                                            <div class="col col-3">
-                                                {{ $row->stock_dpl }}
-                                                <input type="text" name="addStoId[]" value="{{ $row->addStoToSto->id }}" hidden>
-                                                <input type="text" name="addStoDepl[]" value="{{ $row->stock_dpl }}" hidden>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endif
-                                
-                            </div>
-
-                            <div class="col-md-6">
-                        
-                                <h4>Additional Equipment:</h4>
-                                <div class="row cust-underline">
-                                    <div class="col col-3">Name</div>
-                                    <div class="col col-3">Size</div>
-                                    <div class="col col-3">Add. Fee</div>
-                                    <div class="col col-3">Qty. Used</div>
-                                </div>
-                                @if($addEqData->isEmpty())
-                                    <div class="row mt-1 justify-content-center">
-                                        <div class="col col-auto">No additional equipment.</div>
-                                    </div>
-                                @else
-                                    @foreach($addEqData as $row)
-                                        <div class="row cust-underline-secondary mt-1">
-                                            <div class="col col-3">{{ $row->addEqToEq->eq_name }}</div>
-                                            <div class="col col-3">{{ $row->addEqToEq->eq_size }}</div>
-                                            <div class="col col-3">{{ $row->eq_add_fee }}</div>
-                                            <div class="col col-3">
-                                                {{ $row->eq_dpl }}
-                                                <input type="text" name="addEqId[]" value="{{ $row->addEqToEq->id }}" hidden>
-                                                <input type="text" name="addEqDepl[]" value="{{ $row->eq_dpl }}" hidden>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endif
-
-                                
-                            </div>
-                        </div>
-
 
                         {{-- Package Items and Equipment --}}
                         <div class="row mt-4 cust-white-bg">

@@ -24,6 +24,8 @@ return new class extends Migration
             $table->foreign('stock_id')->references('id')->on('stocks')->onUpdate('cascade')->nullOnDelete();
 
             $table->smallInteger('stock_used');
+            $table->smallInteger('stock_used_set');
+
 
             $table->timestamps();
         });

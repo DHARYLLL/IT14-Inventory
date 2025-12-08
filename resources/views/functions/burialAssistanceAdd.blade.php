@@ -43,6 +43,7 @@
                                     <label for="amount" class="form-label">Amount:</label>
                                     <input type="text" class="form-control" name="amount" value="{{ old('amount') }}">
                                     <input type="text" name="joId" value="{{ $joData->id }}" hidden>
+                                    <input type="text" name="addWakeId" value="{{ $joData->joTojod->jodToAddWake->id ?? '' }}" hidden>
                                     @error('amount')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror

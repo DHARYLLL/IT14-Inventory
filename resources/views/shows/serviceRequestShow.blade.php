@@ -44,29 +44,80 @@
                         <p>{{ $joData->joToSvcReq->veh_id ? $joData->joToSvcReq->svcReqToVeh->driver_name : 'N/A' }}</p>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Vehicle</label>
-                        <p>{{ $joData->joToSvcReq->veh_id ? $joData->joToSvcReq->svcReqToVeh->veh_brand : 'N/A' }} |
-                            {{ $joData->joToSvcReq->veh_id ? $joData->joToSvcReq->svcReqToVeh->veh_plate_no : 'N/A' }}</p>
-                    </div>
-                    <div class="col-md-3">
                         <label class="form-label fw-semibold">Contact number</label>
                         <p>{{ $joData->joToSvcReq->veh_id ? $joData->joToSvcReq->svcReqToVeh->driver_contact_number : 'N/A' }}</p>
                     </div>
                     
                     <div class="w-100 mb-2"></div>
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Start date</label>
-                        <p>{{ $joData->jo_start_date }}</p>
+                        <label class="form-label fw-semibold">Service date</label>
+                        <p>{{ \Carbon\Carbon::parse($joData->jo_start_date)->format('d/M/Y') }}</p>
+                    </div> 
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Burial time</label>
+                        <p>{{ $joData->jo_burial_time ? \Carbon\Carbon::parse($joData->jo_burial_time)->format('g:i A') : 'No Sched.' }}</p>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Start time</label>
-                        <p>{{ \Carbon\Carbon::parse($joData->jo_start_time)->format('g:i A') }}</p>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">End time</label>
-                        <p>{{ \Carbon\Carbon::parse($joData->jo_end_time)->format('g:i A') }}</p>
+                        <label class="form-label fw-semibold">Embalm time</label>
+                        <p>{{ $joData->jo_embalm_time ? \Carbon\Carbon::parse($joData->jo_embalm_time)->format('g:i A') : 'No Sched.' }}</p>
                     </div>
                     
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Assign Schedule</label>
+                        <!-- Button trigger modal for assign schedule -->
+                        <button type="button" class="cust-btn cust-btn-primary" data-bs-toggle="modal" data-bs-target="#applySched">
+                        Schedule
+                        </button>
+                    </div>
+
+                    <!-- Modal for schedule -->
+                    <div class="modal fade" id="applySched" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="applySchedLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="applySchedLabel">Assign Schedule</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{{ route('Service-Request.updateSchedule', $joData->id) }}" method="POST">
+                                    @csrf
+                                    @method('put')
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold">Service Date <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" name="svcDate" value="{{ old('svcDate', $joData->jo_start_date ?? '') }}">
+                                                @error('svcDate')
+                                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                                    <script>
+                                                        document.addEventListener("DOMContentLoaded", function () {
+                                                            var modal = new bootstrap.Modal(document.getElementById('applySched'));
+                                                            modal.show();
+                                                        });
+                                                    </script>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold">Burial Time</label>
+                                                <input type="time" class="cust-time" name="burialTime" value="{{ old('burialTime', $joData->jo_burial_time ?? '') }}">
+                                                @error('burialTime')
+                                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold">Embalm Time</label>
+                                                <input type="time" class="cust-time" name="embalmTime" value="{{ old('embalmTime', $joData->jo_embalm_time ?? '') }}">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="cust-btn cust-btn-primary">update</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                     
                 </div>
 
@@ -114,11 +165,6 @@
                             <p>₱{{ $joData->jo_total - $joData->jo_dp }}</p>
                         </div>
                     @endif
-
-
-                    
-
-                    
                 </div>
 
                 

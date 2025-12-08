@@ -4,13 +4,12 @@
 @section('content')
     @section('head', 'Supplier')
 
-    <div class="d-flex align-items-center justify-content-between p-0 cust-h-heading">
+    <div class="d-flex align-items-center justify-content-between p-2 cust-h-heading">
 
         <div class="input-group cust-searchbar">
             <input type="text" id="searchInput" class="form-control" placeholder="Search Service Request"
                 style="border-radius: 0; border: none;">
-            <button class="btn" id="clearSearch"
-                style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
+            <button class="cust-btn cust-btn-search" id="clearSearch">Clear</button>
         </div>
         <button class="cust-btn cust-btn-primary" type="button" data-bs-toggle="modal"
             data-bs-target="#NewSupplierModal"><i class="bi bi-plus-lg"></i><span>Add Supplier</span>
@@ -51,14 +50,16 @@
                                         <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top"
                                             title="Edit"></i>
                                     </button>
-                                    <form action="{{ route('supplier.destroy', $supplier->id) }}" method="POST" class="m-0">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="cust-btn cust-btn-danger-secondary  btn-md">
-                                            <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                title="Delete"></i>
-                                        </button>
-                                    </form>
+                                    @if(session("empRole") == 'sadmin' || session("empRole") == 'admin')
+                                        <form action="{{ route('supplier.destroy', $supplier->id) }}" method="POST" class="m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="cust-btn cust-btn-danger-secondary  btn-md">
+                                                <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Delete"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -116,9 +117,9 @@
                                         </div>
                                         {{-- Footer --}}
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i
+                                            <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal"><i
                                                     class="bi bi-x-lg px-2"></i>Cancel</button>
-                                            <button type="submit" class="btn btn-green"><i class="bi bi-floppy px-2"></i>Save
+                                            <button type="submit" class="cust-btn cust-btn-primary"><i class="bi bi-floppy px-2"></i>Save
                                                 Changes</button>
                                         </div>
                                     </form>
@@ -129,33 +130,6 @@
                 @endif
             </tbody>
         </table>
-        {{-- Custom Pagination --}}
-        <div class="d-flex justify-content-center mt-3">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination mb-0">
-                    <li class="page-item {{ $suppliers->onFirstPage() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $suppliers->previousPageUrl() ?? '#' }}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    @for ($i = 1; $i <= $suppliers->lastPage(); $i++)
-                        <li class="page-item {{ $suppliers->currentPage() == $i ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $suppliers->url($i) }}">{{ $i }}</a>
-                        </li>
-                    @endfor
-                    <li class="page-item {{ $suppliers->currentPage() == $suppliers->lastPage() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $suppliers->nextPageUrl() ?? '#' }}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        {{-- Showing results text --}}
-        <div class="text-center text-secondary mt-2">
-            Showing {{ $suppliers->firstItem() ?? 0 }} to {{ $suppliers->lastItem() ?? 0 }} of
-            {{ $suppliers->total() ?? 0 }} results
-        </div>
     </div>
 
 @endsection
@@ -214,9 +188,9 @@ aria-hidden="true">
 
             {{-- Footer --}}
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i
+                <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal"><i
                         class="bi bi-x-lg px-1"></i>Cancel</button>
-                <button type="submit" class="btn btn-green"><i class="bi bi-plus-lg px-1"></i>Add
+                <button type="submit" class="cust-btn cust-btn-primary"><i class="bi bi-plus-lg px-1"></i>Add
                     Supplier</button>
             </div>
         </form>

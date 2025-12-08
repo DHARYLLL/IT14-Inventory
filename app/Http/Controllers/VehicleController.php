@@ -40,8 +40,6 @@ class VehicleController extends Controller
                             Rule::unique('vehicles', 'driver_name')
                             ->where('veh_plate_no', $request->plateNo)],
             'contactNumber' => 'required|digits:11',
-            'brand' => 'required|max:50',
-            'plateNo' => 'required|max:25|unique:vehicles,veh_plate_no',
             'price' => 'required|numeric|min:1|max:999999.99'
         ], [
             'driverName.required' => 'This field is required.',
@@ -50,13 +48,6 @@ class VehicleController extends Controller
 
             'contactNumber.required' => 'This field is required.',
             'contactNumber.digits' => 'Not a valid number.',
-
-            'brand.required' => 'This field is required.',
-            'brand.max' => '50 characters limit reached.',
-
-            'plateNo.required' => 'This field is required.',
-            'plateNo.max' => '25 characters limit reached.',
-            'plateNo.unique' => 'Plate No. is already taken.',
 
             'price.required' => 'This field is required.',
             'price.numeric' => 'Number only.',
@@ -67,9 +58,7 @@ class VehicleController extends Controller
         vehicle::create([
             'driver_name' => $request->driverName,
             'driver_contact_number' => $request->contactNumber,
-            'veh_price' => $request->price,
-            'veh_brand' => $request->brand,
-            'veh_plate_no' => $request->plateNo
+            'veh_price' => $request->price
         ]);
 
         $vehId = vehicle::orderBy('id', 'desc')->take(1)->value('id');
@@ -81,7 +70,7 @@ class VehicleController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-s', 'Added Successfully.');
+        return redirect()->back()->with('success', 'Added Successfully!');
 
     }
 
@@ -112,16 +101,13 @@ class VehicleController extends Controller
                 'required',
                 'max:50',
                 Rule::unique('vehicles', 'driver_name')
-                ->where('veh_plate_no', $request->plateNo)
                 ->ignore($id)
             ],
-            'contactNumber' => 'required|digits:11',
-            'brand' => 'required|max:50',
-            'plateNo' => [
+            'contactNumber' => [
                 'required',
-                'max:25',
-                Rule::unique('vehicles', 'veh_plate_no')
-                ->ignore($id) 
+                'digits:11',
+                Rule::unique('vehicles', 'driver_contact_number')
+                ->ignore($id)
             ],
             'price' => 'required|numeric|min:1|max:999999.99'
         ], [
@@ -132,13 +118,6 @@ class VehicleController extends Controller
             'contactNumber.required' => 'This field is required.',
             'contactNumber.digits' => 'Not a valid number.',
 
-            'brand.required' => 'This field is required.',
-            'brand.max' => '50 characters limit reached.',
-
-            'plateNo.required' => 'This field is required.',
-            'plateNo.max' => '25 characters limit reached.',
-            'plateNo.unique' => 'Plate No. is already taken.',
-
             'price.required' => 'This field is required.',
             'price.numeric' => 'Number only.',
             'price.min' => 'Amount must be 1 or more.',
@@ -148,9 +127,7 @@ class VehicleController extends Controller
         vehicle::findOrFail($id)->update([
             'driver_name' => $request->driverName,
             'driver_contact_number' => $request->contactNumber,
-            'veh_price' => $request->price,
-            'veh_brand' => $request->brand,
-            'veh_plate_no' => $request->plateNo
+            'veh_price' => $request->price
         ]);
 
         Log::create([
@@ -160,14 +137,22 @@ class VehicleController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-s', 'Updated Successfully.');
+        return redirect(route('Vehicle.index'))->with('success', 'Updated Successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {
-        //
+    {   
+        vehicle::findOrFail($id)->delete();
+        Log::create([
+            'transaction' => 'Delete',
+            'tx_desc' => 'Deleted Vehicle | ID: ' . $id,
+            'tx_date' => Carbon::now(),
+            'emp_id' => session('loginId')
+        ]);
+
+        return redirect(route('Vehicle.index'))->with('success', 'Deleted Successfully!');
     }
 }

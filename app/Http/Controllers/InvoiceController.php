@@ -54,7 +54,7 @@ class InvoiceController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Invoice Created Successfully!');
     }
 
     /**

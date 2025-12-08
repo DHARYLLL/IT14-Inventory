@@ -1,0 +1,198 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\AddWake;
+use App\Models\BurialAssistance;
+use App\Models\jobOrder;
+use App\Models\jobOrderDetails;
+use App\Models\Log;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+class AddWakeController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {   
+        $request->validate([
+            'addDays' => 'required|integer|min:1|max:30',
+            'addFeeDays' => 'required|numeric|min:1|max:999999.99'
+        ],[
+            'addDays.require' => 'This field is required.',
+            'addDays.min' => 'Days must be 1 or more',
+            'addDays.max' => '30 days limit reached',
+
+            'addFeeDays.require' => 'This field is required.',
+            'addFeeDays.numeric' => 'Number only.',
+            'addFeeDays.min' => 'Amount must be 1 or more',
+            'addFeeDays.max' => '6 digits limit reached'
+        ]);
+
+        AddWake::create([
+            'day' => $request->addDays,
+            'fee' => $request->addFeeDays,
+            'jod_id' => $request->jodId
+        ]);
+
+        $id = AddWake::orderBy('id', 'desc')->take(1)->value('id');
+
+        $addWakeTotal = $request->addDays * $request->addFeeDays;
+        $addWakeData = AddWake::select('id', 'jod_id')->where('id', $id)->first();
+
+        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total')->where('jod_id', $addWakeData->jod_id)->first();
+
+        $burAsstTotal = 0;
+        if ($request->burrAsstId) {
+            $getBurrAsst = BurialAssistance::select('id', 'amount')->where('jo_id', $getDp->id)->first();
+            $burAsstTotal = $getBurrAsst->amount;
+        }
+
+        if (($getDp->jo_total + $addWakeTotal) <= ($getDp->jo_dp + $burAsstTotal)) {
+            jobOrder::findOrFail($getDp->id)->update([
+                'jo_status' => 'Paid'
+            ]);
+        } else {
+            jobOrder::findOrFail($getDp->id)->update([
+                'jo_status' => 'Pending'
+            ]);
+        }
+
+        Log::create([
+            'transaction' => 'Added',
+            'tx_desc' => 'Added add. wake days | ID: ' . $request->jodId,
+            'tx_date' => Carbon::now(),
+            'emp_id' => session('loginId')
+        ]);
+
+        return redirect()->back()->with('success', 'Additional days added!');
+
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $request->validate([
+            'days' => 'required|integer|min:1|max:30',
+            'feeDays' => 'required|numeric|min:1|max:999999.99'
+        ],[
+            'days.require' => 'This field is required.',
+            'days.min' => 'Days must be 1 or more',
+            'days.max' => '30 days limit reached',
+
+            'feeDays.require' => 'This field is required.',
+            'feeDays.numeric' => 'Number only.',
+            'feeDays.min' => 'Amount must be 1 or more',
+            'feeDays.max' => '6 digits limit reached'
+        ]);
+
+        $addWakeTotal = $request->days * $request->feeDays;
+        $addWakeData = AddWake::select('id', 'jod_id')->where('id', $id)->first();
+
+        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total')->where('jod_id', $addWakeData->jod_id)->first();
+
+        $burAsstTotal = 0;
+        if ($request->burrAsstId) {
+            $getBurrAsst = BurialAssistance::select('id', 'amount')->where('jo_id', $getDp->id)->first();
+            $burAsstTotal = $getBurrAsst->amount;
+        }
+
+        if (($getDp->jo_total + $addWakeTotal) <= ($getDp->jo_dp + $burAsstTotal)) {
+            jobOrder::findOrFail($getDp->id)->update([
+                'jo_status' => 'Paid'
+            ]);
+        } else {
+            jobOrder::findOrFail($getDp->id)->update([
+                'jo_status' => 'Pending'
+            ]);
+        }
+
+        AddWake::findOrFail($id)->update([
+            'day' => $request->days,
+            'fee' => $request->feeDays,
+        ]);
+
+        Log::create([
+            'transaction' => 'Update',
+            'tx_desc' => 'Updated add. wake days and fee | ID: ' . $request->jodId,
+            'tx_date' => Carbon::now(),
+            'emp_id' => session('loginId')
+        ]);
+
+        return redirect()->back()->with('success', 'Updated Successfully!');
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $addWakeData = AddWake::where('id', $id)->first();
+        $joData = jobOrder::select('id', 'jo_dp', 'jo_total')->where('jod_id', $addWakeData->jod_id)->first();
+
+        $addWakeTotal = $addWakeData->day * $addWakeData->fee;
+
+        $burAsstTotal = 0;
+        if ($joData->joToBurrAsst) {
+            $getBurrAsst = BurialAssistance::select('id', 'amount')->where('jo_id', $joData->id)->first();
+            $burAsstTotal = $getBurrAsst->amount;
+        }
+
+        if (($joData->jo_total - $addWakeTotal) <= ($joData->jo_dp + $burAsstTotal)) {
+            jobOrder::where('jod_id', $addWakeData->jod_id)->update([
+                'jo_status' => 'Paid'
+            ]);
+        } else {
+            jobOrder::where('jod_id', $addWakeData->jod_id)->update([
+                'jo_status' => 'Pending'
+            ]);
+        }
+        AddWake::findOrFail($id)->delete();
+
+        Log::create([
+            'transaction' => 'Delete',
+            'tx_desc' => 'Deletd add. wake | ID: ' . $id,
+            'tx_date' => Carbon::now(),
+            'emp_id' => session('loginId')
+        ]);
+
+        return redirect()->back()->with('success', 'Deleted Successfully!');
+    }
+}

@@ -66,14 +66,17 @@ class ServiceRequestController extends Controller
             ],
             'payment' => 'required|integer|min:0|max:999999',
             'total' => 'required|integer|min:1|max:999999',
-            'timeStart' => 'required',
-            'timeEnd' => 'required'
-            
+            'burrDate' => [
+                'nullable',
+                Rule::date()->afterOrEqual('svcDate')
+            ]
         ], [
             'clientName.required' => 'This field is required.',
             'clientConNum.required' => 'This field is required.',
             'svcDate.required' => 'This field is required.',
-            'svcDate.after_or_equal' => 'The start date must be today or after.',
+            'svcDate.after_or_equal' => 'Date must be today or after.',
+
+            'burrDate.after_or_equal' => 'Date must be today or after service date.',
 
             'vehicle.required_without' => 'Select at least one: vehicle or embalm.',
             'embalm.required_without'  => 'Select at least one: vehicle or embalm.',
@@ -83,28 +86,16 @@ class ServiceRequestController extends Controller
 
             'payment.required' => 'This field is required.',
             'payment.integer' => 'Number only.',
-            'payment.min' => 'Payment must be 1 or more',
+            'payment.min' => 'Not a valid payment.',
             'payment.max' => '6 digits is the max.',
 
             'total.required' => 'This field is required.',
             'total.integer' => 'Number only.',
             'total.min' => 'Total must be 1 or more',
-            'total.max' => '6 digits is the max.',
-
-            'timeStart.required' => 'This field is required.',
-            'timeEnd.required' => 'This field is required.',
-            
+            'total.max' => '6 digits is the max.'
         ]);
 
         //dd('hello');
-
-        // validate time
-        $start = Carbon::parse($request->jo_start_time);
-        $end   = Carbon::parse($request->jo_end_time);
-
-        if ($end->lt($start)) { // lt = less than
-            return back()->with('promt-f', 'End time must be after start time.')->withInput();
-        }
 
         ServiceRequest::create([
             'veh_id' => $request->setVehId,
@@ -121,10 +112,11 @@ class ServiceRequestController extends Controller
             'jo_total' => $request->total,
             'jo_status' => $request->payment >= $request->total ? 'Paid' : 'Pending',
             'jo_start_date' => $request->svcDate,
-            'jo_start_time' => $request->timeStart,
-            'jo_end_time' => $request->timeEnd,
+            'jo_embalm_time' => $request->embalmTime,
+            'jo_burial_date' => $request->burrDate,
+            'jo_burial_time' => $request->burialTime,
             'emp_id' => session('loginId'),
-            'svc_id' => $svcId
+            'svc_id'  => $svcId
         ]);
 
         $joId = jobOrder::orderBy('id', 'desc')->take(1)->value('id');
@@ -148,7 +140,7 @@ class ServiceRequestController extends Controller
         ]);
 
 
-        return redirect(route('Service-Request.show', $joId))->with('promt-s', 'Requested Successfully.');
+        return redirect(route('Job-Order.index'))->with('success', 'Requested Successfully!');
         
     }
 
@@ -186,7 +178,35 @@ class ServiceRequestController extends Controller
             'jo_status' => ($request->payment >= ($getDp->jo_total - $getDp->jo_dp )) ? 'Paid' : 'Pending'
         ]);
 
-        return redirect()->back()->with('promt-s', 'Payment Successfull.');
+        return redirect()->back()->with('success', 'Payment Successfull!');
+    }
+
+    public function updateSchedule(Request $request, String $id)
+    {
+        $request->validate([
+            'svcDate' => [
+                'required',
+                Rule::date()->afterOrEqual(today())
+            ]
+        ],[
+            'svcDate.required' => 'This field is required.',
+            'svcDate.after_or_equal' => 'Date must be today or after.'
+        ]);
+
+        jobOrder::findOrFail($id)->update([
+            'jo_start_date' => $request->svcDate,
+            'jo_embalm_time' => $request->embalmTime,
+            'jo_burial_time' => $request->burialTime
+        ]);
+
+        Log::create([
+            'transaction' => 'Update',
+            'tx_desc' => 'Updated service request schedule | ID: ' . $id,
+            'tx_date' => Carbon::now(),
+            'emp_id' => session('loginId')
+        ]);
+
+       return redirect()->back()->with('success', 'Updated Schedule!');
     }
 
     /**
@@ -284,6 +304,6 @@ class ServiceRequestController extends Controller
             'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
-        return redirect()->back()->with('success', 'Deleted Succesfully');
+        return redirect()->back()->with('success', 'Deleted Succesfully!');
     }
 }

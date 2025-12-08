@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\addEquipment;
 use App\Models\addStock;
+use App\Models\AddWake;
 use App\Models\BurialAssistance;
 use App\Models\Chapel;
 use App\Models\Equipment;
@@ -51,6 +52,7 @@ class JobOrderController extends Controller
      */
     public function store(Request $request)
     {
+        //dd(Carbon::parse($request->svcDate)->addDays((int)$request->wakeDay));
         $request->validate([
             'package' => 'required',
             'clientName' => 'required|max:100',
@@ -60,10 +62,6 @@ class JobOrderController extends Controller
                 'required',
                 Rule::date()->afterOrEqual(today())
             ],
-            'timeStart' => 'required',
-            'timeEnd' => 'required',
-            'wakeLoc' => 'required',
-            'burialLoc' => 'required',
             'decName' => 'required',
             'decBorn' => [
                 'required',
@@ -72,18 +70,12 @@ class JobOrderController extends Controller
             'decDied' => [
                 'required',
                 Rule::date()->afterOrEqual('decBorn')
+                ->beforeOrEqual(today())
             ],
-            'decCOD' => 'required',
             'payment' => 'required|integer|min:0|max:999999',
             'vehicle' => 'required',
             'total' => 'required|integer|min:1|max:999999',
 
-            'itemName.*' => 'required',
-            'stockQty.*' => 'required|integer|min:1|max:999',
-            'stofee.*' => 'required|numeric|min:1|max:999999.99',
-            'eqName.*' => 'required',
-            'eqQty.*' => 'required|integer|min:1|max:999',
-            'eqfee.*' => 'required|numeric|min:1|max:999999.99',
             'wakeDay' => 'required|integer|min:1|max:999'
         ], [
             'package.required' => 'This field is required.',
@@ -101,11 +93,6 @@ class JobOrderController extends Controller
             'svcDate.required' => 'This field is required.',
             'svcDate.after_or_equal' => 'The start date must be today or after.',
 
-            'timeStart.required' => 'This field is required.',
-            'timeEnd.required' => 'This field is required.',
-
-            'wakeLoc.required' => 'This field is required.',
-            'burialLoc.required' => 'This field is required.',
             'decName.required' => 'This field is required.',
 
             'decBorn.required' => 'This field is required.',
@@ -113,8 +100,7 @@ class JobOrderController extends Controller
 
             'decDied.required' => 'This field is required.',
             'decDied.after_or_equal' => 'The date must be after of equal the date of born.',
-
-            'decCOD.required' => 'This field is required.',
+            'decDied.before_or_equal' => 'The date must be before of today.',
 
             'payment.required' => 'This field is required.',
             'payment.number' => 'Number only.',
@@ -122,24 +108,6 @@ class JobOrderController extends Controller
             'payment.max' => '6 digit limit reached.',
 
             'vehicle.required' => 'This field is required.',
-
-            'stockQty.*.required' => 'This field is required.',
-            'stockQty.*.min' => 'Item quantity must be 1 or more.',
-            'stockQty.*.max' => '3 digits limit reached.',
-
-            'stofee.*.required' => 'This field is required.',
-            'stofee.*.numeric' => 'Numer only.',
-            'stofee.*.min' => 'Amount must be 1 or more.',
-            'stofee.*.max' => '6 digits limit reached.',
-
-            'eqQty.*.required' => 'This field is required.',
-            'eqQty.*.min' => 'Equipment quantity must be 1 or more.',
-            'eqQty.*.max' => '3 digits limit reached.',
-
-            'eqfee.*.required' => 'This field is required.',
-            'eqfee.*.numeric' => 'Numer only.',
-            'eqfee.*.min' => 'Amount must be 1 or more.',
-            'eqfee.*.max' => '6 digits limit reached.',
 
             'wakeDay.required' => 'This field is required.',
             'wakeDay.min' => 'Day must be 1 or more.',
@@ -151,84 +119,12 @@ class JobOrderController extends Controller
             'pkgPrice.max' => '6 digits limit reached.'
         ]);
 
-        $start = Carbon::parse($request->jo_svc_date. ' ' .$request->jo_start_time);
-        $end   = Carbon::parse($request->jo_svc_date. ' ' .$request->jo_end_time);
-
-        if ($end->lt($start)) { // lt = less than
-            return back()->with('promt-f-date', 'End time must be after start time.')->withInput();
-        }
-
-        $eq = $request->equipment;
-        $eqQty = $request->eqQty;
-        $eqFee = $request->eqfee;
-        $sto = $request->stock;
-        $stoQty = $request->stockQty;
-        $stoFee = $request->stofee; 
-
-        $sumEqFee = array();
-        $sumStoFee = array();
-
-        
-
-        //get all equipment in request and rpovide error
-        $equipmentErrors = [];
-        if ($eq !== null) {
-            for ($i = 0; $i < count($eq); $i++) {
-                $equipmentId = $eq[$i];
-                $requestedQty = (int) $eqQty[$i];
-                array_push($sumEqFee, (float) $eqFee[$i]);
-
-                $equipment = Equipment::find($equipmentId);
-
-                if (!$equipment) {
-                    $equipmentErrors["equipment.$i"] = "Equipment item not found.";
-                    continue;
-                }
-                if ($requestedQty > $equipment->eq_available) {
-                    $equipmentErrors["eqQty.$i"] = "Requested quantity ($requestedQty) exceeds available equipment ({$equipment->eq_available}).";
-                }
-            }
-
-            if (!empty($equipmentErrors)) {
-                return back()->withErrors($equipmentErrors)->withInput();
-            }
-        }
-
-        $StoErrors = [];
-        if ($sto != null) {
-            for ($i = 0; $i < count($sto); $i++) {
-                $stockId = $sto[$i];
-                $requestedQty = (int) $stoQty[$i];
-                array_push($sumStoFee, (float) $stoFee[$i]);
-
-                // Get stock from DB
-                $stock = Stock::find($stockId); // replace with your actual Stock model
-
-                if (!$stock) {
-                    $StoErrors["stock.$i"] = "Stock item not found.";
-                    continue;
-                }
-                if ($requestedQty > $stock->item_qty) {
-                    $StoErrors["stockQty.$i"] = "Requested quantity ({$requestedQty}) exceeds available stock ({$stock->item_qty}).";
-                }
-            }
-
-            if (!empty($StoErrors)) {
-                return back()->withErrors($StoErrors)->withInput();
-            }
-        }
-
-        $eqTotal = array_sum($sumEqFee);
-        $stoTotal = array_sum($sumStoFee);
-
         //dd($request->payment >= $request->total ? 'paid' : 'not paid');
         jobOrderDetails::create([
             'dec_name' => $request->decName,
             'dec_born_date' => $request->decBorn, 
             'dec_died_date' => $request->decDied,
-            'dec_cause_of_death' => $request->decCOD,
             'jod_days_of_wake' => $request->wakeDay,
-            'jod_wakeLoc' => $request->wakeLoc,
             'jod_burialLoc' => $request->burialLoc,
             'jod_eq_stat' => 'Pending',
             'pkg_id' => $request->pkgId,
@@ -237,40 +133,19 @@ class JobOrderController extends Controller
 
         $jodId = jobOrderDetails::orderBy('id', 'desc')->take(1)->value('id');
 
-        if ($eq != null) {
-            for ($i = 0; $i < count($eq); $i++) {
-                addEquipment::create([
-                    'jod_id' => $jodId,
-                    'eq_id' => $eq[$i],
-                    'eq_add_fee' => $eqFee[$i],
-                    'eq_dpl' => $eqQty[$i]
-                ]);
-            }
-        }
-
-        if ($sto != null) {
-            for ($i = 0; $i < count($sto); $i++) {
-                addStock::create([
-                    'jod_id' => $jodId,
-                    'stock_id' => $sto[$i],    
-                    'stock_add_fee' => $stoFee[$i],
-                    'stock_dpl' => $stoQty[$i]
-                ]);
-            }
-        }
-
         jobOrder::create([
             'client_name' => $request->clientName,
             'client_contact_number' => $request->clientConNum,
             'client_address' => $request->address,
             'jo_dp' => $request->payment,
-            'jo_total' => $request->total + ($eqTotal + $stoTotal),
+            'jo_total' => $request->total,
             'jo_status' => $request->payment >= $request->total ? 'Paid' : 'Pending',
             'jo_start_date' => $request->svcDate,
-            'jo_start_time' => $request->timeStart,
-            'jo_end_time' => $request->timeEnd,
+            'jo_embalm_time' => $request->embalmTime,
+            'jo_burial_date' => Carbon::parse($request->svcDate)->addDays((int)$request->wakeDay)->toDateString(),
+            'jo_burial_time' => $request->burialTime,
             'emp_id' => session('loginId'),
-            'jod_id'=> $jodId
+            'jod_id' => $jodId
         ]);
 
         $joId = jobOrder::orderBy('id', 'desc')->take(1)->value('id');
@@ -313,24 +188,14 @@ class JobOrderController extends Controller
         $joData = jobOrder::findOrFail($id);
         $jodData = jobOrderDetails::findOrFail($joData->jod_id);
 
-        $addEqData = addEquipment::where('jod_id', $jodData->id)->get();
-        $addStoData = addStock::where('jod_id', $jodData->id)->get();
-
         $pkgEqData = PkgEquipment::where('pkg_id', $jodData->pkg_id)->get();
         $pkgStoData = PkgStock::where('pkg_id', $jodData->pkg_id)->get();
-        return view('shows/jobOrdDeplShow', ['joData' => $joData, 'jodData' => $jodData, 'addStoData' => $addStoData, 
-                                        'addEqData' => $addEqData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData]);
+        return view('shows/jobOrdDeplShow', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData]);
     }
 
     public function deployItems(Request $request, string $id)
     {
         $request->validate([
-            'addEqId.*' => 'required',
-            'addStoId.*' => 'required',
-
-            'addEqDepl.*' => 'required|integer|min:1|max:999',
-            'addStoDepl.*' => 'required|integer|min:1|max:999',
-
             'eqId.*' => 'required',
             'stoId.*' => 'required',
 
@@ -345,13 +210,6 @@ class JobOrderController extends Controller
             'eqDepl.*.min' => 'Quantity must be 0 or more.',
             'eqDepl.*.max' => '3 digit equipment quantity reached.',
         ]);
-
-        // Store additional equipment and stock IDs and quantity used
-        $addStoId = $request->addStoId;
-        $addEqId = $request->addEqId;
-
-        $addStoDepl = $request->addStoDepl;
-        $addEqDepl = $request->addEqDepl;
 
         // Store equipment and stock IDs and quantity used
         $stoId = $request->stoId;
@@ -369,27 +227,6 @@ class JobOrderController extends Controller
             return redirect()->back()
                 ->with('promt-f', 'Cannot deploy before (' . $jo->jo_start_date . ')')
                 ->withInput();
-        }
-
-        // for additional item and equipment
-
-        if ($addStoId != null) {
-            $addStocks = Stock::select('id', 'item_qty')->whereIn('id', $addStoId)->get();
-            foreach ($addStocks as $index => $data) {
-                $data->update([
-                    'item_qty' => $data->item_qty - $addStoDepl[$index],
-                ]);
-            }
-        }
-
-        if ($addEqId != null) {
-            $addEq = Equipment::select('id', 'eq_available', 'eq_in_use')->whereIn('id', $addEqId)->get();
-            foreach ($addEq as $index => $data) {
-                $data->update([
-                    'eq_available' => $data->eq_available - $addEqDepl[$index],
-                    'eq_in_use' => $data->eq_in_use + $addEqDepl[$index],
-                ]);
-            }
         }
 
         // for the inital item and equipment from th package
@@ -428,7 +265,7 @@ class JobOrderController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Job-Order.showReturn', $jo->id))->with('promt-s', 'Deployed Successfuly.');
+        return redirect(route('Job-Order.index'))->with('success', 'Deployed Successfuly!');
     }
 
     public function showReturnItems(string $id)
@@ -436,17 +273,13 @@ class JobOrderController extends Controller
         $joData = jobOrder::findOrFail($id);
         $jodData = jobOrderDetails::findOrFail($joData->jod_id);
 
-        $addEqData = addEquipment::where('jod_id', $jodData->id)->get();
-        $addStoData = addStock::where('jod_id', $jodData->id)->get();
-
         $pkgEqData = PkgEquipment::where('pkg_id', $jodData->pkg_id)->get();
         $pkgStoData = PkgStock::where('pkg_id', $jodData->pkg_id)->get();
 
         $tempEqData = TempEquipment::where('jod_id', $joData->jod_id)->get();
    
 
-        return view('functions/jobOrdReturn', ['joData' => $joData, 'jodData' => $jodData, 'addStoData' => $addStoData, 
-                                    'addEqData' => $addEqData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'tempEqData' => $tempEqData]);
+        return view('functions/jobOrdReturn', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'tempEqData' => $tempEqData]);
     }
 
     public function returnItems(Request $request, string $id)
@@ -459,10 +292,6 @@ class JobOrderController extends Controller
             'eqDepl.*' => 'required|integer|min:0|max:999'
 
         ]);
-
-        // Store additional equipment and stock IDs and quantity used
-        $addEqId = $request->addEqId;
-        $addEqDepl = $request->addEqDepl;
 
         // Store equipment and stock IDs and quantity used
         $eqId = $request->eqId;
@@ -481,27 +310,11 @@ class JobOrderController extends Controller
 
         // for additional item and equipment
 
-        if ($addEqId != null) {
-            $addEq = Equipment::select('id', 'eq_available', 'eq_in_use')->whereIn('id', $addEqId)->get();
-            foreach ($addEq as $index => $data) {
-                $data->update([
-                    'eq_available' => $data->eq_available + $addEqDepl[$index],
-                    'eq_in_use' => $data->eq_in_use - $addEqDepl[$index],
-                ]);
-            }
-        }
-
         // for the inital item and equipment from th package
         $eq = Equipment::select('id', 'eq_available', 'eq_in_use')->whereIn('id', $eqId)->get();
         $pkgEq = PkgEquipment::select('id', 'eq_used')->whereIn('eq_id', $eqId)->get();
 
         foreach ($eq as $index => $data) {
-            TempEquipment::create([
-                'jod_id' => $id,
-                'pkg_eq_id' => $pkgEq[$index]->id,
-                'eq_dpl_qty' => $eqDepl[$index]
-            ]);
-
             $data->update([
                 'eq_available' => $data->eq_available + $eqDepl[$index],
                 'eq_in_use' => $data->eq_in_use - $eqDepl[$index],
@@ -519,13 +332,92 @@ class JobOrderController extends Controller
             'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
-        return redirect(route('Job-Order.show', $jo->id))->with('promt-s', 'Returned Successfuly.');
+        return redirect(route('Job-Order.show', $jo->id))->with('success', 'Returned Successfuly!');
     }
 
     public function applyBurAsst(string $id)
     {
         $joData = jobOrder::findOrFail($id);
         return view('functions/burialAssistanceAdd', ['joData' => $joData]);
+    }
+
+     public function applySched(Request $request, string $id)
+    {
+        $request->validate([
+            'burialTime' => 'required'
+        ],[
+            'burialTime.required' => 'This field is required.'
+        ]);
+
+        jobOrder::findOrFail($id)->update([
+            'jo_embalm_time' => $request->embalmTime,
+            'jo_burial_time' => $request->burialTime
+        ]);
+
+        Log::create([
+            'transaction' => 'Added',
+            'tx_desc' => 'Added time schedule | ID: ' . $id,
+            'tx_date' => Carbon::now(),
+            'emp_id' => session('loginId')
+        ]);
+
+       return redirect()->back()->with('success', 'Updated Schedule!');
+    }
+
+    public function updateRA(Request $request, string $id)
+    {
+        $row = JobOrder::findOrFail($id);
+        $row->ra = $request->boolean('status'); 
+        $row->save();
+
+        return redirect()->back();
+    }
+
+    public function payAmount(Request $request, string $id)
+    {
+        $request->validate([
+            'payAmount' => 'required|numeric|min:1|max:999999' 
+        ], [
+            'payAmount.required' => 'This field is required.',
+            'payAmount.numeric' => 'Number only.',
+            'payAmount.min' => 'Amount must be 1 or more.',
+            'payAmount.max' => '6 digit limit reached.'
+        ]);
+        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total')->where('id', $id)->first();
+       
+        $addWakeTotal = 0;
+        if ($request->addWakeId != null) {
+            $getWake = AddWake::where('id', $request->addWakeId)->first();
+            $addWakeTotal = $getWake->day * $getWake->fee;
+        }
+
+        $burAsstTotal = 0;
+        if ($getDp->joToBurrAsst) {
+            $getBurrAsst = BurialAssistance::select('id', 'amount')->where('jo_id', $getDp->id)->first();
+            $burAsstTotal = $getBurrAsst->amount;
+        }
+
+        if ((($getDp->jo_total + $addWakeTotal) - ($getDp->jo_dp + $burAsstTotal)) <= $request->payAmount)
+        {
+            jobOrder::findOrFail($getDp->id)->update([
+                'jo_dp' => $getDp->jo_dp + $request->payAmount,
+                'jo_status' => 'Paid'
+            ]);
+        } else {
+            jobOrder::findOrFail($id)->update([
+                'jo_dp' => $getDp->jo_dp + $request->payAmount,
+            ]);
+        }    
+        
+        Log::create([
+            'transaction' => 'Pay',
+            'tx_desc' => 'Payed for Job Order| ID: ' . $id,
+            'tx_date' => Carbon::now(),
+            'emp_id' => session('loginId') 
+        ]);
+
+
+        return redirect()->back()->with('success', 'Paid Successfully!');
     }
 
     /**

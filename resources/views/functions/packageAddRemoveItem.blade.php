@@ -8,19 +8,16 @@
         <div class="card bg-white border-0 rounded-3 h-100">
             <div class="card-body h-100">
 
-                <div class="row cust-h-form">
+                <div class="row h-90">
 
-                    <div class="col-md-6 h-100 overflow-auto">
-
+                    <div class="col-md-6 h-100">
                         {{-- Add new stock --}}
-                        <div class="row cust-white-bg mx-1">
-                            <div class="col-md-12">
+                        <div class="row h-100">
+                            <div class="col-md-12 h-25 overflow-auto shadow-sm">
                                 <form action="{{ route('Pkg-Stock.store') }}" method="POST">
                                     @csrf
-
                                     <div class="row">
-
-                                        <div class="col-md-5">
+                                        <div class="col-md-6">
                                             <label for="stoAdd" class="form-label">Item</label>
                                             <select name="stoAdd" id="stoAdd" class="form-select" >
                                                 <option value="">Select Item</option>
@@ -33,88 +30,76 @@
                                             @error('stoAdd')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                             @enderror
+                                            <input type="text" name="pkgId" value="{{ $pkgId }}" hidden>
                                         </div>
-
-                                        <div class="col-md-5">
-
-                                            <label for="utilQty" class="form-label w-75">Use Qty.</label>
-                                            <input type="number" class="form-control w-75" name="utilQty" value="{{ old('utilQty') }}">
-                                            @error('utilQty')
+                                        <div class="col-md-2">
+                                            <label for="qty" class="form-label">Qty.</label>
+                                            <input type="number" class="form-control" name="qty" value="{{ old('qty') }}">
+                                            @error('qty')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                             @enderror
-                                            <input type="text" name="pkgId" value="{{ $pkgData->id }}" hidden>
-                                            
                                         </div>
-
                                         <div class="col-md-2">
-                                            <label for="stoAdd" class="form-label">Add</label>
+                                            <label for="qtySet" class="form-label">Pcs/Kg/L</label>
+                                            <input type="number" class="form-control" name="qtySet" value="{{ old('qtySet', 1) }}">
+                                            @error('qtySet')
+                                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="" class="form-label">Add</label>
                                             <button type="submit" class="cust-btn cust-btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Item"><i class="bi bi-plus-lg"></i></button>
                                         </div>
-
-                                    </div> 
-                                    
+                                    </div>
+                            
                                 </form>
-
                             </div>
-
-                        </div>
-
-                        <div class="row mt-4">
-                            <div class="col-md-12">
-                                {{-- Stock --}}
-                                <table class="table table-hover align-middle mb-0">
-                                    <thead class="table-success text-secondary" >
-                                        <tr>
-                                            <th class="fw-semibold">Item</th>
-                                            <th class="fw-semibold">Size</th>
-                                            <th class="fw-semibold">Qty.</th>
-                                            <th class="fw-semibold">Used</th>
-                                            <th class="fw-semibold">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{-- Get stock --}}
-                                        @foreach ($pkgStoData as $row)
-                                            <tr>
-                                                <td>{{ $row->pkgStoToSto->item_name }}</td>
-                                                <td>{{ $row->pkgStoToSto->item_size }}</td>
-                                                <td>{{ $row->pkgStoToSto->item_qty }}</td>
-                                                <td>{{ $row->stock_used }}</td> 
-                                                <td>
-                                                    <form action="{{ route('Pkg-Stock.destroy', $row->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="cust-btn cust-btn-danger-secondary mt-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash"></i></button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        
-                                    </tbody>
-                                </table>
-                                
+                            <div class="col-md-12 h-75 overflow-auto">
+                                @if($leStoData->isEmpty())
+                                    <div class="row">
+                                        <div class="col-md-12 text-center text-secondary">No Items Included.</div>
+                                    </div>
+                                @else
+                                    @foreach($leStoData as $row)
+                                        <div class="row mt-2 cust-white-bg mx-1">
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-semibold text-secondary">Name</label>
+                                                <p>{{ $row->pkgStoToSto->item_name }}</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-semibold text-secondary">Size</label>
+                                                <p>{{ $row->pkgStoToSto->item_size }}</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-semibold text-secondary">Qty.</label>
+                                                <p>{{ $row->stock_used * $row->stock_used_set }}</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <form action="{{ route('Pkg-Stock.destroy', $row->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="cust-btn cust-btn-danger-secondary mt-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash"></i></button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
-
                         </div>
 
                     </div>
 
-                    <div class="col-md-6 h-100 overflow-auto">
-
-                        <div class="row cust-white-bg mx-1">
-                            <div class="col-md-12">
-                                {{-- Add new equipment --}}
-                                
+                    <div class="col-md-6 h-100">
+                        {{-- Add equipment --}}
+                        <div class="row h-100">
+                            <div class="col-md-12 h-25 overflow-auto shadow-sm">
                                 <form action="{{ route('Pkg-Equipment.store') }}" method="POST">
                                     @csrf
-
                                     <div class="row">
-
-                                        <div class="col-md-5">
-
+                                        <div class="col-md-6">
                                             <label for="eqAdd" class="form-label">Equipment</label>
                                             <select name="eqAdd" id="eqAdd" class="form-select" >
-                                                <option value="">Select Item</option>
+                                                <option value="">Select Equipment</option>
                                                 @foreach ($eqData as $data)
                                                     <option value="{{ $data->id }}" {{ old('eqAdd') == $data->id ? 'selected' : '' }}>
                                                         {{ $data->eq_name }} | size: {{ $data->eq_size }} | Unit: {{ $data->eq_unit }}
@@ -124,68 +109,63 @@
                                             @error('eqAdd')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                             @enderror
-
+                                            <input type="text" name="pkgId" value="{{ $pkgId }}" hidden>
                                         </div>
-
-                                        <div class="col-md-5">
-                                            <label for="eqUtilQty" class="form-label w-75">Use Qty.</label>
-                                            <input type="number" class="form-control w-75" name="eqUtilQty" value="{{ old('eqUtilQty') }}">
-                                            @error('eqUtilQty')
+                                        <div class="col-md-2">
+                                            <label for="eqQty" class="form-label">Qty.</label>
+                                            <input type="number" class="form-control" name="eqQty" value="{{ old('eqQty') }}">
+                                            @error('eqQty')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                             @enderror
-                                            <input type="text" name="pkgId" value="{{ $pkgData->id }}" hidden>
-                                                
                                         </div>
-
+                                        <div class="col-md-2">
+                                            <label for="eqQtySet" class="form-label">Pcs/Kg/L</label>
+                                            <input type="number" class="form-control" name="eqQtySet" value="{{ old('eqQtySet', 1) }}">
+                                            @error('eqQtySet')
+                                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                         <div class="col-md-2">
                                             <label for="" class="form-label">Add</label>
-                                            <button type="submit" class="cust-btn cust-btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Equipment"><i class="bi bi-plus-lg"></i></button>
+                                            <button type="submit" class="cust-btn cust-btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Item"><i class="bi bi-plus-lg"></i></button>
                                         </div>
-
-
                                     </div>
-                                        
+                            
                                 </form>
-                                
                             </div>
-                        </div>
 
-                        <div class="row mt-4">
-                            <div class="col-md-12">
-                                {{-- Equipment --}}
-                                <table class="table table-hover align-middle mb-0">
-                                    <thead class="table-success text-secondary" >
-                                        <tr>
-                                            <th class="fw-semibold">Equipment</th>
-                                            <th class="fw-semibold">Size</th>
-                                            <th class="fw-semibold">Qty.</th>
-                                            <th class="fw-semibold">Used</th>
-                                            <th class="fw-semibold text-center">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
-                                        @foreach ($pkgEqData as $row)
-                                            <tr>
-                                                <td>{{ $row->pkgEqToEq->eq_name }}</td>
-                                                <td>{{ $row->pkgEqToEq->eq_size }}</td>
-                                                <td>{{ $row->pkgEqToEq->eq_available }}</td>
-                                                <td>{{ $row->eq_used }}</td>
-                                                <td>
-                                                    <form action="{{ route('Pkg-Equipment.destroy', $row->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="cust-btn cust-btn-danger-secondary mt-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash"></i></button>
-                                                    </form>
-                                                </td>
-                                
-                                            </tr>
-                                        @endforeach
-                                
-                                
-                                    </tbody>
-                                </table>
+                            <div class="col-md-12 h-75 overflow-auto">
+                                @if($leEqData->isEmpty())
+                                    <div class="row">
+                                        <div class="col-md-12 text-center text-secondary">No Equipemnt Included.</div>
+                                    </div>
+                                @else
+                                    @foreach($leEqData as $row)
+                                        <div class="row mt-2 cust-white-bg mx-1">
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-semibold text-secondary">Name</label>
+                                                <p>{{ $row->pkgEqToEq->eq_name }}</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-semibold text-secondary">Size</label>
+                                                <p>{{ $row->pkgEqToEq->eq_size }}</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-semibold text-secondary">Qty.</label>
+                                                <p>{{ $row->eq_used * $row->eq_used_set }}</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <form action="{{ route('Pkg-Equipment.destroy', $row->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="cust-btn cust-btn-danger-secondary mt-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash"></i></button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
+
                         </div>
 
                     </div>
@@ -202,7 +182,7 @@
                     </div>
 
                     <div class="col col-auto">
-                        <a href="{{ route('Package.edit', $pkgData->id) }}" class="cust-btn cust-btn-secondary"><i class="bi bi-arrow-left"></i>
+                        <a href="{{ route('Package.edit', $pkgId) }}" class="cust-btn cust-btn-secondary"><i class="bi bi-arrow-left"></i>
                             <span>Back</span>
                         </a>
                     </div>

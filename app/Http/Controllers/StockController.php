@@ -20,19 +20,16 @@ class StockController extends Controller
      */
     public function index(Request $request)
     {
-        //$stoData = Stock::paginate(5);
-        $query = Stock::query();
+        //$stoData = Stock::paginate(10);
+        $search = $request->input('search');
 
-        if ($request->has('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('item_name', 'LIKE', "%{$search}%")
-                ->orWhere('item_size', 'LIKE', "%{$search}%")
-                ->orWhere('id', 'LIKE', "%{$search}%");
-            });
-        }
-
-        $stoData = $query->paginate(10)->appends($request->only('search'));
+        $stoData = Stock::when($search, function ($q) use ($search) {
+            $q->where('item_name', 'like', "%{$search}%")
+            ->orWhere('item_size', 'like', "%{$search}%")
+            ->orWhere('id', 'like', "%{$search}%");
+        })
+        ->paginate(10)
+        ->withQueryString(); 
         return view('alar.stock', ['stoData' => $stoData]);
     }
 
@@ -162,16 +159,14 @@ class StockController extends Controller
     public function update(Request $request, String $id)
     {
         $request->validate([
-            'itemName' => "required|min:5|max:100",
-            'size' => "required|min:1|max:20"
+            'itemName' => "required|max:100",
+            'size' => "required|max:20"
         ],  [
             'itemName.required' => 'This field is required.',
-            'itemName.min' => '5 - 100 Characters only.',
-            'itemName.max' => '5 - 100 Characters only.',
+            'itemName.max' => '100 Characters limit reached.',
 
             'size.required' => 'This field is required.',
-            'size.min' => '1 - 20 Characters only.',
-            'size.max' => '1 - 20 Characters only.',
+            'size.max' => '20 Characters limit reached.',
         ]);
 
         Stock::findOrFail($id)->update([
@@ -186,7 +181,7 @@ class StockController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt', 'Updated Sucessfuly');
+        return redirect()->back()->with('success', 'Updated Sucessfuly!');
     }
 
     /**

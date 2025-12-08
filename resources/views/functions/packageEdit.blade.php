@@ -48,7 +48,63 @@
                         {{-- Stock --}}
                         <div class="col col-6 h-100 overflow-auto">
 
-                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5 class="cust-sub-title">Items:</h5>
+                                </div>
+                                <div class="col-md-12">
+                                    @if($pkgStoData->isEmpty())
+                                        <div class="row">
+                                            <div class="col-md-12 text-center text-secondary">No Items Included.</div>
+                                        </div>
+                                    @else
+                                        @foreach($pkgStoData as $row)
+                                            <div class="row mt-2 cust-white-bg mx-1">
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-semibold text-secondary">Name</label>
+                                                    <p>{{ $row->pkgStoToSto->item_name }}</p>
+                                                    <input type="text" name="stoId[]" value="{{ $row->id }}" hidden>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <p>{{ $row->pkgStoToSto->item_size }}</p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label fw-semibold text-secondary">In stock</label>
+                                                    <p>{{ $row->pkgStoToSto->item_qty }}</p>
+                                                </div>
+                                                <div class="col-md-12 mb-1">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-semibold text-secondary">Total Qty.</label>
+                                                            <p>{{ $row->stock_used * $row->stock_used_set }}</p>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-semibold text-secondary">Qty.</label>
+                                                            <input type="number" class="form-control" name="qty[]" value="{{ old('qty.'.$loop->index, $row->stock_used) }}">
+                                                            @error('qty.' . $loop->index)
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                            <input type="number" class="form-control" name="qtySet[]" value="{{ old('qtySet.'.$loop->index, $row->stock_used_set) }}">
+                                                            @error('qtySet.' . $loop->index)
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        @endforeach
+                                        
+                                    @endif
+                                </div>
+
+                            </div>
+
+                            <!--
                             <table class="table table-hover align-middle mb-0">
                                 <thead class="table-success text-secondary" >
                                     <tr>
@@ -83,12 +139,68 @@
                                     @endif
                                 </tbody>
                             </table>
+                            -->
                         </div>
 
 
                         {{-- Equipment --}}
                         <div class="col col-6 h-100 overflow-auto">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5 class="cust-sub-title">Equipment:</h5>
+                                </div>
+                                <div class="col-md-12">
+                                    @if($pkgEqData->isEmpty())
+                                        <div class="row">
+                                            <div class="col-md-12 text-center text-secondary">No Items Included.</div>
+                                        </div>
+                                    @else
+                                        @foreach($pkgEqData as $row)
+                                            <div class="row mt-2 cust-white-bg mx-1">
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-semibold text-secondary">Name</label>
+                                                    <p>{{ $row->pkgEqToEq->eq_name }}</p>
+                                                    <input type="text" name="eqId[]" value="{{ $row->id }}" hidden>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <p>{{ $row->pkgEqToEq->eq_size }}</p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label fw-semibold text-secondary">Available</label>
+                                                    <p>{{ $row->pkgEqToEq->eq_available }}</p>
+                                                </div>
+                                                <div class="col-md-12 mb-1">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-semibold text-secondary">Total Qty.</label>
+                                                            <p>{{ $row->eq_used * $row->eq_used_set }}</p>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-semibold text-secondary">Qty.</label>
+                                                            <input type="number" class="form-control" name="eqQty[]" value="{{ old('eqQty.'.$loop->index, $row->eq_used) }}">
+                                                            @error('eqQty.' . $loop->index)
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                            <input type="number" class="form-control" name="eqQtySet[]" value="{{ old('eqQtySet.'.$loop->index, $row->eq_used_set) }}">
+                                                            @error('eqQtySet.' . $loop->index)
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        @endforeach
+                                        
+                                    @endif
+                                </div>
 
+                            </div>
+                            <!--
                             <table class="table table-hover align-middle mb-0">
                                 <thead class="table-success text-secondary" >
                                     <tr>
@@ -98,7 +210,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if ($pkgStoData->isEmpty())
+                                    @if ($pkgEqData->isEmpty())
                                         <tr>
                                             <td colspan="4" class="text-center text-secondary py-3">No Items Included Found.</td>
                                         </tr>
@@ -124,7 +236,7 @@
                                         
                                 </tbody>
                             </table>
-
+                            -->
 
                         </div>
 

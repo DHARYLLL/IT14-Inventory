@@ -32,7 +32,7 @@ if (document.getElementById('add_new')) {
             </div>
 
             <div class="col-md-1">
-                <label class="form-label fw-semibold text-secondary">Qty. per Set/Box <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
                 <input type="number" name="qtySet[]" value="1" class="form-control shadow-sm">
             </div>
 
@@ -109,7 +109,7 @@ function setStock() {
                     <label class="form-label fw-semibold text-secondary">
                         <i class="bi bi-receipt" style="color:#60BF4F"></i> Item Name
                     </label>
-                    <input type="text" name="itemName[]" class="form-control shadow-sm" value="${forName}" readonly>
+                    <input type="text" name="itemName[]" class="form-control shadow-sm" value="${forName}">
                 </div>
 
                 <div class="col-md-1">
@@ -118,13 +118,13 @@ function setStock() {
                 </div>
 
                 <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">Qty. per Set/Box <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
                     <input type="number" name="qtySet[]" value="1" class="form-control shadow-sm">
                 </div>
 
                 <div class="col-md-2">
                     <label class="form-label fw-semibold text-secondary">Size</label>
-                    <input type="text" name="size[]" class="form-control shadow-sm" value="${forSize}" readonly>
+                    <input type="text" name="size[]" class="form-control shadow-sm" value="${forSize}">
                 </div>
 
                 <div class="col-md-2">
@@ -181,7 +181,7 @@ function setEquipment() {
             <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
                 <div class="col-md-3">
                     <label class="form-label fw-semibold text-secondary">Item Name</label>
-                    <input type="text" name="itemName[]" class="form-control shadow-sm" value="${forName}" readonly>
+                    <input type="text" name="itemName[]" class="form-control shadow-sm" value="${forName}">
                 </div>
 
                 <div class="col-md-1">
@@ -190,13 +190,13 @@ function setEquipment() {
                 </div>
 
                 <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">Qty. per Set/Box <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
                     <input type="number" name="qtySet[]" value="1" class="form-control shadow-sm">
                 </div>
 
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">Size/Weight</label>
-                    <input type="text" name="size[]" class="form-control shadow-sm" value="${forSize}" readonly>
+                    <label class="form-label fw-semibold text-secondary">Size</label>
+                    <input type="text" name="size[]" class="form-control shadow-sm" value="${forSize}">
                 </div>
 
                 <div class="col-md-2">
@@ -311,17 +311,17 @@ function checkInputEq() {
             <input type="text" class="form-control" name="eqAvail[]"  value="${forAvail}" readonly>
         </div>
         <div class="col-md-5">
-            <label class="form-label fw-semibold text-secondary">Qty.</label>
+            <label class="form-label fw-semibold text-secondary">Qty. <span class="text-danger">*</span></label>
             <input type="number" class="form-control" name="eqQty[]" value="1">     
         </div>
         <div class="col-md-5">
-            <label class="form-label fw-semibold text-secondary">Qty. per Set/Unit</label>
+            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
             <input type="number" class="form-control" name="eqQtySet[]" value="1">     
         </div>
         <div class="col-md-2">
             <label class="form-label fw-semibold text-secondary">Remove</label>
             <button type="button" class="btn btn-outline-danger w-100 remove-eq">
-                <i class="bi bi-x-circle"></i>
+                <i class="bi bi-x-circle remove-eq"></i>
             </button>
         </div>
     `;
@@ -390,16 +390,16 @@ function checkInputSto() {
             <input type="text" class="form-control" name="stoAvail[]" value="${forAvail}" readonly>
         </div>
         <div class="col-md-5">
-            <label class="form-label fw-semibold text-secondary">Qty.</label>
+            <label class="form-label fw-semibold text-secondary">Qty. <span class="text-danger">*</span></label>
             <input type="number" class="form-control" name="stockQty[]" value="1">
         </div>
         <div class="col-md-5">
-            <label class="form-label fw-semibold text-secondary">Qty. per Set/Unit</label>
+            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
             <input type="number" class="form-control" name="stockQtySet[]" value="1">
         </div>
         <div class="col-md-2">
             <label class="form-label fw-semibold text-secondary">Remove</label>
-            <button type="button" class="btn btn-outline-danger w-100 remove-sto"><i class="bi bi-x-circle"></i> </button>
+            <button type="button" class="btn btn-outline-danger w-100 remove-sto"><i class="bi bi-x-circle remove-sto"></i> </button>
         </div>
     `;
 

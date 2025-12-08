@@ -8,8 +8,7 @@
         <div class="input-group cust-searchbar">
             <input type="text" id="searchInput" class="form-control" placeholder="Search"
                 style="border-radius: 0; border: none;">
-            <button class="btn" id="clearSearch"
-                style="background-color: #b3e6cc; color: black; border: none;">Clear</button>
+            <button class="cust-btn cust-btn-search" id="clearSearch">Clear</button>
         </div>
     <div>
         <a href="{{ route('Stock-Out.create') }}" class="cust-btn cust-btn-primary"><i class="bi bi-box-arrow-left"></i> <span>Stock Out</span></a>

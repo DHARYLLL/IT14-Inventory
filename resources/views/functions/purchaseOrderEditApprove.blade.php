@@ -8,11 +8,20 @@
 <link rel="stylesheet" href="{{ asset('CSS/POshow.css') }}">
 
 
-<div class="d-flex align-items-center justify-content-end cust-h-heading">
-    <a href="{{ route('Purchase-Order.index') }}" class="cust-btn cust-btn-secondary d-flex align-items-center gap-2"><i
-            class="bi bi-arrow-left"></i>
-        <span>Back</span>
-    </a>
+<div class="d-flex align-items-center justify-content-end cust-h-heading gap-2">
+    <div>
+        <form action="{{ route('Purchase-Order.export', $poData->id) }}" method="post">
+            @csrf
+            <button class="cust-btn cust-btn-secondary d-flex align-items-center gap-2" type="submit">Export</button>
+        </form>
+    </div>
+    
+    <div>
+        <a href="{{ route('Purchase-Order.index') }}" class="cust-btn cust-btn-secondary d-flex align-items-center gap-2"><i
+                class="bi bi-arrow-left"></i>
+            <span>Back</span>
+        </a>
+    </div>
 </div>
 
     <div class="cust-h">
@@ -185,7 +194,7 @@
                                             @if ($poData->status == 'Approved')
                                                 <td>
                                                     <input type="number" class="form-control qty-input" name="qtyArrived[]" placeholder="Qty Arrived" 
-                                                        value="{{ old('qtyArrived.' . $loop->index) }}">
+                                                        value="{{ old('qtyArrived.' . $loop->index , $row->qty_total) }}">
                                                     @error('qtyArrived.' . $loop->index)
                                                         <small class="text-danger">{{ $message }}</small>
                                                     @enderror

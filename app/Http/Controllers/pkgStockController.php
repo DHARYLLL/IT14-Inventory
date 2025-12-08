@@ -34,26 +34,25 @@ class pkgStockController extends Controller
     {
         $request->validate([
             'stoAdd' => 'required',
-            'utilQty' => 'required|integer|min:1|max:999999'
+            'qty' => 'required|integer|min:1|max:999',
+            'qtySet' => 'required|integer|min:1|max:999'
         ],[
             'stoAdd.required' => 'This field is required.',
-            'utilQty.required' => 'This field is required.',
-            'utilQty.min' => 'Must be 1 or more.',
-            'utilQty.max' => '6 digit max reached.',
+            'qty.required' => 'This field is required.',
+            'qty.min' => 'Must be 1 or more.',
+            'qty.max' => '3 digit limit reached.',
+            'qtySet.required' => 'This field is required.',
+            'qtySet.min' => 'Must be 1 or more.',
+            'qtySet.max' => '3 digit limit reached.',
+        ]); 
+
+        PkgStock::create([
+            'pkg_id' => $request->pkgId,
+            'stock_id' => $request->stoAdd,
+            'stock_used' => $request->qty,
+            'stock_used_set' => $request->qtySet
         ]);
-        $getQty = PkgStock::select('id', 'stock_used')->where('stock_id', $request->stoAdd)->where('pkg_id', $request->pkgId)->first();
- 
-        if ($getQty) {
-            PkgStock::findOrFail($getQty->id)->update([
-                'stock_used' => $getQty->stock_used + $request->utilQty
-            ]);
-        } else {
-            PkgStock::create([
-                'pkg_id' => $request->pkgId,
-                'stock_id' => $request->stoAdd,
-                'stock_used' => $request->utilQty
-            ]);
-        }
+        
 
         Log::create([
             'transaction' => 'Added',
@@ -62,7 +61,7 @@ class pkgStockController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-s', 'Added Successfully.');
+        return redirect()->back()->with('success', 'Added Successfully!');
     }
 
     /**
@@ -107,7 +106,7 @@ class pkgStockController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-s', 'Updated Successfully.');
+        return redirect()->back()->with('success', 'Updated Successfully!');
     }
 
     /**
@@ -126,6 +125,6 @@ class pkgStockController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-s', 'Deleted Successfully.');
+        return redirect()->back()->with('success', 'Deleted Successfully!');
     }
 }

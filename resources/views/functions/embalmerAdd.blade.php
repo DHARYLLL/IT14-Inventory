@@ -34,133 +34,162 @@
                     <div class="row h-65 mt-4">
 
                         <div class="col-md-6 h-100 overflow-auto">
-                            {{-- Stock --}}
-                            <div class="col-12">
-                                <label for="stock" class="form-label">Stock</label>
-                                <div class="d-flex gap-2 align-items-center">
-                                    <select name="" id="stock" class="form-select w-50" onchange="getQtyStoAddEmbalm()">
-                                        <option value="">Select Stock</option>
-                                        @foreach ($stoData as $data)
-                                            <option value="{{ $data->id }},{{ $data->item_name }}">
-                                                {{ $data->id }} — {{ $data->item_name }} {{ $data->size_weight }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <input type="text" id="sto" class="form-control w-25" readonly placeholder="Available">
-                                    
-                                    <button type="button" id="add_sto" onclick="checkInputStoAddEmbalm()" class="cust-btn cust-btn-primary">Add Stock</button>
+                            <div class="row">
+                                {{-- Stock --}}
+                                <div class="col-12">
+                                    <label for="stock" class="form-label">Stock</label>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <select name="" id="stock" class="form-select w-50" onchange="getQtySto()">
+                                            <option value="">Select Stock</option>
+                                            @foreach ($stoData as $data)
+                                                <option value="{{ $data->id }},{{ $data->item_name }}:{{ $data->item_size }};{{ $data->item_qty }}">
+                                                    {{ $data->id }} — {{ $data->item_name }} {{ $data->size }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <input type="text" id="sto" class="form-control w-25" readonly placeholder="Available" hidden>
+                                
+                                        <button type="button" id="add_sto" onclick="checkInputSto()" class="cust-btn cust-btn-primary"><i
+                                                class="bi bi-plus-circle"></i>
+                                            Add Stock
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div id="addStock" class="col-12 mt-3">
-                            
-                                @php
-                                    $oldItems = old('itemName', ['']);
-                                    $oldQtys = old('stockQty', ['']);
-                                    $oldStock = old('stock', ['']);
-                                @endphp
-
-                                @if(!empty(array_filter($oldItems)))
-
-                                    @foreach($oldItems as $i => $item)
-
-                                        <div class="row g-2 align-items-start mb-2 added-item">
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-secondary">Stock</label>
-                                                <input type="text" class="form-control" name="itemName[]" value="{{ $item }}" readonly>
-                                                <input type="text" name="stock[]" value="{{ $oldStock[$i] ?? '' }}" hidden>
-                                                @error("itemName.$i")
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror 
+                                <div id="addStock" class="col-12 mt-3">
+                                
+                                    @php
+                                        $oldItems = old('itemName', ['']);
+                                        $oldQtys = old('stockQty', ['']);
+                                        $oldQtySet = old('stockQtySet', ['']);
+                                        $oldStock = old('stock', ['']);
+                                        $oldStoSize = old('stoSize', ['']);
+                                        $oldStoAvail = old('stoAvail', ['']);
+                                    @endphp
+                                    @if(!empty(array_filter($oldItems)))
+                                        @foreach($oldItems as $i => $item)
+                                            <div class="row g-2 align-items-start mb-2 added-item">
+                                                <div class="col-md-4">
+                                                    <label class="form-label fw-semibold text-secondary">Stock</label>
+                                                    <input type="text" class="form-control" name="itemName[]" value="{{ $item }}" readonly>
+                                                    <input type="text" name="stock[]" value="{{ $oldStock[$i] ?? '' }}" hidden>
+                                                    
+                                                    @error("itemName.$i")
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <input type="text" class="form-control" name="stoSize[]" value="{{ $oldStoSize[$i] ?? '' }}" readonly>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label fw-semibold text-secondary">In Stock</label>
+                                                    <input type="text" class="form-control" name="stoAvail[]" value="{{ $oldStoAvail[$i] ?? '' }}" readonly>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label class="form-label fw-semibold text-secondary">Qty.</label>
+                                                    <input type="number" class="form-control" name="stockQty[]" value="{{ $oldQtys[$i] ?? '' }}">
+                                                    @error("stockQty.$i")
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                    <input type="number" class="form-control" name="stockQtySet[]" value="{{ $oldQtySet[$i] ?? '' }}">
+                                                    @error("stockQtySet.$i")
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="form-label fw-semibold text-secondary">Remove</label>
+                                                    <button type="button" class="btn btn-outline-danger w-100 remove-sto"><i class="bi bi-x-circle"></i> </button>
+                                                </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <label class="form-label fw-semibold text-secondary">Stock Qty</label>
-                                                <input type="number" class="form-control" name="stockQty[]" placeholder="Stock Qty" value="{{ $oldQtys[$i] ?? '' }}">
-                                                @error("stockQty.$i")
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="form-label fw-semibold text-secondary">Remove</label>
-                                                <button type="button" class="btn btn-outline-danger w-100 remove-sto">
-                                                    <i class="bi bi-x-circle"></i></button>
-                                            </div>
-                                        </div>
-
-
-                                    @endforeach
-
-                                @endif
-
+                                        @endforeach
+                                    @endif
+                                </div>
                             </div>
 
                         </div>
 
                         <div class="col-md-6 h-100 overflow-auto">
 
-                            {{-- Equipment --}}
-                            <div class="col-12">
-                                <label for="equipment" class="form-label">Equipment</label>
-                                <div class="d-flex gap-2 align-items-center">
-                                    <select name="" id="equipment" class="form-select w-50" onchange="getQtyAddEmbalm()">
-                                        <option value="">Select Equipment</option>
-                                        @foreach ($eqData as $data)
-                                            <option value="{{ $data->id }},{{ $data->eq_name }}">
-                                                {{ $data->id }} — {{ $data->eq_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <input type="text" id="avail" class="form-control w-25" readonly placeholder="Available">
-                                    <button type="button" id="add_eq" onclick="checkInputEqyAddEmbalm()" class="cust-btn cust-btn-primary">Add Equip.</button>
+                            <div class="row">
+                                {{-- Equipment --}}
+                                <div class="col-12">
+                                    <label for="equipment" class="form-label">Equipment</label>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <select name="" id="equipment" class="form-select w-50" onchange="getQty()">
+                                            <option value="">Select Equipment</option>
+                                            @foreach ($eqData as $data)
+                                                <option value="{{ $data->id }},{{ $data->eq_name }}:{{ $data->eq_size }};{{ $data->eq_available }}">
+                                                    {{ $data->id }} — {{ $data->eq_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <input type="text" id="avail" class="form-control w-25" readonly placeholder="Available" hidden>
+                                        <button type="button" id="add_eq" onclick="checkInputEq()" class="cust-btn cust-btn-primary"><i
+                                                class="bi bi-plus-circle"></i>
+                                            Add Equipment
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div id="addEquipment" class="col-12 mt-3">
-
-                                @php
-                                    $oldEq = old('eqName', ['']);
-                                    $oldEqQtys = old('eqQty', ['']);
-                                    $oldEqId = old('equipment', ['']);
-                                @endphp
-
-                                @if(!empty(array_filter($oldEq)))
-
-                                    @foreach($oldEq as $i => $item)
-
-                                        <div class="row g-2 align-items-start mb-2 added-item">
-
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-secondary">Equipment</label>
-                                                <input type="text" class="form-control" name="eqName[]" value="{{ $item }}" readonly>
-                                                <input type="text" name="equipment[]" value="{{ $oldEqId[$i] ?? '' }}" hidden>
-                                                @error("eqName.$i")
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
+                                <div id="addEquipment" class="col-12 mt-3">
+                                    @php
+                                        $oldEq = old('eqName', ['']);
+                                        $oldEqQtys = old('eqQty', ['']);
+                                        $oldEqQtySet = old('eqQtySet', ['']);
+                                        $oldEqId = old('equipment', ['']);
+                                        $oldEqSize = old('eqSize', ['']);
+                                        $oldEqAvail = old('eqAvail', ['']);
+                                    @endphp
+                                    @if(!empty(array_filter($oldEq)))
+                                        @foreach($oldEq as $i => $item)
+                                            <div class="row g-2 align-items-start mb-2 added-item">
+                                                <div class="col-md-4">
+                                                    <label class="form-label fw-semibold text-secondary">Equipment</label>
+                                                    <input type="text" class="form-control" name="eqName[]" value="{{ $item }}" readonly>
+                                                    <input type="text" name="equipment[]" value="{{ $oldEqId[$i] ?? '' }}" hidden>
+                                                    @error("eqName.$i")
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <input type="text" class="form-control" name="eqSize[]" value="{{ $oldEqSize[$i] ?? '' }}" readonly>
+                                                    @error("eqSize.$i")
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label fw-semibold text-secondary">In Stock</label>
+                                                    <input type="text" class="form-control" name="eqAvail[]" value="{{ $oldEqAvail[$i] ?? '' }}" readonly>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label class="form-label fw-semibold text-secondary">Qty</label>
+                                                    <input type="number" class="form-control" name="eqQty[]" value="{{ $oldEqQtys[$i] ?? '' }}">
+                                                    @error("eqQty.$i")
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                    <input type="number" class="form-control" name="eqQtySet[]" value="{{ $oldEqQtySet[$i] ?? '' }}">
+                                                    @error("eqQtySet.$i")
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="form-label fw-semibold text-secondary">Remove</label>
+                                                    <button type="button" class="btn btn-outline-danger w-100 remove-eq"><i class="bi bi-x-circle"></i></button>
+                                                </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <label class="form-label fw-semibold text-secondary">Qty</label>
-                                                <input type="number" class="form-control" name="eqQty[]" placeholder="Qty" value="{{ $oldEqQtys[$i] ?? '' }}">     
-                                                @error("eqQty.$i")
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="form-label fw-semibold text-secondary">Remove</label>
-                                                <button type="button" class="btn btn-outline-danger w-100 remove-eq">
-                                                    <i class="bi bi-x-circle"></i></button>
-                                            </div>
-
-                                        </div>
-
-
-                                    @endforeach
-
-                                @endif
-
-
+                                        @endforeach
+                                    @endif
+                                </div>
                             </div>
 
                         </div>
-
+                        <!--
                         <script>
                             //cust embalmer
 
@@ -269,7 +298,7 @@
 
 
                         </script>
-
+                        -->
                     </div>
 
                     {{-- Submit --}}

@@ -14,9 +14,20 @@ class EquipmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $eqData = Equipment::all();
+        //$eqData = Equipment::all();
+
+        $search = $request->input('search');
+
+        $eqData = Equipment::when($search, function ($q) use ($search) {
+            $q->where('eq_name', 'like', "%{$search}%")
+            ->orWhere('eq_size', 'like', "%{$search}%")
+            ->orWhere('id', 'like', "%{$search}%");
+        })
+        ->paginate(10)
+        ->withQueryString(); 
+
         return view('alar.equipment', ['eqData' => $eqData]);
     }
 
@@ -52,7 +63,7 @@ class EquipmentController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Equipment.index'));
+        return redirect(route('Equipment.index'))->with('success', 'Created Successfully!');
     }
 
     /**
@@ -102,7 +113,7 @@ class EquipmentController extends Controller
             'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
-        return redirect()->back()->with('promt-s', 'Updated Successfully.');
+        return redirect()->back()->with('success', 'Updated Successfully!');
 
     }
 

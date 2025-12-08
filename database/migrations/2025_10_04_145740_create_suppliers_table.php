@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('mname', 15)->nullable();
             $table->string('lname', 15);
             $table->string('contact_number', 11);
-            $table->string('company_name');
-            $table->string('company_address');
+            $table->string('company_name', 150)->nullable();
+            $table->string('company_address', 150)->nullable();
             $table->timestamps();
 
             $table->unique(['contact_number', 'company_name']);

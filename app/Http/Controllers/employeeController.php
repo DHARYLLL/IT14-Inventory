@@ -230,7 +230,7 @@ class employeeController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-b', 'Updated Successfuly');
+        return redirect()->back()->with('success', 'Updated Successfuly!');
     }
 
     /**

@@ -54,11 +54,12 @@
                             <table class="table table-borderless table-hover placeholder-table mb-0" >
                                 <thead>
                                     <tr>
-                                        <th>Client</th>
-                                        <th>Contact #</th>
-                                        <th>Start date</th>
-                                        <th>Start time</th>
-                                        <th>Equipment</th>
+                                        <th>Client</th> 
+                                        <th>RA</th>
+                                        <th>Service Date</th>
+                                        <th>Burial date</th>
+                                        <th>Burial time</th>
+                                        
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -71,27 +72,35 @@
                                         @foreach ($jobOrdData as $row)
                                             <tr>
                                                 <td>{{ $row->client_name }}</td>
-                                                <td>{{ $row->client_contact_number }}</td>
-                                                <td>{{ $row->jo_start_date }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($row->jo_start_time)->format('g:i A') }}</td>
-                                                <td>{{ $row->joToJod->jod_eq_stat ?? 'N/A'}}</td>
+                                                <td>                     
+                                                    <form action="{{ route('Job-Order.raUpdate', $row->id) }}" method="POST" class="raForm">
+                                                        @csrf
+                                                        @method('put')
+                                                        <label>
+                                                            <input type="checkbox" name="status" class="raCheckbox" {{ $row->ra ? 'checked' : '' }}>
+                                                        </label>
+                                                    </form>
+                                                </td>
+                                                <td>{{ $row->jo_start_date ? \Carbon\Carbon::parse($row->jo_start_date)->format('d/M/Y') : 'No Sched.' }}</td>
+                                                <td>{{ $row->jo_burial_date ? \Carbon\Carbon::parse($row->jo_burial_date)->format('d/M/Y') : 'No Sched.' }}</td>
+                                                <td>{{ $row->jo_burial_time ? \Carbon\Carbon::parse($row->jo_burial_time)->format('g:i A') : 'No Sched.' }}</td>
                                                 <td>
                                                     @if($row->jod_id)
                                                         @if($row->joToJod->jod_eq_stat == 'Pending')
                                                             <a href="{{ route('Job-Order.showDeploy', $row->id) }}"
-                                                                class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Deploy">
+                                                                class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Deploy">
                                                                 <i class="bi bi-box-arrow-up"></i>
                                                             </a>
                                                         @endif 
                                                         @if($row->joToJod->jod_eq_stat == 'Deployed')
                                                             <a href="{{ route('Job-Order.showReturn', $row->id) }}"
-                                                                class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Return">
+                                                                class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Return">
                                                                 <i class="bi bi-box-arrow-in-down"></i>
                                                             </a>
                                                         @endif 
                                                         @if($row->joToJod->jod_eq_stat == 'Returned')
                                                             <a href="{{ route('Job-Order.show', $row->id) }}"
-                                                                class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                                class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                                                                 <i class="fi fi-rr-eye"></i>                              
                                                             </a>
                                                         @endif 
@@ -99,12 +108,12 @@
                                                     @if($row->svc_id)
                                                         @if($row->jo_status == 'Paid')
                                                             <a href="{{ route('Service-Request.show', $row->id) }}"
-                                                                class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                                class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                                                                 <i class="fi fi-rr-eye"></i>
                                                             </a>
                                                         @else
                                                             <a href="{{ route('Service-Request.show', $row->id) }}"
-                                                                class="btn btn-outline-success btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Review">
+                                                                class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Review">
                                                                 <i class="bi bi-list-ul"></i>
                                                             </a>
                                                         @endif
@@ -115,6 +124,14 @@
                                                 </td>
                                             </tr>
                                         @endforeach
+                                        <script>
+                                            document.querySelectorAll('.raCheckbox').forEach((checkbox) => {
+                                                checkbox.addEventListener('change', function() {
+                                                    // submit the form that contains this checkbox
+                                                    this.closest('form').submit();
+                                                });
+                                            });
+                                        </script>
                                     @endif
                                 </tbody>
                             </table>

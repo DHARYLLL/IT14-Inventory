@@ -14,10 +14,8 @@ return new class extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
             $table->string('driver_name', 50);
-            $table->string('driver_contact_number', 15);
+            $table->string('driver_contact_number', 11);
             $table->decimal('veh_price', 8,2);
-            $table->string('veh_brand', 50);
-            $table->string('veh_plate_no', 20);
             $table->timestamps();
         });
     }

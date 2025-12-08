@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreign('eq_id')->references('id')->on('equipments')->onUpdate('cascade')->nullOnDelete();
 
             $table->smallInteger('eq_used');
+            $table->smallInteger('eq_used_set');
 
             $table->timestamps();
         });

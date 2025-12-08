@@ -42,7 +42,7 @@
 
                                 @foreach ($vehData as $data)
                                     <option value="{{ $data->id }}" {{ old('vehicle') == $data->id ? 'selected' : '' }}>
-                                        {{ $data->driver_name }} | Model: {{ $data->veh_brand }}
+                                        {{ $data->driver_name }} | {{ $data->driver_contact_number }}
                                     </option>
                                 @endforeach
                         
@@ -189,15 +189,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="w-100 mb-2"></div>
-
-                                <div class="col-md-4">
-                                    <label for="" class="form-label">Cause of Death <span class="text-danger">*</span></label>
-                                    <input type="text" name="decCOD" class="form-control" placeholder="Deceasd Cause of Death" value="{{ old('decCOD') }}">
-                                    @error('decCOD')
-                                        <div class="text-danger small mt-1">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                
                             </div>
                         </div>
 
@@ -223,29 +215,29 @@
 
                         <div class="col-md-4">
                             <label for="wakeDay" class="form-label">Days of Wake <span class="text-danger">*</span></label>
-                            <input type="number" class="cust-time" name="wakeDay" value="{{ old('wakeDay') }}">
+                            <input type="number" class="form-control" name="wakeDay" value="{{ old('wakeDay', '9') }}">
                             @error('wakeDay')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="col-md-4">
-                            <label for="timeStart" class="form-label">Start Time <span class="text-danger">*</span></label>
-                            <input type="time" class="cust-time" name="timeStart" value="{{ old('timeStart') }}">
-                            @error('timeStart')
+                            <label for="burialTime" class="form-label">Burial Time</label>
+                            <input type="time" class="cust-time" name="burialTime" value="{{ old('burialTime') }}">
+                            @error('burialTime')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label for="embalmTime" class="form-label">Embalm Time</label>
+                            <input type="time" class="cust-time" name="embalmTime" value="{{ old('embalmTime') }}">
+                            @error('embalmTime')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                             @session('promt-f-date')
                                 <div class="text-danger small mt-1">{{ $value }}</div>
                             @endsession
-                        </div>
-                        <div class="col-md-4">
-                            <label for="timeEnd" class="form-label">End Time</label>
-                            <input type="time" class="cust-time" name="timeEnd" value="{{ old('timeEnd') }}">
-                            @error('timeEnd')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        </div>          
 
                     </div>
 
@@ -258,14 +250,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="wakeLoc" class="form-label">Wake Location <span class="text-danger">*</span></label>
-                            <input type="text" name="wakeLoc" id="wakeLoc" class="form-control" value="{{ old('wakeLoc') }}">
-                            @error('wakeLoc')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-4">
-                            <label for="burialLoc" class="form-label">Burial Location <span class="text-danger">*</span></label>
+                            <label for="burialLoc" class="form-label">Burial Location</label>
                             <input type="text" name="burialLoc" id="burialLoc" class="form-control"
                                 value="{{ old('burialLoc') }}">
                             @error('burialLoc')
@@ -273,304 +258,6 @@
                             @enderror
                         </div>
                     </div>
-
-                    {{-- Add additional new item and equipment --}}
-                    <div class="row mt-4" style="height: 400;">
-
-                        <div class="col-md-12">
-                            <h5 class="cust-sub-title">Additional Item and Equipment:</h5>
-                        </div>
-
-                        <div class="col-md-6 h-100 overflow-auto">
-                            {{-- Stock --}}
-                            <div class="col-12">
-                                <label for="stock" class="form-label">Stock</label>
-                                <div class="d-flex gap-2 align-items-center">
-                                    <select name="" id="stock" class="form-select w-50" onchange="getQtyStoAdd()">
-                                        <option value="">Select Stock</option>
-                                        @foreach ($stoData as $data)
-                                            <option value="{{ $data->id }},{{ $data->item_name }} | {{ $data->item_size }}:{{ $data->item_qty }}">
-                                                {{ $data->id }} — {{ $data->item_name }} {{ $data->size_weight }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <input type="text" id="sto" class="form-control w-25" readonly placeholder="Available">
-                                    
-                                    <button type="button" id="add_sto" onclick="checkInputStoAdd()" class="cust-btn cust-btn-primary">Add Stock</button>
-                                </div>
-                            </div>
-
-                            <div id="addStock" class="col-12 mt-3">
-                            
-                                @php
-                                    $oldItems = old('itemName', ['']);
-                                    $oldQtys = old('stockQty', ['']);
-                                    $oldStock = old('stock', ['']);
-                                    $oldQtyAvail = old('stockQtyAvail', ['']);
-                                    $oldStoFee = old('stofee', ['']);
-                                @endphp
-
-                                @if(!empty(array_filter($oldItems)))
-
-                                    @foreach($oldItems as $i => $item)
-
-                                        <div class="row g-2 align-items-start mb-2 added-item mt-1">
-                                            <div class="col-md-8">
-                                                <label class="form-label fw-semibold text-secondary">Stock</label>
-                                                <input type="text" class="form-control" name="itemName[]" value="{{ $item }}" readonly>
-                                                <input type="text" name="stock[]" value="{{ $oldStock[$i] ?? '' }}" hidden>
-                                                @error("itemName.$i")
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror 
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label fw-semibold text-secondary">Qty Avail</label>
-                                                <input type="number" class="form-control" name="stockQtyAvail[]" value="{{ $oldQtyAvail[$i] ?? '' }}" readonly>
-                                                @error("stockQtyAvail.$i")
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label fw-semibold text-secondary">Qty Used</label>
-                                                <input type="number" class="form-control" name="stockQty[]" value="{{ $oldQtys[$i] ?? '' }}">
-                                                @error("stockQty.$i")
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label fw-semibold text-secondary">Fee</label>
-                                                <input type="text" class="form-control" name="stofee[]" value="{{ $oldStoFee[$i] ?? '' }}">
-                                                @error("stofee.$i")
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label fw-semibold text-secondary">Remove</label>
-                                                <button type="button" class="btn btn-outline-danger w-100 remove-sto">
-                                                    <i class="bi bi-x-circle"></i></button>
-                                            </div>
-                                        </div>
-
-
-                                    @endforeach
-
-                                @endif
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6 h-100 overflow-auto">
-
-                            {{-- Equipment --}}
-                            <div class="col-12">
-                                <label for="equipment" class="form-label">Equipment</label>
-                                <div class="d-flex gap-2 align-items-center">
-                                    <select name="" id="equipment" class="form-select w-50" onchange="getQtyAdd()">
-                                        <option value="">Select Equipment</option>
-                                        @foreach ($eqData as $data)
-                                            <option value="{{ $data->id }},{{ $data->eq_name }} | {{ $data->eq_size }}:{{ $data->eq_available }}">
-                                                {{ $data->id }} — {{ $data->eq_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <input type="text" id="avail" class="form-control w-25" readonly placeholder="Available">
-                                    <button type="button" id="add_eq" onclick="checkInputEqAdd()" class="cust-btn cust-btn-primary">Add Equipment</button>
-                                </div>
-                            </div>
-                            <div id="addEquipment" class="col-12 mt-3">
-
-                                @php
-                                    $oldEq = old('eqName', ['']);
-                                    $oldEqQtys = old('eqQty', ['']);
-                                    $oldEqId = old('equipment', ['']);
-                                    $oldEqQtyAvail = old('eqQtyAvail', ['']);
-                                    $oldEqFee = old('eqfee', ['']);
-                                @endphp
-
-                                @if(!empty(array_filter($oldEq)))
-
-                                    @foreach($oldEq as $i => $item)
-
-                                        <div class="row g-2 align-items-start mb-2 added-item">
-
-                                            <div class="col-md-8">
-                                                <label class="form-label fw-semibold text-secondary">Equipment</label>
-                                                <input type="text" class="form-control" name="eqName[]" value="{{ $item }}" readonly>
-                                                <input type="text" name="equipment[]" value="{{ $oldEqId[$i] ?? '' }}" hidden>
-                                                @error("eqName.$i")
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label fw-semibold text-secondary">Qty Avail</label>
-                                                <input type="number" class="form-control" name="eqQtyAvail[]" placeholder="Qty" value="{{ $oldEqQtyAvail[$i] ?? '' }}" readonly>     
-                                                @error("eqQtyAvail.$i")
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label fw-semibold text-secondary">Qty Used</label>
-                                                <input type="number" class="form-control" name="eqQty[]" value="{{ $oldEqQtys[$i] ?? '' }}">     
-                                                @error("eqQty.$i")
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label fw-semibold text-secondary">Fee</label>
-                                                <input type="text" class="form-control" name="eqfee[]" value="{{ $oldEqFee[$i] ?? '' }}">     
-                                                @error("eqFee.$i")
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label fw-semibold text-secondary">Remove</label>
-                                                <button type="button" class="btn btn-outline-danger w-100 remove-eq">
-                                                    <i class="bi bi-x-circle"></i></button>
-                                            </div>
-
-                                        </div>
-
-
-                                    @endforeach
-
-                                @endif
-
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <script>
-                        // for items
-                        function getQtyStoAdd() {
-                            const get = document.getElementById('stock');
-                            const stoInput = document.getElementById("sto");
-
-                            if (get && stoInput) {
-                                const idData = get.options[get.selectedIndex].value;
-                                const forQty = idData.slice(idData.indexOf(":") + 1);
-                                stoInput.value = forQty;
-                            } else if (stoInput) {
-                                stoInput.value = '';
-                            }
-                        }
-                        function checkInputStoAdd() {
-                            const input = document.getElementById("sto");
-                            const get = document.getElementById('stock');
-                            if (!input || !get) return;
-
-                            if (input.value.trim() === "") {
-                                alert("Input is empty");
-                                return;
-                            }
-
-                            var idData = get.options[get.selectedIndex].value;
-                            let forId = idData.slice(0, idData.indexOf(","));
-                            let forName = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
-                            let forAvail = idData.slice(idData.indexOf(":") + 1);
-                            const wrapper = document.createElement('div');
-                            wrapper.classList.add('row', 'g-2', 'align-items-start', 'mb-2', 'added-item', 'mt-1');
-
-                            wrapper.innerHTML = `
-                                <div class="col-md-8">
-                                    <label class="form-label fw-semibold text-secondary">Stock</label>
-                                    <input type="text" class="form-control" name="itemName[]" value="${forName}" readonly>
-                                    <input type="text" name="stock[]" value="${forId}" hidden>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-secondary">In Stock</label>
-                                    <input type="text" class="form-control" name="stockQtyAvail[]" value="${forAvail}" readonly>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-secondary">Qty.</label>
-                                    <input type="number" class="form-control" name="stockQty[]">
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-secondary">Fee</label>
-                                    <input type="text" class="form-control" name="stofee[]">
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-secondary">Remove</label>
-                                    <button type="button" class="btn btn-outline-danger w-100 remove-sto"><i class="bi bi-x-circle"></i> </button>
-                                </div>
-                            `;
-
-                            document.getElementById('addStock').appendChild(wrapper);
-                        }
-
-
-
-                        // for equipment
-
-                        function getQtyAdd() {
-                            const get = document.getElementById('equipment');
-                            const availInput = document.getElementById("avail");
-
-                            if (get && availInput) {
-                                const idData = get.options[get.selectedIndex].value;
-                                const forQty = idData.slice(idData.indexOf(":") + 1);
-                                availInput.value = forQty;
-                            } else if (availInput) {
-                                availInput.value = '';
-                            }
-                        }
-
-                        function checkInputEqAdd() {
-                            const input = document.getElementById("avail");
-                            const get = document.getElementById('equipment');
-                            if (!input || !get) return;
-
-                            if (input.value.trim() === "") {
-                                alert("Input is empty");
-                                return;
-                            }
-
-                            var idData = get.options[get.selectedIndex].value;
-                            let forId = idData.slice(0, idData.indexOf(","));
-                            let forName = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
-                            let forAvail = idData.slice(idData.indexOf(":") + 1);
-                            const wrapper = document.createElement('div');
-                            wrapper.classList.add('row', 'g-2', 'align-items-start', 'mb-2', 'added-item');
-
-                            wrapper.innerHTML = `
-                                <div class="col-md-8">
-                                    <label class="form-label fw-semibold text-secondary">Equipment</label>
-                                    <input type="text" class="form-control" name="eqName[]" value="${forName}" readonly>
-                                    <input type="text" name="equipment[]" value="${forId}" hidden>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-secondary">Qty Avail</label>
-                                    <input type="number" class="form-control" name="eqQtyAvail[]" value="${forAvail}" readonly>     
-                                </div>
-
-
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-secondary">Qty Used</label>
-                                    <input type="number" class="form-control" name="eqQty[]">
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-secondary">Fee</label>
-                                    <input type="text" class="form-control" name="eqfee[]">
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-secondary">Remove</label>
-                                    <button type="button" class="btn btn-outline-danger w-100 remove-eq">
-                                        <i class="bi bi-x-circle"></i>
-                                    </button>
-                                </div>
-                            `;
-
-                            document.getElementById('addEquipment').appendChild(wrapper);
-                        }
-
-                    </script>
 
                     {{-- Submit --}}
                     <div class="row justify-content-end mt-4">

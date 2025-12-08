@@ -32,28 +32,24 @@ class pkgEquipmentController extends Controller
     {
         $request->validate([
             'eqAdd' => 'required',
-            'eqUtilQty' => 'required|integer|min:1|max:999999'
+            'eqQty' => 'required|integer|min:1|max:999',
+            'eqQtySet' => 'required|integer|min:1|max:999'
         ],[
             'eqAdd.required' => 'This field is required.',
-            'eqUtilQty.required' => 'This field is required.',
-            'eqUtilQty.min' => 'Must be 1 or more.',
-            'eqUtilQty.max' => '6 digit max reached.',
+            'eqQty.required' => 'This field is required.',
+            'eqQty.min' => 'Must be 1 or more.',
+            'eqQty.max' => '3 digit limit reached.',
+            'eqQtySet.required' => 'This field is required.',
+            'eqQtySet.min' => 'Must be 1 or more.',
+            'eqQtySet.max' => '3 digit limit reached.',
         ]);
-
-        $getQty = PkgEquipment::select('id', 'eq_used')->where('pkg_id', $request->pkgId)->where('eq_id', $request->eqAdd)->first();
         
-        if ($getQty) {
-            PkgEquipment::findOrFail($getQty->id)->update([
-                'eq_used' => $getQty->eq_used + $request->eqUtilQty
-            ]);
-        } else {
-            PkgEquipment::create([
-                'pkg_id' => $request->pkgId,
-                'eq_id' => $request->eqAdd,
-                'eq_used' => $request->eqUtilQty
-            ]);
-        }
-       
+        PkgEquipment::create([
+            'pkg_id' => $request->pkgId,
+            'eq_id' => $request->eqAdd,
+            'eq_used' => $request->eqQty,
+            'eq_used_set' => $request->eqQtySet
+        ]);
 
         Log::create([
             'transaction' => 'Added',
@@ -62,7 +58,7 @@ class pkgEquipmentController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-s', 'Added Successfully.');
+        return redirect()->back()->with('success', 'Added Successfully!');
     }
 
     /**
@@ -107,7 +103,7 @@ class pkgEquipmentController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-s', 'Updated Successfully.');
+        return redirect()->back()->with('success', 'Updated Successfully!');
     }
 
     /**
@@ -125,6 +121,6 @@ class pkgEquipmentController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('promt-s', 'Deleted Successfully.');
+        return redirect()->back()->with('success', 'Deleted Successfully!');
     }
 }

@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        /*
         Schema::create('add_equipment', function (Blueprint $table) {
             $table->id();
             
@@ -25,6 +26,7 @@ return new class extends Migration
 
             $table->timestamps();
         });
+        */
     }
 
     /**

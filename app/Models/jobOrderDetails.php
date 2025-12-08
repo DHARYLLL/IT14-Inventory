@@ -11,9 +11,7 @@ class jobOrderDetails extends Model
         'dec_name',
         'dec_born_date',
         'dec_died_date',
-        'dec_cause_of_death',
         'jod_days_of_wake',
-        'jod_wakeLoc',
         'jod_burialLoc',
         'jod_eq_stat',
         'jod_deploy_date',
@@ -28,5 +26,9 @@ class jobOrderDetails extends Model
 
     public function jodToChap(){
         return $this->belongsTo(Chapel::class, 'chap_id');
+    }
+
+    public function jodToAddWake(){
+        return $this->hasOne(AddWake::class, 'jod_id');
     }
 }

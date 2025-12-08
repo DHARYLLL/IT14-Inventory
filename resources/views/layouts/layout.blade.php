@@ -39,7 +39,7 @@
             {{-- LOGO --}}
             <div class="logo mb-4">
                 <div class="d-flex align-items-center gap-2">
-                    <img src="{{ secure_asset('images/alar-logo.png') }}" alt="Alar Memorial Services Logo"
+                    <img src="{{ asset('images/alar-logo.png') }}" alt="Alar Memorial Services Logo"
                         style="max-width: 100%; height: auto;">
                 </div>
             </div>

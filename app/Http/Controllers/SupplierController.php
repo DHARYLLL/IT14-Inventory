@@ -34,7 +34,7 @@ class SupplierController extends Controller
         $supplier = $request->validated();
         Supplier::create($supplier);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Added Successfully!');
     }
 
     /**
@@ -60,7 +60,7 @@ class SupplierController extends Controller
     {
         $editSupplier = $request->validated();
         $supplier->update($editSupplier);
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Updated Successfully!');
     }
 
     /**
@@ -69,6 +69,6 @@ class SupplierController extends Controller
     public function destroy(Supplier $supplier)
     {
         $supplier->delete();
-        return redirect()->back()->with('success', 'Delete Successfully');
+        return redirect()->back()->with('success', 'Deleted Successfully!');
     }
 }

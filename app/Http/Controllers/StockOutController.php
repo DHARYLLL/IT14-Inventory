@@ -39,6 +39,7 @@ class StockOutController extends Controller
     {
         $request->validate([
             'reason' => 'required|max:100',
+
             'itemName.*' => 'required',
             'stockQty.*' => 'required|integer|min:1|max:999',
             'stockQtySet.*' => 'required|integer|min:1|max:999',
@@ -64,7 +65,6 @@ class StockOutController extends Controller
             'eqQtySet.*.required' => 'This field is required.',
             'eqQtySet.*.min' => 'Equipment quantity must be 1 or more.',
             'eqQtySet.*.max' => '3 digits limit reached.'
-
 
         ]);
 
@@ -243,7 +243,7 @@ class StockOutController extends Controller
             }
         }
 
-        return redirect()->back()->with('promt-s', 'Stock-out has been Cancelled.');
+        return redirect()->back()->with('success', 'Stock-out has been Cancelled!');
     }
 
     /**

@@ -53,7 +53,7 @@
                     {{-- Services --}}
                     <div class="row mt-4">
                         <div class="col-md-12">
-                            <h5 class="cust-sub-title">Services:</h5>
+                            <h5 class="cust-sub-title">Services: <span class="text-danger">*</span></h5>
                         </div>
 
                         <div class="col-md-5">
@@ -91,15 +91,13 @@
 
                     </div> 
 
-
-                    {{-- Date --}}
+                    {{-- Dates --}}
                     <div class="row mt-4">
 
                         <div class="col-md-12">
                             <h5 class="cust-sub-title">Date:</h5>
                         </div>
-
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="svcDate" class="form-label">Service Date <span class="text-danger">*</span></label>
                             <input type="date" name="svcDate" class="form-control"
                                 value="{{ old('svcDate') }}">
@@ -108,20 +106,44 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-2">
-                            <label for="timeStart" class="form-label">Start Time <span class="text-danger">*</span></label>
-                            <input type="time" class="cust-time" name="timeStart" value="{{ old('timeStart') }}">
-                            @error('timeStart')
+                        <div class="col-md-3">
+                            <label for="burrDate" class="form-label">Burial Date</label>
+                            <input type="date" name="burrDate" class="form-control"
+                                value="{{ old('burrDate') }}">
+                            @error('burrDate')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
-                            @session('promt-f')
-                                <div class="text-danger small mt-1">{{ $value }}</div>
-                            @endsession
                         </div>
-                        <div class="col-md-2">
-                            <label for="timeEnd" class="form-label">End Time</label>
-                            <input type="time" class="cust-time" name="timeEnd" value="{{ old('timeEnd') }}">
-                            @error('timeEnd')
+
+                        <div class="col-md-3">
+                            <label for="burialTime" class="form-label">Burial Time</label>
+                            <input type="time" class="cust-time" name="burialTime" value="{{ old('burialTime') }}">
+                            @error('burialTime')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-3">
+                            <label for="embalmTime" class="form-label">Embalm Time</label>
+                            <input type="time" class="cust-time" name="embalmTime" value="{{ old('embalmTime') }}">
+                            @error('embalmTime')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>          
+
+                    </div>
+
+                    {{-- Locations --}}
+                    <div class="row mt-4">
+
+                        <div class="col-md-12">
+                            <h5 class="cust-sub-title">Location:</h5>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="burialLoc" class="form-label">Burial Location</label>
+                            <input type="text" name="burialLoc" id="burialLoc" class="form-control"
+                                value="{{ old('burialLoc') }}">
+                            @error('burialLoc')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
