@@ -31,4 +31,12 @@ class jobOrderDetails extends Model
     public function jodToAddWake(){
         return $this->hasOne(AddWake::class, 'jod_id');
     }
+
+    public function jodTojo(){
+        return $this->hasOne(jobOrder::class, 'jod_id');
+    }
+
+    public function jodToTempEq(){
+        return $this->hasMany(TempEquipment::class, 'jod_id');
+    }
 }

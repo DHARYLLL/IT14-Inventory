@@ -16,4 +16,8 @@ class BAOtherInfos extends Model
         'relationship',
         'bur_asst_id'
     ];
+
+    public function baoToBurAsst() {
+        return $this->belongsTo(BurialAssistance::class, 'bur_asst_id');
+    }
 }

@@ -15,4 +15,8 @@ class BAMotherInfos extends Model
         'religion',
         'bur_asst_id'
     ];
+
+    public function bamToBurAsst() {
+        return $this->belongsTo(BurialAssistance::class, 'bur_asst_id');
+    }
 }
