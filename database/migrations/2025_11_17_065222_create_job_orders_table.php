@@ -35,7 +35,7 @@ return new class extends Migration
             $table->foreign('svc_id')->references('id')->on('services_requests')->onUpdate('cascade')->nullOnDelete();
 
             $table->unsignedBigInteger('ba_id')->nullable();
-            $table->foreign('ba_id')->references('id')->on('burial_assistance')->onUpdate('cascade')->nullOnDelete();
+            $table->foreign('ba_id')->references('id')->on('burial_assistance')->onUpdate('cascade');
 
             $table->timestamps();
         });
