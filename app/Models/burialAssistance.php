@@ -8,14 +8,6 @@ class BurialAssistance extends Model
 {
     protected $table = 'burial_assistance';
     protected $fillable = [
-        /*
-        'civil_status',
-        'religion',
-        'address',
-        'birthdate',
-        'gender',
-        'rel_to_the_dec',
-        */
         'amount',
         'jo_id'
     ];
