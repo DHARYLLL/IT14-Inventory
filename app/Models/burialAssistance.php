@@ -11,6 +11,7 @@ class BurialAssistance extends Model
         'amount'
     ];
 
+    
     public function burAsstToJo() {
         return $this->hasOne(jobOrder::class, 'ba_id');
     }

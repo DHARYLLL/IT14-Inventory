@@ -37,7 +37,7 @@ class jobOrder extends Model
         return $this->belongsTo(ServiceRequest::class, 'svc_id');
     }
 
-    public function joToBurrAsst(){
+    public function joToBurAsst(){
         return $this->belongsTo(BurialAssistance::class, 'ba_id');
     }
 }
