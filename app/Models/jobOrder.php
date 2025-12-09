@@ -37,6 +37,6 @@ class jobOrder extends Model
     }
 
     public function joToBurrAsst(){
-        return $this->belongsTo(BurialAssistance::class, 'jo_id');
+        return $this->hasOne(BurialAssistance::class, 'jo_id');
     }
 }
