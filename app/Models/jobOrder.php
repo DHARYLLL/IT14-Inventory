@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\BurialAssistance;
 
 class jobOrder extends Model
 {
@@ -37,7 +36,7 @@ class jobOrder extends Model
         return $this->belongsTo(ServiceRequest::class, 'svc_id');
     }
 
-    public function joToBurrAsst(){
+    public function joToBurAsst(){
         return $this->hasOne(BurialAssistance::class, 'jo_id');
     }
 }
