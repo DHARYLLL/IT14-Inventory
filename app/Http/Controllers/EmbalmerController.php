@@ -161,6 +161,7 @@ class EmbalmerController extends Controller
         Log::create([
             'transaction' => 'Added',
             'tx_desc' => 'Added New Embalmer | ID: ' . $embId,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
@@ -229,6 +230,7 @@ class EmbalmerController extends Controller
         Log::create([
             'transaction' => 'Added',
             'tx_desc' => 'Added New Item To Embalmer | ID: ' . $request->embId,
+            'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 

@@ -23,7 +23,7 @@ class PackageController extends Controller
      */
     public function index()
     {
-        $pacData = Package::paginate(8);
+        $pacData = Package::orderBy('pkg_name', 'asc')->get();
         return view('alar/package', ['pacData' => $pacData]);
     }
 

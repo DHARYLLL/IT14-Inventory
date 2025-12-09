@@ -38,13 +38,13 @@ class VehicleController extends Controller
             'driverName' => ['required',
                             'max:50',
                             Rule::unique('vehicles', 'driver_name')
-                            ->where('veh_plate_no', $request->plateNo)],
+            ],
             'contactNumber' => 'required|digits:11',
             'price' => 'required|numeric|min:1|max:999999.99'
         ], [
             'driverName.required' => 'This field is required.',
             'driverName.max' => '50 characters limit reached.',
-            'driverName.unique' => 'Similar Driver & Plate No. is already added.',
+            'driverName.unique' => 'Similar Driver is already added.',
 
             'contactNumber.required' => 'This field is required.',
             'contactNumber.digits' => 'Not a valid number.',
@@ -70,7 +70,7 @@ class VehicleController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('success', 'Added Successfully!');
+        return redirect(route('Vehicle.index'))->with('success', 'Added Successfully!');
 
     }
 
@@ -113,7 +113,7 @@ class VehicleController extends Controller
         ], [
             'driverName.required' => 'This field is required.',
             'driverName.max' => '50 characters limit reached.',
-            'driverName.unique' => 'Similar Driver & Plate No. is already added.',
+            'driverName.unique' => 'Similar Driver is already added.',
 
             'contactNumber.required' => 'This field is required.',
             'contactNumber.digits' => 'Not a valid number.',

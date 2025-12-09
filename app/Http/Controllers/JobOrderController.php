@@ -28,7 +28,7 @@ class JobOrderController extends Controller
      */
     public function index()
     {
-        $jOData = jobOrder::all();
+        $jOData = jobOrder::orderBy('client_name', 'asc')->get();
         return view('alar/jobOrder', ['jOData' => $jOData]);
     }
 
@@ -170,17 +170,13 @@ class JobOrderController extends Controller
         $joData = jobOrder::findOrFail($id);
         $jodData = jobOrderDetails::findOrFail($joData->jod_id);
 
-        $addEqData = addEquipment::where('jod_id', $jodData->id)->get();
-        $addStoData = addStock::where('jod_id', $jodData->id)->get();
-
         $pkgEqData = PkgEquipment::where('pkg_id', $jodData->pkg_id)->get();
         $pkgStoData = PkgStock::where('pkg_id', $jodData->pkg_id)->get();
 
         $tempEqData = TempEquipment::where('jod_id', $joData->jod_id)->get();
    
 
-        return view('shows/jobOrdShow', ['joData' => $joData, 'jodData' => $jodData, 'addStoData' => $addStoData, 
-                                    'addEqData' => $addEqData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'tempEqData' => $tempEqData]);
+        return view('shows/jobOrdShow', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'tempEqData' => $tempEqData]);
     }
 
     public function showDeployItems(string $id)
