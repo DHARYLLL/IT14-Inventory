@@ -21,7 +21,8 @@ class jobOrder extends Model
         'jo_burial_time',
         'emp_id',
         'jod_id',
-        'svc_id'
+        'svc_id',
+        'ba_id'
     ];
 
     public function joToEmp(){
@@ -36,7 +37,7 @@ class jobOrder extends Model
         return $this->belongsTo(ServiceRequest::class, 'svc_id');
     }
 
-    public function joToBurAsst(){
-        return $this->hasOne(BurialAssistance::class, 'jo_id');
+    public function joToBurrAsst(){
+        return $this->belongsTo(BurialAssistance::class, 'ba_id');
     }
 }

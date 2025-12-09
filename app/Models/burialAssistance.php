@@ -8,12 +8,11 @@ class BurialAssistance extends Model
 {
     protected $table = 'burial_assistance';
     protected $fillable = [
-        'amount',
-        'jo_id'
+        'amount'
     ];
 
     public function burAsstToJo() {
-        return $this->belongsTo(jobOrder::class, 'jo_id');
+        return $this->hasOne(jobOrder::class, 'ba_id');
     }
 
     public function burAsstToBac() {

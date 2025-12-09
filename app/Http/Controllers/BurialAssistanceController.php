@@ -184,10 +184,13 @@ class BurialAssistanceController extends Controller
         }
         BurialAssistance::create([
             'amount' => $request->amount,
-            'jo_id' => $request->joId,
         ]);
 
         $burAsstId = BurialAssistance::orderBy('id', 'desc')->take(1)->value('id');
+
+        jobOrder::findOrFail($request->joId)->update([
+            'ba_id' => $burAsstId
+        ]);
 
         BAClientInfos::create([
             'cli_fname' => $request->cliFname,

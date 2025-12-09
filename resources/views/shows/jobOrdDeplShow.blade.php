@@ -44,7 +44,7 @@
 
                             <div class="w-100"></div>
 
-                            @if($joData->joToBurrAsst)
+                            @if($joData->ba_id)
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">Total Payment</label>
                                     <p>₱{{ $joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total }}</p>
@@ -63,7 +63,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">Balance</label>
-                                    <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->joToBurrAsst ? ($joData->joToBurrAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
+                                    <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurrAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
                                 </div>
                                 
                             @else
@@ -77,7 +77,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">Balance</label>
-                                    <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->joToBurrAsst ? ($joData->joToBurrAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
+                                    <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurrAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
                                 </div>
                                 @session('promt-s')
                                     <div class="col-md-12">
@@ -107,7 +107,7 @@
                                                 <input type="text" class="form-control" name="payAmount" 
                                                     value="{{ old('payAmount', 
                                                             ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - 
-                                                            ($joData->joToBurrAsst ? ($joData->joToBurrAsst->amount + $joData->jo_dp) : $joData->jo_dp)) 
+                                                            ($joData->ba_id ? ($joData->joToBurrAsst->amount + $joData->jo_dp) : $joData->jo_dp)) 
                                                         }}">
                                                 @error('payAmount')
                                                     <div class="text-danger small mt-1">{{ $message }}</div>
@@ -119,7 +119,7 @@
                                                 <button type="submit" class="cust-btn cust-btn-primary w-100">Pay</button>
                                             </div>
 
-                                            @if(!$joData->joToBurrAsst)                                               
+                                            @if(!$joData->ba_id)                                               
                                                     
                                                 <div class="col-md-5">
                                                     <label for="" class="form-label fw-semibold text-secondary">Apply Burial Assistance</label>
@@ -327,7 +327,7 @@
 
                                         </div>
                                         <div class="modal-footer">
-                                            <input type="text" name="burrAsstId" value="{{$joData->joToBurrAsst ? $joData->joToBurrAsst->id : '' }}" hidden>
+                                            <input type="text" name="burrAsstId" value="{{$joData->ba_id ? $joData->joToBurrAsst->id : '' }}" hidden>
                                             <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                             <button type="submit" class="cust-btn cust-btn-primary">Add</button>
                                         </div>
@@ -357,7 +357,7 @@
                                                     @enderror
                                                     <input type="text" name="jodId" value="{{ $joData->joToJod->id }}" hidden>
                                                     <input type="text" name="joId" value="{{ $joData->id }}" hidden>
-                                                    <input type="text" name="burrAsstId" value="{{$joData->joToBurrAsst ? $joData->joToBurrAsst->id : '' }}" hidden>
+                                                    <input type="text" name="burrAsstId" value="{{$joData->ba_id ? $joData->joToBurrAsst->id : '' }}" hidden>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label fw-semibold">Fee per Day <span class="text-danger">*</span></label>
