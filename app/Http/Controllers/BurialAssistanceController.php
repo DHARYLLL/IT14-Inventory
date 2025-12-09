@@ -8,6 +8,7 @@ use App\Models\BAFatherInfos;
 use App\Models\BAMotherInfos;
 use App\Models\BAOtherInfos;
 use App\Models\BurialAssistance;
+use App\Models\BurialAsst;
 use App\Models\jobOrder;
 use App\Models\jobOrderDetails;
 use App\Models\Log;
@@ -182,11 +183,11 @@ class BurialAssistanceController extends Controller
                 'jo_status' => 'Paid'
             ]);
         }
-        BurialAssistance::create([
+        BurialAsst::create([
             'amount' => $request->amount,
         ]);
 
-        $burAsstId = BurialAssistance::orderBy('id', 'desc')->take(1)->value('id');
+        $burAsstId = BurialAsst::orderBy('id', 'desc')->take(1)->value('id');
 
         jobOrder::findOrFail($request->joId)->update([
             'ba_id' => $burAsstId
@@ -264,7 +265,7 @@ class BurialAssistanceController extends Controller
      */
     public function show(string $id)
     {
-        $burrAsstData = BurialAssistance::findOrFail($id);
+        $burrAsstData = BurialAsst::findOrFail($id);
         return view('shows/burialAssistanceShow', ['burrAsstData' => $burrAsstData]);
     }
 
