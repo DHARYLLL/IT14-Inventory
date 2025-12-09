@@ -13,7 +13,7 @@ class BurialAssistance extends Model
     ];
 
     public function burAsstToJo() {
-        return $this->belongsTo(JobOrder::class, 'jo_id');
+        return $this->belongsTo(jobOrder::class, 'jo_id');
     }
 
     public function burAsstToBac() {

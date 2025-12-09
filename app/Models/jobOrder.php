@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class JobOrder extends Model
+class jobOrder extends Model
 {
     protected $table = 'job_orders';
     protected $fillable = [
@@ -29,7 +29,7 @@ class JobOrder extends Model
     }
 
     public function joToJod(){
-        return $this->belongsTo(JobOrderDetails::class, 'jod_id');
+        return $this->belongsTo(jobOrderDetails::class, 'jod_id');
     }
 
     public function joToSvcReq(){

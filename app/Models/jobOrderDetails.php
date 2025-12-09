@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class JobOrderDetails extends Model
+class jobOrderDetails extends Model
 {
     protected $table = 'job_ord_details';
     protected $fillable = [
@@ -33,7 +33,7 @@ class JobOrderDetails extends Model
     }
 
     public function jodTojo(){
-        return $this->hasOne(JobOrder::class, 'jod_id');
+        return $this->hasOne(jobOrder::class, 'jod_id');
     }
 
     public function jodToTempEq(){
