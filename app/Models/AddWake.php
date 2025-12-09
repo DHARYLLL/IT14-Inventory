@@ -14,6 +14,6 @@ class AddWake extends Model
     ];
 
     public function addwakeTojod(){
-        return $this->belongsTo(jobOrderDetails::class, 'jod_id');
+        return $this->belongsTo(JobOrderDetails::class, 'jod_id');
     }
 }

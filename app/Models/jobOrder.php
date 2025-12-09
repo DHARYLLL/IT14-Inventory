@@ -29,7 +29,7 @@ class JobOrder extends Model
     }
 
     public function joToJod(){
-        return $this->belongsTo(jobOrderDetails::class, 'jod_id');
+        return $this->belongsTo(JobOrderDetails::class, 'jod_id');
     }
 
     public function joToSvcReq(){

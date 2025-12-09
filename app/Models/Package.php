@@ -25,7 +25,7 @@ class Package extends Model
 
     public function pkgToJod()
     {
-        return $this->hasMany(jobOrderDetails::class, 'pkg_id');
+        return $this->hasMany(JobOrderDetails::class, 'pkg_id');
     }
 
 
