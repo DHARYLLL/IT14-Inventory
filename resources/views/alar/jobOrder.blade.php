@@ -55,7 +55,7 @@
                     <tr>
                         {{-- Safely display the package name (avoid null errors) --}}
                         <td>{{ $row->client_name ?? '—'  }}</td>
-                        <td>{{ $row->ba_id ? '₱'.$row->joToBurrAsst?->amount : 'N/A' }}</td>
+                        <td>{{ $row->ba_id ? '₱'.$row->joToBurrAsst->amount : 'N/A' }}</td>
                         <td>                     
                             <form action="{{ route('Job-Order.raUpdate', $row->id) }}" method="POST" class="raForm">
                                 @csrf
