@@ -33,7 +33,7 @@ class jobOrderDetails extends Model
     }
 
     public function jodTojo(){
-        return $this->hasOne(jobOrder::class, 'jod_id');
+        return $this->hasOne(JobOrder::class, 'jod_id');
     }
 
     public function jodToTempEq(){
