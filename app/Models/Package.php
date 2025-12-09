@@ -22,4 +22,11 @@ class Package extends Model
     {
         return $this->hasMany(PkgStock::class, 'pkg_id');
     }
+
+    public function pkgToJod()
+    {
+        return $this->hasMany(jobOrderDetails::class, 'pkg_id');
+    }
+
+
 }
