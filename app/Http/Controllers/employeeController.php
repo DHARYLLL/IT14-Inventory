@@ -162,7 +162,7 @@ class employeeController extends Controller
                             ->where('emp_contact_number', $request->input('empConNum'))
                             ->ignore($id)],
             'empMname' => 'required|max:15',
-            'empLname' => 'required|max:15',
+            'empLname' => 'max:15',
             'empConNum' => ['required',
                             'digits:11',
                             Rule::unique('employees', 'emp_fname')
@@ -176,7 +176,6 @@ class employeeController extends Controller
             'empFname.unique' => 'Name is already already added.',
             'empFname.max' => '30 characters limit reached.',
 
-            'empMname.required' => 'This field is required.',
             'empMname.max' => '15 characters limit reached.',
 
             'empLname.required' => 'This field is required.',  

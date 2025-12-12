@@ -308,6 +308,8 @@ class EmbalmerController extends Controller
         $request->validate([
             'embalmName' => [
                 'required',
+                'regex:/^[A-Za-z0-9\s\.\'-]+$/',
+                'min:1',
                 'max:50',
                 Rule::unique('embalming', 'embalmer_name')
                 ->ignore($id)
@@ -321,6 +323,8 @@ class EmbalmerController extends Controller
         ], [
             'embalmName.required' => 'This field is required.',
             'embalmName.unique' => 'Name is already added.',
+            'embalmName.regex' => 'Not a valid name.',
+            'embalmName.min' => 'At least 1 or more characters.',
             'embalmName.max' => '50 characters limit reached.',
 
             'embalmPrice.required' => 'This field is required.',

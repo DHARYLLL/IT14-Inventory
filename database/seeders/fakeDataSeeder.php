@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Chapel;
 use App\Models\ChapEquipment;
 use App\Models\ChapStock;
+use App\Models\embalming;
 use App\Models\Employee;
 use App\Models\Equipment;
 use App\Models\Package;
@@ -67,7 +68,7 @@ class fakeDataSeeder extends Seeder
             'emp_fname' => 'Aureliano',
             'emp_mname' => 'Espina',
             'emp_lname' => '09198337182',
-            'emp_contact_number' => '12345678910',
+            'emp_contact_number' => '09198337182',
             'emp_address' => 'Compostela Davao de oro',
             'emp_email' => 'alarmemorial@alar.com',
             'emp_password' => Hash::make('alar'),
@@ -103,7 +104,7 @@ class fakeDataSeeder extends Seeder
 
         $equipments = [
             ['eq_name' => 'Casket Stand',            'eq_type' => 'Non-Consumable', 'eq_available' => 5,    'eq_size' => '84 x 28 x 23',  'eq_in_use' => 0],
-            ['eq_name' => 'Viewing Light Set',       'eq_type' => 'Non-Consumable', 'eq_available' => 3,    'eq_size' => '48 in',         'eq_in_use' => 0],
+            ['eq_name' => 'Viewing Light Set',       'eq_type' => 'Non-Consumable', 'eq_available' => 5,    'eq_size' => '48 in',         'eq_in_use' => 0],
             ['eq_name' => 'Flower Stand',            'eq_type' => 'Non-Consumable', 'eq_available' => 8,    'eq_size' => '36 in',         'eq_in_use' => 0],
             ['eq_name' => 'Viewing Tent',            'eq_type' => 'Non-Consumable', 'eq_available' => 4,    'eq_size' => '3m x 3m',       'eq_in_use' => 0],
             ['eq_name' => 'Chapel Chairs',           'eq_type' => 'Non-Consumable', 'eq_available' => 100,  'eq_size' => '35 x 19 x 20',  'eq_in_use' => 0],
@@ -147,7 +148,7 @@ class fakeDataSeeder extends Seeder
         PkgEquipment::create([
             'pkg_id' => 1,
             'eq_id' => 2,
-            'eq_used' => 1,
+            'eq_used' => 4,
             'eq_used_set' => 1
         ]);
         PkgEquipment::create([
@@ -194,9 +195,51 @@ class fakeDataSeeder extends Seeder
 
         //end
 
+        //new emabler
+        embalming::create([
+            'embalmer_name' => 'Test embalmer',
+            'prep_price' => 4000
+        ]);
+
+        PkgStock::create([
+            'prep_id' => 1,
+            'stock_id' => 7,
+            'stock_used' => 1,
+            'stock_used_set' => 20,
+        ]);
+
+        PkgStock::create([
+            'prep_id' => 1,
+            'stock_id' => 8,
+            'stock_used' => 1,
+            'stock_used_set' => 20,
+        ]);
+
+        PkgEquipment::create([
+            'prep_id' => 1,
+            'eq_id' => 9,
+            'eq_used' => 1,
+            'eq_used_set' => 1
+        ]);
+
+        PkgEquipment::create([
+            'prep_id' => 1,
+            'eq_id' => 10,
+            'eq_used' => 1,
+            'eq_used_set' => 1
+        ]);
+
+        //end
+
         Chapel::create([
             'chap_name' => 'Chapel of Rest',
             'chap_room' => '101',
+            'chap_price' => 2000
+        ]);
+
+        Chapel::create([
+            'chap_name' => 'Chapel of Rest',
+            'chap_room' => '102',
             'chap_price' => 2000
         ]);
 

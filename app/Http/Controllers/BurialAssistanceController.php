@@ -180,7 +180,7 @@ class BurialAssistanceController extends Controller
         if ((($getTotal->jo_total + $addWakeTotal) - $getTotal->jo_dp) <= $request->amount)
         {
             jobOrder::findOrFail($request->joId)->update([
-                'jo_status' => 'Paid'
+                'jo_status' => 'Paid',
             ]);
         }
         BurialAsst::create([
@@ -203,7 +203,7 @@ class BurialAssistanceController extends Controller
             'birthdate' => $request->birthDate,
             'gender' => $request->gender,
             'rel_to_the_dec' => $request->rotd,
-            'bur_asst_id' => $burAsstId
+            'ba_id' => $burAsstId
         ]);
         
         if ($request->filled('motherLname') || $request->filled('motherFname') || $request->filled('motherMname')) {
@@ -213,7 +213,7 @@ class BurialAssistanceController extends Controller
                 'lname' => $request->motherLname,
                 'civil_status' => $request->momCivilStatus,
                 'religion' => $request->momReligion,
-                'bur_asst_id' => $burAsstId
+                'ba_id' => $burAsstId
             ]);
         }
 
@@ -224,7 +224,7 @@ class BurialAssistanceController extends Controller
                 'lname' => $request->fatherLname,
                 'civil_status' => $request->fatherCivilStatus,
                 'religion' => $request->fatherReligion,
-                'bur_asst_id' => $burAsstId
+                'ba_id' => $burAsstId
             ]);
         }
 
@@ -236,7 +236,7 @@ class BurialAssistanceController extends Controller
                 'civil_status' => $request->otherCivilStatus,
                 'religion' => $request->otherReligion,
                 'relationship'=> $request->relationship,
-                'bur_asst_id' => $burAsstId
+                'ba_id' => $burAsstId
             ]);
         }
 
@@ -266,12 +266,16 @@ class BurialAssistanceController extends Controller
     public function show(string $id)
     {
         $burrAsstData = BurialAsst::findOrFail($id);
-        return view('shows/burialAssistanceShow', ['burrAsstData' => $burrAsstData]);
+        $cliData = BAClientInfos::where('ba_id', $id)->first();
+        $momData = BAMotherInfos::where('ba_id', $id)->first();
+        $fatherData = BAFatherInfos::where('ba_id', $id)->first();
+        $otherData = BAOtherInfos::where('ba_id', $id)->first();
+        return view('shows/burialAssistanceShow', ['burrAsstData' => $burrAsstData, 'cliData' => $cliData, 'momData' => $momData, 'fatherData' => $fatherData, 'otherData' => $otherData]);
     }
 
     public function burrAsstBack(string $id)
     {
-        $joData = jobOrder::select('id', 'jod_id')->where('id', $id)->first();
+        $joData = jobOrder::select('id', 'jod_id')->where('ba_id', $id)->first();
         $jodData = jobOrderDetails::select('id', 'jod_eq_stat')->where('id', $joData->jod_id)->first();
 
         if ($jodData->jod_eq_stat == 'Pending') {

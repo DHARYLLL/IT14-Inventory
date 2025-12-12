@@ -28,6 +28,7 @@ class StockController extends Controller
             ->orWhere('item_size', 'like', "%{$search}%")
             ->orWhere('id', 'like', "%{$search}%");
         })
+        ->orderBy('item_qty', 'asc')
         ->paginate(10)
         ->withQueryString(); 
         return view('alar.stock', ['stoData' => $stoData]);

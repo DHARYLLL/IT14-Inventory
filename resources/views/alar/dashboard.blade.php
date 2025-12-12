@@ -13,7 +13,7 @@
                 <h5>Total Items</h5>
                 <div class="card-content">
                     <i class="bi bi-box-seam"></i>
-                    <span class="count">{{ $stockData->count('item_name') }}</span>
+                    <span class="count">{{ $stockData->count('item_name') + $eqData->count('eq_name') }}</span>
                 </div>
             </div>
 
@@ -21,7 +21,7 @@
                 <h5>Low Stock</h5>
                 <div class="card-content">
                     <i class="bi bi-exclamation-triangle"></i>
-                    <span class="count">{{ $lowStockData->count('item_name') }}</span>
+                    <span class="count">{{ $lowStockData->count('item_name') + $lowEqData->count() }}</span>
                 </div>
             </div>
 
@@ -29,7 +29,7 @@
                 <h5>Out of Stock</h5>
                 <div class="card-content">
                     <i class="bi bi-x-circle"></i>
-                    <span class="count">{{ $noStockData->count('item_name') }}</span>
+                    <span class="count">{{ $noStockData->count('item_name') + $noEqData->count() }}</span>
                 </div>
             </div>
 
@@ -49,8 +49,8 @@
                 {{-- Schedule --}}
                 <div class="col-md-12">
                     <div class="dashboard-box">
-                        <h5>Schedule</h5>
-                        <div class="placeholder-box overflow-auto " style="height: 500px;">
+                        <h5>On going schedule</h5>
+                        <div class="placeholder-box cust-max-500">
                             <table class="table table-borderless table-hover placeholder-table mb-0" >
                                 <thead>
                                     <tr>
@@ -139,30 +139,30 @@
                     </div>
                 </div>
 
-                <!-- Recent Activity -->
+                <!-- Low Stock Items -->
                 <div class="col-md-6">
                     <div class="dashboard-box">
-                        <h5>Recent Activity</h5>
+                        <h5>Low Stock Items</h5>
                         <div class="placeholder-box overflow-auto">
                             <table class="table table-borderless table-hover placeholder-table mb-0">
                                 <thead>
                                     <tr>
-                                        <th>Action</th>
-                                        <th>Action Date</th>
-                                        <th>Employee</th>
+                                        <th>Item Name</th>
+                                        <th>Size</th>
+                                        <th>Quantity</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if ($logData->isEmpty())
+                                    @if ($lowStockData->isEmpty())
                                         <tr>
                                             <td colspan="3" class="text-center text-muted">No data available</td>
                                         </tr>
                                     @else
-                                        @foreach ($logData as $row)
+                                        @foreach ($lowStockData as $row)
                                             <tr>
-                                                <td>{{ $row->transaction }}</td>
-                                                <td>{{ $row->tx_date }}</td>
-                                                <td>{{ $row->logToEmp->emp_fname }}</td>
+                                                <td>{{ $row->item_name }}</td>
+                                                <td>{{ $row->item_size }}</td>
+                                                <td>{{ $row->item_qty }}</td>
                                             </tr>
                                         @endforeach
                                     @endif
@@ -175,29 +175,27 @@
                 <!-- Low Stock Items -->
                 <div class="col-md-6">
                     <div class="dashboard-box">
-                        <h5>Low Stock Items</h5>
+                        <h5>Low Stock Equipment</h5>
                         <div class="placeholder-box overflow-auto">
                             <table class="table table-borderless table-hover placeholder-table mb-0">
                                 <thead>
                                     <tr>
-                                        <th>Item Name</th>
-                                        <th>Quantity</th>
+                                        <th>Equipment Name</th>
                                         <th>Size</th>
-                                        <th>Unit</th>
+                                        <th>Quantity</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if ($lowStockData->isEmpty())
+                                    @if ($lowEqData->isEmpty())
                                         <tr>
-                                            <td colspan="4" class="text-center text-muted">No data available</td>
+                                            <td colspan="3" class="text-center text-muted">No data available</td>
                                         </tr>
                                     @else
-                                        @foreach ($lowStockData as $row)
+                                        @foreach ($lowEqData as $row)
                                             <tr>
-                                                <td>{{ $row->item_name }}</td>
-                                                <td>{{ $row->item_qty }}</td>
-                                                <td>{{ $row->item_size }}</td>
-                                                <td>{{ $row->item_unit }}</td>
+                                                <td>{{ $row->eq_name }}</td>
+                                                <td>{{ $row->eq_size }}</td>
+                                                <td>{{ $row->eq_available + $row->eq_in_use }}</td>
                                             </tr>
                                         @endforeach
                                     @endif

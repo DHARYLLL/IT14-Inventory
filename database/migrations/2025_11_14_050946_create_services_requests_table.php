@@ -13,16 +13,14 @@ return new class extends Migration
     {
         Schema::create('services_requests', function (Blueprint $table) {
             $table->id();
-            /*
-            $table->string('svc_name', 100);
-            $table->decimal('svc_amount', 8,2);
-            */
+
             $table->unsignedBigInteger('veh_id')->nullable();
             $table->foreign('veh_id')->references('id')->on('vehicles')->onUpdate('cascade')->nullOnDelete();
 
             $table->unsignedBigInteger('prep_id')->nullable();
             $table->foreign('prep_id')->references('id')->on('embalming')->onUpdate('cascade')->nullOnDelete();
 
+            $table->string('svc_status', 15);
             
             $table->timestamps();
         });

@@ -7,6 +7,7 @@ use App\Models\addStock;
 use App\Models\AddWake;
 use App\Models\BurialAssistance;
 use App\Models\Chapel;
+use App\Models\embalming;
 use App\Models\Equipment;
 use App\Models\jobOrder;
 use App\Models\jobOrderDetails;
@@ -14,6 +15,7 @@ use App\Models\Log;
 use App\Models\Package;
 use App\Models\PkgEquipment;
 use App\Models\PkgStock;
+use App\Models\ServiceRequest;
 use App\Models\Stock;
 use App\Models\TempEquipment;
 use App\Models\vehicle;
@@ -40,11 +42,12 @@ class JobOrderController extends Controller
         $pkgData = Package::all();
         $chapData = Chapel::all();
         $vehData = vehicle::all();
+        $embalmData = embalming::all();
 
         $eqData = Equipment::all();
         $stoData = Stock::all();
 
-        return view('functions/jobOrdDetailAdd', ['pkgData' => $pkgData, 'chapData' => $chapData, 'vehData' => $vehData, 'eqData' => $eqData, 'stoData' => $stoData]);
+        return view('functions/jobOrdDetailAdd', ['pkgData' => $pkgData, 'chapData' => $chapData, 'vehData' => $vehData, 'eqData' => $eqData, 'stoData' => $stoData, 'embalmData' => $embalmData]);
     }
 
     /**
@@ -55,9 +58,11 @@ class JobOrderController extends Controller
         //dd(Carbon::parse($request->svcDate)->addDays((int)$request->wakeDay));
         $request->validate([
             'package' => 'required',
-            'clientName' => 'required|max:100',
+            'vehicle' => 'required',
+            'embalm' => 'required',
+            'clientName' => 'required|regex:/^[A-Za-z0-9\s\.\'-]+$/|min:1|max:100',
             'address' => 'required|max:150',
-            'clientConNum' => 'required|integer|digits:11',
+            'clientConNum' => 'required|regex:/^[0-9]{11}$/',
             'svcDate' => [
                 'required',
                 Rule::date()->afterOrEqual(today())
@@ -73,22 +78,24 @@ class JobOrderController extends Controller
                 ->beforeOrEqual(today())
             ],
             'payment' => 'required|integer|min:0|max:999999',
-            'vehicle' => 'required',
             'total' => 'required|integer|min:1|max:999999',
 
             'wakeDay' => 'required|integer|min:1|max:999'
         ], [
             'package.required' => 'This field is required.',
+            'vehicle.required' => 'This field is required.',
+            'embalm.required' => 'This field is required.',
 
             'clientName.required' => 'This field is required.',
+            'clientName.regex' => 'Not a valid name.',
+            'clientName.min' => 'At least 1 or more characters.',
             'clientName.max' => '100 charaters limit reached.',
             
             'address.required' => 'This field is required.',
             'address.max' => '150 charaters limit reached.',
 
             'clientConNum.required' => 'This field is required.',
-            'clientConNum.integer' => 'Number only.',
-            'clientConNum.digits' => 'Not a valid number.',
+            'clientConNum.regex' => 'Not a valid number.',
 
             'svcDate.required' => 'This field is required.',
             'svcDate.after_or_equal' => 'The start date must be today or after.',
@@ -107,8 +114,6 @@ class JobOrderController extends Controller
             'payment.min' => 'Invalid amount',
             'payment.max' => '6 digit limit reached.',
 
-            'vehicle.required' => 'This field is required.',
-
             'wakeDay.required' => 'This field is required.',
             'wakeDay.min' => 'Day must be 1 or more.',
             'wakeDay.max' => '3 digits limit reached.',
@@ -118,6 +123,14 @@ class JobOrderController extends Controller
             'pkgPrice.min' => 'Amount must be 1 or more.',
             'pkgPrice.max' => '6 digits limit reached.'
         ]);
+
+        ServiceRequest::create([
+            'veh_id' => $request->vehicle,
+            'prep_id' => $request->embalm,
+            'svc_status' => 'Pending'
+        ]);
+
+        $svcId = ServiceRequest::orderBy('id', 'desc')->take(1)->value('id');
 
         //dd($request->payment >= $request->total ? 'paid' : 'not paid');
         jobOrderDetails::create([
@@ -145,7 +158,8 @@ class JobOrderController extends Controller
             'jo_burial_date' => Carbon::parse($request->svcDate)->addDays((int)$request->wakeDay)->toDateString(),
             'jo_burial_time' => $request->burialTime,
             'emp_id' => session('loginId'),
-            'jod_id' => $jodId
+            'jod_id' => $jodId,
+            'svc_id' => $svcId
         ]);
 
         $joId = jobOrder::orderBy('id', 'desc')->take(1)->value('id');
@@ -196,15 +210,27 @@ class JobOrderController extends Controller
             'stoId.*' => 'required',
 
             'eqDepl.*' => 'required|integer|min:0|max:999',
-            'stoDepl.*' => 'required|integer|min:0|max:999'
+            'eqDeplSet.*' => 'required|integer|min:0|max:999',
+
+            'stoDepl.*' => 'required|integer|min:0|max:999',
+            'stoDeplSet.*' => 'required|integer|min:0|max:999',
 
         ], [
             'stoDepl.*.required' => 'This field is required.',
             'stoDepl.*.min' => 'Quantity must atleast 0 or more.',
             'stoDepl.*.max' => '3 digit item quantity reached.',
+
+            'stoDeplSet.*.required' => 'This field is required.',
+            'stoDeplSet.*.min' => 'Quantity must atleast 0 or more.',
+            'stoDeplSet.*.max' => '3 digit item quantity reached.',
+
             'eqDepl.*.required' => 'This field is required.',
             'eqDepl.*.min' => 'Quantity must be 0 or more.',
             'eqDepl.*.max' => '3 digit equipment quantity reached.',
+
+            'eqDeplSet.*.required' => 'This field is required.',
+            'eqDeplSet.*.min' => 'Quantity must be 0 or more.',
+            'eqDeplSet.*.max' => '3 digit equipment quantity reached.',
         ]);
 
         // Store equipment and stock IDs and quantity used
@@ -212,7 +238,9 @@ class JobOrderController extends Controller
         $eqId = $request->eqId;
 
         $stoDepl = $request->stoDepl;
+        $stoDeplSet = $request->stoDeplSet;
         $eqDepl = $request->eqDepl;
+        $eqDeplSet = $request->eqDeplSet;
 
         //dd($addStoId, $addStoDepl, $addEqId, $addEqDepl);
         //dd($stoId, $stoDepl, $eqId, $eqDepl);
@@ -232,7 +260,7 @@ class JobOrderController extends Controller
 
         foreach ($stocks as $index => $data) {
             $data->update([
-                'item_qty' => $data->item_qty - $stoDepl[$index],
+                'item_qty' => $data->item_qty - ($stoDepl[$index] * $stoDeplSet[$index]),
             ]);
         }
 
@@ -240,12 +268,13 @@ class JobOrderController extends Controller
             TempEquipment::create([
                 'jod_id' => $id,
                 'pkg_eq_id' => $pkgEq[$index]->id,
-                'eq_dpl_qty' => $eqDepl[$index]
+                'eq_dpl_qty' => $eqDepl[$index],
+                'eq_dpl_qty_set' => $eqDeplSet[$index]
             ]);
 
             $data->update([
-                'eq_available' => $data->eq_available - $eqDepl[$index],
-                'eq_in_use' => $data->eq_in_use + $eqDepl[$index],
+                'eq_available' => $data->eq_available - ($eqDepl[$index] * $eqDeplSet[$index]),
+                'eq_in_use' => $data->eq_in_use + ($eqDepl[$index] * $eqDeplSet[$index]),
             ]);
         }
 
@@ -291,12 +320,11 @@ class JobOrderController extends Controller
 
         // Store equipment and stock IDs and quantity used
         $eqId = $request->eqId;
+
         $eqDepl = $request->eqDepl;
+        $eqDeplSet = $request->eqDeplSet;
 
-        //dd($addStoId, $addStoDepl, $addEqId, $addEqDepl);
-        //dd($stoId, $stoDepl, $eqId, $eqDepl);
-
-        // Check date
+        // Check date for deployment
         $jo = jobOrder::select('id', 'jo_start_date')->where('jod_id', $id)->first();
         if (Carbon::parse($jo->jo_start_date)->gt(Carbon::today())) {
             return redirect()->back()
@@ -304,16 +332,14 @@ class JobOrderController extends Controller
                 ->withInput();
         }
 
-        // for additional item and equipment
-
-        // for the inital item and equipment from th package
+        // for the inital item and equipment from the package
         $eq = Equipment::select('id', 'eq_available', 'eq_in_use')->whereIn('id', $eqId)->get();
         $pkgEq = PkgEquipment::select('id', 'eq_used')->whereIn('eq_id', $eqId)->get();
 
         foreach ($eq as $index => $data) {
             $data->update([
-                'eq_available' => $data->eq_available + $eqDepl[$index],
-                'eq_in_use' => $data->eq_in_use - $eqDepl[$index],
+                'eq_available' => $data->eq_available + ($eqDepl[$index] * $eqDeplSet[$index]),
+                'eq_in_use' => $data->eq_in_use - ($eqDepl[$index] * $eqDeplSet[$index]),
             ]);
         }
 

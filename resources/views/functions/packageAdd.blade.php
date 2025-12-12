@@ -308,7 +308,7 @@
                         </div>
 
                         <div class="col col-auto">
-                            <a href="{{ route('Package.index') }}" class="btn btn-outline-success d-flex align-items-center gap-2">
+                            <a href="{{ route('Package.index') }}" class="cust-btn cust-btn-secondary d-flex align-items-center gap-2">
                                 <i class="bi bi-arrow-left"></i> <span>Cancel</span>
                             </a>
                         </div>

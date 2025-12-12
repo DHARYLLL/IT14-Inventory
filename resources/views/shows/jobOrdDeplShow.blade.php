@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">View</label>
-                                    <a href="{{ route('Burial-Assistance.show', $joData->joToBurAsst->id) }}" class="cust-btn cust-btn-secondary"><i class="fi fi-rr-eye"></i></a>
+                                    <a href="{{ route('Burial-Assistance.show', $joData->ba_id) }}" class="cust-btn cust-btn-secondary"><i class="fi fi-rr-eye"></i></a>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">Down Payment</label>
@@ -75,10 +75,19 @@
                                     <label class="form-label fw-semibold">Down Payment</label>
                                     <p>₱{{ $joData->jo_dp }}</p>
                                 </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold">Balance</label>
-                                    <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
-                                </div>
+                                @if($joData->jo_status == 'Paid')
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-semibold">Change</label>
+                                        <p>₱{{ ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) - ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) }}</p>
+                                    </div>
+                                @else
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-semibold">Balance</label>
+                                        <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
+                                    </div>
+                                @endif
+
+                                
                                 @session('promt-s')
                                     <div class="col-md-12">
                                         <div class="text-success small mt-1">{{ $value }}</div>
@@ -119,7 +128,7 @@
                                                 <button type="submit" class="cust-btn cust-btn-primary w-100">Pay</button>
                                             </div>
 
-                                            @if(!$joData->ba_id)                                               
+                                            @if(!$joData->ba_id && $joData->ra)                                               
                                                     
                                                 <div class="col-md-5">
                                                     <label for="" class="form-label fw-semibold text-secondary">Apply Burial Assistance</label>
@@ -458,54 +467,123 @@
                                 <h5 class="cust-sub-title">Package Items and Equipment:</h5>
                             </div>
                             <div class="col-md-6">
-                                <h4>Item:</h4>
-                                <div class="row cust-underline">
-                                    <div class="col col-3">Name</div>
-                                    <div class="col col-3">Size</div>
-                                    <div class="col col-3">Qty. Used</div>
-                                    <div class="col col-3">Qty. Depl.</div>
-                                </div>
-                                @php
-                                    $oldStoDepl = old('stoDepl', ['']);
-                                @endphp
-                                @foreach($pkgStoData as $row)
-                                    <div class="row cust-underline-secondary mt-1">
-                                        <div class="col col-3">{{ $row->pkgStoToSto->item_name }}</div>
-                                        <div class="col col-3">{{ $row->pkgStoToSto->item_size }}</div>
-                                        <div class="col col-3">{{ $row->stock_used }}</div>
-                                        <div class="col col-3">{{ $row->stock_used }}
-                                            <input type="text" name="stoId[]" value="{{ $row->pkgStoToSto->id }}" hidden>
-                                            <input type="text" name="stoDepl[]" value="{{ $row->stock_used }}" hidden>
-
-                                        </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Item:</h4>
                                     </div>
-                                @endforeach
+                                    <div class="col-md-12 cust-max-500">
+                                         @foreach($pkgStoData as $row)
+                                            <div class="row cust-underline-secondary mt-1">
+                                                <div class="col col-4">
+                                                    <label class="form-label fw-semibold text-secondary">Name</label>
+                                                    <p>{{ $row->pkgStoToSto->item_name }}</p>
+                                                </div>
+                                                <div class="col col-4">
+                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <p>{{ $row->pkgStoToSto->item_size }}</p>
+                                                </div>
+                                                <div class="col col-4">
+                                                    <label class="form-label fw-semibold text-secondary">In Stock</label>
+                                                    <p>{{ $row->pkgStoToSto->item_qty }}</p>
+                                                </div>
+                                                <div class="w-100"></div>
+                                                <div class="col col-6">
+                                                    <input type="text" name="stoId[]" value="{{ $row->pkgStoToSto->id }}" hidden>
+                                                    <div class="row">
+                                                        <div class="col col-auto cust-underline-secondary">
+                                                            Deploy Quantity
+                                                        </div>
+                                                        <div class="w-100"></div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label fw-semibold text-secondary">Quantity</label>
+                                                            <p>{{ $row->stock_used }}</p>
+                                                            <input type="text" name="stoDepl[]" value="{{ $row->stock_used }}" hidden>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label fw-semibold text-secondary">Quantity</label>
+                                                            <p>{{ $row->stock_used_set }}</p>
+                                                            <input type="text" name="stoDeplSet[]" value="{{ $row->stock_used_set }}" hidden>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="col-md-6">
-                        
-                                <h4>Equipment:</h4>
-                                <div class="row cust-underline">
-                                    <div class="col col-3">Name</div>
-                                    <div class="col col-3">Size</div>
-                                    <div class="col col-3">Qty. Used</div>
-                                    <div class="col col-3">Qty. Depl.</div>
-                                </div>
-                                @foreach($pkgEqData as $row)
-                                    <div class="row cust-underline-secondary mt-1">
-                                        <div class="col col-3">{{ $row->pkgEqToEq->eq_name }}</div>
-                                        <div class="col col-3">{{ $row->pkgEqToEq->eq_size }}</div>
-                                        <div class="col col-3">{{ $row->eq_used }}</div>
-                                        <div class="col col-3">
-                                            <input type="text" name="eqId[]" value="{{ $row->pkgEqToEq->id }}" hidden>
-                                            <input type="number" class="form-input w-100 mb-1" name="eqDepl[]"
-                                                value="{{ old('eqDepl.' . $loop->index, $row->eq_used) }}">
-
-                                            @error("eqDepl." . $loop->index)
-                                                <small class="text-danger">{{ $message }}</small> 
-                                            @enderror 
-                                        </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Equipment:</h4>
                                     </div>
-                                @endforeach
+                                    <div class="col-md-12 cust-max-500">
+                                        @foreach($pkgEqData as $row)
+                                            <div class="row cust-underline-secondary mt-1">
+                                                <div class="col col-4">
+                                                    <label class="form-label fw-semibold text-secondary">Name</label>
+                                                    <p>{{ $row->pkgEqToEq->eq_name }}</p>
+                                                </div>
+                                                <div class="col col-4">
+                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <p>{{ $row->pkgEqToEq->eq_size }}</p>
+                                                </div>
+                                                <div class="col col-4">
+                                                    <label class="form-label fw-semibold text-secondary">Available</label>
+                                                    <p>{{ $row->pkgEqToEq->eq_available }}</p>
+                                                </div>
+                                                <div class="w-100"></div>
+                                                <div class="col col-6">
+                                                    <input type="text" name="eqId[]" value="{{ $row->pkgEqToEq->id }}" hidden>
+                                                    <div class="row">
+                                                        <div class="col col-auto cust-underline-secondary">
+                                                            Inital Quantity
+                                                        </div>
+                                                        <div class="w-100"></div>
+                                                        <div class="col col-6">
+                                                            <label class="form-label fw-semibold text-secondary">Quantity</label>
+                                                            <p>{{ $row->eq_used }}</p>
+                                                        </div>
+                                                        <div class="col col-6">
+                                                            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                            <p>{{ $row->eq_used_set }}</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="col col-6">
+                                                    <div class="row">
+                                                        <div class="col col-auto cust-underline-secondary">
+                                                            Deploy Quantity
+                                                        </div>
+                                                        <div class="w-100"></div>
+                                                        <div class="col col-6">
+                                                            <label class="form-label fw-semibold text-secondary">Quantity</label>
+                                                            <input type="number" class="form-input w-100 mb-1" name="eqDepl[]"
+                                                                value="{{ old('eqDepl.' . $loop->index, $row->eq_used) }}">
+
+                                                            @error("eqDepl." . $loop->index)
+                                                                <small class="text-danger">{{ $message }}</small> 
+                                                            @enderror 
+                                                        </div>
+                                                        <div class="col col-6">
+                                                            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                            <input type="number" class="form-input w-100 mb-1" name="eqDeplSet[]"
+                                                                value="{{ old('eqDeplSet.' . $loop->index, $row->eq_used_set) }}">
+
+                                                            @error("eqDeplSet." . $loop->index)
+                                                                <small class="text-danger">{{ $message }}</small> 
+                                                            @enderror 
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                
+                                
                             </div>
                         </div>
 

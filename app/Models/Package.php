@@ -9,8 +9,7 @@ class Package extends Model
     protected $table = 'packages';
     protected $fillable = [
         'pkg_name',
-        'pkg_price',
-        'svc_id'
+        'pkg_price'
     ];
 
     public function pkgToPkgEq()

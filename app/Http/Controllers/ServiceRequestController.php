@@ -55,8 +55,8 @@ class ServiceRequestController extends Controller
     public function store(Request $request)
     {
         $request->validate([ 
-            'clientName' => 'required',
-            'clientConNum' => 'required',
+            'clientName' => 'required|regex:/^[A-Za-z0-9\s\.\'-]+$/|min:1|max:100',
+            'clientConNum' => 'required|regex:/^[0-9]{11}$/',
             'address' => 'required|max:150',
             'vehicle' => 'required_without:embalm',
             'embalm'  => 'required_without:vehicle',
@@ -72,7 +72,13 @@ class ServiceRequestController extends Controller
             ]
         ], [
             'clientName.required' => 'This field is required.',
+            'clientName.regex' => 'Not a valid name.',
+            'clientName.min' => 'At least 1 or more characters.',
+            'clientName.max' => '100 charaters limit reached.',
+
             'clientConNum.required' => 'This field is required.',
+            'clientConNum.regex' => 'Not a valid number.',
+
             'svcDate.required' => 'This field is required.',
             'svcDate.after_or_equal' => 'Date must be today or after.',
 

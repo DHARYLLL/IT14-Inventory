@@ -16,9 +16,6 @@ return new class extends Migration
             $table->string('pkg_name', 50)->unique();
             $table->decimal('pkg_price', 8,2);
 
-            $table->unsignedBigInteger('svc_id')->nullable();
-            $table->foreign('svc_id')->references('id')->on('services_requests')->onUpdate('cascade')->nullOnDelete();
-
             $table->timestamps();
         });
     }

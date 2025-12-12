@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('civil_status',20);
             $table->string('religion', 50);
 
-            $table->unsignedBigInteger('bur_asst_id');
-            $table->foreign('bur_asst_id')->references('id')->on('burial_assistance')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('ba_id');
+            $table->foreign('ba_id')->references('id')->on('burial_assistance')->onUpdate('cascade')->onDelete('cascade');
 
             $table->timestamps();
         });

@@ -697,6 +697,11 @@ body {
     height: 90%;
 }
 
+.cust-max-500 {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
 .cust-time {
     border: .5px #ced4da solid;
     cursor: pointer;

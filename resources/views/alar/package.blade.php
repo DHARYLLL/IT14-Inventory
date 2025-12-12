@@ -50,18 +50,36 @@
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
                                 @if(session("empRole") == 'sadmin' || session("empRole") == 'admin')
-                                    <form action="{{ route('Package.destroy', $row->id) }}" method="POST" class="m-0">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"
-                                            class="cust-btn cust-btn-danger-secondary btn-md">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
+                                    <!-- Delte Button -->
+                                    <button type="button" class="cust-btn cust-btn-danger-secondary" data-bs-toggle="modal" data-bs-target="#delete{{ $row->id }}">
+                                    <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
+                                    </button>
                                 @endif
                                 
                             </div>
                         </td>
+                        <!-- Delete Modal -->
+                        <div class="modal fade" id="delete{{ $row->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="delete{{ $row->id }}Label" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="delete{{ $row->id }}Label">Delete Package</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{{ route('Package.destroy', $row->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <div class="modal-body">
+                                        Are you sure you want to Delete {{ $row->pkg_name }}?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="cust-btn cust-btn-danger-primary">Delete</button>
+                                    </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </tr>
                 @endforeach
             @endif

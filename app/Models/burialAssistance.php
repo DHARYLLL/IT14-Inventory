@@ -15,20 +15,20 @@ class BurialAssistance extends Model
     public function burAsstToJo() {
         return $this->hasOne(jobOrder::class, 'ba_id');
     }
-
+    
     public function burAsstToBac() {
-        return $this->hasOne(BAClientInfos::class, 'bur_asst_id');
+        return $this->hasOne(BAClientInfos::class, 'ba_id');
     }
 
     public function burAsstToBam() {
-        return $this->hasOne(BAMotherInfos::class, 'bur_asst_id');
+        return $this->hasOne(BAMotherInfos::class, 'ba_id');
     }
 
     public function burAsstToBaf() {
-        return $this->hasOne(BAFatherInfos::class, 'bur_asst_id');
+        return $this->hasOne(BAFatherInfos::class, 'ba_id');
     }
 
     public function burAsstToBao() {
-        return $this->hasOne(BAOtherInfos::class, 'bur_asst_id');
+        return $this->hasOne(BAOtherInfos::class, 'ba_id');
     }
 }

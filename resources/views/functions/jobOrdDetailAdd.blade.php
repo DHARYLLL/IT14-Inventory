@@ -37,7 +37,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="vehicle" class="form-label">Vehicle <span class="text-danger">*</span></label>
-                            <select name="vehicle" id="vehicle" class="form-select">
+                            <select name="vehicle" id="vehicle" class="form-select" >
                                 <option value="">None</option>
 
                                 @foreach ($vehData as $data)
@@ -52,6 +52,24 @@
                             @enderror
                         
                         </div>
+                        <div class="col-md-4">
+                            <label for="embalm" class="form-label">Embalmer <span class="text-danger">*</span></label>
+                            <select name="embalm" id="embalm" class="form-select" >
+                                <option value="">None</option>
+
+                                @foreach ($embalmData as $data)
+                                    <option value="{{ $data->id }}" {{ old('embalm') == $data->id ? 'selected' : '' }}>
+                                        {{ $data->embalmer_name }}
+                                    </option>
+                                @endforeach
+                        
+                            </select>
+                            @error('embalm')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        
+                        </div>
+
                         <div class="col-md-4">
                             <label for="chapel" class="form-label">Chapel</label>
                             <select name="chapel" id="chapel" class="form-select" onchange="PriceChap()">

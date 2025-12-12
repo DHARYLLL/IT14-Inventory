@@ -8,12 +8,9 @@ class ServiceRequest extends Model
 {
     protected $table = 'services_requests';
     protected $fillable = [
-        /*
-        'svc_name',
-        'svc_amount',
-        */
         'veh_id',
-        'prep_id'
+        'prep_id',
+        'svc_status'
     ];
 
 

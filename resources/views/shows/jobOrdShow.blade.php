@@ -75,10 +75,17 @@
                                     <label class="form-label fw-semibold">Down Payment</label>
                                     <p>₱{{ $joData->jo_dp }}</p>
                                 </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold">Balance</label>
-                                    <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
-                                </div>
+                                @if($joData->jo_status == 'Paid')
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-semibold">Change</label>
+                                        <p>₱{{ ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) - ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) }}</p>
+                                    </div>
+                                @else
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-semibold">Balance</label>
+                                        <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
+                                    </div>
+                                @endif
                                 @session('promt-s')
                                     <div class="col-md-12">
                                         <div class="text-success small mt-1">{{ $value }}</div>
@@ -141,18 +148,13 @@
                                 <label class="form-label fw-semibold">Deceased Name</label>
                                 <p>{{ $jodData->dec_name }}</p>
                             </div>
-                            <div class="w-100"></div>
-                             <div class="col-md-4">
+                            <div class="col-md-4">
                                 <label class="form-label fw-semibold">Birth Date</label>
                                 <p>{{ \Carbon\Carbon::parse($jodData->dec_born_date)->format('d/M/Y') }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Died Date</label>
                                 <p>{{ \Carbon\Carbon::parse($jodData->dec_died_date)->format('d/M/Y') }}</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Casue of Death</label>
-                                <p>{{ $jodData->dec_cause_of_death }}</p>
                             </div>
 
                         </div>
@@ -260,42 +262,81 @@
                             <h5 class="cust-sub-title">Package Items and Equipment:</h5>
                         </div>
                         <div class="col-md-6">
-                            <h4>Item:</h4>
-                            <div class="row cust-underline">
-                                <div class="col col-3">Name</div>
-                                <div class="col col-3">Size</div>
-                                <div class="col col-3">Qty. Used</div>
-                                <div class="col col-3">Qty. Depl.</div>
-                            </div>
-                            @php
-                                $oldStoDepl = old('stoDepl', ['']);
-                            @endphp
-                            @foreach($pkgStoData as $row)
-                                <div class="row mt-1 cust-underline-secondary">
-                                    <div class="col col-3">{{ $row->pkgStoToSto->item_name }}</div>
-                                    <div class="col col-3">{{ $row->pkgStoToSto->item_size }}</div>
-                                    <div class="col col-3">{{ $row->stock_used }}</div>
-                                    <div class="col col-3">{{ $row->pkgStoToSto->id }}</div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Item:</h4>
+                                    <div class="row cust-underline">
+                                        <div class="col col-4">Name</div>
+                                        <div class="col col-3">Size</div>
+                                        <div class="col col-5">Qty. Depl.</div>
+                                    </div>
                                 </div>
-                            @endforeach
+                                <div class="col-md-12 cust-max-500">
+                                    @foreach($pkgStoData as $row)
+                                        <div class="row mt-1 cust-underline-secondary">
+                                            <div class="col col-4">
+                                                <label class="form-label fw-semibold text-secondary">Name</label>
+                                                <p>{{ $row->pkgStoToSto->item_name }}</p>
+                                            </div>
+                                            <div class="col col-3">
+                                                <label class="form-label fw-semibold text-secondary">Size</label>
+                                                <p>{{ $row->pkgStoToSto->item_size }}</p>
+                                            </div>
+                                            <div class="col col-5">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label fw-semibold text-secondary">Quantity</label>
+                                                        <p>{{ $row->stock_used }}</p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                        <p>{{ $row->stock_used_set }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            
                         </div>
                         <div class="col-md-6">
-                    
-                            <h4>Equipment:</h4>
-                            <div class="row cust-underline">
-                                <div class="col col-3">Name</div>
-                                <div class="col col-3">Size</div>
-                                <div class="col col-3">Qty. Used</div>
-                                <div class="col col-3">Qty. Depl.</div>
-                            </div>
-                            @foreach($tempEqData as $row)
-                                <div class="row mt-1 cust-underline-secondary">
-                                    <div class="col col-3">{{ $row->tempEqToPkgEq->pkgEqToEq->eq_name }}</div>
-                                    <div class="col col-3">{{ $row->tempEqToPkgEq->pkgEqToEq->eq_size }}</div>
-                                    <div class="col col-3">{{ $row->tempEqToPkgEq->eq_used }}</div>
-                                    <div class="col col-3">{{ $row->eq_dpl_qty }}</div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Equipment:</h4>
+                                    <div class="row cust-underline">
+                                        <div class="col col-4">Name</div>
+                                        <div class="col col-3">Size</div>
+                                        <div class="col col-5">Qty. Deployed</div>
+                                    </div>
                                 </div>
-                            @endforeach
+                                <div class="col-md-12 cust-max-500">
+                                    @foreach($tempEqData as $row)
+                                        <div class="row mt-1 cust-underline-secondary">
+                                            <div class="col col-4">
+                                                <label class="form-label fw-semibold text-secondary">Name</label>
+                                                <p>{{ $row->tempEqToPkgEq->pkgEqToEq->eq_name }}</p>
+                                            </div>
+                                            <div class="col col-3">
+                                                <label class="form-label fw-semibold text-secondary">Size</label>
+                                                <p>{{ $row->tempEqToPkgEq->pkgEqToEq->eq_size }}</p>
+                                            </div>
+                                            <div class="col col-5">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label fw-semibold text-secondary">Quantity</label>
+                                                        <p>{{ $row->eq_dpl_qty }}</p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                        <p>{{ $row->eq_dpl_qty_set }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
                     </div>
 

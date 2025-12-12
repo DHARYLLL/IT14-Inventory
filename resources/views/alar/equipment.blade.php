@@ -45,7 +45,7 @@
                 </tr>
             @else
                 @foreach ($eqData as $row)
-                    <tr>
+                    <tr class="{{ $row->eq_available <= 10 ? 'cust-warning' : ''}}">
                         <td>{{ $row->eq_name }}</td>
                         <td>{{ $row->eq_size }}</td>
                         <td>{{ $row->eq_available }}</td>

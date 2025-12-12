@@ -36,18 +36,22 @@ class VehicleController extends Controller
     {
         $request->validate([
             'driverName' => ['required',
+                            'regex:/^[A-Za-z0-9\s\.\'-]+$/',
+                            'min:1',
                             'max:50',
                             Rule::unique('vehicles', 'driver_name')
             ],
-            'contactNumber' => 'required|digits:11',
+            'contactNumber' => 'required|regex:/^[0-9]{11}$/',
             'price' => 'required|numeric|min:1|max:999999.99'
         ], [
             'driverName.required' => 'This field is required.',
+            'driverName.regex' => 'No a valid name.',
+            'driverName.min' => 'At least 1 or more characters.',
             'driverName.max' => '50 characters limit reached.',
-            'driverName.unique' => 'Similar Driver is already added.',
+            'driverName.unique' => 'Driver is already added.',
 
             'contactNumber.required' => 'This field is required.',
-            'contactNumber.digits' => 'Not a valid number.',
+            'contactNumber.regex' => 'Not a valid number.',
 
             'price.required' => 'This field is required.',
             'price.numeric' => 'Number only.',

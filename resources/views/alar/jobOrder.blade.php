@@ -38,7 +38,7 @@
                 <th class="fw-semibold">Casket</th>
                 <th class="fw-semibold">Amount</th>
                 <th class="fw-semibold">Contact #</th>
-                <th class="fw-semibold">Action</th>
+                <th class="col col-md-2 fw-semibold text-center">Action</th>
             </tr>
         </thead>
     
@@ -61,7 +61,7 @@
                                 @csrf
                                 @method('put')
                                 <label>
-                                    <input type="checkbox" name="status" class="raCheckbox" {{ $row->ra ? 'checked' : '' }}>
+                                    <input type="checkbox" name="status" class="raCheckbox" {{ $row->ra ? 'checked' : '' }} {{ $row->ba_id ? 'disabled' : '' }}>
                                 </label>
                             </form>
                         </td>
@@ -69,41 +69,43 @@
                         <td>{{ $row->jod_id ? $row->joToJod->jodToPkg->pkg_name : 'N/A' }}</td>
                         <td>{{ $row->jo_status == "Paid" ? $row->jo_status :$row->jo_total }}</td>
                         <td>{{ $row->client_contact_number ?? '—' }}</td>
-                        <td>
+                        <td class="text-center col col-md-2">
                             
-                            @if($row->jod_id)
-                                @if($row->joToJod->jod_eq_stat == 'Pending')
-                                    <a href="{{ route('Job-Order.showDeploy', $row->id) }}"
-                                        class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Deploy">
-                                        <i class="bi bi-box-arrow-up"></i>
-                                    </a>
-                                @endif 
-                                @if($row->joToJod->jod_eq_stat == 'Deployed')
-                                    <a href="{{ route('Job-Order.showReturn', $row->id) }}"
-                                        class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Return">
-                                        <i class="bi bi-box-arrow-in-down"></i>
-                                    </a>
-                                @endif 
-                                @if($row->joToJod->jod_eq_stat == 'Returned')
-                                    <a href="{{ route('Job-Order.show', $row->id) }}"
-                                        class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                        <i class="fi fi-rr-eye"></i>                              
-                                    </a>
-                                @endif 
-                            @endif
-                            @if($row->svc_id)
-                                @if($row->jo_status == 'Paid')
-                                    <a href="{{ route('Service-Request.show', $row->id) }}"
-                                        class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                        <i class="fi fi-rr-eye"></i>
-                                    </a>
-                                @else
-                                    <a href="{{ route('Service-Request.show', $row->id) }}"
-                                        class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Review">
-                                        <i class="bi bi-list-ul"></i>
-                                    </a>
-                                @endif                                  
-                            @endif                      
+                            <div class="d-inline-flex justify-content-center gap-2">
+                                @if($row->jod_id)
+                                    @if($row->joToJod->jod_eq_stat == 'Pending')
+                                        <a href="{{ route('Job-Order.showDeploy', $row->id) }}"
+                                            class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Deploy">
+                                            <i class="bi bi-box-arrow-up"></i>
+                                        </a>
+                                    @endif
+                                    @if($row->joToJod->jod_eq_stat == 'Deployed')
+                                        <a href="{{ route('Job-Order.showReturn', $row->id) }}"
+                                            class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Return">
+                                            <i class="bi bi-box-arrow-in-down"></i>
+                                        </a>
+                                    @endif
+                                    @if($row->joToJod->jod_eq_stat == 'Returned')
+                                        <a href="{{ route('Job-Order.show', $row->id) }}"
+                                            class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                            <i class="fi fi-rr-eye"></i>
+                                        </a>
+                                    @endif
+                                @endif
+                                @if($row->svc_id)
+                                    @if($row->jo_status == 'Paid')
+                                        <a href="{{ route('Service-Request.show', $row->id) }}"
+                                            class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                            <i class="fi fi-rr-eye"></i>
+                                        </a>
+                                    @else
+                                        <a href="{{ route('Service-Request.show', $row->id) }}"
+                                            class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Review Service">
+                                            <i class="bi bi-list-ul"></i>
+                                        </a>
+                                    @endif
+                                @endif
+                            </div>                     
                            
                         </td>
                     </tr>

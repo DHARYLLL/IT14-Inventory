@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dashboard;
 use App\Http\Controllers\Controller;
+use App\Models\Equipment;
 use App\Models\Invoice;
 use App\Models\jobOrder;
 use App\Models\Log;
@@ -21,9 +22,14 @@ class DashboardController extends Controller
         $stockData = Stock::all();
         $lowStockData = Stock::where('item_qty', '<', 11)->get();
         $noStockData = Stock::where('item_qty', '=', 0)->get();
-        $logData = Log::latest()->take(10)->get();
 
-        $jobOrdData = jobOrder::where('jo_start_date', '=', Carbon::today())->orderBy('jo_start_date', 'desc')->get();
+        $eqData = Equipment::all();
+        $lowEqData = Equipment::whereRaw('eq_available + eq_in_use < ?', [11])->get();
+        $noEqData = Equipment::whereRaw('eq_available + eq_in_use <= ?', [0])->get();
+
+        $jobOrdData = jobOrder::where('jo_start_date', '<=', Carbon::today())->
+                                where('jo_burial_date', '>=', Carbon::today())->
+                                orderBy('jo_start_date', 'desc')->get();
 
         $getValue = Invoice::select('total')->whereMonth('invoice_date', date('m'))->get();
         $set = array();
@@ -37,7 +43,8 @@ class DashboardController extends Controller
         $getAv = count($getValue) > 0 ? array_sum($set) / count($getValue) : 0;
 
         return view('alar.dashboard', ['stockData' => $stockData, 'lowStockData' => $lowStockData, 
-        'noStockData' => $noStockData, 'logData' => $logData, 'getAv' => $getAv, 'jobOrdData' => $jobOrdData]);
+        'noStockData' => $noStockData, 'getAv' => $getAv, 'jobOrdData' => $jobOrdData,
+        'eqData' => $eqData, 'lowEqData' => $lowEqData, 'noEqData' => $noEqData]);
     }
 
     /**

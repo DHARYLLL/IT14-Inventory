@@ -14,10 +14,10 @@ class BAOtherInfos extends Model
         'civil_status',
         'religion',
         'relationship',
-        'bur_asst_id'
+        'ba_id'
     ];
 
     public function baoToBurAsst() {
-        return $this->belongsTo(BurialAssistance::class, 'bur_asst_id');
+        return $this->belongsTo(BurialAssistance::class, 'ba_id');
     }
 }

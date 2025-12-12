@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('pkg_eq_id')->references('id')->on('pkg_equipment')->onUpdate('cascade')->nullOnDelete();
 
             $table->smallInteger('eq_dpl_qty');
+            $table->smallInteger('eq_dpl_qty_set');
 
             $table->timestamps();
         });

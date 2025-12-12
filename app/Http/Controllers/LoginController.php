@@ -79,6 +79,7 @@ class LoginController extends Controller
                 Log::create([
                     'transaction' => 'Update',
                     'tx_desc' => 'Change Password | ID: ' . $id,
+                    'tx_date' => Carbon::now(),
                     'emp_id' => session('loginId')
                 ]);
 
@@ -94,6 +95,12 @@ class LoginController extends Controller
     }
 
     public function logout(Request $request){
+        Log::create([
+            'transaction' => 'Logout',
+            'tx_desc' => 'Logout Employee | ID: ' . session('loginId'),
+            'tx_date' => Carbon::now(),
+            'emp_id' => session('loginId')
+        ]);
         $request->session()->invalidate();
         $request->session()->flush();
         return redirect(route('showLogin'));

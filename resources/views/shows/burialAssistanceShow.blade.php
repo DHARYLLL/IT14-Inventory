@@ -51,41 +51,41 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="clientName" class="form-label">Last Name:</label>
-                                <p>{{ $burrAsstData->burAsstToBac->cli_lname }}</p>
+                                <p>{{ $cliData->cli_lname }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="clientName" class="form-label">First Name:</label>
-                                <p>{{ $burrAsstData->burAsstToBac->cli_fname }}</p>
+                                <p>{{ $cliData->cli_fname }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="clientName" class="form-label">Middle Name:</label>
-                                <p>{{ $burrAsstData->burAsstToBac->cli_mname }}</p>
+                                <p>{{ $cliData->cli_mname }}</p>
                             </div>
 
                             <div class="col-md-4">
                                 <label for="address" class="form-label">Address:</label>
-                                <p>{{ $burrAsstData->burAsstToBac->address }}</p>
+                                <p>{{ $cliData->address }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="civilStatus" class="form-label">Civil Status:</label>
-                                <p>{{ $burrAsstData->burAsstToBac->civil_status }}</p>
+                                <p>{{ $cliData->civil_status }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="religion" class="form-label">Religion:</label>
-                                <p>{{ $burrAsstData->burAsstToBac->religion }}</p>
+                                <p>{{ $cliData->religion }}</p>
                             </div>
 
                             <div class="col-md-4">
                                 <label for="birthDate" class="form-label">Birthdate:</label>
-                                <p>{{ $burrAsstData->burAsstToBac->birthdate }}</p>
+                                <p>{{ $cliData->birthdate }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="gender" class="form-label">Gender:</label>
-                                <p>{{ $burrAsstData->burAsstToBac->gender }}</p>
+                                <p>{{ $cliData->gender }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="rotd" class="form-label">Relationship to the Deceased:</label>
-                                <p>{{ $burrAsstData->burAsstToBac->rel_to_the_dec }}</p>
+                                <p>{{ $cliData->rel_to_the_dec }}</p>
                             </div>
                         </div>
 
@@ -104,23 +104,23 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="motherLname" class="form-label">Last Name:</label>
-                                <p>{{ $burrAsstData->burAsstToBam->lname ?? 'N/A' }}</p>
+                                <p>{{ $momData->lname ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="motherFname" class="form-label">First Name:</label>
-                                <p>{{ $burrAsstData->burAsstToBam->fname ?? 'N/A' }}</p>
+                                <p>{{ $momData->fname ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="motherMname" class="form-label">Middle Name:</label>
-                                <p>{{ $burrAsstData->burAsstToBam->mname ?? 'N/A' }}</p>
+                                <p>{{ $momData->mname ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="momCivilStatus" class="form-label">Civil Status:</label>
-                                <p>{{ $burrAsstData->burAsstToBam->civil_status ?? 'N/A' }}</p>
+                                <p>{{ $momData->civil_status ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="momReligion" class="form-label">Religion:</label>
-                                <p>{{ $burrAsstData->burAsstToBam->religion ?? 'N/A' }}</p>
+                                <p>{{ $momData->religion ?? 'N/A' }}</p>
                             </div>
                         </div>
                     </div>
@@ -136,23 +136,23 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="fatherLname" class="form-label">Last Name:</label>
-                                <p>{{ $burrAsstData->burAsstToBaf->lname ?? 'N/A' }}</p>
+                                <p>{{ $fatherData->lname ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="fatherFname" class="form-label">First Name:</label>
-                                <p>{{ $burrAsstData->burAsstToBaf->fname ?? 'N/A' }}</p>
+                                <p>{{ $fatherData->fname ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="fatherMname" class="form-label">Middle Name:</label>
-                                <p>{{ $burrAsstData->burAsstToBaf->mname ?? 'N/A' }}</p>
+                                <p>{{ $fatherData->mname ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="fatherCivilStatus" class="form-label">Civil Status:</label>
-                                <p>{{ $burrAsstData->burAsstToBaf->civil_status ?? 'N/A' }}</p>
+                                <p>{{ $fatherData->civil_status ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="fatherReligion" class="form-label">Religion:</label>
-                                <p>{{ $burrAsstData->burAsstToBaf->religion ?? 'N/A' }}</p>
+                                <p>{{ $fatherData->religion ?? 'N/A' }}</p>
                             </div>
                         </div>
                     </div>
@@ -174,28 +174,28 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="otherLname" class="form-label">Last Name:</label>
-                                <p>{{ $burrAsstData->burAsstToBao->lname ?? 'N/A' }}</p>
+                                <p>{{ $otherData->lname ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="otherFname" class="form-label">First Name:</label>
-                                <p>{{ $burrAsstData->burAsstToBao->fname ?? 'N/A' }}</p>
+                                <p>{{ $otherData->fname ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="otherMname" class="form-label">Middle Name:</label>
-                                <p>{{ $burrAsstData->burAsstToBao->mname ?? 'N/A' }}</p>
+                                <p>{{ $otherData->mname ?? 'N/A' }}</p>
                             </div>
 
                             <div class="col-md-4">
                                 <label for="otherCivilStatus" class="form-label">Civil Status:</label>
-                                <p>{{ $burrAsstData->burAsstToBao->civil_status ?? 'N/A' }}</p>
+                                <p>{{ $otherData->civil_status ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="otherReligion" class="form-label">Religion:</label>
-                                <p>{{ $burrAsstData->burAsstToBao->religion ?? 'N/A' }}</p>
+                                <p>{{ $otherData->religion ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-4">
                                 <label for="relationship" class="form-label">Relationship</label>
-                                <p>{{ $burrAsstData->burAsstToBao->relationship ?? 'N/A' }}</p>
+                                <p>{{ $otherData->relationship ?? 'N/A' }}</p>
                             </div>
                             
                         </div>            
@@ -214,7 +214,7 @@
                     </div>
 
                     <div class="col col-auto">
-                        <a href="{{ route('Burial-Assistance.back', $burrAsstData->jo_id) }}" class="cust-btn cust-btn-secondary"><i
+                        <a href="{{ route('Burial-Assistance.back', $burrAsstData->id) }}" class="cust-btn cust-btn-secondary"><i
                             class="bi bi-arrow-left"></i>
                             <span>Back</span>
                         </a>
