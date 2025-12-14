@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Models\Log;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class EquipmentController extends Controller
 {
@@ -91,21 +92,31 @@ class EquipmentController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'eqName' => "required|min:5|max:100",
-            'size' => "required|min:1|max:20"
+            'eqName' => ['required',
+                            'max:100',
+                            Rule::unique('equipments', 'eq_name')
+                            ->where('eq_size', $request->size)
+                            ->ignore($id)
+            ],
+            'size' => "required|max:20",
+            'eqLimit' => 'required|integer|min:1|max:999999.99'
         ],  [
             'eqName.required' => 'This field is required.',
-            'eqName.min' => '5 - 100 Characters only.',
-            'eqName.max' => '5 - 100 Characters only.',
+            'eqName.unique' => 'Equipment already added.',
+            'eqName.max' => '100 Characters limit reached.',
 
             'size.required' => 'This field is required.',
-            'size.min' => '1 - 20 Characters only.',
-            'size.max' => '1 - 20 Characters only.',
+            'size.max' => '20 Characters limit reached.',
+
+            'eqLimit.required' => 'This field is required.',
+            'eqLimit.min' => 'Limit must be 1 or more.',
+            'eqLimit.max' => '6 digits limit reached.',
         ]);
 
         Equipment::findOrFail($id)->update([
             'eq_name' => $request->eqName,
-            'eq_size' => $request->size
+            'eq_size' => $request->size,
+            'eq_low_limit' => $request->eqLimit
         ]);
 
         Log::create([

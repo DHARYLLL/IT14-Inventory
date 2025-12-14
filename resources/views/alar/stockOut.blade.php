@@ -34,7 +34,7 @@
             <tbody id="tableBody">
                 @if ($stoOutData->isEmpty())
                     <tr>
-                        <td colspan="6" class="text-center text-secondary py-3">
+                        <td colspan="7" class="text-center text-secondary py-3">
                             No Items has been Stock Out.
                         </td>
                     </tr>

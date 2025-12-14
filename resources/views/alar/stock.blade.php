@@ -22,7 +22,7 @@
                 <tr class="table-white">
                     <th class="fw-semibold">Item #</th>
                     <th class="fw-semibold">Item Name</th>
-                    <th class="fw-semibold">Size</th>
+                    <th class="fw-semibold">Size/Unit</th>
                     <th class="fw-semibold">Item Quantity</th>
                     <th class="fw-semibold">Action</th>
                 </tr>
@@ -37,11 +37,11 @@
                     </tr>
                 @else
                     @foreach ($stoData as $row)
-                        <tr class="{{ $row->item_qty <= 10 ? 'cust-warning' : ''}}">
+                        <tr>
                             <td>{{ $row->id }}</td>
                             <td>{{ $row->item_name }}</td>
                             <td>{{ $row->item_size}}</td>
-                            <td>{{ $row->item_qty }}</td>
+                            <td><span class="{{ $row->item_qty <= $row->item_low_limit ? 'badge rounded-pill text-bg-warning' : ''}}">{{ $row->item_qty }}</span></td>
                             <td>
                                 <a href="{{ route('Stock.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" 
                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">

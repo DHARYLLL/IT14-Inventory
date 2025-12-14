@@ -16,6 +16,7 @@ use App\Http\Controllers\LogController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\packageInclusionController;
+use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\pkgEquipmentController;
 use App\Http\Controllers\pkgStockController;
 use App\Http\Controllers\PurchaseOrderController;
@@ -96,6 +97,7 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::put('Job-Order/{id}/Pay', [JobOrderController::class, 'payAmount'])->name('Job-Order.pay');
 
     Route::resource('Add-Wake', AddWakeController::class);
+    Route::resource('Personnel' , PersonnelController::class);
 
     Route::resource('Burial-Assistance', BurialAssistanceController::class);
     Route::get('Burial-Assistance/{id}/Back', [BurialAssistanceController::class, 'burrAsstBack'])->name('Burial-Assistance.back');

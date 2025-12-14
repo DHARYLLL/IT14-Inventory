@@ -79,13 +79,13 @@ class PurchaseOrderController extends Controller
 
         $newItem = array();     
         $newItemSize = array();
-        $newItemUnitPrice = array();
         $newItemType = array();
+        $newItemLimit = array();
         
         $newEquipment = array();  
         $newEquipmentSize = array();
-        $newEquipmentUnitPrice = array();
         $newEquipmentType = array();
+        $newEquipmentLimit = array();
         
         //dd($item, $qty, $qtySet, $size, $unitPrice, $type);
         //dd($qty[0] * ($qtySet[0] = 0 ? 1 : $qtySet[0]));
@@ -96,8 +96,8 @@ class PurchaseOrderController extends Controller
                 if (Stock::where('item_name', '=', $item[$i])->where('item_size', '=', $size[$i])->doesntExist()) {
                     array_push($newItem, $item[$i]);
                     array_push($newItemSize, $size[$i]);
-                    array_push($newItemUnitPrice, $unitPrice[$i]);
                     array_push($newItemType, $type[$i]);
+                    array_push($newItemLimit, $qtySet[$i] * 10);
                 }
             }
 
@@ -107,8 +107,8 @@ class PurchaseOrderController extends Controller
 
                     array_push($newEquipment, $item[$i]);
                     array_push($newEquipmentSize, $size[$i]);
-                    array_push($newEquipmentUnitPrice, $unitPrice[$i]);
                     array_push($newEquipmentType, $type[$i]);
+                    array_push($newEquipmentLimit, $qtySet[$i] * 10);
                 }
             }
         }
@@ -122,8 +122,8 @@ class PurchaseOrderController extends Controller
                     'item_name' => $newItem[$i],
                     'item_qty' => 0,
                     'item_size' => $newItemSize[$i],
-                    'item_unit_price' => $newItemUnitPrice[$i],
-                    'item_type' => $newItemType[$i]
+                    'item_type' => $newItemType[$i],
+                    'item_low_limit' => $newItemLimit[$i]
                 ]);
             }
         }
@@ -135,8 +135,8 @@ class PurchaseOrderController extends Controller
                     'eq_type' => $newEquipmentType[$i],
                     'eq_available' => 0,
                     'eq_size' => $newEquipmentSize[$i],
-                    'eq_unit_price' => $newEquipmentUnitPrice[$i],
-                    'eq_in_use' => 0
+                    'eq_in_use' => 0,
+                    'eq_low_limit' => $newEquipmentLimit[$i]
                 ]);
             }
         }

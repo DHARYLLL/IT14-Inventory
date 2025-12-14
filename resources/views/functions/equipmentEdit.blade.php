@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label fw-semibold">Size</label>
+                    <label class="form-label fw-semibold">Size/Unit</label>
                     <input type="text" class="form-control" name="size" value="{{ old('size', $eqData->eq_size) }}">
                     @error('size')
                         <div class="text-danger small mt-1">{{ $message }}</div>
@@ -42,6 +42,11 @@
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Item Type</label>
                     <input type="text" class="form-control" value="{{ $eqData->eq_type }}" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Equipment Item Limit</label>
+                    <input type="number" class="form-control" name="eqLimit" value="{{ $eqData->eq_low_limit }}">
                 </div>
             </div>
 

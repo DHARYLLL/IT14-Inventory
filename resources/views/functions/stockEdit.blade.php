@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label fw-semibold">Size</label>
+                    <label class="form-label fw-semibold">Size/Unit</label>
                     <input type="text" class="form-control" name="size" value="{{ old('size', $stockData->item_size) }}">
                     @error('size')
                         <div class="text-danger small mt-1">{{ $message }}</div>
@@ -41,6 +41,14 @@
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Item Type</label>
                     <input type="text" class="form-control" value="{{ $stockData->item_type }}" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Low Item Limit</label>
+                    <input type="number" class="form-control" name="itemLimit" value="{{ old('itemLimit', $stockData->item_low_limit) }}">
+                    @error('itemLimit')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
 

@@ -16,7 +16,7 @@
 
                         <div class="col-md-6">
                             <label for="embalmName" class="form-label">Name:</label>
-                            <input type="text" class="form-control" name="embalmName" placeholder="Embalmer name" value="{{ old('embalmName') ? old('embalmName') : $leData->embalmer_name }}">
+                            <input type="text" class="form-control" name="embalmName" placeholder="Embalmer name" value="{{ old('embalmName') ? old('embalmName') : $leData->embalmer_name }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
                             @error('embalmName')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
@@ -24,7 +24,7 @@
 
                         <div class="col-md-2">
                             <label for="embalmPrice" class="form-label">Price</label>
-                            <input type="text" class="form-control" name="embalmPrice" placeholder="Price" value="{{ old('embalmPrice') ? old('embalmPrice') : $leData->prep_price }}">
+                            <input type="text" class="form-control" name="embalmPrice" placeholder="Price" value="{{ old('embalmPrice') ? old('embalmPrice') : $leData->prep_price }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
                             @error('embalmPrice')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
@@ -34,8 +34,11 @@
                         <div class="col-md-4">
                             <div class="row justify-content-end">
                                 <div class="col-auto">
-                                    <label for="" class="form-label">Add/Remove</label>
-                                    <a href="{{ route('Embalmer.addRemItem', $leData->id) }}" class="cust-btn cust-btn-primary">Add/Remove Equipment</a>
+                                    @if(session("empRole") != 'staff')
+                                        <label for="" class="form-label">Add/Remove</label>
+                                        <a href="{{ route('Embalmer.addRemItem', $leData->id) }}" class="cust-btn cust-btn-primary">Add/Remove Equipment</a>
+                                    @endif
+                                    
                                 </div>
                             </div>
                             
@@ -54,7 +57,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     @if($leStoData->isEmpty())
-                                        <div class="row">
+                                        <div class="row mt-2 cust-white-bg mx-1">
                                             <div class="col-md-12 text-center text-secondary">No Items Included.</div>
                                         </div>
                                     @else
@@ -66,7 +69,7 @@
                                                     <input type="text" name="stoId[]" value="{{ $row->id }}" hidden>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <label class="form-label fw-semibold text-secondary">Size/Unit</label>
                                                     <p>{{ $row->pkgStoToSto->item_size }}</p>
                                                 </div>
                                                 <div class="col-md-3">
@@ -81,14 +84,14 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label fw-semibold text-secondary">Qty.</label>
-                                                            <input type="number" class="form-control" name="qty[]" value="{{ old('qty.'.$loop->index, $row->stock_used) }}">
+                                                            <input type="number" class="form-control" name="qty[]" value="{{ old('qty.'.$loop->index, $row->stock_used) }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
                                                             @error('qty.' . $loop->index)
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
-                                                            <input type="number" class="form-control" name="qtySet[]" value="{{ old('qtySet.'.$loop->index, $row->stock_used_set) }}">
+                                                            <input type="number" class="form-control" name="qtySet[]" value="{{ old('qtySet.'.$loop->index, $row->stock_used_set) }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
                                                             @error('qtySet.' . $loop->index)
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
@@ -115,8 +118,8 @@
                                 </div>
                                 <div class="col-md-12">
                                     @if($leEqData->isEmpty())
-                                        <div class="row">
-                                            <div class="col-md-12 text-center text-secondary">No Items Included.</div>
+                                        <div class="row mt-2 cust-white-bg mx-1">
+                                            <div class="col-md-12 text-center text-secondary">No Equipment Included.</div>
                                         </div>
                                     @else
                                         @foreach($leEqData as $row)
@@ -127,7 +130,7 @@
                                                     <input type="text" name="eqId[]" value="{{ $row->id }}" hidden>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <label class="form-label fw-semibold text-secondary">Size/Unit</label>
                                                     <p>{{ $row->pkgEqToEq->eq_size }}</p>
                                                 </div>
                                                 <div class="col-md-3">
@@ -142,14 +145,14 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label fw-semibold text-secondary">Qty.</label>
-                                                            <input type="number" class="form-control" name="eqQty[]" value="{{ old('eqQty.'.$loop->index, $row->eq_used) }}">
+                                                            <input type="number" class="form-control" name="eqQty[]" value="{{ old('eqQty.'.$loop->index, $row->eq_used) }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
                                                             @error('eqQty.' . $loop->index)
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
-                                                            <input type="number" class="form-control" name="eqQtySet[]" value="{{ old('eqQtySet.'.$loop->index, $row->eq_used_set) }}">
+                                                            <input type="number" class="form-control" name="eqQtySet[]" value="{{ old('eqQtySet.'.$loop->index, $row->eq_used_set) }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
                                                             @error('eqQtySet.' . $loop->index)
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
@@ -178,18 +181,21 @@
                         </div>
 
                         <div class="col col-auto">
-                            <a href="{{ route('Embalmer.index') }}" class="cust-btn cust-btn-secondary"><i
+                            <a href="{{ route('Personnel.index') }}" class="cust-btn cust-btn-secondary"><i
                                 class="bi bi-arrow-left"></i>
                                 <span>Cancel</span>
                             </a>
                         </div>
 
                         {{-- Submit Button --}}
-                        <div class="col col-auto ">
+                        @if( session("empRole") != 'staff' )
+                            <div class="col col-auto ">
                             <button type="submit" class="cust-btn cust-btn-primary"><i class="bi bi-floppy px-2"></i>
                                 Save
                             </button>      
                         </div>
+                        @endif
+                        
                     </div>
                     
                 </form>

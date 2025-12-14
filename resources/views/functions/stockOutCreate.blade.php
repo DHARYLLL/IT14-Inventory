@@ -33,7 +33,7 @@
                                             <option value="">Select Stock</option>
                                             @foreach ($stoData as $data)
                                                 <option value="{{ $data->id }},{{ $data->item_name }}:{{ $data->item_size }};{{ $data->item_qty }}">
-                                                    {{ $data->id }} — {{ $data->item_name }} {{ $data->size }}
+                                                    {{ $data->item_name }} | {{ $data->item_size }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -112,7 +112,7 @@
                                             <option value="">Select Equipment</option>
                                             @foreach ($eqData as $data)
                                                 <option value="{{ $data->id }},{{ $data->eq_name }}:{{ $data->eq_size }};{{ $data->eq_available }}">
-                                                    {{ $data->id }} — {{ $data->eq_name }}
+                                                    {{ $data->eq_name }} | {{ $data->eq_size }}
                                                 </option>
                                             @endforeach
                                         </select>

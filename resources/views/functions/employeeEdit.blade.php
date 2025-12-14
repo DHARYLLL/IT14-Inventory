@@ -89,6 +89,8 @@
                                     <option value="">Select Role</option>
                                     <option value="admin" {{ old('role', $empData->emp_role) == 'admin' ? 'selected' : '' }}>Admin</option>
                                     <option value="staff" {{ old('role', $empData->emp_role) == 'staff' ? 'selected' : '' }}>Staff</option>
+                                    <option value="embalmer" {{ old('role', $empData->emp_role) == 'embalmer' ? 'selected' : '' }}>Embalmer</option>
+                                    <option value="driver" {{ old('role', $empData->emp_role) == 'driver' ? 'selected' : '' }}>Driver</option>
                                 </select>
                                 @error('role')
                                     <p class="text-danger small mt-1">{{ $message }}</p>

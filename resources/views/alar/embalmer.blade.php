@@ -5,14 +5,14 @@
     @section('head', 'Embalmers')
 
     <div class="d-flex align-items-center justify-content-between p-2 mb-0 cust-h-heading">
-    <div class="input-group cust-searchbar">
-        <input type="text" id="searchInput" class="form-control" placeholder="Search Embalmer"
-            style="border-radius: 0; border: none;">
-        <button class="cust-btn cust-btn-search" id="clearSearch">Clear</button>
-    </div>
-    <div>
-        <a href="{{ route('Embalmer.create') }}" class="cust-btn cust-btn-primary"><i class="bi bi-plus-lg"></i> <span>Add Embalmer</span></a>
-    </div>
+        <div class="input-group cust-searchbar">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search Embalmer"
+                style="border-radius: 0; border: none;">
+            <button class="cust-btn cust-btn-search" id="clearSearch">Clear</button>
+        </div>
+        <div>
+            <a href="{{ route('Embalmer.create') }}" class="cust-btn cust-btn-primary"><i class="bi bi-plus-lg"></i> <span>Add Embalmer</span></a>
+        </div>
     </div>
 
 

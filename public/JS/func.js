@@ -37,7 +37,7 @@ if (document.getElementById('add_new')) {
             </div>
 
             <div class="col-md-2">
-                <label class="form-label fw-semibold text-secondary">Size <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold text-secondary">Size/Unit <span class="text-danger">*</span></label>
                 <input type="text" name="size[]" class="form-control shadow-sm">
             </div>
 
@@ -106,9 +106,7 @@ function setStock() {
         const template = `
             <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold text-secondary">
-                        <i class="bi bi-receipt" style="color:#60BF4F"></i> Item Name
-                    </label>
+                    <label class="form-label fw-semibold text-secondary">Item Name <span class="text-danger">*</span></label>
                     <input type="text" name="itemName[]" class="form-control shadow-sm" value="${forName}">
                 </div>
 
@@ -123,7 +121,7 @@ function setStock() {
                 </div>
 
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">Size</label>
+                    <label class="form-label fw-semibold text-secondary">Size/Unit <span class="text-danger">*</span></label>
                     <input type="text" name="size[]" class="form-control shadow-sm" value="${forSize}">
                 </div>
 
@@ -180,7 +178,7 @@ function setEquipment() {
         const template = `
             <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold text-secondary">Item Name</label>
+                    <label class="form-label fw-semibold text-secondary">Item Name <span class="text-danger">*</span></label>
                     <input type="text" name="itemName[]" class="form-control shadow-sm" value="${forName}">
                 </div>
 
@@ -195,7 +193,7 @@ function setEquipment() {
                 </div>
 
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">Size</label>
+                    <label class="form-label fw-semibold text-secondary">Size/Unit <span class="text-danger">*</span></label>
                     <input type="text" name="size[]" class="form-control shadow-sm" value="${forSize}">
                 </div>
 
@@ -303,7 +301,7 @@ function checkInputEq() {
             <input type="text" name="equipment[]" value="${forId}" hidden>
         </div>
         <div class="col-md-4">
-            <label class="form-label fw-semibold text-secondary">Size</label>
+            <label class="form-label fw-semibold text-secondary">Size/Unit</label>
             <input type="text" class="form-control" name="eqSize[]" value="${forSize}" readonly>     
         </div>
         <div class="col-md-4">
@@ -382,7 +380,7 @@ function checkInputSto() {
             <input type="text" name="stock[]" value="${forId}" hidden>
         </div>
         <div class="col-md-4">
-            <label class="form-label fw-semibold text-secondary">Size</label>
+            <label class="form-label fw-semibold text-secondary">Size/Unit</label>
             <input type="text" class="form-control" name="stoSize[]" value="${forSize}" readonly>
         </div>
         <div class="col-md-4">

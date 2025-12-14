@@ -12,6 +12,7 @@ use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class StockController extends Controller
 {
@@ -160,19 +161,31 @@ class StockController extends Controller
     public function update(Request $request, String $id)
     {
         $request->validate([
-            'itemName' => "required|max:100",
-            'size' => "required|max:20"
+            'itemName' => ['required',
+                            'max:100',
+                            Rule::unique('stocks', 'item_name')
+                            ->where('item_size', $request->size)
+                            ->ignore($id)
+            ],
+            'size' => "required|max:20",
+            'itemLimit' => 'required|integer|min:1|max:999999.99'
         ],  [
             'itemName.required' => 'This field is required.',
+            'itemName.unique' => 'Item already added.',
             'itemName.max' => '100 Characters limit reached.',
 
             'size.required' => 'This field is required.',
             'size.max' => '20 Characters limit reached.',
+
+            'itemLimit.required' => 'This field is required.',
+            'itemLimit.min' => 'Limit must be 1 or more.',
+            'itemLimit.max' => '6 digits limit reached.',
         ]);
 
         Stock::findOrFail($id)->update([
             'item_name' => $request->itemName,
             'item_size' => $request->size,
+            'item_low_limit' => $request->itemLimit
         ]);
 
         Log::create([

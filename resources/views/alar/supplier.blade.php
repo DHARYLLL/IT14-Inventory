@@ -26,7 +26,7 @@
                     <th class="fw-semibold">Contact number</th>
                     <th class="fw-semibold">Company name</th>
                     <th class="fw-semibold">Company Address</th>
-                    <th class="fw-semibold text-center">Action</th>
+                    <th class="col col-md-2 fw-semibold text-center">Action</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -43,8 +43,8 @@
                             <td>{{ $supplier->contact_number }}</td>
                             <td>{{ $supplier->company_name }}</td>
                             <td>{{ $supplier->company_address }}</td>
-                            <td class="align-middle">
-                                <div class="d-flex justify-content-center align-items-center gap-2">
+                            <td class="text-center col col-md-2">
+                                <div class="d-inline-flex justify-content-center gap-2">
                                     <button type="button" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="modal"
                                         data-bs-target="#EditSupplierModal{{ $supplier->id }}">
                                         <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top"

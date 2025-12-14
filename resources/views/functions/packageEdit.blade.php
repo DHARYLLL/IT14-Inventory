@@ -66,7 +66,7 @@
                                                     <input type="text" name="stoId[]" value="{{ $row->id }}" hidden>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <label class="form-label fw-semibold text-secondary">Size/Unit</label>
                                                     <p>{{ $row->pkgStoToSto->item_size }}</p>
                                                 </div>
                                                 <div class="col-md-3">
@@ -163,7 +163,7 @@
                                                     <input type="text" name="eqId[]" value="{{ $row->id }}" hidden>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <label class="form-label fw-semibold text-secondary">Size/Unit</label>
                                                     <p>{{ $row->pkgEqToEq->eq_size }}</p>
                                                 </div>
                                                 <div class="col-md-3">

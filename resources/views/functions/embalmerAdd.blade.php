@@ -43,7 +43,7 @@
                                             <option value="">Select Stock</option>
                                             @foreach ($stoData as $data)
                                                 <option value="{{ $data->id }},{{ $data->item_name }}:{{ $data->item_size }};{{ $data->item_qty }}">
-                                                    {{ $data->id }} — {{ $data->item_name }} {{ $data->size }}
+                                                    {{ $data->item_name }} | {{ $data->item_size }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -78,7 +78,7 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <label class="form-label fw-semibold text-secondary">Size/Unit</label>
                                                     <input type="text" class="form-control" name="stoSize[]" value="{{ $oldStoSize[$i] ?? '' }}" readonly>
                                                 </div>
                                                 <div class="col-md-4">
@@ -122,7 +122,7 @@
                                             <option value="">Select Equipment</option>
                                             @foreach ($eqData as $data)
                                                 <option value="{{ $data->id }},{{ $data->eq_name }}:{{ $data->eq_size }};{{ $data->eq_available }}">
-                                                    {{ $data->id }} — {{ $data->eq_name }}
+                                                    {{ $data->eq_name }} | {{ $data->eq_size }} 
                                                 </option>
                                             @endforeach
                                         </select>
@@ -154,7 +154,7 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label class="form-label fw-semibold text-secondary">Size</label>
+                                                    <label class="form-label fw-semibold text-secondary">Size/Unit</label>
                                                     <input type="text" class="form-control" name="eqSize[]" value="{{ $oldEqSize[$i] ?? '' }}" readonly>
                                                     @error("eqSize.$i")
                                                         <small class="text-danger">{{ $message }}</small>
@@ -311,7 +311,7 @@
                         </div>
 
                         <div class="col col-auto">
-                            <a href="{{ route('Embalmer.index') }}" class="cust-btn cust-btn-secondary"><i
+                            <a href="{{ route('Personnel.index') }}" class="cust-btn cust-btn-secondary"><i
                                 class="bi bi-arrow-left"></i>
                                 <span>Cancel</span>
                             </a>

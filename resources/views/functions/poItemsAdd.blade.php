@@ -140,7 +140,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label fw-semibold text-secondary">Size <span class="text-danger">*</span></label>
+                                    <label class="form-label fw-semibold text-secondary">Size/Unit <span class="text-danger">*</span></label>
                                     <input type="text" name="size[]" value="{{ $oldsize[$i] ?? '' }}"
                                         class="form-control shadow-sm">
                                     @error("size.$i")

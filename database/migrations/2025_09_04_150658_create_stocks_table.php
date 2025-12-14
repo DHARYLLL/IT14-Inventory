@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->string('item_name', 100)->unique();
+            $table->string('item_name', 100);
             $table->smallInteger('item_qty');
             $table->string('item_size', 20);
             $table->string('item_type', 15);
+            $table->smallInteger('item_low_limit');
 
             $table->timestamps();
 

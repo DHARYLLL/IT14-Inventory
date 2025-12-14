@@ -20,11 +20,11 @@ class DashboardController extends Controller
     public function index()
     {
         $stockData = Stock::all();
-        $lowStockData = Stock::where('item_qty', '<', 11)->get();
+        $lowStockData = Stock::whereColumn('item_qty', '<=', 'item_low_limit')->get();
         $noStockData = Stock::where('item_qty', '=', 0)->get();
 
         $eqData = Equipment::all();
-        $lowEqData = Equipment::whereRaw('eq_available + eq_in_use < ?', [11])->get();
+        $lowEqData = Equipment::whereRaw('eq_available + eq_in_use <= eq_low_limit')->get();
         $noEqData = Equipment::whereRaw('eq_available + eq_in_use <= ?', [0])->get();
 
         $jobOrdData = jobOrder::where('jo_start_date', '<=', Carbon::today())->

@@ -61,33 +61,36 @@
                         </a>
                     </li>
 
-                    <li class="nav-list">
-                        <a href="{{ route('Purchase-Order.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Purchase-Order.*') ? 'active' : '' }}">
-                            <span>Purchase Order</span>
-                        </a>
-                    </li>
+                    @if(session("empRole") == 'admin' || session("empRole") == 'sadmin')
+                        <li class="nav-list">
+                            <a href="{{ route('Purchase-Order.index') }}"
+                                class="nav-link-custom {{ request()->routeIs('Purchase-Order.*') ? 'active' : '' }}">
+                                <span>Purchase Order</span>
+                            </a>
+                        </li>
 
-                    <li class="nav-list">
-                        <a href="{{ route('Stock.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Stock.*') ? 'active' : '' }}">
-                            <span>Stock</span>
-                        </a>
-                    </li>
+                        <li class="nav-list">
+                            <a href="{{ route('Stock.index') }}"
+                                class="nav-link-custom {{ request()->routeIs('Stock.*') ? 'active' : '' }}">
+                                <span>Stock</span>
+                            </a>
+                        </li>
 
-                    <li class="nav-list">
-                        <a href="{{ route('Equipment.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Equipment.*') ? 'active' : '' }}">
-                            <span>Equipment</span>
-                        </a>
-                    </li>
+                        <li class="nav-list">
+                            <a href="{{ route('Equipment.index') }}"
+                                class="nav-link-custom {{ request()->routeIs('Equipment.*') ? 'active' : '' }}">
+                                <span>Equipment</span>
+                            </a>
+                        </li>
 
-                    <li class="nav-list">
-                        <a href="{{ route('Package.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Package.*') ? 'active' : '' }}">
-                            <span>Package</span>
-                        </a>
-                    </li>
+                        <li class="nav-list">
+                            <a href="{{ route('Package.index') }}"
+                                class="nav-link-custom {{ request()->routeIs('Package.*') ? 'active' : '' }}">
+                                <span>Package</span>
+                            </a>
+                        </li>
+
+                    @endif
 
                     <li class="nav-list">
                         <a href="{{ route('Chapel.index') }}"
@@ -96,6 +99,13 @@
                         </a>
                     </li>
 
+                    <li class="nav-list">
+                        <a href="{{ route('Personnel.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('Personnel.*') || request()->routeIs('Embalmer.*') || request()->routeIs('Vehicle.*') ? 'active' : '' }}">
+                            <span>Personnel</span>
+                        </a>
+                    </li>
+                    {{--
                     <li class="nav-list">
                         <a href="{{ route('Embalmer.index') }}"
                             class="nav-link-custom {{ request()->routeIs('Embalmer.*') ? 'active' : '' }}">
@@ -109,20 +119,25 @@
                             <span>Vehicle</span>
                         </a>
                     </li>
+                    --}}
+                    @if(session("empRole") == 'admin' || session("empRole") == 'sadmin')
 
-                    <li class="nav-list">
-                        <a href="{{ route('supplier.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('supplier.*') ? 'active' : '' }}">
-                            <span>Supplier</span>
-                        </a>
-                    </li>
+                        <li class="nav-list">
+                            <a href="{{ route('supplier.index') }}"
+                                class="nav-link-custom {{ request()->routeIs('supplier.*') ? 'active' : '' }}">
+                                <span>Supplier</span>
+                            </a>
+                        </li>
 
-                    <li class="nav-list">
-                        <a href="{{ route('Stock-Out.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Stock-Out.*') ? 'active' : '' }}">
-                            <span>Stock Out</span>
-                        </a>
-                    </li>
+                        <li class="nav-list">
+                            <a href="{{ route('Stock-Out.index') }}"
+                                class="nav-link-custom {{ request()->routeIs('Stock-Out.*') ? 'active' : '' }}">
+                                <span>Stock Out</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    
 
                 </ul>
             </nav>
@@ -142,7 +157,7 @@
                             <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center dropdown-toggle"
                                 id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false"
                                 style="width: 36px; height: 36px; cursor: pointer;">
-                                <span class="fw-semibold small">ST</span>
+                                <span class="fw-semibold small">AM</span>
                             </div>
 
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">

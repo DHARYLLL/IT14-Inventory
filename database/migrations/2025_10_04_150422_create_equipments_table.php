@@ -17,12 +17,8 @@ return new class extends Migration
             $table->string('eq_type', 15);
             $table->smallInteger('eq_available');
             $table->string('eq_size', 20);
-            /*
-            $table->smallInteger('eq_qty_set')->nullable();
-            $table->smallInteger('eq_total_qty')->nullable();
-            $table->decimal('eq_unit_price', 8,2);
-            */
             $table->smallInteger('eq_in_use');
+            $table->smallInteger('eq_low_limit');
 
             $table->timestamps();
 

@@ -12,7 +12,10 @@
         <button class="cust-btn cust-btn-search" id="clearSearch">Clear</button>
     </div>
     <div>
-        <a href="{{ route('Chapel.create') }}" class="cust-btn cust-btn-primary"><i class="bi bi-plus-lg"></i> <span>Add Chapel</span></a>
+        @if(session("empRole") == 'admin' || session("empRole") == 'sadmin')
+            <a href="{{ route('Chapel.create') }}" class="cust-btn cust-btn-primary"><i class="bi bi-plus-lg"></i> <span>Add Chapel</span></a>
+        @endif
+        
     </div>
     </div>
 
@@ -44,9 +47,16 @@
                             <td>₱ {{ $row->chap_price }}</td>
                             <td class="text-center col col-md-2">
                                 <div class="d-inline-flex justify-content-center gap-2">
-                                    <a href="{{ route('Chapel.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
+                                    @if(session("empRole") == 'Staff')
+                                        <a href="{{ route('Chapel.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                    @else
+                                        <a href="{{ route('Chapel.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Show">
+                                            <i class="fi fi-rr-eye"></i>
+                                        </a>
+                                    @endif
+                                    
                                     @if(session("empRole") == 'sadmin' || session("empRole") == 'admin')
                                         <!-- Delte Button -->
                                         <button type="button" class="cust-btn cust-btn-danger-secondary" data-bs-toggle="modal" data-bs-target="#delete{{ $row->id }}">

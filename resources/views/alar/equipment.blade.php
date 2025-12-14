@@ -29,7 +29,7 @@
         <thead class="table-light">
             <tr>
                 <th class="fw-semibold">Equipment</th>
-                <th class="fw-semibold">Size</th>
+                <th class="fw-semibold">Size/Unit</th>
                 <th class="fw-semibold">Available</th>
                 <th class="fw-semibold">In Use</th>
                 <th class="fw-semibold">Action</th>
@@ -45,10 +45,10 @@
                 </tr>
             @else
                 @foreach ($eqData as $row)
-                    <tr class="{{ $row->eq_available <= 10 ? 'cust-warning' : ''}}">
+                    <tr>
                         <td>{{ $row->eq_name }}</td>
                         <td>{{ $row->eq_size }}</td>
-                        <td>{{ $row->eq_available }}</td>
+                        <td><span class="{{ $row->eq_available <= $row->eq_low_limit ? 'badge rounded-pill text-bg-warning' : ''}}">{{ $row->eq_available }}</span></td>
                         <td>{{ $row->eq_in_use }}</td>
                         <td>
                             <a href="{{ route('Equipment.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" 

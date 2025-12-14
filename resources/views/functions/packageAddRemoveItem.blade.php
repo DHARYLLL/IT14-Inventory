@@ -67,7 +67,7 @@
                                                 <p>{{ $row->pkgStoToSto->item_name }}</p>
                                             </div>
                                             <div class="col-md-2">
-                                                <label class="form-label fw-semibold text-secondary">Size</label>
+                                                <label class="form-label fw-semibold text-secondary">Size/Unit</label>
                                                 <p>{{ $row->pkgStoToSto->item_size }}</p>
                                             </div>
                                             <div class="col-md-2">
@@ -147,7 +147,7 @@
                                                 <p>{{ $row->pkgEqToEq->eq_name }}</p>
                                             </div>
                                             <div class="col-md-2">
-                                                <label class="form-label fw-semibold text-secondary">Size</label>
+                                                <label class="form-label fw-semibold text-secondary">Size/Unit</label>
                                                 <p>{{ $row->pkgEqToEq->eq_size }}</p>
                                             </div>
                                             <div class="col-md-2">

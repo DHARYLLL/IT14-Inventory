@@ -54,13 +54,12 @@
                             <table class="table table-borderless table-hover placeholder-table mb-0" >
                                 <thead>
                                     <tr>
-                                        <th>Client</th> 
-                                        <th>RA</th>
-                                        <th>Service Date</th>
-                                        <th>Burial date</th>
-                                        <th>Burial time</th>
-                                        
-                                        <th>Action</th>
+                                        <th class="fw-semibold">Client</th> 
+                                        <th class="fw-semibold">RA</th>
+                                        <th class="fw-semibold">Service Date</th>
+                                        <th class="fw-semibold">Burial date</th>
+                                        <th class="fw-semibold">Burial time</th>
+                                        <th class="col col-md-2 fw-semibold text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -84,42 +83,43 @@
                                                 <td>{{ $row->jo_start_date ? \Carbon\Carbon::parse($row->jo_start_date)->format('d/M/Y') : 'No Sched.' }}</td>
                                                 <td>{{ $row->jo_burial_date ? \Carbon\Carbon::parse($row->jo_burial_date)->format('d/M/Y') : 'No Sched.' }}</td>
                                                 <td>{{ $row->jo_burial_time ? \Carbon\Carbon::parse($row->jo_burial_time)->format('g:i A') : 'No Sched.' }}</td>
-                                                <td>
-                                                    @if($row->jod_id)
-                                                        @if($row->joToJod->jod_eq_stat == 'Pending')
-                                                            <a href="{{ route('Job-Order.showDeploy', $row->id) }}"
-                                                                class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Deploy">
-                                                                <i class="bi bi-box-arrow-up"></i>
-                                                            </a>
-                                                        @endif 
-                                                        @if($row->joToJod->jod_eq_stat == 'Deployed')
-                                                            <a href="{{ route('Job-Order.showReturn', $row->id) }}"
-                                                                class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Return">
-                                                                <i class="bi bi-box-arrow-in-down"></i>
-                                                            </a>
-                                                        @endif 
-                                                        @if($row->joToJod->jod_eq_stat == 'Returned')
-                                                            <a href="{{ route('Job-Order.show', $row->id) }}"
-                                                                class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                                <i class="fi fi-rr-eye"></i>                              
-                                                            </a>
-                                                        @endif 
-                                                    @endif
-                                                    @if($row->svc_id)
-                                                        @if($row->jo_status == 'Paid')
-                                                            <a href="{{ route('Service-Request.show', $row->id) }}"
-                                                                class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                                <i class="fi fi-rr-eye"></i>
-                                                            </a>
-                                                        @else
-                                                            <a href="{{ route('Service-Request.show', $row->id) }}"
-                                                                class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Review">
-                                                                <i class="bi bi-list-ul"></i>
-                                                            </a>
+                                                <td class="text-center col col-md-2">
+                                                    <div class="d-inline-flex justify-content-center gap-2">
+                                                        @if($row->jod_id)
+                                                            @if($row->joToJod->jod_eq_stat == 'Pending')
+                                                                <a href="{{ route('Job-Order.showDeploy', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Deploy">
+                                                                    <i class="bi bi-box-arrow-up"></i>
+                                                                </a>
+                                                            @endif
+                                                            @if($row->joToJod->jod_eq_stat == 'Deployed')
+                                                                <a href="{{ route('Job-Order.showReturn', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Return">
+                                                                    <i class="bi bi-box-arrow-in-down"></i>
+                                                                </a>
+                                                            @endif
+                                                            @if($row->joToJod->jod_eq_stat == 'Returned')
+                                                                <a href="{{ route('Job-Order.show', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                                    <i class="fi fi-rr-eye"></i>
+                                                                </a>
+                                                            @endif
                                                         @endif
-
+                                                        @if($row->svc_id)
+                                                            @if($row->jo_status == 'Paid')
+                                                                <a href="{{ route('Service-Request.show', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                                    <i class="fi fi-rr-eye"></i>
+                                                                </a>
+                                                            @else
+                                                                <a href="{{ route('Service-Request.show', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Review">
+                                                                    <i class="bi bi-list-ul"></i>
+                                                                </a>
+                                                            @endif
                                                         
-                                                    @endif
+                                                        @endif
+                                                    </div>
 
                                                 </td>
                                             </tr>

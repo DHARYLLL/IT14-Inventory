@@ -61,7 +61,7 @@
                     </div>
 
                     <div class="col col-auto">
-                        <a href="{{ route('Vehicle.index') }}" class="cust-btn cust-btn-secondary"><i
+                        <a href="{{ route('Personnel.index') }}" class="cust-btn cust-btn-secondary"><i
                             class="bi bi-arrow-left"></i>
                             <span>Cancel</span>
                         </a>

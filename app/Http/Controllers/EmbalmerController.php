@@ -165,7 +165,7 @@ class EmbalmerController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Embalmer.index'))->with('success', 'Created successfully!');
+        return redirect(route('Personnel.index'))->with('success', 'Created successfully!');
     }
 
     /**
@@ -389,7 +389,7 @@ class EmbalmerController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('success', 'Updated Successfuly!');
+        return redirect(route('Personnel.index'))->with('success', 'Updated Successfuly!');
     }
 
     /**
@@ -406,6 +406,6 @@ class EmbalmerController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Embalmer.index'))->with('success', 'Deleted Successfuly!');
+        return redirect(route('Personnel.index'))->with('success', 'Deleted Successfuly!');
     }
 }

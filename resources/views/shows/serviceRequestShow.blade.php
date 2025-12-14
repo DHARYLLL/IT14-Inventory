@@ -161,8 +161,8 @@
                         </div>
                     @else
                         <div class="col-md-3">
-                            <label class="form-label fw-semibold">Balance</label>
-                            <p>₱{{ $joData->jo_total - $joData->jo_dp }}</p>
+                            <label class="form-label fw-semibold">Change</label>
+                            <p>₱{{ $joData->jo_dp - $joData->jo_total }}</p>
                         </div>
                     @endif
                 </div>

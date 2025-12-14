@@ -73,8 +73,10 @@
                             <label class="fw-semibold text-dark mb-1">Role:</label>
                             <select name="role" class="form-select">
                                 <option value="">Select Role</option>
-                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>admin</option>
+                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                                 <option value="staff" {{ old('role') == 'staff' ? 'selected' : '' }}>staff</option>
+                                <option value="embalmer" {{ old('role') == 'embalmer' ? 'selected' : '' }}>Embalmer</option>
+                                <option value="driver" {{ old('role') == 'driver' ? 'selected' : '' }}>Driver</option>
                             </select>
                             @error('role')
                                 <p class="text-danger small mt-1">{{ $message }}</p>

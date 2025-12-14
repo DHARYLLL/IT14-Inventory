@@ -123,11 +123,44 @@ class JobOrderController extends Controller
             'pkgPrice.min' => 'Amount must be 1 or more.',
             'pkgPrice.max' => '6 digits limit reached.'
         ]);
+        /*
+        $checkAvail = Carbon::parse($request->svcDate)->addDays((int)$request->wakeDay)->toDateString();
+        //dd($checkAvail);
+        $joCheckAvail = jobOrder::select('id', 'svc_id')->where('jo_burial_date', $checkAvail)->first();
+        //dd($joCheckAvail);
+        if ($joCheckAvail) {
+            $svcCheckAvail = ServiceRequest::where('id', $joCheckAvail->svc_id)->where('svc_status', '<>', 'Completed')->first();
+            if ($svcCheckAvail) {
+                if ($svcCheckAvail->veh_id == $request->vehicle) {
+                    dd('driver not available', $checkAvail);
+                }
+                dd('driver available 2', $checkAvail);
+            }
+            dd('driver available', $checkAvail);
+        }
+        dd('no date found, driver available', $checkAvail);
+        */
+        $checkAvail = Carbon::parse($request->svcDate)
+            ->addDays((int)$request->wakeDay)
+            ->toDateString();
 
+        $driverUnavailable = JobOrder::where('jo_burial_date', $checkAvail)
+            ->whereRelation('joToSvcReq', 'veh_id', $request->vehicle)
+            ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
+            ->exists();
+
+        if ($driverUnavailable) {
+            //dd('driver not available', $checkAvail);
+            return back()->with('promt-f', 'Driver not available at the date of burial.')->withInput();
+        }
+
+        //dd('driver available', $checkAvail);
+
+        
         ServiceRequest::create([
             'veh_id' => $request->vehicle,
             'prep_id' => $request->embalm,
-            'svc_status' => 'Pending'
+            'svc_status' =>  Carbon::parse($request->svcDate)->addDays((int)$request->wakeDay)->isSameDay(Carbon::today()) ? 'Ongoing' : 'Pending'
         ]);
 
         $svcId = ServiceRequest::orderBy('id', 'desc')->take(1)->value('id');
@@ -325,7 +358,7 @@ class JobOrderController extends Controller
         $eqDeplSet = $request->eqDeplSet;
 
         // Check date for deployment
-        $jo = jobOrder::select('id', 'jo_start_date')->where('jod_id', $id)->first();
+        $jo = jobOrder::select('id', 'jo_start_date', 'svc_id')->where('jod_id', $id)->first();
         if (Carbon::parse($jo->jo_start_date)->gt(Carbon::today())) {
             return redirect()->back()
                 ->with('promt-f', 'Cannot deploy before (' . $jo->jo_start_date . ')')
@@ -346,6 +379,10 @@ class JobOrderController extends Controller
         jobOrderDetails::findOrFail($id)->update([
             'jod_eq_stat' => 'Returned',
             'jod_return_date' => Carbon::now()->format('Y-m-d')
+        ]);
+
+        ServiceRequest::findOrFail($jo->svc_id)->update([
+            'svc_status' => 'Completed'
         ]);
 
         Log::create([

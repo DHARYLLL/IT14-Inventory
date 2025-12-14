@@ -23,7 +23,7 @@
                                                 <option value="">Select Item</option>
                                                 @foreach ($stoData as $data)
                                                     <option value="{{ $data->id }}" {{ old('stoAdd') == $data->id ? 'selected' : '' }}>
-                                                        {{ $data->item_name }} | size: {{ $data->item_size }} | Unit: {{ $data->item_unit }}
+                                                        {{ $data->item_name }} | size: {{ $data->item_size }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -55,7 +55,7 @@
                             </div>
                             <div class="col-md-12 h-75 overflow-auto">
                                 @if($leStoData->isEmpty())
-                                    <div class="row">
+                                    <div class="row mt-2 cust-white-bg mx-1">
                                         <div class="col-md-12 text-center text-secondary">No Items Included.</div>
                                     </div>
                                 @else
@@ -66,7 +66,7 @@
                                                 <p>{{ $row->pkgStoToSto->item_name }}</p>
                                             </div>
                                             <div class="col-md-2">
-                                                <label class="form-label fw-semibold text-secondary">Size</label>
+                                                <label class="form-label fw-semibold text-secondary">Size/Unit</label>
                                                 <p>{{ $row->pkgStoToSto->item_size }}</p>
                                             </div>
                                            <div class="col-md-2">
@@ -101,7 +101,7 @@
                                                 <option value="">Select Equipment</option>
                                                 @foreach ($eqData as $data)
                                                     <option value="{{ $data->id }}" {{ old('eqAdd') == $data->id ? 'selected' : '' }}>
-                                                        {{ $data->eq_name }} | size: {{ $data->eq_size }} | Unit: {{ $data->eq_unit }}
+                                                        {{ $data->eq_name }} | size: {{ $data->eq_size }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -133,7 +133,7 @@
                             </div>
                             <div class="col-md-12 h-75 overflow-auto">
                                 @if($leEqData->isEmpty())
-                                    <div class="row">
+                                    <div class="row mt-2 cust-white-bg mx-1">
                                         <div class="col-md-12 text-center text-secondary">No Items Included.</div>
                                     </div>
                                 @else
@@ -144,7 +144,7 @@
                                                 <p>{{ $row->pkgEqToEq->eq_name }}</p>
                                             </div>
                                             <div class="col-md-2">
-                                                <label class="form-label fw-semibold text-secondary">Size</label>
+                                                <label class="form-label fw-semibold text-secondary">Size/Unit</label>
                                                 <p>{{ $row->pkgEqToEq->eq_size }}</p>
                                             </div>
                                            <div class="col-md-2">

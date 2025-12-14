@@ -101,11 +101,12 @@ class ServiceRequestController extends Controller
             'total.max' => '6 digits is the max.'
         ]);
 
-        //dd('hello');
+        //dd(Carbon::parse($request->svcDate)->isSameDay(Carbon::today()) ? 'Ongoing' : 'Pending');
 
         ServiceRequest::create([
             'veh_id' => $request->setVehId,
-            'prep_id' => $request->setEmbalmId
+            'prep_id' => $request->setEmbalmId,
+            'svc_status' => Carbon::parse($request->svcDate)->isSameDay(Carbon::today()) ? 'Ongoing' : 'Pending'
         ]);
 
         $svcId = ServiceRequest::orderBy('id', 'desc')->take(1)->value('id');

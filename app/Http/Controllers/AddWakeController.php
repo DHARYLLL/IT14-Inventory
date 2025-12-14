@@ -7,6 +7,7 @@ use App\Models\BurialAssistance;
 use App\Models\jobOrder;
 use App\Models\jobOrderDetails;
 use App\Models\Log;
+use App\Models\ServiceRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -47,6 +48,20 @@ class AddWakeController extends Controller
             'addFeeDays.max' => '6 digits limit reached'
         ]);
 
+        $checkAvail = Carbon::parse($request->burDate)
+            ->addDays((int)$request->addDays)
+            ->toDateString();
+
+        $driverUnavailable = JobOrder::where('jo_burial_date', $checkAvail)
+            ->whereRelation('joToSvcReq', 'veh_id', $request->vehId)
+            ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
+            ->exists();
+
+        if ($driverUnavailable) {
+            //dd('driver not available', $checkAvail);
+            return back()->with('promt-f-add', 'Driver not available at the date of burial.')->withInput();
+        }
+
         AddWake::create([
             'day' => $request->addDays,
             'fee' => $request->addFeeDays,
@@ -65,6 +80,8 @@ class AddWakeController extends Controller
             $getBurrAsst = BurialAssistance::select('id', 'amount')->where('jo_id', $getDp->id)->first();
             $burAsstTotal = $getBurrAsst->amount;
         }
+
+
 
         if (($getDp->jo_total + $addWakeTotal) <= ($getDp->jo_dp + $burAsstTotal)) {
             jobOrder::findOrFail($getDp->id)->update([
@@ -130,6 +147,20 @@ class AddWakeController extends Controller
         $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total', 'jo_start_date', 'jod_id')->where('jod_id', $addWakeData->jod_id)->first();
         $jodData = jobOrderDetails::select('id', 'jod_days_of_wake')->where('id', $getDp->jod_id)->first();
 
+        $checkAvail = Carbon::parse($getDp->jo_start_date)
+            ->addDays((int)$jodData->jod_days_of_wake + $request->days)
+            ->toDateString();
+
+        $driverUnavailable = JobOrder::where('jo_burial_date', $checkAvail)
+            ->whereRelation('joToSvcReq', 'veh_id', $request->vehId)
+            ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
+            ->exists();
+
+        if ($driverUnavailable) {
+            //dd('driver not available', $checkAvail);
+            return back()->with('promt-f-edit', 'Driver not available at the date of burial.')->withInput();
+        }
+
         $burAsstTotal = 0;
         if ($request->burrAsstId) {
             $getBurrAsst = BurialAssistance::select('id', 'amount')->where('jo_id', $getDp->id)->first();
@@ -170,8 +201,23 @@ class AddWakeController extends Controller
     public function destroy(string $id)
     {
         $addWakeData = AddWake::where('id', $id)->first();
-        $joData = jobOrder::select('id', 'jo_dp', 'jo_total' , 'jo_start_date')->where('jod_id', $addWakeData->jod_id)->first();
+        $joData = jobOrder::select('id', 'jo_dp', 'jo_total' , 'jo_start_date', 'jo_burial_date', 'svc_id')->where('jod_id', $addWakeData->jod_id)->first();
         $jodData = jobOrderDetails::select('id', 'jod_days_of_wake')->where('id', $addWakeData->jod_id)->first();
+        $svcReqData = ServiceRequest::where('id', $joData->svc_id)->first();
+
+        $checkAvail = Carbon::parse($joData->jo_start_date)
+            ->addDays((int)$jodData->jod_days_of_wake + $addWakeData->day)
+            ->toDateString();
+
+        $driverUnavailable = JobOrder::where('jo_burial_date', $checkAvail)
+            ->whereRelation('joToSvcReq', 'veh_id', $svcReqData->veh_id)
+            ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
+            ->exists();
+
+        if ($driverUnavailable) {
+            //dd('driver not available', $checkAvail);
+            return back()->with('promt-f-delete', 'Driver not available at the date of burial.')->withInput();
+        }
 
         $addWakeTotal = $addWakeData->day * $addWakeData->fee;
 
@@ -192,6 +238,7 @@ class AddWakeController extends Controller
                 'jo_burial_date' => Carbon::parse($joData->jo_start_date)->addDays((int)$jodData->jod_days_of_wake)->toDateString(),
             ]);
         }
+
         AddWake::findOrFail($id)->delete();
 
         Log::create([
