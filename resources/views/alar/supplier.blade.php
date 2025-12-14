@@ -51,17 +51,35 @@
                                             title="Edit"></i>
                                     </button>
                                     @if(session("empRole") == 'sadmin' || session("empRole") == 'admin')
-                                        <form action="{{ route('supplier.destroy', $supplier->id) }}" method="POST" class="m-0">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="cust-btn cust-btn-danger-secondary  btn-md">
-                                                <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="Delete"></i>
-                                            </button>
-                                        </form>
+                                        <!-- Delte Button -->
+                                        <button type="button" class="cust-btn cust-btn-danger-secondary" data-bs-toggle="modal" data-bs-target="#delete{{ $supplier->id }}">
+                                        <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
+                                        </button>
                                     @endif
                                 </div>
                             </td>
+                            <!-- Delete Modal -->
+                            <div class="modal fade" id="delete{{ $supplier->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="delete{{ $supplier->id }}Label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="delete{{ $supplier->id }}Label">Delete Chapel</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="{{ route('supplier.destroy', $supplier->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <div class="modal-body">
+                                            Are you sure you want to Delete {{ $supplier->fname . ' ' . ($supplier->mname ? $supplier->mname . ' ' : '') . $supplier->lname }}?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="cust-btn cust-btn-danger-primary">Delete</button>
+                                        </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </tr>
                         <!-- Edit Modal -->
                         <div class="modal fade" id="EditSupplierModal{{ $supplier->id }}" tabindex="-1"

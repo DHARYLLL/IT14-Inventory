@@ -18,7 +18,7 @@ class StockOutController extends Controller
      */
     public function index()
     {
-        $stoOutData = stockOut::orderByRaw("CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END")->get();
+        $stoOutData = stockOut::orderByRaw("CASE WHEN status = 'Cancelled' THEN 1 ELSE 0 END")->orderBy('so_date', 'desc')->get();
         return (view('alar/stockOut', ['stoOutData' => $stoOutData]));
     }
 

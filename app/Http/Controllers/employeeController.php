@@ -45,7 +45,7 @@ class employeeController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return back()->with('promt-s', 'Updated Successfully.');
+        return back()->with('success', 'Password has been reset.');
     }
 
     /**
@@ -67,7 +67,7 @@ class employeeController extends Controller
                             Rule::unique('employees', 'emp_fname')
                             ->where('emp_lname', $request->input('empLname'))
                             ->where('emp_mname', $request->input('empMname'))],
-            'empMname' => 'required|max:15',
+            'empMname' => 'max:15',
             'empLname' => 'required|max:15',
             'empConNum' => ['required',
                             'digits:11',
@@ -82,7 +82,6 @@ class employeeController extends Controller
             'empFname.unique' => 'Name is already already added.',
             'empFname.max' => '30 characters limit reached.',
 
-            'empMname.required' => 'This field is required.',
             'empMname.max' => '15 characters limit reached.',
 
             'empLname.required' => 'This field is required.',  
@@ -118,10 +117,11 @@ class employeeController extends Controller
             Log::create([
                 'transaction' => 'Created',
                 'tx_desc' => 'Created new account',
+                'tx_date' => Carbon::now(),
                 'emp_id' => session('loginId')
             ]);
 
-            return back()->with('promt-s', 'Updated Successfully.');
+            return back()->with('success', 'Added Successfully.');
         } else {
             return back()->with('promt-a', 'Password did not match.')->withInput();
         }
@@ -161,7 +161,7 @@ class employeeController extends Controller
                             ->where('emp_mname', $request->input('empMname'))
                             ->where('emp_contact_number', $request->input('empConNum'))
                             ->ignore($id)],
-            'empMname' => 'required|max:15',
+            'empMname' => 'max:15',
             'empLname' => 'max:15',
             'empConNum' => ['required',
                             'digits:11',

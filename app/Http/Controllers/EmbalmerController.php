@@ -389,7 +389,7 @@ class EmbalmerController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Personnel.index'))->with('success', 'Updated Successfuly!');
+        return redirect()->back()->with('success', 'Updated Successfuly!');
     }
 
     /**

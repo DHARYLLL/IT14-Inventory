@@ -228,7 +228,7 @@ class PurchaseOrderController extends Controller
                 'required',
                 Rule::date()->beforeOrEqual(today())
             ],
-            'qtyArrived.*' => 'required|integer|min:1|max:999',
+            'qtyArrived.*' => 'required|integer|min:1|max:999999',
             'del_date' => [
                 'required',
                 Rule::date()->afterOrEqual('inv_date'),
@@ -251,7 +251,7 @@ class PurchaseOrderController extends Controller
             'total.max' => '6 digits is the max.',
             'qtyArrived.*.required' => 'This field is required.',
             'qtyArrived.*.min' => 'Quantity must be 1 or more.',
-            'qtyArrived.*.max' => '4 digits is the max.'
+            'qtyArrived.*.max' => '6 digits limit reached.'
         ]);
 
         $items = PurchaseOrderItem::where('po_id', '=', $request->po_id)->get();

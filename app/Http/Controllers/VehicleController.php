@@ -75,7 +75,7 @@ class VehicleController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Vehicle.index'))->with('success', 'Added Successfully!');
+        return redirect(route('Personnel.index'))->with('success', 'Added Successfully!');
 
     }
 

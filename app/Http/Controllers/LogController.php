@@ -13,7 +13,7 @@ class LogController extends Controller
     public function index()
     {
         $logData = Log::all();
-        return view('alar/Logs', ['logData' => $logData]);
+        return view('alar/logs', ['logData' => $logData]);
     }
 
     /**
