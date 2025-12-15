@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AddWake;
 use App\Models\BurialAssistance;
+use App\Models\BurialAsst;
 use App\Models\jobOrder;
 use App\Models\jobOrderDetails;
 use App\Models\Log;
@@ -73,11 +74,11 @@ class AddWakeController extends Controller
         $addWakeTotal = $request->addDays * $request->addFeeDays;
         $addWakeData = AddWake::select('id', 'jod_id')->where('id', $id)->first();
 
-        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total', 'jo_burial_date')->where('jod_id', $addWakeData->jod_id)->first();
+        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total', 'jo_burial_date', 'ba_id')->where('jod_id', $addWakeData->jod_id)->first();
 
         $burAsstTotal = 0;
         if ($request->burrAsstId) {
-            $getBurrAsst = BurialAssistance::select('id', 'amount')->where('jo_id', $getDp->id)->first();
+            $getBurrAsst = BurialAsst::select('id', 'amount')->where('id', $getDp->ba_id)->first();
             $burAsstTotal = $getBurrAsst->amount;
         }
 
@@ -144,7 +145,7 @@ class AddWakeController extends Controller
         $addWakeTotal = $request->days * $request->feeDays;
         $addWakeData = AddWake::select('id', 'jod_id')->where('id', $id)->first();
 
-        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total', 'jo_start_date', 'jod_id')->where('jod_id', $addWakeData->jod_id)->first();
+        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total', 'jo_start_date', 'jod_id', 'ba_id')->where('jod_id', $addWakeData->jod_id)->first();
         $jodData = jobOrderDetails::select('id', 'jod_days_of_wake')->where('id', $getDp->jod_id)->first();
 
         $checkAvail = Carbon::parse($getDp->jo_start_date)
@@ -163,7 +164,7 @@ class AddWakeController extends Controller
 
         $burAsstTotal = 0;
         if ($request->burrAsstId) {
-            $getBurrAsst = BurialAssistance::select('id', 'amount')->where('jo_id', $getDp->id)->first();
+            $getBurrAsst = BurialAsst::select('id', 'amount')->where('id', $getDp->ba_id)->first();
             $burAsstTotal = $getBurrAsst->amount;
         }
 
@@ -201,12 +202,12 @@ class AddWakeController extends Controller
     public function destroy(string $id)
     {
         $addWakeData = AddWake::where('id', $id)->first();
-        $joData = jobOrder::select('id', 'jo_dp', 'jo_total' , 'jo_start_date', 'jo_burial_date', 'svc_id')->where('jod_id', $addWakeData->jod_id)->first();
+        $joData = jobOrder::select('id', 'jo_dp', 'jo_total' , 'jo_start_date', 'jo_burial_date', 'svc_id', 'ba_id')->where('jod_id', $addWakeData->jod_id)->first();
         $jodData = jobOrderDetails::select('id', 'jod_days_of_wake')->where('id', $addWakeData->jod_id)->first();
         $svcReqData = ServiceRequest::where('id', $joData->svc_id)->first();
 
         $checkAvail = Carbon::parse($joData->jo_start_date)
-            ->addDays((int)$jodData->jod_days_of_wake + $addWakeData->day)
+            ->addDays((int)$jodData->jod_days_of_wake)
             ->toDateString();
 
         $driverUnavailable = JobOrder::where('jo_burial_date', $checkAvail)
@@ -222,8 +223,8 @@ class AddWakeController extends Controller
         $addWakeTotal = $addWakeData->day * $addWakeData->fee;
 
         $burAsstTotal = 0;
-        if ($joData->joToBurrAsst) {
-            $getBurrAsst = BurialAssistance::select('id', 'amount')->where('jo_id', $joData->id)->first();
+        if ($joData->ba_id) {
+            $getBurrAsst = BurialAsst::select('id', 'amount')->where('id', $joData->ba_id)->first();
             $burAsstTotal = $getBurrAsst->amount;
         }
 

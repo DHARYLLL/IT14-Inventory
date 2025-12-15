@@ -93,7 +93,7 @@
                                     @endif
                                 @endif
                                 @if($row->svc_id)
-                                    @if($row->jo_status == 'Paid')
+                                    @if($row->joToSvcReq->svc_status == 'Completed')
                                         <a href="{{ route('Service-Request.show', $row->id) }}"
                                             class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                                             <i class="fi fi-rr-eye"></i>

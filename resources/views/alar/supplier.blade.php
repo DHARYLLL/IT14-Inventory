@@ -21,7 +21,6 @@
         <table class="table table-hover align-middle mb-0">
             <thead>
                 <tr class="table-light">
-                    <th class="fw-semibold">Supplier #</th>
                     <th class="fw-semibold">Name</th>
                     <th class="fw-semibold">Contact number</th>
                     <th class="fw-semibold">Company name</th>
@@ -37,7 +36,6 @@
                 @else
                     @foreach ($suppliers as $supplier)
                         <tr>
-                            <td>{{ $supplier->id }}</td>
                             <td>{{ $supplier->fname . ' ' . ($supplier->mname ? $supplier->mname . ' ' : '') . $supplier->lname }}
                             </td>
                             <td>{{ $supplier->contact_number }}</td>

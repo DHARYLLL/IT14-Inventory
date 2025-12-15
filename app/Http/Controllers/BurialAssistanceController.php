@@ -84,7 +84,7 @@ class BurialAssistanceController extends Controller
             'amount.min' => 'Amount must be 1 or more',
             'amount.max' => '6 digit limit reached.',
         ]);
-        //dd('hello');
+        //dd($request->addWakeId);
         $getTotal = jobOrder::select('id', 'jod_id', 'jo_dp', 'jo_total')->where('id', $request->joId)->first();
         $getStat = jobOrderDetails::select('id', 'jod_eq_stat')->where('id', $getTotal->jod_id)->first();
 

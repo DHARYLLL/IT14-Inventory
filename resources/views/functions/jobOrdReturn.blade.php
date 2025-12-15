@@ -39,15 +39,22 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label fw-semibold">View Burial Assistance</label>
-                    <a href="{{ route('Burial-Assistance.show', $joData->ba_id) }}" class="cust-btn cust-btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><i class="fi fi-rr-eye"></i></a>
+                    <a href="{{ route('Burial-Assistance.show', $joData->ba_id) }}" class="cust-btn cust-btn-secondary"  data-bs-toggle="tooltip" data-bs-placement="top" title="View"><i class="fi fi-rr-eye"></i></a>
                 </div>
-                
+
                 <div class="w-100"></div>
 
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Balance</label>
-                    <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
-                </div>
+                @if($joData->jo_status == 'Paid')
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Change</label>
+                        <p>₱{{ ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) - ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) }}</p>
+                    </div>
+                @else
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Balance</label>
+                        <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
+                    </div>
+                @endif
                 
             @else
                 <div class="col-md-3">
@@ -123,10 +130,10 @@
                 </div>
             </div>
         @endif
+        
 
-
-        {{-- Job Order --}}
-        <div class="row  mt-4 cust-white-bg">
+        {{-- Job Order Details --}}
+        <div class="row mt-4 cust-white-bg">
             <div class="col-md-12">
                 <h5 class="cust-sub-title">Job Order Details:</h5>
             </div>
@@ -279,6 +286,15 @@
                                     @error('addDays')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
+                                    @session('promt-f-add')
+                                        <div class="text-danger small mt-1">{{ $value }}</div>
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", function () {
+                                                var modal = new bootstrap.Modal(document.getElementById('wakeDay'));
+                                                modal.show();
+                                            });
+                                        </script>
+                                    @endsession
                                     <input type="text" name="jodId" value="{{ $joData->joToJod->id }}" hidden>
                                     <input type="text" name="joId" value="{{ $joData->id }}" hidden>
                                     <input type="text" name="burDate" value="{{ $joData->jo_burial_date }}" hidden>
@@ -331,10 +347,18 @@
                                     @error('days')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
+                                    @session('promt-f-edit')
+                                        <div class="text-danger small mt-1">{{ $value }}</div>
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", function () {
+                                                var modal = new bootstrap.Modal(document.getElementById('wakeDayEdit'));
+                                                modal.show();
+                                            });
+                                        </script>
+                                    @endsession
                                     <input type="text" name="jodId" value="{{ $joData->joToJod->id }}" hidden>
                                     <input type="text" name="joId" value="{{ $joData->id }}" hidden>
                                     <input type="text" name="burrAsstId" value="{{$joData->ba_id ? $joData->joToBurAsst->id : '' }}" hidden>
-                                    <input type="text" name="burDate" value="{{ $joData->jo_burial_date }}" hidden>
                                     <input type="text" name="vehId" value="{{ $joData->joToSvcReq->veh_id }}" hidden>
                                 </div>
                                 <div class="col-md-6">
@@ -377,12 +401,18 @@
                         @method('delete')
                         <div class="modal-body">
                             <p>Are you sure you want to Delete the additional wake?</p>
+                            @session('promt-f-delete')
+                                <div class="text-danger small mt-1">{{ $value }}</div>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function () {
+                                        var modal = new bootstrap.Modal(document.getElementById('wakeDayDelete'));
+                                        modal.show();
+                                    });
+                                </script>
+                            @endsession
 
                         </div>
                         <div class="modal-footer">
-                            <input type="text" name="joId" value="{{ $joData->id }}" hidden>
-                            <input type="text" name="burDate" value="{{ $joData->jo_burial_date }}" hidden>
-                            <input type="text" name="vehId" value="{{ $joData->joToSvcReq->veh_id }}" hidden>
                             <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="cust-btn cust-btn-danger-primary">Delete</button>
                         </div>
@@ -429,7 +459,7 @@
             </div>
         </div>
 
-        {{-- Equipment Status --}}
+
         <div class="row mt-4 cust-white-bg">
             <div class="col-md-12">
                 <h5 class="cust-sub-title">Equipment Status:</h5>
@@ -441,11 +471,11 @@
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Deployed Date</label>
-                <p>{{ $jodData->jod_deploy_date ? \Carbon\Carbon::parse($jodData->jod_deploy_date)->format('d/M/Y') : 'N/A'}}</p>
+                <p>{{ $jodData->jod_deploy_date ?? 'N/A'}}</p>
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Return Date</label>
-                <p>{{ $jodData->jod_return_date ? \Carbon\Carbon::parse($jodData->jod_return_date)->format('d/M/Y') : 'N/A' }}</p>
+                <p>{{ $jodData->jod_return_date ?? 'N/A' }}</p>
             </div>
         </div>
 

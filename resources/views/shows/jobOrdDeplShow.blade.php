@@ -44,10 +44,17 @@
 
                 <div class="w-100"></div>
 
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Balance</label>
-                    <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
-                </div>
+                @if($joData->jo_status == 'Paid')
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Change</label>
+                        <p>₱{{ ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) - ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) }}</p>
+                    </div>
+                @else
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Balance</label>
+                        <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
+                    </div>
+                @endif
                 
             @else
                 <div class="col-md-3">

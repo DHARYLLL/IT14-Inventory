@@ -20,7 +20,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Chapel Name</label>
-                                <input type="text" class="form-control" name="chapName" value="{{ old('chapName', $chapData->chap_name) }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
+                                <input type="text" class="form-control" name="chapName" value="{{ old('chapName', $chapData->chap_name) }}">
                                 @error('chapName')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
@@ -28,15 +28,15 @@
 
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Chapel Room</label>
-                                <input type="text" class="form-control" name="chapRoom" value="{{ old('chapRoom', $chapData->chap_room) }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
+                                <input type="text" class="form-control" name="chapRoom" value="{{ old('chapRoom', $chapData->chap_room) }}">
                                 @error('chapRoom')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
-                            </div>`
+                            </div>
 
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Chapel Price</label>
-                                <input type="text" class="form-control" name="chapPrice" value="{{ old('chapPrice', $chapData->chap_price) }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
+                                <input type="text" class="form-control" name="chapPrice" value="{{ old('chapPrice', $chapData->chap_price) }}">
                                 @error('chapPrice')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror

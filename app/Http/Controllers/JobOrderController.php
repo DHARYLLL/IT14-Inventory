@@ -6,6 +6,7 @@ use App\Models\addEquipment;
 use App\Models\addStock;
 use App\Models\AddWake;
 use App\Models\BurialAssistance;
+use App\Models\BurialAsst;
 use App\Models\Chapel;
 use App\Models\embalming;
 use App\Models\Equipment;
@@ -442,7 +443,7 @@ class JobOrderController extends Controller
             'payAmount.min' => 'Amount must be 1 or more.',
             'payAmount.max' => '6 digit limit reached.'
         ]);
-        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total')->where('id', $id)->first();
+        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total', 'ba_id')->where('id', $id)->first();
        
         $addWakeTotal = 0;
         if ($request->addWakeId != null) {
@@ -451,8 +452,8 @@ class JobOrderController extends Controller
         }
 
         $burAsstTotal = 0;
-        if ($getDp->joToBurrAsst) {
-            $getBurrAsst = BurialAssistance::select('id', 'amount')->where('jo_id', $getDp->id)->first();
+        if ($getDp->ba_id) {
+            $getBurrAsst = BurialAsst::select('id', 'amount')->where('id', $getDp->ba_id)->first();
             $burAsstTotal = $getBurrAsst->amount;
         }
 

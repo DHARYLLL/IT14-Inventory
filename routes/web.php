@@ -58,6 +58,7 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::resource('Service-Request', ServiceRequestController::class);
     Route::put('Service-Request/{id}/Pay-Balance', [ServiceRequestController::class, 'payBalance'])->name('Service-Request.payBalance');
     Route::put('Service-Request/{id}/Update-Schedule', [ServiceRequestController::class, 'updateSchedule'])->name('Service-Request.updateSchedule');
+    Route::get('Service-Request/{id}/Complete-Service', [ServiceRequestController::class, 'completeService'])->name('Service-Request.complete');
     //Route::put('Service-Request/{$id}/Deploy-Equipment', [ServiceRequestController::class, 'deploy'])->name('Service-Request.deploy');
     Route::resource('Package', PackageController::class);
     

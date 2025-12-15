@@ -46,16 +46,22 @@
                                     <td>₱{{ $row->veh_price }}</td>
                                     <td class="text-center col col-md-2">
                                         <div class="d-inline-flex justify-content-center gap-2">
-                                            <a href="{{ route('Vehicle.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </a>
-
                                             @if(session("empRole") == 'sadmin' || session("empRole") == 'admin')
-                                                <!-- Delte Button -->
+                                                <a href="{{ route('Vehicle.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                                
+                                                <!-- Delete Button -->
                                                 <button type="button" class="cust-btn cust-btn-danger-secondary" data-bs-toggle="modal" data-bs-target="#delete{{ $row->id }}">
                                                 <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
                                                 </button>
+                                            @else
+                                                <a href="{{ route('Vehicle.show', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Show">
+                                                    <i class="fi fi-rr-eye"></i>
+                                                </a>
+                                                
                                             @endif
+
                                         </div>
                                         
                                     </td>
@@ -131,18 +137,21 @@
                                     <td>₱{{ $row->prep_price }}</td>
                                     <td class="text-center col col-md-2">
                                         <div class="d-inline-flex justify-content-center gap-2">
-                                            
-                                            <a href="{{ route('Embalmer.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </a>
 
                                             @if(session("empRole") == 'sadmin' || session("empRole") == 'admin')
+                                                <a href="{{ route('Embalmer.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                            
                                                 <!-- Delte Button -->
                                                 <button type="button" class="cust-btn cust-btn-danger-secondary" data-bs-toggle="modal" data-bs-target="#delete{{ $row->id }}">
                                                 <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
                                                 </button>
-                                            @endif
-                                            
+                                            @else
+                                                <a href="{{ route('Embalmer.show', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Show">
+                                                    <i class="fi fi-rr-eye"></i>
+                                                </a>
+                                            @endif     
                                         </div>
                                     </td>
                                     <!-- Delete Modal -->

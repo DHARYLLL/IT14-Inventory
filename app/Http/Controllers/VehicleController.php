@@ -84,7 +84,8 @@ class VehicleController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $vehData = vehicle::findOrFail($id);
+        return view('shows/vehicleShow', ['vehData' => $vehData]);
     }
 
     /**

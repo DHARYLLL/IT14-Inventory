@@ -16,7 +16,7 @@
 
                         <div class="col-md-6">
                             <label for="embalmName" class="form-label">Name:</label>
-                            <input type="text" class="form-control" name="embalmName" placeholder="Embalmer name" value="{{ old('embalmName') ? old('embalmName') : $leData->embalmer_name }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
+                            <input type="text" class="form-control" name="embalmName" placeholder="Embalmer name" value="{{ old('embalmName') ? old('embalmName') : $leData->embalmer_name }}">
                             @error('embalmName')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
@@ -24,7 +24,7 @@
 
                         <div class="col-md-2">
                             <label for="embalmPrice" class="form-label">Price</label>
-                            <input type="text" class="form-control" name="embalmPrice" placeholder="Price" value="{{ old('embalmPrice') ? old('embalmPrice') : $leData->prep_price }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
+                            <input type="text" class="form-control" name="embalmPrice" placeholder="Price" value="{{ old('embalmPrice') ? old('embalmPrice') : $leData->prep_price }}">
                             @error('embalmPrice')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
@@ -34,10 +34,10 @@
                         <div class="col-md-4">
                             <div class="row justify-content-end">
                                 <div class="col-auto">
-                                    @if(session("empRole") != 'staff')
-                                        <label for="" class="form-label">Add/Remove</label>
-                                        <a href="{{ route('Embalmer.addRemItem', $leData->id) }}" class="cust-btn cust-btn-primary">Add/Remove Equipment</a>
-                                    @endif
+                                    
+                                    <label for="" class="form-label">Add/Remove</label>
+                                    <a href="{{ route('Embalmer.addRemItem', $leData->id) }}" class="cust-btn cust-btn-primary">Add/Remove Equipment</a>
+                                    
                                     
                                 </div>
                             </div>
@@ -84,14 +84,14 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label fw-semibold text-secondary">Qty.</label>
-                                                            <input type="number" class="form-control" name="qty[]" value="{{ old('qty.'.$loop->index, $row->stock_used) }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
+                                                            <input type="number" class="form-control" name="qty[]" value="{{ old('qty.'.$loop->index, $row->stock_used) }}">
                                                             @error('qty.' . $loop->index)
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
-                                                            <input type="number" class="form-control" name="qtySet[]" value="{{ old('qtySet.'.$loop->index, $row->stock_used_set) }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
+                                                            <input type="number" class="form-control" name="qtySet[]" value="{{ old('qtySet.'.$loop->index, $row->stock_used_set) }}">
                                                             @error('qtySet.' . $loop->index)
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
@@ -145,14 +145,14 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label fw-semibold text-secondary">Qty.</label>
-                                                            <input type="number" class="form-control" name="eqQty[]" value="{{ old('eqQty.'.$loop->index, $row->eq_used) }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
+                                                            <input type="number" class="form-control" name="eqQty[]" value="{{ old('eqQty.'.$loop->index, $row->eq_used) }}">
                                                             @error('eqQty.' . $loop->index)
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
-                                                            <input type="number" class="form-control" name="eqQtySet[]" value="{{ old('eqQtySet.'.$loop->index, $row->eq_used_set) }}" {{ session("empRole") == 'staff' ? 'readonly' : '' }}>
+                                                            <input type="number" class="form-control" name="eqQtySet[]" value="{{ old('eqQtySet.'.$loop->index, $row->eq_used_set) }}">
                                                             @error('eqQtySet.' . $loop->index)
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror

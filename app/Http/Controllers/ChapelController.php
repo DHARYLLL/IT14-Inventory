@@ -81,7 +81,8 @@ class ChapelController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $chapData = Chapel::findOrFail($id);
+        return view('shows/chapelShow', ['chapData' => $chapData]);
     }
 
     /**

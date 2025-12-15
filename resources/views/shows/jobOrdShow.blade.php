@@ -44,10 +44,17 @@
                 
                 <div class="w-100"></div>
 
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Balance</label>
-                    <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
-                </div>
+                @if($joData->jo_status == 'Paid')
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Change</label>
+                        <p>₱{{ ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) - ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) }}</p>
+                    </div>
+                @else
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Balance</label>
+                        <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
+                    </div>
+                @endif
                 
             @else
                 <div class="col-md-3">
@@ -167,16 +174,6 @@
                 <p>{{ $joData->jo_embalm_time ? \Carbon\Carbon::parse($joData->jo_embalm_time)->format('g:i A') : 'No sched.' }}</p>
             </div>
 
-            @if(!$joData->joToJod->jodToAddWake)
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Add. Wake</label>
-                    <!-- Button trigger modal for adding wake days -->
-                    <button type="button" class="cust-btn cust-btn-primary" data-bs-toggle="modal" data-bs-target="#wakeDay">
-                    Add wake
-                    </button>
-                </div>
-            @endif
-
             @if($joData->joToJod->jodToAddWake)
                 <div class="w-100 mb-2"></div>
                 <div class="col-md-3">
@@ -187,34 +184,8 @@
                     <label class="form-label fw-semibold">Total Fee</label>
                     <p>₱{{ $joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee }}</p>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Add. Wake</label>
 
-                    <div class="row">
-                        <div class="col col-auto">
-                            <!-- Button trigger modal for edit wake days -->
-                            <button type="button" class="cust-btn cust-btn-secondary" data-bs-toggle="modal" data-bs-target="#wakeDayEdit">
-                            <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i> 
-                            </button>
-                        </div>
-                        <div class="col col-auto">
-                            <!-- Delete button -->
-                            <button type="button" class="cust-btn cust-btn-danger-secondary" data-bs-toggle="modal" data-bs-target="#wakeDayDelete">
-                            <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i> 
-                            </button>
-                        </div>
-                    </div>
-                    
-                </div>
             @endif
-
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Assign Schedule</label>
-                <!-- Button trigger modal for assign schedule -->
-                <button type="button" class="cust-btn cust-btn-primary" data-bs-toggle="modal" data-bs-target="#applySched">
-                Schedule
-                </button>
-            </div>
             
             
         </div>

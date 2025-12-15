@@ -20,7 +20,6 @@
         <table class="table table-hover modern-table mb-0">
             <thead>
                 <tr class="table-white">
-                    <th class="fw-semibold">Item #</th>
                     <th class="fw-semibold">Item Name</th>
                     <th class="fw-semibold">Size/Unit</th>
                     <th class="fw-semibold">Item Quantity</th>
@@ -38,7 +37,6 @@
                 @else
                     @foreach ($stoData as $row)
                         <tr>
-                            <td>{{ $row->id }}</td>
                             <td>{{ $row->item_name }}</td>
                             <td>{{ $row->item_size}}</td>
                             <td><span class="{{ $row->item_qty <= $row->item_low_limit ? 'badge rounded-pill text-bg-warning' : ''}}">{{ $row->item_qty }}</span></td>

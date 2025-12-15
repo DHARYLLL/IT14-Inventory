@@ -216,14 +216,18 @@ class ServiceRequestController extends Controller
        return redirect()->back()->with('success', 'Updated Schedule!');
     }
 
+    public function completeService(String $id) {
+        dd('hello');
+
+        return redirect(route('Service-Request.index'))->with('success', 'Completed Serivce Request!');
+    }
+
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, String $id)
     {
         $pkgId = ServiceRequest::where('id', $id)->take(1)->value('pkg_id');
-        
-
         $pkgEqs = PkgEquipment::where('pkg_id', '=', $pkgId)->get();
         $pkgStos = PkgStock::where('pkg_id', '=', $pkgId)->get();
 

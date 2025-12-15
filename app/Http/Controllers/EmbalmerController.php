@@ -173,7 +173,11 @@ class EmbalmerController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $leData = embalming::findOrFail($id);
+
+        $leEqData = PkgEquipment::where('prep_id', $leData->id)->get();
+        $leStoData = PkgStock::where('prep_id', $leData->id)->get();
+        return view('shows/embalmerShow', ['leData' => $leData, 'leEqData' => $leEqData, 'leStoData' => $leStoData]);
     }
 
     /**
