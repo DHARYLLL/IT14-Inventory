@@ -61,7 +61,7 @@
                                 @csrf
                                 @method('put')
                                 <label>
-                                    <input type="checkbox" name="status" class="raCheckbox" {{ $row->ra ? 'checked' : '' }} {{ $row->ba_id ? 'disabled' : '' }}>
+                                    <input type="checkbox" name="status" class="raCheckbox" {{ $row->ra ? 'checked' : '' }} {{ $row->ba_id || $row->jo_status == 'Paid' ? 'disabled' : '' }}>
                                 </label>
                             </form>
                         </td>
@@ -92,7 +92,7 @@
                                         </a>
                                     @endif
                                 @endif
-                                @if($row->svc_id)
+                                @if($row->svc_id && !$row->jod_id)
                                     @if($row->joToSvcReq->svc_status == 'Completed')
                                         <a href="{{ route('Service-Request.show', $row->id) }}"
                                             class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">

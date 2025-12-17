@@ -48,7 +48,19 @@
                     <tr>
                         <td>{{ $row->eq_name }}</td>
                         <td>{{ $row->eq_size }}</td>
-                        <td><span class="{{ $row->eq_available <= $row->eq_low_limit ? 'badge rounded-pill text-bg-warning' : ''}}">{{ $row->eq_available }}</span></td>
+                        <td>
+                            @if($row->eq_available == 0)
+                                    <span class="cust-empty">{{ $row->eq_available }} {{ $row->eq_available <= $row->eq_low_limit ? '(No stock)' : ''}}</span>
+                            @else
+                                @if($row->eq_available > $row->eq_low_limit)
+                                    <span>{{ $row->eq_available }}</span>
+                                @else
+                                    <span class="cust-warning">{{ $row->eq_available }} {{ $row->eq_available <= $row->eq_low_limit ? '(Low Stock)' : ''}}</span>
+                                @endif
+                                
+                            @endif
+                            
+                        </td>
                         <td>{{ $row->eq_in_use }}</td>
                         <td>
                             <a href="{{ route('Equipment.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" 

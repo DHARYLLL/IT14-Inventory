@@ -21,6 +21,24 @@
                 <label class="form-label fw-semibold">Contact Number</label>
                 <p>{{ $joData->client_contact_number }}</p>
             </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Referal (Ra)</label>
+                <form action="{{ route('Job-Order.raUpdate', $joData->id) }}" method="POST" class="raForm">
+                    @csrf
+                    @method('put')
+                    <label>
+                        <input type="checkbox" name="status" class="raCheckbox" {{ $joData->ra ? 'checked' : '' }} {{ $joData->ba_id || $joData->jo_status == 'Paid' ? 'disabled' : '' }}>
+                    </label>
+                </form>
+                <script>
+                    document.querySelectorAll('.raCheckbox').forEach((checkbox) => {
+                        checkbox.addEventListener('change', function() {
+                            // submit the form that contains this checkbox
+                            this.closest('form').submit();
+                        });
+                    });
+                </script>
+            </div>
 
             <div class="w-100"></div>
 
@@ -188,6 +206,28 @@
             @endif
             
             
+        </div>
+
+        {{-- Service Details --}}
+        <div class="row mt-4 cust-white-bg">
+
+            <div class="col-md-12 mb-2">
+                <h5 class="cust-sub-title">Services:</h5>
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Embalmer</label>
+                <p>{{ $joData->joToSvcReq->prep_id ? $joData->joToSvcReq->svcReqToEmbalm->embalmer_name : 'N/A' }}</p>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Driver</label>
+                <p>{{ $joData->joToSvcReq->veh_id ? $joData->joToSvcReq->svcReqToVeh->driver_name : 'N/A' }}</p>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Contact number</label>
+                <p>{{ $joData->joToSvcReq->veh_id ? $joData->joToSvcReq->svcReqToVeh->driver_contact_number : 'N/A' }}</p>
+            </div>
+
         </div>
 
         {{-- Deceased Info --}}

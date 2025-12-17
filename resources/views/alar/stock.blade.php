@@ -39,7 +39,21 @@
                         <tr>
                             <td>{{ $row->item_name }}</td>
                             <td>{{ $row->item_size}}</td>
-                            <td><span class="{{ $row->item_qty <= $row->item_low_limit ? 'badge rounded-pill text-bg-warning' : ''}}">{{ $row->item_qty }}</span></td>
+                            <td>
+                                
+                                @if($row->item_qty == 0)
+                                    <span class="cust-empty">{{ $row->item_qty }} {{ $row->item_qty <= $row->item_low_limit ? '(No stock)' : ''}}</span>
+                                @else
+                                    @if($row->item_qty > $row->item_low_limit)
+                                        <span>{{ $row->item_qty }}</span>
+                                    @else
+                                        <span class="cust-warning">{{ $row->item_qty }} {{ $row->item_qty <= $row->item_low_limit ? '(Low Stock)' : ''}}</span>
+                                    @endif
+                                    
+                                @endif
+                            
+                                
+                            </td>
                             <td>
                                 <a href="{{ route('Stock.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" 
                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">

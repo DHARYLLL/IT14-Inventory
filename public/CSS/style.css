@@ -748,4 +748,14 @@ body {
     box-shadow: 0 0 0 3px rgba(96, 191, 79, 0.2);
     border-color: #60BF4F;
 }
+
+.cust-warning {
+    color: #a6af00;
+    font-weight: 700;
+}
+
+.cust-empty {
+    color: #af0000;
+    font-weight: 700;
+}
 /* Si gar nag butang ani hahahaha (end)*/
