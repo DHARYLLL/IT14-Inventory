@@ -144,13 +144,20 @@
                 <div class="col-md-4">
                     <label for="chapel" class="form-label">Chapel</label>
                     <select name="chapel" id="chapel" class="form-select" onchange="PriceChap()">
-                        <option value="">None</option>
+                        
+                        @if($chapData->isEmpty())
+                            <option value="">No Available Chapel</option>
+                        @else
+                            <option value="">None</option>
+                            @foreach ($chapData as $data)
+                            
+                                <option value="{{ $data->id }},{{ $data->chap_price }}" {{ old('chapel') == $data->id.','.$data->chap_price ? 'selected' : '' }}>
+                                    {{ $data->chap_name }} - Room {{ $data->chap_room }} | Price: ₱{{ $data->chap_price }}
+                                </option>
+                            @endforeach
+                        @endif
 
-                        @foreach ($chapData as $data)
-                            <option value="{{ $data->id }},{{ $data->chap_price }}" {{ old('chapel') == $data->id.','.$data->chap_price ? 'selected' : '' }}>
-                                {{ $data->chap_name }} - Room {{ $data->chap_room }} | Price: ₱{{ $data->chap_price }}
-                            </option>
-                        @endforeach
+                        
                 
                     </select>
                     

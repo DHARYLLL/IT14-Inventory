@@ -40,8 +40,19 @@ class JobOrderController extends Controller
      */
     public function create()
     {
+
+        $jodIds = JobOrder::where('jo_burial_date', '>=', today())
+            ->where('jo_start_date', '<=', today())
+            ->pluck('jod_id');
+        //dd($jodIds);
+
+        $usedChapelIds = JobOrderDetails::whereIn('id', $jodIds)
+            ->where('jod_eq_stat', 'Pending')
+            ->pluck('chap_id');
+
+
         $pkgData = Package::all();
-        $chapData = Chapel::all();
+        $chapData = Chapel::whereNotIn('id', $usedChapelIds)->get();
         $vehData = vehicle::all();
         $embalmData = embalming::all();
 
