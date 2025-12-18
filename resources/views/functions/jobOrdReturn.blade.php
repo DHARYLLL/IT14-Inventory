@@ -7,6 +7,23 @@
     {{-- table --}}
     <div class="cust-add-form">
 
+        {{-- Display error --}}
+        @session('promt-f')
+            <div class="row mb-4 cust-error-msg">
+                <div class="col-md-12">
+                    <div class="text-danger"><p>{{ $value }}</p></div>
+                </div>
+            </div>
+        @endsession
+
+        @if(!$joData->jo_burial_time)
+            <div class="row mb-4 cust-warning-msg">
+                <div class="col-md-12">
+                    <p>No burial time is assigned</p>
+                </div>
+            </div>
+        @endif
+
         <!-- Client info -->
         <div class="row cust-white-bg">
             <div class="col-md-12">
@@ -166,30 +183,8 @@
             </div>
 
             <div class="col-md-3">
-                <label class="form-label fw-semibold">Service Date</label>
-                <p>{{ \Carbon\Carbon::parse($joData->jo_start_date)->format('d/M/Y')}}</p>
-            </div>
-
-            <div class="col-md-3">
                 <label class="form-label fw-semibold">Days of Wake</label>
                 <p>{{ $jodData->jod_days_of_wake }}</p>
-            </div>
-            
-
-            <div class="w-100 mb-2"></div>
-
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Burial Date</label>
-                <p>{{ \Carbon\Carbon::parse($joData->jo_burial_date)->format('d/M/Y') }}</p>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Burial Time</label>
-                <p>{{ $joData->jo_burial_time ? \Carbon\Carbon::parse($joData->jo_burial_time)->format('g:i A') : 'No sched.' }}</p>
-            </div>
-            
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Embalm Time</label>
-                <p>{{ $joData->jo_embalm_time ? \Carbon\Carbon::parse($joData->jo_embalm_time)->format('g:i A') : 'No sched.' }}</p>
             </div>
 
             @if(!$joData->joToJod->jodToAddWake)
@@ -204,6 +199,11 @@
 
             @if($joData->joToJod->jodToAddWake)
                 <div class="w-100 mb-2"></div>
+
+                <div class="col-md-12">
+                    <h5 class="cust-sub-title">Additional Wake:</h5>
+                </div>
+
                 <div class="col-md-3">
                     <label class="form-label fw-semibold">Add. Wake Days</label>
                     <p>{{ $joData->joToJod->jodToAddWake->day }}</p>
@@ -225,13 +225,39 @@
                         <div class="col col-auto">
                             <!-- Delete button -->
                             <button type="button" class="cust-btn cust-btn-danger-secondary" data-bs-toggle="modal" data-bs-target="#wakeDayDelete">
-                            <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i> 
+                            <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel"></i> 
                             </button>
                         </div>
                     </div>
                     
                 </div>
             @endif
+            
+
+            <div class="w-100 mb-2"></div>
+
+            <div class="col-md-12">
+                <h5 class="cust-sub-title">Schedule:</h5>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Service Date</label>
+                <p>{{ \Carbon\Carbon::parse($joData->jo_start_date)->format('d/M/Y')}}</p>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Burial Date</label>
+                <p>{{ \Carbon\Carbon::parse($joData->jo_burial_date)->format('d/M/Y') }}</p>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Burial Time</label>
+                <p>{{ $joData->jo_burial_time ? \Carbon\Carbon::parse($joData->jo_burial_time)->format('g:i A') : 'No sched.' }}</p>
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Embalm Time</label>
+                <p>{{ $joData->jo_embalm_time ? \Carbon\Carbon::parse($joData->jo_embalm_time)->format('g:i A') : 'No sched.' }}</p>
+            </div>
 
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Assign Schedule</label>

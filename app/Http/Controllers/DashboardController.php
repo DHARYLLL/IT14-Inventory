@@ -29,6 +29,7 @@ class DashboardController extends Controller
 
         $jobOrdData = jobOrder::where('jo_start_date', '<=', Carbon::today())->
                                 where('jo_burial_date', '>=', Carbon::today())->
+                                whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')->
                                 orderBy('jo_start_date', 'desc')->get();
 
         $getValue = Invoice::select('total')->whereMonth('invoice_date', date('m'))->get();

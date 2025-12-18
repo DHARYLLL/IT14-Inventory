@@ -464,6 +464,10 @@ body {
 
 /* Si gar nag butang ani hahahaha (start)*/
 
+.cust-fit-w {
+    width: fit-content;
+}
+
 .cust-sub-title{
     color: black;
     border-bottom: 3px#60BF4F solid;
@@ -749,9 +753,35 @@ body {
     border-color: #60BF4F;
 }
 
+.cust-success-row td{
+    color: #57765a !important;
+    background-color: #ecfff0 !important;
+    font-weight: 700;
+}
+
+.cust-success-td {
+    color: #007d0f !important;
+    font-weight: 700;
+}
+
 .cust-warning {
     color: #a6af00;
     font-weight: 700;
+}
+
+.cust-error-msg {
+    border: 1px #e34444 solid;
+    padding: 13px 10px 0px 0px;
+    background-color: #ffc0c0;
+    border-radius: 10px;
+}
+
+.cust-warning-msg {
+    border: 1px #dada30 solid;
+    border-radius: 10px;
+    padding: 13px 10px 0px 0px;
+    background-color: #fbffb9;
+    color: #9a9d5b;
 }
 
 .cust-empty {

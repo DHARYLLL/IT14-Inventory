@@ -47,11 +47,24 @@
                         <label class="form-label fw-semibold">Contact number</label>
                         <p>{{ $joData->joToSvcReq->veh_id ? $joData->joToSvcReq->svcReqToVeh->driver_contact_number : 'N/A' }}</p>
                     </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Status</label>
+                        <p>{{ $joData->joToSvcReq->svc_status }}</p>
+                    </div>
                     
                     <div class="w-100 mb-2"></div>
+
+                    <div class="col-md-12 mb-2">
+                        <h5 class="cust-sub-title">Schedule:</h5>
+                    </div>
+
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Service date</label>
-                        <p>{{ \Carbon\Carbon::parse($joData->jo_start_date)->format('d/M/Y') }}</p>
+                        <p>{{ $joData->jo_start_date ? \Carbon\Carbon::parse($joData->jo_start_date)->format('d/M/Y') : 'No Sched.' }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Burial date</label>
+                        <p>{{ $joData->jo_burial_date ? \Carbon\Carbon::parse($joData->jo_burial_date)->format('d/M/Y') : 'No Sched.' }}</p>
                     </div> 
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Burial time</label>
@@ -88,9 +101,10 @@
                                     <div class="modal-body">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label class="form-label fw-semibold">Service Date <span class="text-danger">*</span></label>
-                                                <input type="date" class="form-control" name="svcDate" value="{{ old('svcDate', $joData->jo_start_date ?? '') }}">
-                                                @error('svcDate')
+                                                <label class="form-label fw-semibold">Burial Date <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" name="burrDate" value="{{ old('burrDate', $joData->jo_burial_date ?? '') }}">
+                                                <input type="date" name="svcDate" value="{{ old('svcDate', $joData->jo_start_date ?? '') }}" hidden>
+                                                @error('burrDate')
                                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                                     <script>
                                                         document.addEventListener("DOMContentLoaded", function () {

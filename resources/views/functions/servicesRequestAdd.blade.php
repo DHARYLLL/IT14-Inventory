@@ -9,11 +9,21 @@
         {{--
         <div class="card bg-white border-0 rounded-3">
             <div class="card-body">
+
                 --}}
 
                 
                     <form action="{{ route('Service-Request.store') }}" method="post">
                         @csrf
+                        {{-- Display error --}}
+                        @session('promt')
+                            <div class="row mb-4 cust-error-msg">
+                                <div class="col-md-12">
+                                    <div class="text-danger">{{ $value }}</div>
+                                </div>
+                            </div>
+                        @endsession
+
                         <div class="row">
                             <div class="col col-auto">
                                 <h4 class="cust-sub-title mb-4">Service Request Form</h4>
@@ -102,9 +112,9 @@
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
-                            {{--
+                            
                             <div class="col-md-3">
-                                <label for="burrDate" class="form-label">Burial Date</label>
+                                <label for="burrDate" class="form-label">Burial Date <span class="text-danger">*</span></label>
                                 <input type="date" name="burrDate" class="form-control"
                                     value="{{ old('burrDate') }}">
                                 @error('burrDate')
@@ -119,7 +129,7 @@
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
-                            --}}
+                            
                             <div class="col-md-3">
                                 <label for="embalmTime" class="form-label">Embalm Time</label>
                                 <input type="time" class="cust-time" name="embalmTime" value="{{ old('embalmTime') }}">
@@ -149,10 +159,13 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="payment" class="form-label">Total</label>
-                                <input type="text" class="form-control" id="totalPayment" name="total" value="{{ old('total') }}">
-                                @error('total')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <span class="input-group-text">₱</span>
+                                    <input type="text" class="form-control" id="totalPayment" name="total" value="{{ old('total') }}" readonly>
+                                    @error('total')
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
                     
                                 <input type="text" id="setEmbalmPrice" name="setEmbalmPrice" readonly value="{{ old('setEmbalmPrice') }}" hidden>
                                 <input type="text" id="setVehPrice" name="setVehPrice" readonly value="{{ old('setVehPrice') }}" hidden>
@@ -160,11 +173,14 @@
                                 <input type="text" id="setVehId" readonly name="setVehId" value="{{ old('setVehId') }}" hidden>
                             </div>
                             <div class="col-md-3">
-                                <label for="payment" class="form-label">Down Payment</label>
-                                <input type="text" class="form-control" name="payment" value="{{ old('payment', 0) }}">
-                                @error('payment')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
+                                <label for="payment" class="form-label">Down Payment <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₱</span>
+                                    <input type="text" class="form-control" name="payment" value="{{ old('payment', 1000) }}">
+                                    @error('payment')
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                         {{-- Custom Script for Payment --}}
@@ -193,12 +209,7 @@
                     
                         {{-- Submit --}}
                         <div class="row justify-content-end mt-4">
-                            {{-- Display Error --}}
-                            <div class="col col-auto">
-                                @session('promt')
-                                    <div class="text-danger small mt-1">{{ $value }}</div>
-                                @endsession
-                            </div>
+                           
                             <div class="col col-auto">
                                 <a href="{{ route('Job-Order.index') }}" class="cust-btn cust-btn-secondary"><i
                                     class="bi bi-arrow-left"></i>

@@ -11,23 +11,45 @@
     <div class="input-group cust-searchbar">
         <input type="text" id="searchInput" class="form-control" placeholder="Search"
             style="border-radius: 0; border: none;">
-        <button class="cust-btn cust-btn-search" id="clearSearch">Clear</button>
+        <div class="cust-fit-w">
+            <select class="form-select" id="sortSelect" onchange="applySort()" style="border-radius: 0; border: none;">
+                <option value="all">All</option>
+                <option value="pending">Pending</option>
+                <option value="paid">Paid</option>
+                <option value="package">Package</option>
+                <option value="service">Service</option>
+            </select>
+        </div>
+        <button class="cust-btn cust-btn-search" id="clearSearch">Clear</button >
+        
     </div>
+    
     <div class="row">
         <div class="col col-auto">
-            <a href="{{ route('Service-Request.create') }}" class="cust-btn cust-btn-primary"><i
-                class="bi bi-plus-lg"></i> <span>Service</span></a>
-        </div>
-        <div class="col col-auto">
-            <a href="{{ route('Job-Order.create') }}" class="cust-btn cust-btn-primary"><i
-                class="bi bi-plus-lg"></i> <span>Package</span></a>
+            <div class="dropdown">
+                <button class="cust-btn cust-btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-plus-lg"></i> New Job Order
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{{ route('Service-Request.create') }}" class="dropdown-item">
+                            <span>New Service</span>
+                        </a></li>
+                    <li>
+                        <a href="{{ route('Job-Order.create') }}" class="dropdown-item">
+                            <span>New Package</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
         </div>
     </div>
     
 </div>
 
 {{-- table --}}
- <div class="cust-h-content">
+<div class="cust-h-content">
     <table class="table table-hover mb-0">
         <thead>
             <tr class="table-light">
@@ -52,7 +74,7 @@
                 </tr>
             @else
                 @foreach ($jOData as $row)
-                    <tr>
+                    <tr class="{{ $row->joToSvcReq->svc_status == 'Completed' ? 'cust-success-row' : '' }}">
                         {{-- Safely display the package name (avoid null errors) --}}
                         <td>{{ $row->client_name ?? '—'  }}</td>
                         <td>{{ $row->ba_id ? '₱'.$row->joToBurAsst->amount : 'N/A' }}</td>
@@ -67,7 +89,7 @@
                         </td>
                         <td>{{ $row->client_address }}</td>
                         <td>{{ $row->jod_id ? $row->joToJod->jodToPkg->pkg_name : 'N/A' }}</td>
-                        <td>{{ $row->jo_status == "Paid" ? $row->jo_status :$row->jo_total }}</td>
+                        <td class="{{ $row->jo_status == "Paid" ? 'cust-success-td' : '' }}">{{ $row->jo_status == "Paid" ? $row->jo_status : '₱'.number_format($row->jo_total, 2) }}</td>
                         <td>{{ $row->client_contact_number ?? '—' }}</td>
                         <td class="text-center col col-md-2">
                             
@@ -122,6 +144,40 @@
     
         </tbody>
     </table>
+    <script>
+        // Filter 
+        function applySort() {
+            const value = document.getElementById('sortSelect').value;
+            const rows = document.querySelectorAll('#tableBody tr');
+
+            rows.forEach(row => {
+                const amountText = row.cells[5]?.innerText.trim(); // Amount column
+                const casketText = row.cells[4]?.innerText.trim(); // Casket column
+
+                const isPaid = amountText === 'Paid';
+                const hasCasket = casketText !== 'N/A' && casketText !== '';
+
+                let showRow = true;
+
+                if (value === 'paid') {
+                    showRow = isPaid;
+                } 
+                else if (value === 'pending') {
+                    showRow = !isPaid;
+                }
+                else if (value === 'package') {
+                    showRow = hasCasket;
+                }
+                else if (value === 'service') {
+                    showRow = !hasCasket;
+                }
+
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+
+    </script>
 </div>
 
 @endsection

@@ -61,16 +61,15 @@ class ServiceRequestController extends Controller
             'vehicle' => 'required_without:embalm',
             'embalm'  => 'required_without:vehicle',
             'svcDate' => [
-                'required',
                 Rule::date()->afterOrEqual(today())
             ],
-            'payment' => 'required|integer|min:0|max:999999',
+            'payment' => 'required|integer|min:1000|max:999999',
             'total' => 'required|integer|min:1|max:999999',
 
-            // 'burrDate' => [
-            //     'nullable',
-            //     Rule::date()->afterOrEqual('svcDate')
-            // ]
+            'burrDate' => [
+                'nullable',
+                Rule::date()->afterOrEqual('svcDate')
+            ]
         ], [
             'clientName.required' => 'This field is required.',
             'clientName.regex' => 'Not a valid name.',
@@ -83,7 +82,7 @@ class ServiceRequestController extends Controller
             'svcDate.required' => 'This field is required.',
             'svcDate.after_or_equal' => 'Date must be today or after.',
 
-            //'burrDate.after_or_equal' => 'Date must be today or after service date.',
+            'burrDate.after_or_equal' => 'Date must be today or after service date.',
 
             'vehicle.required_without' => 'Select at least one: vehicle or embalm.',
             'embalm.required_without'  => 'Select at least one: vehicle or embalm.',
@@ -93,7 +92,7 @@ class ServiceRequestController extends Controller
 
             'payment.required' => 'This field is required.',
             'payment.integer' => 'Number only.',
-            'payment.min' => 'Not a valid payment.',
+            'payment.min' => 'Minimum downpayment PHP 1,000.',
             'payment.max' => '6 digits is the max.',
 
             'total.required' => 'This field is required.',
@@ -138,7 +137,9 @@ class ServiceRequestController extends Controller
             'jo_total' => $request->total,
             'jo_status' => $request->payment >= $request->total ? 'Paid' : 'Pending',
             'jo_start_date' => $request->svcDate,
+            'jo_burial_date' => $request->burrDate,
             'jo_embalm_time' => $request->embalmTime,
+            'jo_burial_time' => $request->burialTime,
             'emp_id' => session('loginId'),
             'svc_id'  => $svcId
         ]);
@@ -208,17 +209,18 @@ class ServiceRequestController extends Controller
     public function updateSchedule(Request $request, String $id)
     {
         $request->validate([
-            'svcDate' => [
+            'burrDate' => [
                 'required',
-                Rule::date()->afterOrEqual(today())
+                'date',
+                Rule::date()->afterOrEqual('svcDate')
             ]
         ],[
-            'svcDate.required' => 'This field is required.',
-            'svcDate.after_or_equal' => 'Date must be today or after.'
+            'burrDate.required' => 'This field is required.',
+            'burrDate.after_or_equal' => 'Date must on or after Service date.'
         ]);
 
         jobOrder::findOrFail($id)->update([
-            'jo_start_date' => $request->svcDate,
+            'jo_start_date' => $request->burrDate,
             'jo_embalm_time' => $request->embalmTime,
             'jo_burial_time' => $request->burialTime
         ]);

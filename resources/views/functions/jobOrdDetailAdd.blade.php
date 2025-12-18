@@ -89,7 +89,7 @@
             {{-- Package --}}
             <div class="row mt-4 cust-white-bg">
                 <div class="col-md-12">
-                    <h5 class="cust-sub-title">Packages and Payment:</h5>
+                    <h5 class="cust-sub-title">Packages</h5>
                 </div>
 
                 <div class="col-md-4">
@@ -167,9 +167,16 @@
 
                 <div class="w-100 mb-2"></div>
 
+                <div class="col-md-12">
+                    <h5 class="cust-sub-title">Payment:</h5>
+                </div>
+
                 <div class="col-md-4">
                     <label for="payment" class="form-label">Total Payment</label>
-                    <input type="text" class="form-control" id="totalPayment" readonly name="total" value="{{ old('total') }}">
+                    <div class="input-group">
+                        <span class="input-group-text">₱</span>
+                        <input type="text" class="form-control" id="totalPayment" readonly name="total" value="{{ old('total') }}">
+                    </div>
 
                     <input type="text" id="setPricePkg" name="setPricePkg" readonly value="{{ old('setPricePkg') }}" hidden>
                     <input type="text" id="setPriceChap" name="setPriceChap" readonly value="{{ old('setPriceChap') }}" hidden>
@@ -179,7 +186,10 @@
                 </div>
                 <div class="col-md-4">
                     <label for="payment" class="form-label">Payment <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="payment" value="{{ old('payment', 0) }}">
+                    <div class="input-group">
+                        <span class="input-group-text">₱</span>
+                        <input type="text" class="form-control" name="payment" value="{{ old('payment', 1000) }}">
+                    </div>
                     @error('payment')
                         <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror

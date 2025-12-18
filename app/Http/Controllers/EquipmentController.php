@@ -26,7 +26,7 @@ class EquipmentController extends Controller
             ->orWhere('eq_size', 'like', "%{$search}%")
             ->orWhere('id', 'like', "%{$search}%");
         })
-        ->orderBy('eq_available', 'asc')
+        ->orderByRaw("CASE WHEN eq_available <= eq_low_limit THEN 0 ELSE 1 END")->orderBy('eq_available', 'asc')
         ->paginate(10)
         ->withQueryString(); 
 

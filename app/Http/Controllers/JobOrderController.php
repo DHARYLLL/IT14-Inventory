@@ -31,7 +31,11 @@ class JobOrderController extends Controller
      */
     public function index()
     {
-        $jOData = jobOrder::orderBy('client_name', 'asc')->get();
+        
+        $jOData = jobOrder::join('services_requests', 'services_requests.id', '=', 'job_orders.svc_id')
+            ->orderByRaw("CASE WHEN services_requests.svc_status = 'Completed' THEN 1 ELSE 0 END")
+            ->orderBy('client_name', 'asc')
+            ->get();
         return view('alar/jobOrder', ['jOData' => $jOData]);
     }
 
@@ -89,7 +93,7 @@ class JobOrderController extends Controller
                 Rule::date()->afterOrEqual('decBorn')
                 ->beforeOrEqual(today())
             ],
-            'payment' => 'required|integer|min:0|max:999999',
+            'payment' => 'required|integer|min:1000|max:999999',
             'total' => 'required|integer|min:1|max:999999',
 
             'wakeDay' => 'required|integer|min:1|max:999'
@@ -123,7 +127,7 @@ class JobOrderController extends Controller
 
             'payment.required' => 'This field is required.',
             'payment.number' => 'Number only.',
-            'payment.min' => 'Invalid amount',
+            'payment.min' => 'Minimum downpayment PHP 1,000.',
             'payment.max' => '6 digit limit reached.',
 
             'wakeDay.required' => 'This field is required.',
@@ -290,8 +294,14 @@ class JobOrderController extends Controller
         //dd($addStoId, $addStoDepl, $addEqId, $addEqDepl);
         //dd($stoId, $stoDepl, $eqId, $eqDepl);
 
+
         // Check date
-        $jo = jobOrder::select('id', 'jo_start_date')->where('jod_id', $id)->first();
+        $jo = jobOrder::select('id', 'jo_start_date', 'jo_burial_time')->where('jod_id', $id)->first();
+        if ($jo->jo_burial_time == null) {
+            return redirect()->back()
+                ->with('promt-f', 'Please schedule burial time.')
+                ->withInput();
+        }
         if (Carbon::parse($jo->jo_start_date)->gt(Carbon::today())) {
             return redirect()->back()
                 ->with('promt-f', 'Cannot deploy before (' . $jo->jo_start_date . ')')
