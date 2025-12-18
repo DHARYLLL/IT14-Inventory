@@ -53,7 +53,7 @@ class AddWakeController extends Controller
             ->addDays((int)$request->addDays)
             ->toDateString();
 
-        $driverUnavailable = JobOrder::where('jo_burial_date', $checkAvail)
+        $driverUnavailable = jobOrder::where('jo_burial_date', $checkAvail)
             ->whereRelation('joToSvcReq', 'veh_id', $request->vehId)
             ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
             ->exists();
@@ -210,7 +210,7 @@ class AddWakeController extends Controller
             ->addDays((int)$jodData->jod_days_of_wake)
             ->toDateString();
 
-        $driverUnavailable = JobOrder::where('jo_burial_date', $checkAvail)
+        $driverUnavailable = jobOrder::where('jo_burial_date', $checkAvail)
             ->whereRelation('joToSvcReq', 'veh_id', $svcReqData->veh_id)
             ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
             ->exists();

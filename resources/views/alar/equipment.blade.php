@@ -50,12 +50,12 @@
                         <td>{{ $row->eq_size }}</td>
                         <td>
                             @if($row->eq_available == 0)
-                                    <span class="cust-empty">{{ $row->eq_available }} {{ $row->eq_available <= $row->eq_low_limit ? '(No stock)' : ''}}</span>
+                                    <p class="cust-empty">{{ $row->eq_available }} {{ $row->eq_available <= $row->eq_low_limit ? '(No stock)' : ''}}</p>
                             @else
                                 @if($row->eq_available > $row->eq_low_limit)
-                                    <span>{{ $row->eq_available }}</span>
+                                    <p>{{ $row->eq_available }}</p>
                                 @else
-                                    <span class="cust-warning">{{ $row->eq_available }} {{ $row->eq_available <= $row->eq_low_limit ? '(Low Stock)' : ''}}</span>
+                                    <p class="cust-warning">{{ $row->eq_available }} {{ $row->eq_available <= $row->eq_low_limit ? '(Low Stock)' : ''}}</p>
                                 @endif
                                 
                             @endif

@@ -71,12 +71,16 @@
                             <div class="col-md-5">
                                 <label for="vehicle" class="form-label">Vehicle:</label>
                                 <select name="vehicle" id="vehicle" class="form-select" onchange="PriceVeh()">
-                                    <option value="">None</option>
-                                    @foreach ($vehData as $data)
-                                        <option value="{{ $data->id }},{{ $data->veh_price }}" {{ old('vehicle') == $data->id.','.$data->veh_price ? 'selected' : '' }}>
-                                            {{ $data->driver_name }} | Price: ₱{{ $data->veh_price }}
-                                        </option>
-                                    @endforeach
+                                    @if($vehData->isEmpty())
+                                        <option value="">No Driver Available</option>
+                                    @else
+                                        <option value="">None</option>
+                                        @foreach ($vehData as $data)
+                                            <option value="{{ $data->id }},{{ $data->veh_price }}" {{ old('vehicle') == $data->id.','.$data->veh_price ? 'selected' : '' }}>
+                                                {{ $data->driver_name }} | Price: ₱{{ $data->veh_price }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                     
                                 </select>
                                 @error('vehicle')
@@ -98,6 +102,7 @@
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
+                            {{--
                             <div class="col-md-3">
                                 <label for="burrDate" class="form-label">Burial Date</label>
                                 <input type="date" name="burrDate" class="form-control"
@@ -106,6 +111,7 @@
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
+                            
                             <div class="col-md-3">
                                 <label for="burialTime" class="form-label">Burial Time</label>
                                 <input type="time" class="cust-time" name="burialTime" value="{{ old('burialTime') }}">
@@ -113,6 +119,7 @@
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
+                            --}}
                             <div class="col-md-3">
                                 <label for="embalmTime" class="form-label">Embalm Time</label>
                                 <input type="time" class="cust-time" name="embalmTime" value="{{ old('embalmTime') }}">

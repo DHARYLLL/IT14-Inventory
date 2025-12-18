@@ -162,7 +162,7 @@
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Chapel</label>
-                <p>{{ $jodData->chap_id ? $jodData->jodToChap->chap_name : 'N/A' }}</p>
+                <p>{{ $jodData->chap_id ? $jodData->jodToChap->chap_name : 'N/A' }}{{ $jodData->chap_id ? ' | '. $jodData->jodToChap->chap_room : '' }}</p>
             </div>
 
             <div class="col-md-3">

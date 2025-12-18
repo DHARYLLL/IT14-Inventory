@@ -66,10 +66,11 @@ class ServiceRequestController extends Controller
             ],
             'payment' => 'required|integer|min:0|max:999999',
             'total' => 'required|integer|min:1|max:999999',
-            'burrDate' => [
-                'nullable',
-                Rule::date()->afterOrEqual('svcDate')
-            ]
+
+            // 'burrDate' => [
+            //     'nullable',
+            //     Rule::date()->afterOrEqual('svcDate')
+            // ]
         ], [
             'clientName.required' => 'This field is required.',
             'clientName.regex' => 'Not a valid name.',
@@ -82,7 +83,7 @@ class ServiceRequestController extends Controller
             'svcDate.required' => 'This field is required.',
             'svcDate.after_or_equal' => 'Date must be today or after.',
 
-            'burrDate.after_or_equal' => 'Date must be today or after service date.',
+            //'burrDate.after_or_equal' => 'Date must be today or after service date.',
 
             'vehicle.required_without' => 'Select at least one: vehicle or embalm.',
             'embalm.required_without'  => 'Select at least one: vehicle or embalm.',
@@ -103,6 +104,24 @@ class ServiceRequestController extends Controller
 
         //dd(Carbon::parse($request->svcDate)->isSameDay(Carbon::today()) ? 'Ongoing' : 'Pending');
 
+        $driverUnavailable = jobOrder::Where('jo_start_date', $request->svcDate)
+            ->whereRelation('joToSvcReq', 'veh_id', $request->setVehId)
+            ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
+            ->exists();
+
+        if ($driverUnavailable) {
+            //dd('driver not available', $checkAvail);
+            return back()->with('promt', 'Driver not available')->withInput();
+        }
+
+        //$jobOrder
+
+        //$checkIds = ServiceRequest::where('veh_id', $request->setVehId)->where('svc_status', '<>', 'Completed')->exists();
+
+        // if ($checkIds) {
+        //     return back()->with('promt', 'Driver already Booked')->withInput();
+        // }
+
         ServiceRequest::create([
             'veh_id' => $request->setVehId,
             'prep_id' => $request->setEmbalmId,
@@ -120,8 +139,6 @@ class ServiceRequestController extends Controller
             'jo_status' => $request->payment >= $request->total ? 'Paid' : 'Pending',
             'jo_start_date' => $request->svcDate,
             'jo_embalm_time' => $request->embalmTime,
-            'jo_burial_date' => $request->burrDate,
-            'jo_burial_time' => $request->burialTime,
             'emp_id' => session('loginId'),
             'svc_id'  => $svcId
         ]);
@@ -217,9 +234,11 @@ class ServiceRequestController extends Controller
     }
 
     public function completeService(String $id) {
-        dd('hello');
+        ServiceRequest::findOrFail($id)->update([
+            'svc_status' => 'Completed'
+        ]);
 
-        return redirect(route('Service-Request.index'))->with('success', 'Completed Serivce Request!');
+        return redirect(route('Job-Order.index'))->with('success', 'Completed Serivce Request!');
     }
 
     /**
@@ -251,7 +270,7 @@ class ServiceRequestController extends Controller
                 'emp_id' => session('loginId')
             ]);
 
-            return redirect(route('Service-Request.index'));
+            return redirect(route('Job-Order.index'));
         }
 
         // Deploying stock and equipment

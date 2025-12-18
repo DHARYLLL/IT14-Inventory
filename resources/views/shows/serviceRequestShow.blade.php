@@ -192,7 +192,7 @@
                     @if($joData->joToSvcReq->svc_status != 'Completed' && !$joData->jod_id)
                         <div class="col col-auto">
                             <form action="{{ route('Service-Request.complete', $joData->svc_id) }}" method="get">
-                                <button type="submit" class="cust-btn cust-btn-primary"><i class="bi bi-arrow-left"></i><span>Complete Service</span></button>
+                                <button type="submit" class="cust-btn cust-btn-primary"><span>Complete Service</span></button>
                             </form>
                             
                         </div>

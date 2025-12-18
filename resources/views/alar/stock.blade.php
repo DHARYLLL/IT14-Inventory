@@ -42,16 +42,15 @@
                             <td>
                                 
                                 @if($row->item_qty == 0)
-                                    <span class="cust-empty">{{ $row->item_qty }} {{ $row->item_qty <= $row->item_low_limit ? '(No stock)' : ''}}</span>
+                                    <p class="cust-empty">{{ $row->item_qty }} {{ $row->item_qty <= $row->item_low_limit ? '(No stock)' : ''}}</p>
                                 @else
                                     @if($row->item_qty > $row->item_low_limit)
-                                        <span>{{ $row->item_qty }}</span>
+                                        <p>{{ $row->item_qty }}</p>
                                     @else
-                                        <span class="cust-warning">{{ $row->item_qty }} {{ $row->item_qty <= $row->item_low_limit ? '(Low Stock)' : ''}}</span>
+                                        <p class="cust-warning">{{ $row->item_qty }} {{ $row->item_qty <= $row->item_low_limit ? '(Low Stock)' : ''}}</p>
                                     @endif
                                     
-                                @endif
-                            
+                                @endif  
                                 
                             </td>
                             <td>

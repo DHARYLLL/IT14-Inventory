@@ -41,13 +41,13 @@ class JobOrderController extends Controller
     public function create()
     {
 
-        $jodIds = JobOrder::where('jo_burial_date', '>=', today())
+        $jodIds = jobOrder::where('jo_burial_date', '>=', today())
             ->where('jo_start_date', '<=', today())
             ->pluck('jod_id');
         //dd($jodIds);
 
-        $usedChapelIds = JobOrderDetails::whereIn('id', $jodIds)
-            ->where('jod_eq_stat', 'Pending')
+        $usedChapelIds = jobOrderDetails::whereIn('id', $jodIds)
+            ->where('jod_eq_stat', '<>', 'Returned')
             ->pluck('chap_id');
 
 
@@ -156,7 +156,7 @@ class JobOrderController extends Controller
             ->addDays((int)$request->wakeDay)
             ->toDateString();
 
-        $driverUnavailable = JobOrder::where('jo_burial_date', $checkAvail)
+        $driverUnavailable = jobOrder::where('jo_burial_date', $checkAvail)
             ->whereRelation('joToSvcReq', 'veh_id', $request->vehicle)
             ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
             ->exists();
