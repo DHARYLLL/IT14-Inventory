@@ -45,11 +45,11 @@
             @if($joData->ba_id)
                 <div class="col-md-3">
                     <label class="form-label fw-semibold">Total Payment</label>
-                    <p>₱{{ $joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total }}</p>
+                    <p>₱{{ $joData->joToJod->jodToAddWake ? $joData->jo_total + number_format(($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee), 2) : $joData->jo_total }}</p>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold">Down Payment</label>
-                    <p>₱{{ $joData->jo_dp }}</p>
+                    <label class="form-label fw-semibold">Payment</label>
+                    <p>₱{{ number_format($joData->joToSoa->sum('payment'), 2) }}</p>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label fw-semibold">Burial Asst.</label>
@@ -57,43 +57,52 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label fw-semibold">View Burial Assistance</label>
-                    <a href="{{ route('Burial-Assistance.show', $joData->ba_id) }}" class="cust-btn cust-btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><i class="fi fi-rr-eye"></i></a>
+                    <a href="{{ route('Burial-Assistance.show', $joData->ba_id) }}" class="cust-btn cust-btn-secondary"  data-bs-toggle="tooltip" data-bs-placement="top" title="View"><i class="fi fi-rr-eye"></i></a>
                 </div>
-                
+
                 <div class="w-100"></div>
 
                 @if($joData->jo_status == 'Paid')
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Change</label>
-                        <p>₱{{ ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) - ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) }}</p>
+                        <p>₱{{ ($joData->ba_id ? number_format(($joData->joToBurAsst->amount + $joData->joToSoa->sum('payment')), 2) : $joData->joToSoa->sum('payment')) - ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) }}</p>
                     </div>
                 @else
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Balance</label>
-                        <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
+                        <p>₱{{ number_format(($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? $joData->joToBurAsst->amount + $joData->joToSoa->sum('payment') : $joData->joToSoa->sum('payment')), 2) }}</p>
                     </div>
                 @endif
                 
             @else
                 <div class="col-md-3">
                     <label class="form-label fw-semibold">Total Payment</label>
-                    <p>₱{{ $joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total }}</p>
+                    <p>₱{{ $joData->joToJod->jodToAddWake ? number_format($joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee), 2) : number_format($joData->jo_total, 2) }}</p>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold">Down Payment</label>
-                    <p>₱{{ $joData->jo_dp }}</p>
+                    <label class="form-label fw-semibold">Payment</label>
+                    <p>₱{{ number_format($joData->joToSoa->sum('payment'), 2) }}</p>
                 </div>
                 @if($joData->jo_status == 'Paid')
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Change</label>
-                        <p>₱{{ ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) - ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) }}</p>
+                        <p>₱{{ number_format(($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->joToSoa->sum('payment')) : $joData->joToSoa->sum('payment')) - ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total), 2) }}</p>
                     </div>
                 @else
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Balance</label>
-                        <p>₱{{ ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp) }}</p>
+                        <p>₱{{ number_format(($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->joToSoa->sum('payment')) : $joData->joToSoa->sum('payment')), 2) }}</p>
                     </div>
+                    
                 @endif
+                <div class="col-md-3">
+                    <label for="" class="form-label fw-semibold text-secondary">Payment History</label>
+                   <!-- Payment history modal -->
+                    <button type="button" class="cust-btn cust-btn-secondary" data-bs-toggle="modal" data-bs-target="#paymentHistory">
+                        <i class="bi bi-wallet"></i> View payment history
+                    </button>
+
+                </div>
 
                 
                 @session('promt-s')
@@ -121,14 +130,17 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label for="payAmount" class="form-label fw-semibold text-secondary">Amount <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="payAmount" 
-                                    value="{{ old('payAmount', 
-                                            ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) - 
-                                            ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->jo_dp) : $joData->jo_dp)) 
-                                        }}">
+                                <div class="input-group">
+                                    <span class="input-group-text">₱</span>
+                                    <input type="text" class="form-control" name="payAmount"
+                                        value="{{ old('payAmount',
+                                                ($joData->joToJod->jodToAddWake ? $joData->jo_total + ($joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee) : $joData->jo_total) -
+                                                ($joData->ba_id ? ($joData->joToBurAsst->amount + $joData->joToSoa->sum('payment')) : $joData->joToSoa->sum('payment')))
+                                            }}">
+                                </div>
                                 @error('payAmount')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
                                 <input type="text" name="addWakeId" value="{{ $joData->joTojod->jodToAddWake->id ?? '' }}" hidden>
                             </div>
                             <div class="col-md-3">
@@ -136,22 +148,14 @@
                                 <button type="submit" class="cust-btn cust-btn-primary w-100">Pay</button>
                             </div>
 
-                            @if(!$joData->ba_id && $joData->ra)                                               
-                                    
-                                <div class="col-md-3">
-                                    <label for="" class="form-label fw-semibold text-secondary">Apply Burial Assistance</label>
-                                    <a href="{{ route('Job-Order.apply', $joData->id) }}" class="cust-btn cust-btn-secondary w-100 text-center">Apply</a>
-                                </div>                                                                                                 
-                            @endif
                         </div>                                       
                     </form>
                 </div>
             </div>
         @endif
 
-
-        {{-- Job Order --}}
-        <div class="row  mt-4 cust-white-bg">
+        {{-- Job Order Details --}}
+        <div class="row mt-4 cust-white-bg">
             <div class="col-md-12">
                 <h5 class="cust-sub-title">Job Order Details:</h5>
             </div>
@@ -166,17 +170,21 @@
             </div>
 
             <div class="col-md-3">
-                <label class="form-label fw-semibold">Service Date</label>
-                <p>{{ \Carbon\Carbon::parse($joData->jo_start_date)->format('d/M/Y') }}</p>
-            </div>
-
-            <div class="col-md-3">
                 <label class="form-label fw-semibold">Days of Wake</label>
                 <p>{{ $jodData->jod_days_of_wake }}</p>
             </div>
             
 
             <div class="w-100 mb-2"></div>
+
+            <div class="col-md-12">
+                <h5 class="cust-sub-title">Schedule:</h5>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Service Date</label>
+                <p>{{ \Carbon\Carbon::parse($joData->jo_start_date)->format('d/M/Y')}}</p>
+            </div>
 
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Burial Date</label>
@@ -191,20 +199,6 @@
                 <label class="form-label fw-semibold">Embalm Time</label>
                 <p>{{ $joData->jo_embalm_time ? \Carbon\Carbon::parse($joData->jo_embalm_time)->format('g:i A') : 'No sched.' }}</p>
             </div>
-
-            @if($joData->joToJod->jodToAddWake)
-                <div class="w-100 mb-2"></div>
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Add. Wake Days</label>
-                    <p>{{ $joData->joToJod->jodToAddWake->day }}</p>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Total Fee</label>
-                    <p>₱{{ $joData->joToJod->jodToAddWake->day * $joData->joToJod->jodToAddWake->fee }}</p>
-                </div>
-
-            @endif
-            
             
         </div>
 
@@ -228,6 +222,48 @@
                 <p>{{ $joData->joToSvcReq->veh_id ? $joData->joToSvcReq->svcReqToVeh->driver_contact_number : 'N/A' }}</p>
             </div>
 
+        </div>
+
+        <!-- Modal for payment history -->
+        <div class="modal fade" id="paymentHistory" tabindex="-1" aria-labelledby="paymentHistoryLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="paymentHistoryLabel">Payment History</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mx-3">
+                        <div class="col-md-12">
+                            <div class="row cust-table-header cust-table-shadow">
+                                <div class="col-md-4">Payment</div>
+                                <div class="col-md-4">Date</div>
+                                <div class="col-md-4">Employee</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 cust-max-200 cust-table-shadow">
+                            @foreach($payHistoryData as $row)
+                                <div class="row cust-table-content">
+                                    <div class="col-md-4">
+                                        <p>₱{{ number_format($row->payment, 2) }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>{{ \Carbon\Carbon::parse($row->payment_date)->format('d/M/Y') }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>{{ $row->soaToEmp->emp_fname }} {{ $row->soaToEmp->emp_lname }}</p>
+                                    </div>
+
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
         </div>
 
         {{-- Deceased Info --}}
@@ -268,7 +304,7 @@
             </div>
         </div>
 
-        {{-- Equipment Status --}}
+        {{-- Equipment --}}
         <div class="row mt-4 cust-white-bg">
             <div class="col-md-12">
                 <h5 class="cust-sub-title">Equipment Status:</h5>
@@ -280,11 +316,11 @@
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Deployed Date</label>
-                <p>{{ $jodData->jod_deploy_date ? \Carbon\Carbon::parse($jodData->jod_deploy_date)->format('d/M/Y') : 'N/A'}}</p>
+                <p>{{ $jodData->jod_deploy_date ?? 'N/A'}}</p>
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Return Date</label>
-                <p>{{ $jodData->jod_return_date ? \Carbon\Carbon::parse($jodData->jod_return_date)->format('d/M/Y') : 'N/A' }}</p>
+                <p>{{ $jodData->jod_return_date ?? 'N/A' }}</p>
             </div>
         </div>
 

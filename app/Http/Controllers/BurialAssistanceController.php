@@ -12,6 +12,7 @@ use App\Models\BurialAsst;
 use App\Models\jobOrder;
 use App\Models\jobOrderDetails;
 use App\Models\Log;
+use App\Models\Soa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -85,8 +86,9 @@ class BurialAssistanceController extends Controller
             'amount.max' => '6 digit limit reached.',
         ]);
         //dd($request->addWakeId);
-        $getTotal = jobOrder::select('id', 'jod_id', 'jo_dp', 'jo_total')->where('id', $request->joId)->first();
+        $getTotal = jobOrder::select('id', 'jod_id', 'jo_total')->where('id', $request->joId)->first();
         $getStat = jobOrderDetails::select('id', 'jod_eq_stat')->where('id', $getTotal->jod_id)->first();
+        $totalPayment = Soa::where('jo_id', $getTotal->id)->sum('payment');
 
 
         // validate for mother info
@@ -177,7 +179,7 @@ class BurialAssistanceController extends Controller
             $addWakeTotal = $getWake->day * $getWake->fee;
         }
 
-        if ((($getTotal->jo_total + $addWakeTotal) - $getTotal->jo_dp) <= $request->amount)
+        if ((($getTotal->jo_total + $addWakeTotal) - $totalPayment) <= $request->amount)
         {
             jobOrder::findOrFail($request->joId)->update([
                 'jo_status' => 'Paid',

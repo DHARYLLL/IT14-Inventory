@@ -10,6 +10,7 @@ use App\Models\jobOrder;
 use App\Models\Log;
 use App\Models\Stock;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -30,7 +31,7 @@ class DashboardController extends Controller
         $jobOrdData = jobOrder::where('jo_start_date', '<=', Carbon::today())->
                                 where('jo_burial_date', '>=', Carbon::today())->
                                 whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')->
-                                orderBy('jo_start_date', 'desc')->get();
+                                orderBy('jo_burial_date', 'asc')->get();
 
         $getValue = Invoice::select('total')->whereMonth('invoice_date', date('m'))->get();
         $set = array();
@@ -40,12 +41,24 @@ class DashboardController extends Controller
                 array_push($set, $data->total);
             }
         }
+
+        $joPending = jobOrder::select('id', 'client_name', 'client_contact_number', 'svc_id', 'jod_id')
+                            ->where('jo_status', 'Pending')
+                            ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
+                            ->get();
+
+        $joOverDue = jobOrder::select('id', 'client_name', 'client_contact_number', 'svc_id', 'jod_id')
+                            ->where('jo_status', 'Pending')
+                            ->whereRelation('joToSvcReq', 'svc_status', 'Completed')
+                            ->get();
         
         $getAv = count($getValue) > 0 ? array_sum($set) / count($getValue) : 0;
 
         return view('alar.dashboard', ['stockData' => $stockData, 'lowStockData' => $lowStockData, 
-        'noStockData' => $noStockData, 'getAv' => $getAv, 'jobOrdData' => $jobOrdData,
-        'eqData' => $eqData, 'lowEqData' => $lowEqData, 'noEqData' => $noEqData]);
+                                        'noStockData' => $noStockData, 'getAv' => $getAv, 'jobOrdData' => $jobOrdData,
+                                        'eqData' => $eqData, 'lowEqData' => $lowEqData, 'noEqData' => $noEqData,
+                                        'joPending' => $joPending, 'joOverDue' => $joOverDue
+                                    ]);
     }
 
     /**

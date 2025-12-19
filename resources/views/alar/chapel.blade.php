@@ -53,9 +53,9 @@
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
                                         <!-- Delte Button -->
-                                        <button type="button" class="cust-btn cust-btn-danger-secondary" data-bs-toggle="modal" data-bs-target="#delete{{ $row->id }}">
+                                        {{-- <button type="button" class="cust-btn cust-btn-danger-secondary" data-bs-toggle="modal" data-bs-target="#delete{{ $row->id }}">
                                         <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
-                                        </button>
+                                        </button> --}}
                                         
                                     @else
                                         <a href="{{ route('Chapel.show', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Show">

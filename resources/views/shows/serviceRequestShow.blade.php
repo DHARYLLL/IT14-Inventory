@@ -10,22 +10,38 @@
             
             <div class="col col-12 h-100 overflow-auto">
 
+                {{-- Display error --}}
+                @session('promt-f')
+                    <div class="row mb-4 cust-error-msg">
+                        <div class="col-md-12">
+                            <div class="text-danger"><p>{{ $value }}</p></div>
+                        </div>
+                    </div>
+                @endsession
+
 
                 <div class="row cust-white-bg">
                     <div class="col-md-12 mb-2">
                         <h5 class="cust-sub-title">Client Info:</h5>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label fw-semibold">Client name</label>
                         <p>{{ $joData->client_name }}</p>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label fw-semibold">Contact number</label>
                         <p>{{ $joData->client_contact_number }}</p>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label fw-semibold">Address</label>
                         <p>{{ $joData->client_address }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="" class="form-label fw-semibold text-secondary">Payment History</label>
+                        <!-- Payment history modal -->
+                        <button type="button" class="cust-btn cust-btn-secondary" data-bs-toggle="modal" data-bs-target="#paymentHistory">
+                            <i class="bi bi-wallet"></i> View payment history
+                        </button>
                     </div>
                     
                 </div>
@@ -151,11 +167,11 @@
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fw-semibold">Total</label>
-                            <p>₱{{ $joData->jo_total }}</p>
+                            <p>₱{{ number_format($joData->jo_total, 2) }}</p>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fw-semibold">Down payment</label>
-                            <p>₱{{ $joData->jo_dp }}</p>
+                            <p>₱{{ number_format($joData->joToSoa->sum('payment'), 2) }}</p>
                         </div>
                         
                         @if($joData->jo_status != 'Paid')
@@ -166,7 +182,10 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label class="form-label fw-semibold">Balance  <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-input" name="payment" value="{{ old('payment', $joData->jo_total - $joData->jo_dp) }}">
+                                            <div class="input-group">
+                                                <span class="input-group-text">₱</span>
+                                                <input type="text" class="form-input" name="payment" value="{{ old('payment', $joData->jo_total - $joData->joToSoa->sum('payment')) }}">
+                                            </div>
                                             @error('payment')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                             @enderror
@@ -181,11 +200,54 @@
                         @else
                             <div class="col-md-3">
                                 <label class="form-label fw-semibold">Change</label>
-                                <p>₱{{ $joData->jo_dp - $joData->jo_total }}</p>
+                                <p>₱{{ $joData->joToSoa->sum('payment') - $joData->jo_total }}</p>
                             </div>
                         @endif
+                        
                     </div>
                 @endif
+
+                <!-- Modal for payment history -->
+                <div class="modal fade" id="paymentHistory" tabindex="-1" aria-labelledby="paymentHistoryLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="paymentHistoryLabel">Payment History</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row mx-3">
+                                <div class="col-md-12">
+                                    <div class="row cust-table-header cust-table-shadow">
+                                        <div class="col-md-4">Payment</div>
+                                        <div class="col-md-4">Date</div>
+                                        <div class="col-md-4">Employee</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 cust-max-200 cust-table-shadow">
+                                    @foreach($payHistoryData as $row)
+                                        <div class="row cust-table-content">
+                                            <div class="col-md-4">
+                                                <p>₱{{ $row->payment }}</p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p>{{ \Carbon\Carbon::parse($row->payment_date)->format('d/M/Y') }}</p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p>{{ $row->soaToEmp->emp_fname }} {{ $row->soaToEmp->emp_lname }}</p>
+                                            </div>
+
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
 
                 
 
@@ -195,6 +257,9 @@
                     <div class="col col-auto">
                         @session('promt-s')
                             <div class="text-success small mt-1">{{ $value }}</div>
+                        @endsession
+                        @session('promt-f')
+                            <div class="text-danger small mt-1">{{ $value }}</div>
                         @endsession
                     </div>
                     <div class="col col-auto">

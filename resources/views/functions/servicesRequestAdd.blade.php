@@ -19,7 +19,7 @@
                         @session('promt')
                             <div class="row mb-4 cust-error-msg">
                                 <div class="col-md-12">
-                                    <div class="text-danger">{{ $value }}</div>
+                                    <div class="text-danger"><p>{{ $value }}</p></div>
                                 </div>
                             </div>
                         @endsession
@@ -123,7 +123,7 @@
                             </div>
                             
                             <div class="col-md-3">
-                                <label for="burialTime" class="form-label">Burial Time</label>
+                                <label for="burialTime" class="form-label">Burial Time <span class="text-danger">*</span></label>
                                 <input type="time" class="cust-time" name="burialTime" value="{{ old('burialTime') }}">
                                 @error('burialTime')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
@@ -162,10 +162,10 @@
                                 <div class="input-group">
                                     <span class="input-group-text">₱</span>
                                     <input type="text" class="form-control" id="totalPayment" name="total" value="{{ old('total') }}" readonly>
-                                    @error('total')
-                                        <div class="text-danger small mt-1">{{ $message }}</div>
-                                    @enderror
                                 </div>
+                                @error('total')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                     
                                 <input type="text" id="setEmbalmPrice" name="setEmbalmPrice" readonly value="{{ old('setEmbalmPrice') }}" hidden>
                                 <input type="text" id="setVehPrice" name="setVehPrice" readonly value="{{ old('setVehPrice') }}" hidden>

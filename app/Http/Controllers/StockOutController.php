@@ -98,11 +98,6 @@ class StockOutController extends Controller
                     $allErrors["stockQty.$i"] = "Requested quantity ({$requestedQty}) exceeds available stock ({$stock->item_qty}).";
                 }
             }
-            /*
-            if (!empty($StoErrors)) {
-                return back()->withErrors($StoErrors)->withInput();
-            }
-            */
         }
 
         if ($eq !== null) {
@@ -121,11 +116,6 @@ class StockOutController extends Controller
                     $allErrors["eqQty.$i"] = "Requested quantity ($requestedQty) exceeds available equipment ({$equipment->eq_available}).";
                 }
             }
-            /*
-            if (!empty($equipmentErrors)) {
-                return back()->withErrors($equipmentErrors)->withInput();
-            }
-                */
         }
         if (!empty($allErrors)) {
             return back()->withErrors($allErrors)->withInput();
@@ -151,7 +141,6 @@ class StockOutController extends Controller
                     'stock_id' => $sto[$i],
                     'so_qty' => $stoQty[$i] * max(1, $stoQtySet[$i])
                 ]);
-
             }
         }
 
@@ -169,7 +158,6 @@ class StockOutController extends Controller
                 ]);
             }
         }
-        
         
         Log::create([
             'transaction' => 'Stock Out',

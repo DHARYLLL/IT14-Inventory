@@ -16,6 +16,7 @@ use App\Models\Package;
 use App\Models\PkgEquipment;
 use App\Models\PkgStock;
 use App\Models\Receipt;
+use App\Models\Soa;
 use App\Models\Stock;
 use App\Models\SvsEquipment;
 use App\Models\SvsStock;
@@ -60,6 +61,7 @@ class ServiceRequestController extends Controller
             'address' => 'required|max:150',
             'vehicle' => 'required_without:embalm',
             'embalm'  => 'required_without:vehicle',
+            'burialTime'  => 'required',
             'svcDate' => [
                 Rule::date()->afterOrEqual(today())
             ],
@@ -67,7 +69,7 @@ class ServiceRequestController extends Controller
             'total' => 'required|integer|min:1|max:999999',
 
             'burrDate' => [
-                'nullable',
+                'required',
                 Rule::date()->afterOrEqual('svcDate')
             ]
         ], [
@@ -82,7 +84,10 @@ class ServiceRequestController extends Controller
             'svcDate.required' => 'This field is required.',
             'svcDate.after_or_equal' => 'Date must be today or after.',
 
+            'burrDate.required' => 'This field is required.',
             'burrDate.after_or_equal' => 'Date must be today or after service date.',
+
+            'burialTime.required' => 'This field is required.',
 
             'vehicle.required_without' => 'Select at least one: vehicle or embalm.',
             'embalm.required_without'  => 'Select at least one: vehicle or embalm.',
@@ -103,7 +108,7 @@ class ServiceRequestController extends Controller
 
         //dd(Carbon::parse($request->svcDate)->isSameDay(Carbon::today()) ? 'Ongoing' : 'Pending');
 
-        $driverUnavailable = jobOrder::Where('jo_start_date', $request->svcDate)
+        $driverUnavailable = jobOrder::Where('jo_burial_date', $request->burrDate)
             ->whereRelation('joToSvcReq', 'veh_id', $request->setVehId)
             ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
             ->exists();
@@ -133,18 +138,23 @@ class ServiceRequestController extends Controller
             'client_name' => $request->clientName,
             'client_contact_number' => $request->clientConNum,
             'client_address' => $request->address,
-            'jo_dp' => $request->payment,
             'jo_total' => $request->total,
             'jo_status' => $request->payment >= $request->total ? 'Paid' : 'Pending',
             'jo_start_date' => $request->svcDate,
-            'jo_burial_date' => $request->burrDate,
             'jo_embalm_time' => $request->embalmTime,
+            'jo_burial_date' => $request->burrDate,
             'jo_burial_time' => $request->burialTime,
-            'emp_id' => session('loginId'),
-            'svc_id'  => $svcId
+            'svc_id' => $svcId,
         ]);
 
         $joId = jobOrder::orderBy('id', 'desc')->take(1)->value('id');
+
+        Soa::create([
+            'payment' => $request->payment,
+            'payment_date' => Carbon::today(),
+            'jo_id' => $joId,
+            'emp_id' => session('loginId')
+        ]);
 
         /*
         $startTime = Carbon::parse($request->timeStart)->format('g:i A');
@@ -175,7 +185,8 @@ class ServiceRequestController extends Controller
     public function show(String $id)
     {
         $joData = jobOrder::findOrFail($id);
-        return view('shows/serviceRequestShow', ['joData' => $joData]);
+        $payHistoryData = Soa::where('jo_id', $joData->id)->orderBy('id', 'desc')->get();
+        return view('shows/serviceRequestShow', ['joData' => $joData, 'payHistoryData' => $payHistoryData]);
     }
 
     /**
@@ -189,18 +200,24 @@ class ServiceRequestController extends Controller
     public function payBalance(Request $request, String $id)
     {
         $request->validate([
-            'payment' => 'required|numeric|min:1|max:999999.99'
+            'payment' => 'required|numeric|min:100|max:999999.99'
         ], [
             'payment.required' => 'This field is required.',
             'payment.numeric' => 'Number only.',
-            'payment.min' => 'Amount must be 1 or more.',
+            'payment.min' => 'Minimun payment PHP 100.',
             'payment.max' => '6 digits limit reached.'
         ]);
        
-        $getDp = jobOrder::select('jo_dp', 'jo_total')->where('svc_id', $id)->first();
+        $getDp = jobOrder::select('id', 'jo_total')->where('svc_id', $id)->first();
+        $totalPayment = Soa::where('jo_id', $getDp->id)->sum('payment');
         jobOrder::findOrFail($id)->update([
-            'jo_dp' => $getDp->jo_dp + $request->payment,
-            'jo_status' => ($request->payment >= ($getDp->jo_total - $getDp->jo_dp )) ? 'Paid' : 'Pending'
+            'jo_status' => ($request->payment >= ($getDp->jo_total - $totalPayment )) ? 'Paid' : 'Pending'
+        ]);
+        Soa::create([
+            'payment' => $request->payment,
+            'payment_date' => Carbon::today(),
+            'jo_id' => $getDp->id,
+            'emp_id' => session('loginId')
         ]);
 
         return redirect()->back()->with('success', 'Payment Successfull!');
@@ -236,6 +253,15 @@ class ServiceRequestController extends Controller
     }
 
     public function completeService(String $id) {
+        $getStat = jobOrder::select('id', 'jo_status', 'jo_burial_time')->where('svc_id', $id)->first();
+        if ($getStat->jo_status != 'Paid') {
+            return redirect()->back()->with('promt-f', 'Client have pending balance');
+        }
+
+        if ($getStat->jo_burial_time == null) {
+            return redirect()->back()->with('promt-f', 'Please schedule burial time.');
+        }
+
         ServiceRequest::findOrFail($id)->update([
             'svc_status' => 'Completed'
         ]);

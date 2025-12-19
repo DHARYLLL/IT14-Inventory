@@ -9,9 +9,17 @@
         
         <form action="{{ route('Job-Order.store') }}" method="post">
             @csrf
+            {{-- Display error --}}
+            @session('promt-f')
+                <div class="row mb-4 cust-error-msg">
+                    <div class="col-md-12">
+                        <div class="text-danger"><p>{{ $value }}</p></div>
+                    </div>
+                </div>
+            @endsession
             <div class="row">
                 <div class="col col-auto">
-                    <h4 class="form-title mb-4">Job Order Form</h4>
+                    <h4 class="form-title">Job Order Form</h4>
                 </div>
             </div>
 
@@ -105,6 +113,7 @@
                     @error('package')
                         <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
+                    
                 </div>
                 <div class="col-md-4">
                     <label for="vehicle" class="form-label">Vehicle <span class="text-danger">*</span></label>
@@ -242,6 +251,7 @@
 
             {{-- Custom Script for Payment --}}
             <script>
+
                 function PricePkg(){
                     var getPkg = document.getElementById('package');
 
@@ -296,7 +306,7 @@
                     @session('promt-f')
                         <div class="text-danger small mt-1">{{ $value }}</div>
                     @endsession
-                        @session('promt-s')
+                    @session('promt-s')
                         <div class="text-success small mt-1">{{ $value }}</div>
                     @endsession
                 </div>

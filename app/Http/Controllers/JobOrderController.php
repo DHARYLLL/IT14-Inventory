@@ -17,10 +17,12 @@ use App\Models\Package;
 use App\Models\PkgEquipment;
 use App\Models\PkgStock;
 use App\Models\ServiceRequest;
+use App\Models\Soa;
 use App\Models\Stock;
 use App\Models\TempEquipment;
 use App\Models\vehicle;
 use Carbon\Carbon;
+use Faker\Provider\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -33,7 +35,7 @@ class JobOrderController extends Controller
     {
         
         $jOData = jobOrder::join('services_requests', 'services_requests.id', '=', 'job_orders.svc_id')
-            ->orderByRaw("CASE WHEN services_requests.svc_status = 'Completed' THEN 1 ELSE 0 END")
+            ->orderByRaw("CASE WHEN services_requests.svc_status = 'Completed' AND job_orders.jo_status = 'Paid' THEN 1 ELSE 0 END")
             ->orderBy('client_name', 'asc')
             ->get();
         return view('alar/jobOrder', ['jOData' => $jOData]);
@@ -47,13 +49,14 @@ class JobOrderController extends Controller
 
         $jodIds = jobOrder::where('jo_burial_date', '>=', today())
             ->where('jo_start_date', '<=', today())
+            ->whereNotNull('jod_id') 
             ->pluck('jod_id');
         //dd($jodIds);
 
         $usedChapelIds = jobOrderDetails::whereIn('id', $jodIds)
             ->where('jod_eq_stat', '<>', 'Returned')
+            ->whereNotNull('chap_id')
             ->pluck('chap_id');
-
 
         $pkgData = Package::all();
         $chapData = Chapel::whereNotIn('id', $usedChapelIds)->get();
@@ -139,23 +142,7 @@ class JobOrderController extends Controller
             'pkgPrice.min' => 'Amount must be 1 or more.',
             'pkgPrice.max' => '6 digits limit reached.'
         ]);
-        /*
-        $checkAvail = Carbon::parse($request->svcDate)->addDays((int)$request->wakeDay)->toDateString();
-        //dd($checkAvail);
-        $joCheckAvail = jobOrder::select('id', 'svc_id')->where('jo_burial_date', $checkAvail)->first();
-        //dd($joCheckAvail);
-        if ($joCheckAvail) {
-            $svcCheckAvail = ServiceRequest::where('id', $joCheckAvail->svc_id)->where('svc_status', '<>', 'Completed')->first();
-            if ($svcCheckAvail) {
-                if ($svcCheckAvail->veh_id == $request->vehicle) {
-                    dd('driver not available', $checkAvail);
-                }
-                dd('driver available 2', $checkAvail);
-            }
-            dd('driver available', $checkAvail);
-        }
-        dd('no date found, driver available', $checkAvail);
-        */
+
         $checkAvail = Carbon::parse($request->svcDate)
             ->addDays((int)$request->wakeDay)
             ->toDateString();
@@ -199,19 +186,24 @@ class JobOrderController extends Controller
             'client_name' => $request->clientName,
             'client_contact_number' => $request->clientConNum,
             'client_address' => $request->address,
-            'jo_dp' => $request->payment,
             'jo_total' => $request->total,
             'jo_status' => $request->payment >= $request->total ? 'Paid' : 'Pending',
             'jo_start_date' => $request->svcDate,
             'jo_embalm_time' => $request->embalmTime,
             'jo_burial_date' => Carbon::parse($request->svcDate)->addDays((int)$request->wakeDay)->toDateString(),
             'jo_burial_time' => $request->burialTime,
-            'emp_id' => session('loginId'),
             'jod_id' => $jodId,
             'svc_id' => $svcId
         ]);
 
         $joId = jobOrder::orderBy('id', 'desc')->take(1)->value('id');
+
+        Soa::Create([
+            'payment' => $request->payment,
+            'payment_date' => Carbon::today(),
+            'jo_id' => $joId,
+            'emp_id' => session('loginId')
+        ]);
       
         Log::create([
             'transaction' => 'Create',
@@ -237,9 +229,9 @@ class JobOrderController extends Controller
         $pkgStoData = PkgStock::where('pkg_id', $jodData->pkg_id)->get();
 
         $tempEqData = TempEquipment::where('jod_id', $joData->jod_id)->get();
-   
+        $payHistoryData = Soa::select('payment', 'payment_date', 'emp_id')->where('jo_id', $id)->orderBy('id', 'desc')->get();
 
-        return view('shows/jobOrdShow', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'tempEqData' => $tempEqData]);
+        return view('shows/jobOrdShow', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'tempEqData' => $tempEqData, 'payHistoryData' => $payHistoryData]);
     }
 
     public function showDeployItems(string $id)
@@ -249,7 +241,8 @@ class JobOrderController extends Controller
 
         $pkgEqData = PkgEquipment::where('pkg_id', $jodData->pkg_id)->get();
         $pkgStoData = PkgStock::where('pkg_id', $jodData->pkg_id)->get();
-        return view('shows/jobOrdDeplShow', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData]);
+        $payHistoryData = Soa::select('payment', 'payment_date', 'emp_id')->where('jo_id', $id)->orderBy('id', 'desc')->get();
+        return view('shows/jobOrdDeplShow', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData , 'payHistoryData' => $payHistoryData]);
     }
 
     public function deployItems(Request $request, string $id)
@@ -357,9 +350,10 @@ class JobOrderController extends Controller
         $pkgStoData = PkgStock::where('pkg_id', $jodData->pkg_id)->get();
 
         $tempEqData = TempEquipment::where('jod_id', $joData->jod_id)->get();
-   
 
-        return view('functions/jobOrdReturn', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'tempEqData' => $tempEqData]);
+        $payHistoryData = Soa::select('payment', 'payment_date', 'emp_id')->where('jo_id', $id)->orderBy('id', 'desc')->get();
+
+        return view('functions/jobOrdReturn', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'tempEqData' => $tempEqData, 'payHistoryData' => $payHistoryData]);
     }
 
     public function returnItems(Request $request, string $id)
@@ -457,15 +451,16 @@ class JobOrderController extends Controller
     public function payAmount(Request $request, string $id)
     {
         $request->validate([
-            'payAmount' => 'required|numeric|min:1|max:999999' 
+            'payAmount' => 'required|numeric|min:100|max:999999' 
         ], [
             'payAmount.required' => 'This field is required.',
             'payAmount.numeric' => 'Number only.',
-            'payAmount.min' => 'Amount must be 1 or more.',
+            'payAmount.min' => 'Minimum payment is PHP 100.',
             'payAmount.max' => '6 digit limit reached.'
         ]);
-        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total', 'ba_id')->where('id', $id)->first();
-       
+        $getDp = jobOrder::select('id', 'svc_id', 'jo_total', 'ba_id')->where('id', $id)->first();
+        $totalPayment = Soa::where('jo_id', $id)->sum('payment');
+
         $addWakeTotal = 0;
         if ($request->addWakeId != null) {
             $getWake = AddWake::where('id', $request->addWakeId)->first();
@@ -478,16 +473,24 @@ class JobOrderController extends Controller
             $burAsstTotal = $getBurrAsst->amount;
         }
 
-        if ((($getDp->jo_total + $addWakeTotal) - ($getDp->jo_dp + $burAsstTotal)) <= $request->payAmount)
+        if ((($getDp->jo_total + $addWakeTotal) - ($totalPayment + $burAsstTotal)) <= $request->payAmount)
         {
+            Soa::Create([
+                'payment' => $request->payAmount,
+                'payment_date' => Carbon::today(),  
+                'jo_id' => $id,
+                'emp_id' => session('loginId')
+            ]);
             jobOrder::findOrFail($getDp->id)->update([
-                'jo_dp' => $getDp->jo_dp + $request->payAmount,
                 'jo_status' => 'Paid'
             ]);
         } else {
-            jobOrder::findOrFail($id)->update([
-                'jo_dp' => $getDp->jo_dp + $request->payAmount,
-            ]);
+            Soa::Create([
+                'payment' => $request->payAmount,
+                'payment_date' => Carbon::today(),
+                'jo_id' => $id,
+                'emp_id' => session('loginId')
+            ]);     
         }    
         
         Log::create([

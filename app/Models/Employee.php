@@ -22,12 +22,12 @@ class Employee extends Model
         return $this->hasMany(PurchaseOrder::class, 'emp_id');
     }
 
-    public function empToSvcReq(){
-        return $this->hasMany(ServiceRequest::class, 'emp_id');
-    }
-
     public function empToLog(){
         return $this->hasMany(Log::class, 'emp_id');
+    }
+
+    public function empToSoa(){
+        return $this->hasMany(Soa::class, 'emp_id');
     }
 
 }

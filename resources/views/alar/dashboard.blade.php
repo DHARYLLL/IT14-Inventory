@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <!-- Lower Section (2 Boxes) -->
+        <!-- Mid Section -->
         <div class="bottom-section">
             <div class="row g-3">
 
@@ -76,7 +76,7 @@
                                                         @csrf
                                                         @method('put')
                                                         <label>
-                                                            <input type="checkbox" name="status" class="raCheckbox" {{ $row->ra ? 'checked' : '' }} {{ $row->ba_id || $row->jo_status == 'Paid' ? 'disabled' : '' }}>
+                                                            <input type="checkbox" name="status" class="raCheckbox" {{ $row->ra ? 'checked' : '' }} {{ $row->ba_id || $row->jo_status == 'Paid' || !$row->jod_id ? 'disabled' : '' }}>
                                                         </label>
                                                     </form>
                                                 </td>
@@ -138,6 +138,152 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="w-100"></div>
+
+                {{-- Pending payments --}}
+                <div class="col-md-6">
+                    <div class="dashboard-box">
+                        <h5>Pending Payments</h5>
+                        <div class="placeholder-box overflow-auto">
+                            <table class="table table-borderless table-hover placeholder-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="fw-semibold">Client</th>
+                                        <th class="fw-semibold">Contact Number</th>
+                                        <th class="col col-md-2 fw-semibold text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if ($joPending->isEmpty())
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted">No data available</td>
+                                        </tr>
+                                    @else
+                                        @foreach ($joPending as $row)
+                                            <tr>
+                                                <td>{{ $row->client_name }}</td>
+                                                <td>{{ $row->client_contact_number }}</td>
+                                                <td class="text-center col col-md-2">
+                                                    <div class="d-inline-flex justify-content-center gap-2">
+                                                        @if($row->jod_id)
+                                                            @if($row->joToJod->jod_eq_stat == 'Pending')
+                                                                <a href="{{ route('Job-Order.showDeploy', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Deploy">
+                                                                    <i class="bi bi-box-arrow-up"></i>
+                                                                </a>
+                                                            @endif
+                                                            @if($row->joToJod->jod_eq_stat == 'Deployed')
+                                                                <a href="{{ route('Job-Order.showReturn', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Return">
+                                                                    <i class="bi bi-box-arrow-in-down"></i>
+                                                                </a>
+                                                            @endif
+                                                            @if($row->joToJod->jod_eq_stat == 'Returned')
+                                                                <a href="{{ route('Job-Order.show', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                                    <i class="fi fi-rr-eye"></i>
+                                                                </a>
+                                                            @endif
+                                                        @endif
+                                                        @if($row->svc_id && !$row->jod_id)
+                                                            @if($row->jo_status == 'Paid')
+                                                                <a href="{{ route('Service-Request.show', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                                    <i class="fi fi-rr-eye"></i>
+                                                                </a>
+                                                            @else
+                                                                <a href="{{ route('Service-Request.show', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Review">
+                                                                    <i class="bi bi-list-ul"></i>
+                                                                </a>
+                                                            @endif
+                                                        
+                                                        @endif
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Overdue payments --}}
+                <div class="col-md-6">
+                    <div class="dashboard-box">
+                        <h5>Overdue Payments</h5>
+                        <div class="placeholder-box overflow-auto">
+                            <table class="table table-borderless table-hover placeholder-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="fw-semibold">Client</th>
+                                        <th class="fw-semibold">Contact Number</th>
+                                        <th class="col col-md-2 fw-semibold text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if ($joOverDue->isEmpty())
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted">No data available</td>
+                                        </tr>
+                                    @else
+                                        @foreach ($joOverDue as $row)
+                                            <tr>
+                                                <td>{{ $row->client_name }}</td>
+                                                <td>{{ $row->client_contact_number }}</td>
+                                                <td class="text-center col col-md-2">
+                                                    <div class="d-inline-flex justify-content-center gap-2">
+                                                        @if($row->jod_id)
+                                                            @if($row->joToJod->jod_eq_stat == 'Pending')
+                                                                <a href="{{ route('Job-Order.showDeploy', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Deploy">
+                                                                    <i class="bi bi-box-arrow-up"></i>
+                                                                </a>
+                                                            @endif
+                                                            @if($row->joToJod->jod_eq_stat == 'Deployed')
+                                                                <a href="{{ route('Job-Order.showReturn', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Return">
+                                                                    <i class="bi bi-box-arrow-in-down"></i>
+                                                                </a>
+                                                            @endif
+                                                            @if($row->joToJod->jod_eq_stat == 'Returned')
+                                                                <a href="{{ route('Job-Order.show', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                                    <i class="fi fi-rr-eye"></i>
+                                                                </a>
+                                                            @endif
+                                                        @endif
+                                                        @if($row->svc_id && !$row->jod_id)
+                                                            @if($row->jo_status == 'Paid')
+                                                                <a href="{{ route('Service-Request.show', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                                    <i class="fi fi-rr-eye"></i>
+                                                                </a>
+                                                            @else
+                                                                <a href="{{ route('Service-Request.show', $row->id) }}"
+                                                                    class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Review">
+                                                                    <i class="bi bi-list-ul"></i>
+                                                                </a>
+                                                            @endif
+                                                        
+                                                        @endif
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-100"></div>
 
                 <!-- Low Stock Items -->
                 <div class="col-md-6">

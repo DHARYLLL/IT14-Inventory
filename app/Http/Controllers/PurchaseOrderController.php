@@ -86,10 +86,7 @@ class PurchaseOrderController extends Controller
         $newEquipmentSize = array();
         $newEquipmentType = array();
         $newEquipmentLimit = array();
-        
-        //dd($item, $qty, $qtySet, $size, $unitPrice, $type);
-        //dd($qty[0] * ($qtySet[0] = 0 ? 1 : $qtySet[0]));
-        
+
         // Check if stocks exists in the stocks and equipment table
         for ($i = 0; $i < count($item); $i++) {
             if ($type[$i] == "Consumable") {
@@ -112,8 +109,6 @@ class PurchaseOrderController extends Controller
                 }
             }
         }
-        //dd($newItem, $newItemSize, $newItemUnitPrice, $newItemType);
-        //dd($newEquipment, $newEquipmentSize, $newEquipmentUnitPrice, $newEquipmentType);
 
         // Create record for new stocks and in stocks table
         if (count($newItem)) {
@@ -269,8 +264,6 @@ class PurchaseOrderController extends Controller
             'total' => $request->total,
             'po_id' => $request->po_id
         ]);
-        
-
 
         for ($i=0; $i < count($getId); $i++) { 
 
@@ -317,9 +310,7 @@ class PurchaseOrderController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-
         return redirect(route('Purchase-Order.showDelivered', $request->po_id))->with('success', 'Delivered Successfully!');
-
     }
 
     public function showDelivered(String $id)

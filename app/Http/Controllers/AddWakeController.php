@@ -9,6 +9,7 @@ use App\Models\jobOrder;
 use App\Models\jobOrderDetails;
 use App\Models\Log;
 use App\Models\ServiceRequest;
+use App\Models\Soa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -74,7 +75,8 @@ class AddWakeController extends Controller
         $addWakeTotal = $request->addDays * $request->addFeeDays;
         $addWakeData = AddWake::select('id', 'jod_id')->where('id', $id)->first();
 
-        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total', 'jo_burial_date', 'ba_id')->where('jod_id', $addWakeData->jod_id)->first();
+        $getDp = jobOrder::select('id', 'svc_id', 'jo_total', 'jo_burial_date', 'ba_id')->where('jod_id', $addWakeData->jod_id)->first();
+        $totalPayment = Soa::where('jo_id', $getDp->id)->sum('payment');
 
         $burAsstTotal = 0;
         if ($request->burrAsstId) {
@@ -84,7 +86,7 @@ class AddWakeController extends Controller
 
 
 
-        if (($getDp->jo_total + $addWakeTotal) <= ($getDp->jo_dp + $burAsstTotal)) {
+        if (($getDp->jo_total + $addWakeTotal) <= ($totalPayment + $burAsstTotal)) {
             jobOrder::findOrFail($getDp->id)->update([
                 'jo_status' => 'Paid',
                 'jo_burial_date' => Carbon::parse($getDp->jo_burial_date)->addDays((int)$request->addDays)->toDateString(),
@@ -145,8 +147,10 @@ class AddWakeController extends Controller
         $addWakeTotal = $request->days * $request->feeDays;
         $addWakeData = AddWake::select('id', 'jod_id')->where('id', $id)->first();
 
-        $getDp = jobOrder::select('id', 'svc_id', 'jo_dp', 'jo_total', 'jo_start_date', 'jod_id', 'ba_id')->where('jod_id', $addWakeData->jod_id)->first();
+        $getDp = jobOrder::select('id', 'svc_id', 'jo_total', 'jo_start_date', 'jod_id', 'ba_id')->where('jod_id', $addWakeData->jod_id)->first();
         $jodData = jobOrderDetails::select('id', 'jod_days_of_wake')->where('id', $getDp->jod_id)->first();
+
+        $totalPayment = Soa::where('jo_id', $getDp->id)->sum('payment');
 
         $checkAvail = Carbon::parse($getDp->jo_start_date)
             ->addDays((int)$jodData->jod_days_of_wake + $request->days)
@@ -168,7 +172,7 @@ class AddWakeController extends Controller
             $burAsstTotal = $getBurrAsst->amount;
         }
 
-        if (($getDp->jo_total + $addWakeTotal) <= ($getDp->jo_dp + $burAsstTotal)) {
+        if (($getDp->jo_total + $addWakeTotal) <= ($totalPayment + $burAsstTotal)) {
             jobOrder::findOrFail($getDp->id)->update([
                 'jo_status' => 'Paid',
                 'jo_burial_date' => Carbon::parse($getDp->jo_start_date)->addDays((int)$request->days + $jodData->jod_days_of_wake)->toDateString(),
@@ -202,9 +206,10 @@ class AddWakeController extends Controller
     public function destroy(string $id)
     {
         $addWakeData = AddWake::where('id', $id)->first();
-        $joData = jobOrder::select('id', 'jo_dp', 'jo_total' , 'jo_start_date', 'jo_burial_date', 'svc_id', 'ba_id')->where('jod_id', $addWakeData->jod_id)->first();
+        $joData = jobOrder::select('id', 'jo_total' , 'jo_start_date', 'jo_burial_date', 'svc_id', 'ba_id')->where('jod_id', $addWakeData->jod_id)->first();
         $jodData = jobOrderDetails::select('id', 'jod_days_of_wake')->where('id', $addWakeData->jod_id)->first();
         $svcReqData = ServiceRequest::where('id', $joData->svc_id)->first();
+        $totalPayment = Soa::where('jo_id', $id)->sum('payment');
 
         $checkAvail = Carbon::parse($joData->jo_start_date)
             ->addDays((int)$jodData->jod_days_of_wake)
@@ -228,7 +233,7 @@ class AddWakeController extends Controller
             $burAsstTotal = $getBurrAsst->amount;
         }
 
-        if (($joData->jo_total - $addWakeTotal) <= ($joData->jo_dp + $burAsstTotal)) {
+        if (($joData->jo_total - $addWakeTotal) <= ($totalPayment + $burAsstTotal)) {
             jobOrder::where('jod_id', $addWakeData->jod_id)->update([
                 'jo_status' => 'Paid',
                 'jo_burial_date' => Carbon::parse($joData->jo_start_date)->addDays((int)$jodData->jod_days_of_wake)->toDateString(),

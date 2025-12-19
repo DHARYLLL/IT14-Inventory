@@ -74,7 +74,7 @@
                 </tr>
             @else
                 @foreach ($jOData as $row)
-                    <tr class="{{ $row->joToSvcReq->svc_status == 'Completed' ? 'cust-success-row' : '' }}">
+                    <tr class="{{ $row->joToSvcReq->svc_status == 'Completed' ? ($row->jo_status != 'Paid' ? 'cust-warning-row' : 'cust-success-row') : '' }}">
                         {{-- Safely display the package name (avoid null errors) --}}
                         <td>{{ $row->client_name ?? '—'  }}</td>
                         <td>{{ $row->ba_id ? '₱'.$row->joToBurAsst->amount : 'N/A' }}</td>
@@ -83,7 +83,7 @@
                                 @csrf
                                 @method('put')
                                 <label>
-                                    <input type="checkbox" name="status" class="raCheckbox" {{ $row->ra ? 'checked' : '' }} {{ $row->ba_id || $row->jo_status == 'Paid' ? 'disabled' : '' }}>
+                                    <input type="checkbox" name="status" class="raCheckbox" {{ $row->ra ? 'checked' : '' }} {{ $row->ba_id || $row->jo_status == 'Paid' || !$row->jod_id ? 'disabled' : '' }}>
                                 </label>
                             </form>
                         </td>

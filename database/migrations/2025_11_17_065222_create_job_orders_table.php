@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('client_contact_number', 11);     
             $table->string('client_address', 150);    
             $table->boolean('ra')->nullable(); 
-            $table->decimal('jo_dp', 8,2);
+            //$table->decimal('jo_dp', 8,2);
             $table->decimal('jo_total', 8,2);
             $table->string('jo_status', 15);
             $table->date('jo_start_date')->nullable();
@@ -25,8 +25,8 @@ return new class extends Migration
             $table->date('jo_burial_date')->nullable();
             $table->time('jo_burial_time')->nullable();
             
-            $table->unsignedBigInteger('emp_id')->nullable();
-            $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();
+            // $table->unsignedBigInteger('emp_id')->nullable();
+            // $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();
 
             $table->unsignedBigInteger('jod_id')->nullable();
             $table->foreign('jod_id')->references('id')->on('job_ord_details')->onUpdate('cascade')->onDelete('cascade');

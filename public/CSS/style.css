@@ -741,6 +741,11 @@ body {
     overflow-y: auto;
 }
 
+.cust-max-200 {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
 .cust-time {
     border: .5px #ced4da solid;
     cursor: pointer;
@@ -756,6 +761,12 @@ body {
 .cust-success-row td{
     color: #57765a !important;
     background-color: #ecfff0 !important;
+    font-weight: 700;
+}
+
+.cust-warning-row td{
+    color: #a6af00 !important;
+    background-color: #fbffb9 !important;
     font-weight: 700;
 }
 
