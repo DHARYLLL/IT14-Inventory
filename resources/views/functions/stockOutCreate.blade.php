@@ -15,7 +15,7 @@
                     <div class="row cust-h-form">
 
                         <div class="col-md-12 h-25">
-                            <label for="" class="form-label">Reason for Stock-out</label>
+                            <label for="" class="form-label">Reason for Stock-out <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="reason" value="{{ old('reason') }}">
                             @error('reason')
                                 <div class="text-danger small mt-1">{{ $message }}</div>

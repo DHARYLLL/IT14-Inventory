@@ -2,7 +2,7 @@
 @section('title', 'Chapel')
 
 @section('content')
-    @section('head', '')
+    @section('head', 'Add Chapel')
 
     <div class="cust-h-content-func">
         <div class="card bg-white border-0 rounded-3 h-100">
@@ -20,22 +20,25 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="chapName" class="form-label">Name:</label>
+                                    <label for="chapName" class="form-label">Name: <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="chapName" placeholder="Chapel Name" value="{{ old('chapName') }}">
                                     @error('chapName')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-2">
-                                    <label for="chapRoom" class="form-label">Room:</label>
+                                    <label for="chapRoom" class="form-label">Room: <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="chapRoom" placeholder="Room Number" value="{{ old('chapRoom') }}">
                                     @error('chapRoom')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-2">
-                                    <label for="chapPrice" class="form-label">Room Price:</label>
-                                    <input type="text" class="form-control" name="chapPrice" placeholder="Price" value="{{ old('chapPrice') }}">
+                                    <label for="chapPrice" class="form-label">Room Price: <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="text" class="form-control" name="chapPrice" placeholder="Price" value="{{ old('chapPrice') }}">
+                                    </div>
                                     @error('chapPrice')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror

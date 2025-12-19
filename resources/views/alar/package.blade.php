@@ -42,7 +42,7 @@
                         <td>{{ $row->pkg_name }}</td>
                         <td>{{ $row->pkgToPkgSto->count() }}</td>
                         <td>{{ $row->pkgToPkgEq->count() }}</td>
-                        <td>{{ $row->pkg_price }}</td>
+                        <td>₱{{ number_format($row->pkg_price, 2) }}</td>
                         <td class="text-center col col-md-2">
                             <div class="d-inline-flex justify-content-center gap-2">
                                 <a href="{{ route('Package.edit', $row->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"

@@ -14,7 +14,7 @@
                     <div class="row">
 
                         <div class="col-md-6">
-                            <label for="embalmName" class="form-label">Name:</label>
+                            <label for="embalmName" class="form-label">Name: <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="embalmName" placeholder="Embalmer name" value="{{ old('embalmName') }}">
                             @error('embalmName')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
@@ -22,8 +22,11 @@
                         </div>
 
                         <div class="col-md-2">
-                            <label for="embalmPrice" class="form-label">Price</label>
-                            <input type="text" class="form-control" name="embalmPrice" placeholder="Price" value="{{ old('embalmPrice') }}">
+                            <label for="embalmPrice" class="form-label">Price <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">₱</span>
+                                <input type="text" class="form-control" name="embalmPrice" placeholder="Price" value="{{ old('embalmPrice') }}">
+                            </div>
                             @error('embalmPrice')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
@@ -86,14 +89,14 @@
                                                     <input type="text" class="form-control" name="stoAvail[]" value="{{ $oldStoAvail[$i] ?? '' }}" readonly>
                                                 </div>
                                                 <div class="col-md-5">
-                                                    <label class="form-label fw-semibold text-secondary">Qty.</label>
+                                                    <label class="form-label fw-semibold text-secondary">Qty. <span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control" name="stockQty[]" value="{{ $oldQtys[$i] ?? '' }}">
                                                     @error("stockQty.$i")
                                                         <small class="text-danger">{{ $message }}</small>
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-5">
-                                                    <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                    <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control" name="stockQtySet[]" value="{{ $oldQtySet[$i] ?? '' }}">
                                                     @error("stockQtySet.$i")
                                                         <small class="text-danger">{{ $message }}</small>
@@ -165,14 +168,14 @@
                                                     <input type="text" class="form-control" name="eqAvail[]" value="{{ $oldEqAvail[$i] ?? '' }}" readonly>
                                                 </div>
                                                 <div class="col-md-5">
-                                                    <label class="form-label fw-semibold text-secondary">Qty</label>
+                                                    <label class="form-label fw-semibold text-secondary">Qty <span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control" name="eqQty[]" value="{{ $oldEqQtys[$i] ?? '' }}">
                                                     @error("eqQty.$i")
                                                         <small class="text-danger">{{ $message }}</small>
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-5">
-                                                    <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                    <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control" name="eqQtySet[]" value="{{ $oldEqQtySet[$i] ?? '' }}">
                                                     @error("eqQtySet.$i")
                                                         <small class="text-danger">{{ $message }}</small>
@@ -189,116 +192,6 @@
                             </div>
 
                         </div>
-                        <!--
-                        <script>
-                            //cust embalmer
-
-                            // for stock
-                            function getQtyStoAddEmbalm() {
-                                const get = document.getElementById('stock');
-                                const stoInput = document.getElementById("sto");
-
-                                if (get && stoInput) {
-                                    const idData = get.options[get.selectedIndex].value;
-                                    const forQty = idData.slice(idData.indexOf(",") + 1);
-                                    stoInput.value = forQty;
-                                } else if (stoInput) {
-                                    stoInput.value = '';
-                                }
-                            }
-
-                            function checkInputStoAddEmbalm() {
-                                const input = document.getElementById("sto");
-                                const get = document.getElementById('stock');
-                                if (!input || !get) return;
-
-                                if (input.value.trim() === "") {
-                                    alert("Input is empty");
-                                    return;
-                                }
-
-                                
-                                var idData = get.options[get.selectedIndex].value;
-                                let forId = idData.slice(0, idData.indexOf(","));
-                                let forName = idData.slice(idData.indexOf(",") + 1);
-
-                                const wrapper = document.createElement('div');
-                                wrapper.classList.add('row', 'g-2', 'align-items-start', 'mb-2', 'added-item');
-
-                                wrapper.innerHTML = `
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-semibold text-secondary">Stock</label>
-                                        <input type="text" class="form-control" name="itemName[]" value="${forName}" readonly>
-                                        <input type="text" name="stock[]" value="${forId}" hidden>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label fw-semibold text-secondary">Qty Used</label>
-                                        <input type="number" class="form-control" name="stockQty[]" >
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label fw-semibold text-secondary">Remove</label>
-                                        <button type="button" class="btn btn-outline-danger w-100 remove-sto"><i class="bi bi-x-circle"></i> </button>
-                                    </div>
-                                `;
-
-                                document.getElementById('addStock').appendChild(wrapper);
-                            }
-
-                            //for equipment
-                            function getQtyAddEmbalm() {
-                                const get = document.getElementById('equipment');
-                                const availInput = document.getElementById("avail");
-
-                                if (get && availInput) {
-                                    const idData = get.options[get.selectedIndex].value;
-                                    const forQty = idData.slice(idData.indexOf(",") + 1);
-                                    availInput.value = forQty;
-                                } else if (availInput) {
-                                    availInput.value = '';
-                                }
-                            }
-
-                            function checkInputEqyAddEmbalm() {
-                                const input = document.getElementById("avail");
-                                const get = document.getElementById('equipment');
-                                if (!input || !get) return;
-
-                                if (input.value.trim() === "") {
-                                    alert("Input is empty");
-                                    return;
-                                }
-
-                                var idData = get.options[get.selectedIndex].value;
-                                let forId = idData.slice(0, idData.indexOf(","));
-                                let forName = idData.slice(idData.indexOf(",") + 1);
-
-                                const wrapper = document.createElement('div');
-                                wrapper.classList.add('row', 'g-2', 'align-items-start', 'mb-2', 'added-item');
-
-                                wrapper.innerHTML = `
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-semibold text-secondary">Equipment</label>
-                                        <input type="text" class="form-control" name="eqName[]" value="${forName}" readonly>
-                                        <input type="text" name="equipment[]" value="${forId}" hidden>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label fw-semibold text-secondary">Qty</label>
-                                        <input type="number" class="form-control" name="eqQty[]">     
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label fw-semibold text-secondary">Remove</label>
-                                        <button type="button" class="btn btn-outline-danger w-100 remove-eq">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
-                                    </div>
-                                `;
-
-                                document.getElementById('addEquipment').appendChild(wrapper);
-                            }
-
-
-                        </script>
-                        -->
                     </div>
 
                     {{-- Submit --}}

@@ -33,7 +33,7 @@
                                             <input type="text" name="pkgId" value="{{ $pkgId }}" hidden>
                                         </div>
                                         <div class="col-md-2">
-                                            <label for="qty" class="form-label">Qty.</label>
+                                            <label for="qty" class="form-label">Qty. <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control" name="qty" value="{{ old('qty') }}">
                                             @error('qty')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
@@ -112,7 +112,7 @@
                                             <input type="text" name="pkgId" value="{{ $pkgId }}" hidden>
                                         </div>
                                         <div class="col-md-2">
-                                            <label for="eqQty" class="form-label">Qty.</label>
+                                            <label for="eqQty" class="form-label">Qty. <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control" name="eqQty" value="{{ old('eqQty') }}">
                                             @error('eqQty')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>

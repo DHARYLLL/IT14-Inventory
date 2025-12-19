@@ -102,7 +102,7 @@
                                         <div class="modal-body py-3">
                                             <div class="row g-3">
                                                 <div class="col-md-4">
-                                                    <label class="form-label">First Name</label>
+                                                    <label class="form-label">First Name <span class="text-danger">*</span></label>
                                                     <input type="text" name="fname" class="form-control"
                                                         value="{{ $supplier->fname }}">
                                                 </div>
@@ -112,12 +112,12 @@
                                                         value="{{ $supplier->mname }}">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label class="form-label">Last Name</label>
+                                                    <label class="form-label">Last Name <span class="text-danger">*</span></label>
                                                     <input type="text" name="lname" class="form-control"
                                                         value="{{ $supplier->lname }}">
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="form-label">Contact Number</label>
+                                                    <label class="form-label">Contact Number <span class="text-danger">*</span></label>
                                                     <input type="text" name="contact_number" class="form-control"
                                                         value="{{ $supplier->contact_number }}">
                                                 </div>
@@ -169,7 +169,7 @@ aria-hidden="true">
             <div class="modal-body py-3">
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <label class="form-label">First Name</label>
+                        <label class="form-label">First Name <span class="text-danger">*</span></label>
                         <input type="text" name="fname" class="form-control" value="{{ old('fname') }}">
                     </div>
                     <div class="col-md-4">
@@ -177,11 +177,11 @@ aria-hidden="true">
                         <input type="text" name="mname" class="form-control" value="{{ old('mname') }}">
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">Last Name</label>
+                        <label class="form-label">Last Name <span class="text-danger">*</span></label>
                         <input type="text" name="lname" class="form-control" value="{{ old('lname') }}">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Contact Number</label>
+                        <label class="form-label">Contact Number <span class="text-danger">*</span></label>
                         <input type="text" name="contact_number" class="form-control"
                             value="{{ old('contact_number') }}" placeholder="Ex. 09...">
                         @error('contact_number')

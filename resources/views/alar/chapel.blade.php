@@ -44,7 +44,7 @@
                         <tr>
                             <td>{{ $row->chap_name }}</td>
                             <td>{{ $row->chap_room }}</td>
-                            <td>₱ {{ $row->chap_price }}</td>
+                            <td>₱ {{ number_format($row->chap_price, 2) }}</td>
                             <td class="text-center col col-md-2">
                                 <div class="d-inline-flex justify-content-center gap-2">
 

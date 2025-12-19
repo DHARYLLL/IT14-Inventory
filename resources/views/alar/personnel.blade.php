@@ -43,7 +43,7 @@
                                 <tr>
                                     <td>{{ $row->driver_name }}</td>
                                     <td>{{ $row->driver_contact_number }}</td>
-                                    <td>₱{{ $row->veh_price }}</td>
+                                    <td>₱{{ number_format($row->veh_price, 2) }}</td>
                                     <td class="text-center col col-md-2">
                                         <div class="d-inline-flex justify-content-center gap-2">
                                             @if(session("empRole") == 'sadmin' || session("empRole") == 'admin')
@@ -117,7 +117,7 @@
                 <table class="table table-hover modern-table mb-0">
                     <thead>
                         <tr class="table-white">
-                            <th class="fw-semibold">Name</th>
+                            <th class="fw-semibold">Embalmer</th>
                             <th class="fw-semibold">Service Price</th>
                             <th class="col col-md-2 fw-semibold text-center">Action</th>
                         </tr>
@@ -134,7 +134,7 @@
                             @foreach ($leData as $row)
                                 <tr>
                                     <td>{{ $row->embalmer_name }}</td>
-                                    <td>₱{{ $row->prep_price }}</td>
+                                    <td>₱{{ number_format($row->prep_price, 2) }}</td>
                                     <td class="text-center col col-md-2">
                                         <div class="d-inline-flex justify-content-center gap-2">
 

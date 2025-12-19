@@ -19,7 +19,7 @@
                     <div class="col-md-12 cust-h">
                         <div class="row">
                             <div class="col-md-4">
-                                <label class="form-label fw-semibold">Chapel Name</label>
+                                <label class="form-label fw-semibold">Chapel Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="chapName" value="{{ old('chapName', $chapData->chap_name) }}">
                                 @error('chapName')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
@@ -27,7 +27,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label fw-semibold">Chapel Room</label>
+                                <label class="form-label fw-semibold">Chapel Room <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="chapRoom" value="{{ old('chapRoom', $chapData->chap_room) }}">
                                 @error('chapRoom')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
@@ -35,8 +35,11 @@
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label fw-semibold">Chapel Price</label>
-                                <input type="text" class="form-control" name="chapPrice" value="{{ old('chapPrice', $chapData->chap_price) }}">
+                                <label class="form-label fw-semibold">Chapel Price <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₱</span>
+                                    <input type="text" class="form-control" name="chapPrice" value="{{ old('chapPrice', $chapData->chap_price) }}">
+                                </div>
                                 @error('chapPrice')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror

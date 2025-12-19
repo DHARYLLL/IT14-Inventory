@@ -15,15 +15,18 @@
                     @method('put')
                     <div class="row justify-content-between align-items-start">
                         <div class="col-md-5">
-                            <label class="fw-semibold text-dark mb-1">Package Name</label>
+                            <label class="fw-semibold text-dark mb-1">Package Name <span class="text-danger">*</span></label>
                             <input type="text" name="pkgName" class="form-control" value="{{ old('pkgName', $pkgData->pkg_name) }}">
                             @error('pkgName')
                                 <p class="text-danger small mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                         <div class="col-md-3">
-                            <label class="fw-semibold text-dark mb-1">Price</label>
-                            <input type="text" name="pkgPrice" class="form-control" value="{{ old('pkgPrice', $pkgData->pkg_price) }}">
+                            <label class="fw-semibold text-dark mb-1">Price <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">₱</span>
+                                <input type="text" name="pkgPrice" class="form-control" value="{{ old('pkgPrice', $pkgData->pkg_price) }}">
+                            </div>
                             @error('pkgPrice')
                                 <p class="text-danger small mt-1">{{ $message }}</p>
                             @enderror
@@ -80,14 +83,14 @@
                                                             <p>{{ $row->stock_used * $row->stock_used_set }}</p>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label class="form-label fw-semibold text-secondary">Qty.</label>
+                                                            <label class="form-label fw-semibold text-secondary">Qty. <span class="text-danger">*</span></label>
                                                             <input type="number" class="form-control" name="qty[]" value="{{ old('qty.'.$loop->index, $row->stock_used) }}">
                                                             @error('qty.' . $loop->index)
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
                                                             <input type="number" class="form-control" name="qtySet[]" value="{{ old('qtySet.'.$loop->index, $row->stock_used_set) }}">
                                                             @error('qtySet.' . $loop->index)
                                                                 <small class="text-danger">{{ $message }}</small>
@@ -177,14 +180,14 @@
                                                             <p>{{ $row->eq_used * $row->eq_used_set }}</p>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label class="form-label fw-semibold text-secondary">Qty.</label>
+                                                            <label class="form-label fw-semibold text-secondary">Qty. <span class="text-danger">*</span></label>
                                                             <input type="number" class="form-control" name="eqQty[]" value="{{ old('eqQty.'.$loop->index, $row->eq_used) }}">
                                                             @error('eqQty.' . $loop->index)
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
+                                                            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
                                                             <input type="number" class="form-control" name="eqQtySet[]" value="{{ old('eqQtySet.'.$loop->index, $row->eq_used_set) }}">
                                                             @error('eqQtySet.' . $loop->index)
                                                                 <small class="text-danger">{{ $message }}</small>

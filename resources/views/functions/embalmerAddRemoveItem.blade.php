@@ -32,7 +32,7 @@
                                             @enderror
                                         </div>
                                         <div class="col-md-2">
-                                            <label for="qty" class="form-label">Qty.</label>
+                                            <label for="qty" class="form-label">Qty. <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control" name="qty" value="{{ old('qty') }}">
                                             <input type="text" name="embId" value="{{ $embId }}" hidden>
                                             @error('qty')
@@ -110,7 +110,7 @@
                                             @enderror
                                         </div>
                                         <div class="col-md-2">
-                                            <label for="eqQty" class="form-label">Qty.</label>
+                                            <label for="eqQty" class="form-label">Qty. <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control" name="eqQty" value="{{ old('eqQty') }}">
                                             <input type="text" name="embId" value="{{ $embId }}" hidden>
                                             @error('eqQty')

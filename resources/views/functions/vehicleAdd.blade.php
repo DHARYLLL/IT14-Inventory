@@ -23,7 +23,7 @@
                                 <h4 class="cust-sub-title">Driver Info:</h4>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label fw-semibold">Driver Name</label>
+                                <label class="form-label fw-semibold">Driver Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="driverName" value="{{ old('driverName') }}">
                                 @error('driverName')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
@@ -31,7 +31,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label fw-semibold">Contact Number</label>
+                                <label class="form-label fw-semibold">Contact Number <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="contactNumber" value="{{ old('contactNumber') }}">
                                 @error('contactNumber')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
@@ -39,8 +39,11 @@
                             </div>
                              
                             <div class="col-md-4">
-                                <label class="form-label fw-semibold">Price</label>
-                                <input type="text" class="form-control" name="price" value="{{ old('price') }}">
+                                <label class="form-label fw-semibold">Price <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₱</span>
+                                    <input type="text" class="form-control" name="price" value="{{ old('price') }}">
+                                </div>
                                 @error('price')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
