@@ -61,6 +61,13 @@
                         </a>
                     </li>
 
+                    <li class="nav-list">
+                        <a href="{{ route('SOA.index') }}"
+                            class="nav-link-custom {{ request()->routeIs('SOA.*') ? 'active' : '' }}">
+                            <span>SOA</span>
+                        </a>
+                    </li>
+
                     @if(session("empRole") == 'admin' || session("empRole") == 'sadmin')
                         <li class="nav-list">
                             <a href="{{ route('Purchase-Order.index') }}"

@@ -106,7 +106,6 @@ class ServiceRequestController extends Controller
             'total.max' => '6 digits is the max.'
         ]);
 
-        //dd(Carbon::parse($request->svcDate)->isSameDay(Carbon::today()) ? 'Ongoing' : 'Pending');
 
         $driverUnavailable = jobOrder::Where('jo_burial_date', $request->burrDate)
             ->whereRelation('joToSvcReq', 'veh_id', $request->setVehId)
@@ -117,14 +116,6 @@ class ServiceRequestController extends Controller
             //dd('driver not available', $checkAvail);
             return back()->with('promt', 'Driver not available')->withInput();
         }
-
-        //$jobOrder
-
-        //$checkIds = ServiceRequest::where('veh_id', $request->setVehId)->where('svc_status', '<>', 'Completed')->exists();
-
-        // if ($checkIds) {
-        //     return back()->with('promt', 'Driver already Booked')->withInput();
-        // }
 
         ServiceRequest::create([
             'veh_id' => $request->setVehId,
@@ -155,17 +146,6 @@ class ServiceRequestController extends Controller
             'jo_id' => $joId,
             'emp_id' => session('loginId')
         ]);
-
-        /*
-        $startTime = Carbon::parse($request->timeStart)->format('g:i A');
-        $endTime   = Carbon::parse($request->timeEnd)->format('g:i A');
-
-        to convert military time to standard time
-        {{ \Carbon\Carbon::parse($job->jo_start_time)->format('g:i A') }}
-        {{ \Carbon\Carbon::parse($job->jo_end_time)->format('g:i A') }}
-        */
-        //dd($startTime, $endTime);
-
         
         Log::create([
             'transaction' => 'Create',
@@ -274,80 +254,104 @@ class ServiceRequestController extends Controller
      */
     public function update(Request $request, String $id)
     {
-        $pkgId = ServiceRequest::where('id', $id)->take(1)->value('pkg_id');
-        $pkgEqs = PkgEquipment::where('pkg_id', '=', $pkgId)->get();
-        $pkgStos = PkgStock::where('pkg_id', '=', $pkgId)->get();
+        // $pkgId = ServiceRequest::where('id', $id)->take(1)->value('pkg_id');
+        // $pkgEqs = PkgEquipment::where('pkg_id', '=', $pkgId)->get();
+        // $pkgStos = PkgStock::where('pkg_id', '=', $pkgId)->get();
 
-        // returning equipment
-        if ($request->status == 'Deployed') {
+        // // returning equipment
+        // if ($request->status == 'Deployed') {
 
-            // return equipment from package
-            foreach ($pkgEqs as $pkgEq) {
-                $getEq = Equipment::where('id', '=', $pkgEq->eq_id)->first();
-                Equipment::findOrFail($getEq->id)->update([
-                    'eq_available' => $getEq->eq_available + $pkgEq->eq_used,
-                    'eq_in_use' => $getEq->eq_in_use - $pkgEq->eq_used
-                ]);
-            }
+        //     // return equipment from package
+        //     foreach ($pkgEqs as $pkgEq) {
+        //         $getEq = Equipment::where('id', '=', $pkgEq->eq_id)->first();
+        //         Equipment::findOrFail($getEq->id)->update([
+        //             'eq_available' => $getEq->eq_available + $pkgEq->eq_used,
+        //             'eq_in_use' => $getEq->eq_in_use - $pkgEq->eq_used
+        //         ]);
+        //     }
 
 
-            Log::create([
-                'transaction' => 'Returned',
-                'tx_desc' => 'Returned Equipment from Service Request | ID: ' . $id,
-                'tx_date' => Carbon::now(),
-                'emp_id' => session('loginId')
-            ]);
+        //     Log::create([
+        //         'transaction' => 'Returned',
+        //         'tx_desc' => 'Returned Equipment from Service Request | ID: ' . $id,
+        //         'tx_date' => Carbon::now(),
+        //         'emp_id' => session('loginId')
+        //     ]);
 
-            return redirect(route('Job-Order.index'));
+        //     return redirect(route('Job-Order.index'));
+        // }
+
+        // // Deploying stock and equipment
+        // if ($request->status == 'Pending') {
+        //     $get = ServiceRequest::find($id);
+        //     $checkDate = ServiceRequest::where('id', $id)
+        //                 ->whereDate('svc_startDate', '<=', Carbon::now()->format('Y-m-d'))
+        //                 ->whereDate('svc_endDate', '>=', Carbon::now()->format('Y-m-d'))
+        //                 ->first();
+        //     if(!$checkDate){
+        //         return redirect()->back()->with('promt', 'Cannot deploy before ('. $get->svc_startDate .') and after (' . $get->svc_endDate .').')
+        //             ->withInput();
+        //     }
+
+        //     // update deployed equipment from package
+        //     foreach ($pkgEqs as $data) {
+        //         $eqData = Equipment::where('id', '=', $data->eq_id)->first();
+        //         Equipment::findOrFail($eqData->id)->update([
+        //             'eq_available' => $eqData->eq_available - $data->eq_used,
+        //             'eq_in_use' => $eqData->eq_in_use + $data->eq_used
+        //         ]);
+        //     }
+
+        //     // update deployed stocks from package
+        //     foreach ($pkgStos as $data) {
+        //         $stoData = Stock::where('id', '=', $data->stock_id)->first();
+        //         Stock::findOrFail($stoData->id)->update([
+        //             'item_qty' => $stoData->item_qty - $data->stock_used
+        //         ]);
+        //     }
+
+        //     Log::create([
+        //         'transaction' => 'Deployed',
+        //         'tx_desc' => 'Deployed Stock from Service Request | ID: ' . $id,
+        //         'tx_date' => Carbon::now(),
+        //         'emp_id' => session('loginId')
+        //     ]);
+
+        //     Log::create([
+        //         'transaction' => 'Deployed',
+        //         'tx_desc' => 'Deployed Equipment from Service Request | ID: ' . $id,
+        //         'tx_date' => Carbon::now(),
+        //         'emp_id' => session('loginId')
+        //     ]);
+
+        //     return redirect()->back();
+        // }
+
+        // return redirect()->back();
+
+        $request->validate([
+            'embalm' => 'required',
+            'vehicle' => 'required'
+        ], [
+            'embalm.required' => 'This field is required.',
+            'vehicle.required' => 'This field is required.',
+        ]);
+
+        $driverUnavailable = jobOrder::Where('jo_burial_date', $request->burrDate)
+            ->whereRelation('joToSvcReq', 'veh_id', $request->vehicle)
+            ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
+            ->exists();
+
+        if ($driverUnavailable) {
+            //dd('driver not available', $checkAvail);
+            return back()->with('promt-f-svc', 'Driver not available')->withInput();
         }
-
-        // Deploying stock and equipment
-        if ($request->status == 'Pending') {
-            $get = ServiceRequest::find($id);
-            $checkDate = ServiceRequest::where('id', $id)
-                        ->whereDate('svc_startDate', '<=', Carbon::now()->format('Y-m-d'))
-                        ->whereDate('svc_endDate', '>=', Carbon::now()->format('Y-m-d'))
-                        ->first();
-            if(!$checkDate){
-                return redirect()->back()->with('promt', 'Cannot deploy before ('. $get->svc_startDate .') and after (' . $get->svc_endDate .').')
-                    ->withInput();
-            }
-
-            // update deployed equipment from package
-            foreach ($pkgEqs as $data) {
-                $eqData = Equipment::where('id', '=', $data->eq_id)->first();
-                Equipment::findOrFail($eqData->id)->update([
-                    'eq_available' => $eqData->eq_available - $data->eq_used,
-                    'eq_in_use' => $eqData->eq_in_use + $data->eq_used
-                ]);
-            }
-
-            // update deployed stocks from package
-            foreach ($pkgStos as $data) {
-                $stoData = Stock::where('id', '=', $data->stock_id)->first();
-                Stock::findOrFail($stoData->id)->update([
-                    'item_qty' => $stoData->item_qty - $data->stock_used
-                ]);
-            }
-
-            Log::create([
-                'transaction' => 'Deployed',
-                'tx_desc' => 'Deployed Stock from Service Request | ID: ' . $id,
-                'tx_date' => Carbon::now(),
-                'emp_id' => session('loginId')
-            ]);
-
-            Log::create([
-                'transaction' => 'Deployed',
-                'tx_desc' => 'Deployed Equipment from Service Request | ID: ' . $id,
-                'tx_date' => Carbon::now(),
-                'emp_id' => session('loginId')
-            ]);
-
-            return redirect()->back();
-        }
-
-        return redirect()->back();
+        
+        ServiceRequest::findOrFail($id)->update([
+            'veh_id' => $request->vehicle,
+            'prep_id' => $request->embalm
+        ]);
+        return redirect()->back()->with('success', 'Updated Succesfully!');
     }
 
     /**

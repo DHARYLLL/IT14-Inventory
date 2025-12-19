@@ -141,29 +141,31 @@
 
                 <div class="w-100"></div>
 
-                {{-- Pending payments --}}
+                {{-- Delay --}}
                 <div class="col-md-6">
                     <div class="dashboard-box">
-                        <h5>Pending Payments</h5>
+                        <h5>Delayed/Exceeded Job Order Date</h5>
                         <div class="placeholder-box overflow-auto">
                             <table class="table table-borderless table-hover placeholder-table mb-0">
                                 <thead>
                                     <tr>
                                         <th class="fw-semibold">Client</th>
                                         <th class="fw-semibold">Contact Number</th>
+                                        <th class="fw-semibold">Status</th>
                                         <th class="col col-md-2 fw-semibold text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if ($joPending->isEmpty())
                                         <tr>
-                                            <td colspan="3" class="text-center text-muted">No data available</td>
+                                            <td colspan="4" class="text-center text-muted">No data available</td>
                                         </tr>
                                     @else
                                         @foreach ($joPending as $row)
                                             <tr>
                                                 <td>{{ $row->client_name }}</td>
                                                 <td>{{ $row->client_contact_number }}</td>
+                                                <td>{{ $row->jo_status }}</td>
                                                 <td class="text-center col col-md-2">
                                                     <div class="d-inline-flex justify-content-center gap-2">
                                                         @if($row->jod_id)

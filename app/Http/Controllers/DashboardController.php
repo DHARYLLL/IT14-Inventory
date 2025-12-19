@@ -42,8 +42,8 @@ class DashboardController extends Controller
             }
         }
 
-        $joPending = jobOrder::select('id', 'client_name', 'client_contact_number', 'svc_id', 'jod_id')
-                            ->where('jo_status', 'Pending')
+        $joPending = jobOrder::select('id', 'client_name', 'client_contact_number', 'jo_status', 'svc_id', 'jod_id')
+                            ->where('jo_burial_date', '<', Carbon::today())
                             ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
                             ->get();
 

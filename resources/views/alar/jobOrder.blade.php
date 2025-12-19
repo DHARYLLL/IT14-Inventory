@@ -4,180 +4,142 @@
 @section('content')
 @section('head', 'Job Order')
 
-<div class="d-flex align-items-center justify-content-between p-2 mb-0 cust-h-heading">
-    @session('promt')
-        <h2 class="fw-semibold bg-danger-subtle">{{ $value }}</h2>
-    @endsession
+{{-- Header, Search & Filter --}}
+<form id="filterForm" class="d-flex align-items-center justify-content-between p-2 mb-0 cust-h-heading">
+
     <div class="input-group cust-searchbar">
-        <input type="text" id="searchInput" class="form-control" placeholder="Search"
-            style="border-radius: 0; border: none;">
-        <div class="cust-fit-w">
-            <select class="form-select" id="sortSelect" onchange="applySort()" style="border-radius: 0; border: none;">
-                <option value="all">All</option>
-                <option value="pending">Pending</option>
-                <option value="paid">Paid</option>
-                <option value="package">Package</option>
-                <option value="service">Service</option>
-            </select>
-        </div>
-        <button class="cust-btn cust-btn-search" id="clearSearch">Clear</button >
-        
+        <input type="text" name="search" id="searchInput" value="{{ request('search') }}" class="form-control" placeholder="Search" style="border-radius: 0; border: none;">
+
+        <a href="{{ route('Job-Order.index') }}" class="cust-btn cust-btn-search"  style="border-radius: 0; border: none;">Clear</a>
     </div>
-    
+
+
     <div class="row">
         <div class="col col-auto">
+            <div class="cust-fit-w">
+                <select class="form-select" name="filter" id="filterSelect">
+                    <option value="all" {{ request('filter')=='all' ? 'selected' : '' }}>All</option>
+                    <option value="pending" {{ request('filter')=='pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="paid" {{ request('filter')=='paid' ? 'selected' : '' }}>Paid</option>
+                    <option value="package" {{ request('filter')=='package' ? 'selected' : '' }}>Package</option>
+                    <option value="service" {{ request('filter')=='service' ? 'selected' : '' }}>Service</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-auto">
             <div class="dropdown">
                 <button class="cust-btn cust-btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-plus-lg"></i> New Job Order
                 </button>
                 <ul class="dropdown-menu">
-                    <li>
-                        <a href="{{ route('Service-Request.create') }}" class="dropdown-item">
-                            <span>New Service</span>
-                        </a></li>
-                    <li>
-                        <a href="{{ route('Job-Order.create') }}" class="dropdown-item">
-                            <span>New Package</span>
-                        </a>
-                    </li>
+                    <li><a href="{{ route('Service-Request.create') }}" class="dropdown-item">New Service</a></li>
+                    <li><a href="{{ route('Job-Order.create') }}" class="dropdown-item">New Package</a></li>
                 </ul>
             </div>
-            
         </div>
     </div>
-    
-</div>
+</form>
 
-{{-- table --}}
+{{-- Table --}}
 <div class="cust-h-content">
     <table class="table table-hover mb-0">
         <thead>
             <tr class="table-light">
-               <th class="fw-semibold">Client</th>
+                <th class="fw-semibold">Client</th>
                 <th class="fw-semibold">GL</th>
                 <th class="fw-semibold">RA</th>
                 <th class="fw-semibold">Address</th>
                 <th class="fw-semibold">Casket</th>
                 <th class="fw-semibold">Amount</th>
                 <th class="fw-semibold">Contact #</th>
-                <th class="col col-md-2 fw-semibold text-center">Action</th>
+                <th class="col-md-2 fw-semibold text-center">Action</th>
             </tr>
         </thead>
-    
         <tbody id="tableBody">
-    
-            @if ($jOData->isEmpty())
-                <tr>
-                    <td colspan="9" class="text-center text-secondary py-3">
-                        No New Job Order.
-                    </td>
-                </tr>
-            @else
-                @foreach ($jOData as $row)
-                    <tr class="{{ $row->joToSvcReq->svc_status == 'Completed' ? ($row->jo_status != 'Paid' ? 'cust-warning-row' : 'cust-success-row') : '' }}">
-                        {{-- Safely display the package name (avoid null errors) --}}
-                        <td>{{ $row->client_name ?? '—'  }}</td>
-                        <td>{{ $row->ba_id ? '₱'.$row->joToBurAsst->amount : 'N/A' }}</td>
-                        <td>                     
-                            <form action="{{ route('Job-Order.raUpdate', $row->id) }}" method="POST" class="raForm">
-                                @csrf
-                                @method('put')
-                                <label>
-                                    <input type="checkbox" name="status" class="raCheckbox" {{ $row->ra ? 'checked' : '' }} {{ $row->ba_id || $row->jo_status == 'Paid' || !$row->jod_id ? 'disabled' : '' }}>
-                                </label>
-                            </form>
-                        </td>
-                        <td>{{ $row->client_address }}</td>
-                        <td>{{ $row->jod_id ? $row->joToJod->jodToPkg->pkg_name : 'N/A' }}</td>
-                        <td class="{{ $row->jo_status == "Paid" ? 'cust-success-td' : '' }}">{{ $row->jo_status == "Paid" ? $row->jo_status : '₱'.number_format($row->jo_total, 2) }}</td>
-                        <td>{{ $row->client_contact_number ?? '—' }}</td>
-                        <td class="text-center col col-md-2">
-                            
-                            <div class="d-inline-flex justify-content-center gap-2">
-                                @if($row->jod_id)
-                                    @if($row->joToJod->jod_eq_stat == 'Pending')
-                                        <a href="{{ route('Job-Order.showDeploy', $row->id) }}"
-                                            class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Deploy">
-                                            <i class="bi bi-box-arrow-up"></i>
-                                        </a>
-                                    @endif
-                                    @if($row->joToJod->jod_eq_stat == 'Deployed')
-                                        <a href="{{ route('Job-Order.showReturn', $row->id) }}"
-                                            class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Return">
-                                            <i class="bi bi-box-arrow-in-down"></i>
-                                        </a>
-                                    @endif
-                                    @if($row->joToJod->jod_eq_stat == 'Returned')
-                                        <a href="{{ route('Job-Order.show', $row->id) }}"
-                                            class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                            <i class="fi fi-rr-eye"></i>
-                                        </a>
-                                    @endif
-                                @endif
-                                @if($row->svc_id && !$row->jod_id)
-                                    @if($row->joToSvcReq->svc_status == 'Completed')
-                                        <a href="{{ route('Service-Request.show', $row->id) }}"
-                                            class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                            <i class="fi fi-rr-eye"></i>
-                                        </a>
-                                    @else
-                                        <a href="{{ route('Service-Request.show', $row->id) }}"
-                                            class="cust-btn cust-btn-secondary btn-md" data-bs-toggle="tooltip" data-bs-placement="top" title="Review Service">
-                                            <i class="bi bi-list-ul"></i>
-                                        </a>
-                                    @endif
-                                @endif
-                            </div>                     
-                           
-                        </td>
-                    </tr>
-                @endforeach
-                <script>
-                    document.querySelectorAll('.raCheckbox').forEach((checkbox) => {
-                        checkbox.addEventListener('change', function() {
-                            // submit the form that contains this checkbox
-                            this.closest('form').submit();
-                        });
-                    });
-                </script>
-            @endif
-    
+            @include('alar.partials.jobOrderTable')
         </tbody>
     </table>
-    <script>
-        // Filter 
-        function applySort() {
-            const value = document.getElementById('sortSelect').value;
-            const rows = document.querySelectorAll('#tableBody tr');
 
-            rows.forEach(row => {
-                const amountText = row.cells[5]?.innerText.trim(); // Amount column
-                const casketText = row.cells[4]?.innerText.trim(); // Casket column
+    {{-- Pagination --}}
+    <div class="d-flex justify-content-center mt-3" id="paginationLinks">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination mb-0">
+                <li class="page-item {{ $jOData->onFirstPage() ? 'disabled' : '' }}">
+                    <a class="page-link" href="{{ $jOData->previousPageUrl() ?? '#' }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                @for ($i = 1; $i <= $jOData->lastPage(); $i++)
+                    <li class="page-item {{ $jOData->currentPage() == $i ? 'active' : '' }}">
+                        <a class="page-link" href="{{ $jOData->appends(request()->query())->url($i) }}">{{ $i }}</a>
+                    </li>
+                @endfor
+                <li class="page-item {{ $jOData->currentPage() == $jOData->lastPage() ? 'disabled' : '' }}">
+                    <a class="page-link" href="{{ $jOData->nextPageUrl() ?? '#' }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 
-                const isPaid = amountText === 'Paid';
-                const hasCasket = casketText !== 'N/A' && casketText !== '';
-
-                let showRow = true;
-
-                if (value === 'paid') {
-                    showRow = isPaid;
-                } 
-                else if (value === 'pending') {
-                    showRow = !isPaid;
-                }
-                else if (value === 'package') {
-                    showRow = hasCasket;
-                }
-                else if (value === 'service') {
-                    showRow = !hasCasket;
-                }
-
-                row.style.display = showRow ? '' : 'none';
-            });
-        }
-
-
-    </script>
+    {{-- Showing results text --}}
+    <div class="text-center text-secondary mt-2">
+        Showing {{ $jOData->firstItem() ?? 0 }} to {{ $jOData->lastItem() ?? 0 }} of {{ $jOData->total() ?? 0 }} results
+    </div>
 </div>
+
+{{-- JavaScript --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // RA checkbox auto-submit
+    function initRA() {
+        document.querySelectorAll('.raCheckbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                this.closest('form').submit();
+            });
+        });
+    }
+    initRA();
+
+    // Debounce function
+    function debounce(func, delay) {
+        let timer;
+        return function() {
+            clearTimeout(timer);
+            timer = setTimeout(() => func.apply(this, arguments), delay);
+        };
+    }
+
+    // Fetch table data via AJAX
+    function fetchData(url) {
+        $.ajax({
+            url: url,
+            data: $('#filterForm').serialize(),
+            success: function(data) {
+                $('#tableBody').html(data);
+                initRA(); // Re-init checkbox events
+                window.history.pushState("", "", url + '?' + $('#filterForm').serialize());
+            }
+        });
+    }
+
+    // Pagination link click
+    $(document).on('click', '#paginationLinks a.page-link', function(e) {
+        e.preventDefault();
+        let url = $(this).attr('href');
+        if(url && url != '#') fetchData(url);
+    });
+
+    // Search input keyup with debounce
+    $('#searchInput').on('keyup', debounce(function() {
+        fetchData('{{ route("Job-Order.index") }}');
+    }, 500));
+
+    // Filter select change
+    $('#filterSelect').on('change', function() {
+        fetchData('{{ route("Job-Order.index") }}');
+    });
+</script>
 
 @endsection

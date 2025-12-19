@@ -24,6 +24,7 @@ use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\receiptController;
 use App\Http\Controllers\ServiceRequestController;
 use App\Http\Controllers\setStoEqToPkgController;
+use App\Http\Controllers\SoaController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\SupplierController;
@@ -61,10 +62,9 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::get('Service-Request/{id}/Complete-Service', [ServiceRequestController::class, 'completeService'])->name('Service-Request.complete');
     //Route::put('Service-Request/{$id}/Deploy-Equipment', [ServiceRequestController::class, 'deploy'])->name('Service-Request.deploy');
     Route::resource('Package', PackageController::class);
-    
     Route::get('Package/{id}/Remove-Item', [PackageController::class, 'addRemoveItem'])->name('Package.addRemItem');
 
-    Route::resource('Package-Inclusion', packageInclusionController::class);
+    Route::resource('SOA', SoaController::class);
 
     Route::resource('Stock', StockController::class);
 

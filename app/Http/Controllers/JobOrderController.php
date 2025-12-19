@@ -31,14 +31,45 @@ class JobOrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         
-        $jOData = jobOrder::join('services_requests', 'services_requests.id', '=', 'job_orders.svc_id')
+        // $jOData = jobOrder::join('services_requests', 'services_requests.id', '=', 'job_orders.svc_id')
+        //     ->orderByRaw("CASE WHEN services_requests.svc_status = 'Completed' AND job_orders.jo_status = 'Paid' THEN 1 ELSE 0 END")
+        //     ->orderBy('client_name', 'asc')
+        //     ->get();
+        // return view('alar/jobOrder', ['jOData' => $jOData]);
+        $query = jobOrder::leftJoin('services_requests', 'services_requests.id', '=', 'job_orders.svc_id')
+            ->select('job_orders.*')
             ->orderByRaw("CASE WHEN services_requests.svc_status = 'Completed' AND job_orders.jo_status = 'Paid' THEN 1 ELSE 0 END")
-            ->orderBy('client_name', 'asc')
-            ->get();
-        return view('alar/jobOrder', ['jOData' => $jOData]);
+            ->orderBy('client_name', 'asc');
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('client_name', 'like', "%{$search}%")
+                ->orWhere('client_address', 'like', "%{$search}%")
+                ->orWhere('client_contact_number', 'like', "%{$search}%");
+            });
+        }
+
+        // Status/Type filter
+        if ($request->filled('filter') && $request->filter !== 'all') {
+            $filter = $request->filter;
+            if ($filter === 'paid') $query->where('jo_status', 'Paid');
+            elseif ($filter === 'pending') $query->where('jo_status', '!=', 'Paid');
+            elseif ($filter === 'package') $query->whereNotNull('jod_id');
+            elseif ($filter === 'service') $query->whereNull('jod_id');
+        }
+
+        $jOData = $query->paginate(10)->withQueryString();
+
+       if ($request->ajax()) {
+            return view('alar.partials.jobOrderTable', compact('jOData'))->render();
+        }
+
+        return view('alar.jobOrder', compact('jOData'));
     }
 
     /**
@@ -242,7 +273,11 @@ class JobOrderController extends Controller
         $pkgEqData = PkgEquipment::where('pkg_id', $jodData->pkg_id)->get();
         $pkgStoData = PkgStock::where('pkg_id', $jodData->pkg_id)->get();
         $payHistoryData = Soa::select('payment', 'payment_date', 'emp_id')->where('jo_id', $id)->orderBy('id', 'desc')->get();
-        return view('shows/jobOrdDeplShow', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData , 'payHistoryData' => $payHistoryData]);
+        $vehData = vehicle::all();
+        $embalmData = embalming::all();
+        return view('shows/jobOrdDeplShow', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 
+                                            'pkgStoData' => $pkgStoData , 'payHistoryData' => $payHistoryData,
+                                            'vehData' => $vehData, 'embalmData' => $embalmData]);
     }
 
     public function deployItems(Request $request, string $id)
@@ -352,8 +387,12 @@ class JobOrderController extends Controller
         $tempEqData = TempEquipment::where('jod_id', $joData->jod_id)->get();
 
         $payHistoryData = Soa::select('payment', 'payment_date', 'emp_id')->where('jo_id', $id)->orderBy('id', 'desc')->get();
+        $vehData = vehicle::all();
+        $embalmData = embalming::all();
 
-        return view('functions/jobOrdReturn', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 'pkgStoData' => $pkgStoData, 'tempEqData' => $tempEqData, 'payHistoryData' => $payHistoryData]);
+        return view('functions/jobOrdReturn', ['joData' => $joData, 'jodData' => $jodData, 'pkgEqData' => $pkgEqData, 
+                                                'pkgStoData' => $pkgStoData, 'tempEqData' => $tempEqData, 'payHistoryData' => $payHistoryData,
+                                                'vehData' => $vehData, 'embalmData' => $embalmData]);
     }
 
     public function returnItems(Request $request, string $id)

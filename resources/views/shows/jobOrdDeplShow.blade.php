@@ -303,7 +303,70 @@
                 <label class="form-label fw-semibold">Contact number</label>
                 <p>{{ $joData->joToSvcReq->veh_id ? $joData->joToSvcReq->svcReqToVeh->driver_contact_number : 'N/A' }}</p>
             </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Edit Personnel</label>
+                <!-- Button trigger modal -->
+                <button type="button" class="cust-btn cust-btn-secondary" data-bs-toggle="modal" data-bs-target="#personnel">
+                    Edit Personnel
+                </button>
+            </div>
 
+        </div>
+
+        <!-- Modal for perosonnel -->
+        <div class="modal fade" id="personnel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="personnelLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="personnelLabel">Edit Personnel</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('Service-Request.update', $joData->svc_id) }}" method="POST">
+                        @csrf
+                        @method('put')
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Embalmer</label>
+                                    <select name="embalm" class="form-select ">
+                                        @foreach($embalmData as $row)
+                                            <option value="{{ $row->id }}" {{ $joData->joToSvcReq->prep_id == $row->id ? 'selected' : '' }}>{{ $row->embalmer_name }}</option>
+                                        @endforeach
+                                    </select>   
+                                    @error('embalm')
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Driver</label>
+                                    <select name="vehicle" class="form-select ">
+                                        @foreach($vehData as $row)
+                                            <option value="{{ $row->id }}" {{ $joData->joToSvcReq->veh_id == $row->id ? 'selected' : '' }}>{{ $row->driver_name }}</option>
+                                        @endforeach
+                                    </select>   
+                                    @error('vehicle')
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
+                                    @session('promt-f-svc')
+                                        <div class="text-danger small mt-1">{{ $value }}</div>
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", function () {
+                                                var modal = new bootstrap.Modal(document.getElementById('personnel'));
+                                                modal.show();
+                                            });
+                                        </script>
+                                    @endsession
+                                </div>
+                            </div >
+                        </div>
+                        <div class="modal-footer">
+                            <input type="text" name="burrDate" value="{{ $joData->jo_burial_date }}" hidden>
+                            <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="cust-btn cust-btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <!-- Modal for schedule -->
