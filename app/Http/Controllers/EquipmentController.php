@@ -17,20 +17,27 @@ class EquipmentController extends Controller
      */
     public function index(Request $request)
     {
-        //$eqData = Equipment::all();
-
         $search = $request->input('search');
 
         $eqData = Equipment::when($search, function ($q) use ($search) {
-            $q->where('eq_name', 'like', "%{$search}%")
-            ->orWhere('eq_size', 'like', "%{$search}%")
-            ->orWhere('id', 'like', "%{$search}%");
-        })
-        ->orderByRaw("CASE WHEN eq_available <= eq_low_limit THEN 0 ELSE 1 END")->orderBy('eq_available', 'asc')
-        ->paginate(10)
-        ->withQueryString(); 
+                $q->where('eq_name', 'like', "%{$search}%")
+                ->orWhere('eq_size', 'like', "%{$search}%")
+                ->orWhere('id', 'like', "%{$search}%");
+            })
+            ->orderByRaw("CASE WHEN eq_available <= eq_low_limit THEN 0 ELSE 1 END")
+            ->orderBy('eq_available', 'asc')
+            ->paginate(10)
+            ->withQueryString();
 
-        return view('alar.equipment', ['eqData' => $eqData]);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'table' => view('alar.partials.equipmentTable', compact('eqData'))->render(),
+                'pagination' => view('alar.partials.equipmentPagination', compact('eqData'))->render(),
+            ]);
+        }
+
+        return view('alar.equipment', compact('eqData'));
     }
 
     /**

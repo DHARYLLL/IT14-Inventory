@@ -34,17 +34,23 @@ class JobOrderController extends Controller
     public function index(Request $request)
     {
         
-        // $jOData = jobOrder::join('services_requests', 'services_requests.id', '=', 'job_orders.svc_id')
-        //     ->orderByRaw("CASE WHEN services_requests.svc_status = 'Completed' AND job_orders.jo_status = 'Paid' THEN 1 ELSE 0 END")
-        //     ->orderBy('client_name', 'asc')
-        //     ->get();
-        // return view('alar/jobOrder', ['jOData' => $jOData]);
-        $query = jobOrder::leftJoin('services_requests', 'services_requests.id', '=', 'job_orders.svc_id')
+        $query = JobOrder::leftJoin(
+                'services_requests',
+                'services_requests.id',
+                '=',
+                'job_orders.svc_id'
+            )
             ->select('job_orders.*')
-            ->orderByRaw("CASE WHEN services_requests.svc_status = 'Completed' AND job_orders.jo_status = 'Paid' THEN 1 ELSE 0 END")
+            ->orderByRaw("
+                CASE
+                    WHEN services_requests.svc_status = 'Completed'
+                    AND job_orders.jo_status = 'Paid'
+                    THEN 1 ELSE 0
+                END
+            ")
             ->orderBy('client_name', 'asc');
 
-        // Search filter
+        // Search
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -54,19 +60,27 @@ class JobOrderController extends Controller
             });
         }
 
-        // Status/Type filter
+        // Filter
         if ($request->filled('filter') && $request->filter !== 'all') {
-            $filter = $request->filter;
-            if ($filter === 'paid') $query->where('jo_status', 'Paid');
-            elseif ($filter === 'pending') $query->where('jo_status', '!=', 'Paid');
-            elseif ($filter === 'package') $query->whereNotNull('jod_id');
-            elseif ($filter === 'service') $query->whereNull('jod_id');
+            if ($request->filter === 'paid') {
+                $query->where('jo_status', 'Paid');
+            } elseif ($request->filter === 'pending') {
+                $query->where('jo_status', '!=', 'Paid');
+            } elseif ($request->filter === 'package') {
+                $query->whereNotNull('jod_id');
+            } elseif ($request->filter === 'service') {
+                $query->whereNull('jod_id');
+            }
         }
 
         $jOData = $query->paginate(10)->withQueryString();
 
-       if ($request->ajax()) {
-            return view('alar.partials.jobOrderTable', compact('jOData'))->render();
+        // AJAX response
+        if ($request->ajax()) {
+            return response()->json([
+                'table' => view('alar.partials.jobOrderTable', compact('jOData'))->render(),
+                'pagination' => view('alar.partials.jobOrderPagination', compact('jOData'))->render(),
+            ]);
         }
 
         return view('alar.jobOrder', compact('jOData'));

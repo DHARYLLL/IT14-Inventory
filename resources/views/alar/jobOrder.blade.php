@@ -58,88 +58,67 @@
         <tbody id="tableBody">
             @include('alar.partials.jobOrderTable')
         </tbody>
+
     </table>
 
     {{-- Pagination --}}
-    <div class="d-flex justify-content-center mt-3" id="paginationLinks">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination mb-0">
-                <li class="page-item {{ $jOData->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $jOData->previousPageUrl() ?? '#' }}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                @for ($i = 1; $i <= $jOData->lastPage(); $i++)
-                    <li class="page-item {{ $jOData->currentPage() == $i ? 'active' : '' }}">
-                        <a class="page-link" href="{{ $jOData->appends(request()->query())->url($i) }}">{{ $i }}</a>
-                    </li>
-                @endfor
-                <li class="page-item {{ $jOData->currentPage() == $jOData->lastPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $jOData->nextPageUrl() ?? '#' }}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+    <div id="paginationLinks">
+        @include('alar.partials.jobOrderPagination')
     </div>
 
-    {{-- Showing results text --}}
-    <div class="text-center text-secondary mt-2">
-        Showing {{ $jOData->firstItem() ?? 0 }} to {{ $jOData->lastItem() ?? 0 }} of {{ $jOData->total() ?? 0 }} results
-    </div>
 </div>
 
 {{-- JavaScript --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // RA checkbox auto-submit
     function initRA() {
-        document.querySelectorAll('.raCheckbox').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
+        document.querySelectorAll('.raCheckbox').forEach(cb => {
+            cb.addEventListener('change', function () {
                 this.closest('form').submit();
             });
         });
     }
     initRA();
 
-    // Debounce function
-    function debounce(func, delay) {
-        let timer;
-        return function() {
-            clearTimeout(timer);
-            timer = setTimeout(() => func.apply(this, arguments), delay);
+    function debounce(fn, delay) {
+        let t;
+        return function () {
+            clearTimeout(t);
+            t = setTimeout(() => fn.apply(this, arguments), delay);
         };
     }
 
-    // Fetch table data via AJAX
     function fetchData(url) {
         $.ajax({
             url: url,
             data: $('#filterForm').serialize(),
-            success: function(data) {
-                $('#tableBody').html(data);
-                initRA(); // Re-init checkbox events
-                window.history.pushState("", "", url + '?' + $('#filterForm').serialize());
+            success: function (res) {
+                $('#tableBody').html(res.table);
+                $('#paginationLinks').html(res.pagination);
+                initRA();
+
+                history.pushState(
+                    {},
+                    '',
+                    url + '?' + $('#filterForm').serialize()
+                );
             }
         });
     }
 
-    // Pagination link click
-    $(document).on('click', '#paginationLinks a.page-link', function(e) {
+    $(document).on('click', '#paginationLinks a', function (e) {
         e.preventDefault();
-        let url = $(this).attr('href');
-        if(url && url != '#') fetchData(url);
+        fetchData($(this).attr('href'));
     });
 
-    // Search input keyup with debounce
-    $('#searchInput').on('keyup', debounce(function() {
+    $('#searchInput').on('keyup', debounce(function () {
         fetchData('{{ route("Job-Order.index") }}');
     }, 500));
 
-    // Filter select change
-    $('#filterSelect').on('change', function() {
+    $('#filterSelect').on('change', function () {
         fetchData('{{ route("Job-Order.index") }}');
     });
 </script>
+
 
 @endsection

@@ -21,19 +21,28 @@ class StockController extends Controller
      */
     public function index(Request $request)
     {
-        //$stoData = Stock::paginate(10);
         $search = $request->input('search');
-        //$stoOutData = stockOut::->get();
 
         $stoData = Stock::when($search, function ($q) use ($search) {
-            $q->where('item_name', 'like', "%{$search}%")
-            ->orWhere('item_size', 'like', "%{$search}%")
-            ->orWhere('id', 'like', "%{$search}%");
-        })
-        ->orderByRaw("CASE WHEN item_qty <= item_low_limit THEN 0 ELSE 1 END")->orderBy('item_qty', 'asc')
-        ->paginate(10)
-        ->withQueryString(); 
-        return view('alar.stock', ['stoData' => $stoData]);
+                $q->where('item_name', 'like', "%{$search}%")
+                ->orWhere('item_size', 'like', "%{$search}%")
+                ->orWhere('id', 'like', "%{$search}%");
+            })
+            ->orderByRaw("CASE WHEN item_qty <= item_low_limit THEN 0 ELSE 1 END")
+            ->orderBy('item_qty', 'asc')
+            ->paginate(10)
+            ->withQueryString();
+
+        // ✅ AJAX response
+        if ($request->ajax()) {
+            return response()->json([
+                'table' => view('alar.partials.stockTable', compact('stoData'))->render(),
+                'pagination' => view('alar.partials.stockPagination', compact('stoData'))->render(),
+            ]);
+        }
+
+        // ✅ Normal page load
+        return view('alar.stock', compact('stoData'));
     }
 
     /**

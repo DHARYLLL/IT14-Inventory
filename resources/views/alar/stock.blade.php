@@ -4,18 +4,19 @@
 @section('content')
     @section('head', 'Stocks')
 
-    <form method="GET" action="{{ route('Stock.index') }}" class="d-flex align-items-center justify-content-between p-2 mb-0 cust-h-heading">
+    <form id="searchForm" class="d-flex align-items-center justify-content-between p-2 mb-0 cust-h-heading">
         <div class="input-group cust-searchbar">
-            <input type="text" name="search" id="searchInput"
-                class="form-control" style="border-radius: 0; border: none;"
+            <input type="text"
+                name="search"
+                id="searchInput"
+                class="form-control"
                 placeholder="Search Stock"
-                value="{{ request('search') }}">
+                value="{{ request('search') }}" style="border-radius: 0; border: none;">
             <button class="cust-btn cust-btn-search">Search</button>
+                
         </div>
     </form>
 
-
-    {{-- Stock Table --}}
     <div class="cust-h-content overflow-auto">
         <table class="table table-hover modern-table mb-0">
             <thead>
@@ -28,70 +29,53 @@
             </thead>
 
             <tbody id="tableBody">
-                @if ($stoData->isEmpty())
-                    <tr>
-                        <td colspan="6" class="text-center text-secondary py-3">
-                            No Stock Item Available.
-                        </td>
-                    </tr>
-                @else
-                    @foreach ($stoData as $row)
-                        <tr>
-                            <td>{{ $row->item_name }}</td>
-                            <td>{{ $row->item_size}}</td>
-                            <td>
-                                
-                                @if($row->item_qty == 0)
-                                    <p class="cust-empty">{{ $row->item_qty }} {{ $row->item_qty <= $row->item_low_limit ? '(No stock)' : ''}}</p>
-                                @else
-                                    @if($row->item_qty > $row->item_low_limit)
-                                        <p>{{ $row->item_qty }}</p>
-                                    @else
-                                        <p class="cust-warning">{{ $row->item_qty }} {{ $row->item_qty <= $row->item_low_limit ? '(Low Stock)' : ''}}</p>
-                                    @endif
-                                    
-                                @endif  
-                                
-                            </td>
-                            <td>
-                                <a href="{{ route('Stock.edit', $row->id) }}" class="cust-btn cust-btn-secondary btn-md" 
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
+                @include('alar.partials.stockTable')
             </tbody>
         </table>
 
-        {{-- Custom Pagination --}}
-        <div class="d-flex justify-content-center mt-3">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination mb-0">
-                    <li class="page-item {{ $stoData->onFirstPage() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $stoData->previousPageUrl() ?? '#' }}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    @for ($i = 1; $i <= $stoData->lastPage(); $i++)
-                        <li class="page-item {{ $stoData->currentPage() == $i ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $stoData->appends(request()->query())->url($i) }}">{{ $i }}</a>
-                        </li>
-                    @endfor
-                    <li class="page-item {{ $stoData->currentPage() == $stoData->lastPage() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $stoData->nextPageUrl() ?? '#' }}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+        <div id="paginationLinks">
+            @include('alar.partials.stockPagination')
         </div>
-        {{-- Showing results text --}}
-        <div class="text-center text-secondary mt-2">
-            Showing {{ $stoData->firstItem() ?? 0 }} to {{ $stoData->lastItem() ?? 0 }} of
-            {{ $stoData->total() ?? 0 }} results
-        </div>
+
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function debounce(fn, delay) {
+        let timer;
+        return function () {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(this, arguments), delay);
+        };
+    }
+
+    function fetchStock(url) {
+        $.ajax({
+            url: url,
+            data: $('#searchForm').serialize(),
+            success: function (res) {
+                $('#tableBody').html(res.table);
+                $('#paginationLinks').html(res.pagination);
+
+                history.pushState(
+                    {},
+                    '',
+                    url + '?' + $('#searchForm').serialize()
+                );
+            }
+        });
+    }
+
+    // Pagination click
+    $(document).on('click', '#paginationLinks a', function (e) {
+        e.preventDefault();
+        fetchStock($(this).attr('href'));
+    });
+
+    // Search (live)
+    $('#searchInput').on('keyup', debounce(function () {
+        fetchStock('{{ route("Stock.index") }}');
+    }, 400));
+</script>
+
 
 @endsection
