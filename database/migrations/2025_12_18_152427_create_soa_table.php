@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('soa', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
             $table->decimal('payment', 8,2);
             $table->date('payment_date');
 
-            $table->unsignedBigInteger('jo_id')->nullable();
-            $table->foreign('jo_id')->references('id')->on('job_orders')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedMediumInteger('jo_id');
+            $table->foreign('jo_id')->references('id')->on('job_orders')->onUpdate('cascade');
 
-            $table->unsignedBigInteger('emp_id')->nullable();
-            $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();
+            $table->unsignedMediumInteger('emp_id');
+            $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade');
 
             $table->timestamps();
         });

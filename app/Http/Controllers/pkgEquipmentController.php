@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Equipment;
 use App\Models\Log;
 use App\Models\PkgEquipment;
 use Carbon\Carbon;
@@ -33,22 +34,22 @@ class pkgEquipmentController extends Controller
         $request->validate([
             'eqAdd' => 'required',
             'eqQty' => 'required|integer|min:1|max:999',
-            'eqQtySet' => 'required|integer|min:1|max:999'
         ],[
             'eqAdd.required' => 'This field is required.',
             'eqQty.required' => 'This field is required.',
             'eqQty.min' => 'Must be 1 or more.',
             'eqQty.max' => '3 digit limit reached.',
-            'eqQtySet.required' => 'This field is required.',
-            'eqQtySet.min' => 'Must be 1 or more.',
-            'eqQtySet.max' => '3 digit limit reached.',
         ]);
-        
+
+        $getEqQty = Equipment::select('id', 'eq_available')->where('id', $request->eqAdd)->first();
+        if ($getEqQty->eq_available < $request->eqQty) {
+            return back()->with('promt-f-eq', 'Requested quantity ('. $request->eqQty .') exceeds available stock ('. $getEqQty->eq_available .').')->withInput();
+        }
+
         PkgEquipment::create([
             'pkg_id' => $request->pkgId,
             'eq_id' => $request->eqAdd,
-            'eq_used' => $request->eqQty,
-            'eq_used_set' => $request->eqQtySet
+            'eq_used' => $request->eqQty
         ]);
 
         Log::create([
@@ -115,12 +116,12 @@ class pkgEquipmentController extends Controller
         PkgEquipment::findOrFail($id)->delete();
 
         Log::create([
-            'transaction' => 'Deleted',
-            'tx_desc' => 'Deleted Equipment (ID: '. $id .') from Package | ID: ' . $pkgId,
+            'transaction' => 'Removed',
+            'tx_desc' => 'Removed Equipment (ID: '. $id .') from Package | ID: ' . $pkgId,
             'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
-        return redirect()->back()->with('success', 'Deleted Successfully!');
+        return redirect()->back()->with('success', 'Removed Successfully!');
     }
 }

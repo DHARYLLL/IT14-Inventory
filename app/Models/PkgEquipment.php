@@ -11,8 +11,7 @@ class PkgEquipment extends Model
         'pkg_id',
         'eq_id',
         'prep_id',
-        'eq_used',
-        'eq_used_set'
+        'eq_used'
     ];
 
     public function pkgEqToPkg() {

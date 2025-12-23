@@ -70,7 +70,7 @@
                                     @else
                                         @foreach ($jobOrdData as $row)
                                             <tr>
-                                                <td>{{ $row->client_name }}</td>
+                                                <td>{{ $row->client_fname }} {{ $row->client_lname }}</td>
                                                 <td>                     
                                                     <form action="{{ route('Job-Order.raUpdate', $row->id) }}" method="POST" class="raForm">
                                                         @csrf
@@ -163,7 +163,7 @@
                                     @else
                                         @foreach ($joPending as $row)
                                             <tr>
-                                                <td>{{ $row->client_name }}</td>
+                                                <td>{{ $row->client_fname }} {{ $row->client_lname }}</td>
                                                 <td>{{ $row->client_contact_number }}</td>
                                                 <td>{{ $row->jo_status }}</td>
                                                 <td class="text-center col col-md-2">
@@ -235,7 +235,7 @@
                                     @else
                                         @foreach ($joOverDue as $row)
                                             <tr>
-                                                <td>{{ $row->client_name }}</td>
+                                                <td>{{ $row->client_fname }} {{ $row->client_lname }}</td>
                                                 <td>{{ $row->client_contact_number }}</td>
                                                 <td class="text-center col col-md-2">
                                                     <div class="d-inline-flex justify-content-center gap-2">

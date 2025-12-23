@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('purchase_order_items', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
             $table->string('item', 100);
             $table->string('size', 20);
             $table->smallInteger('qty');
@@ -23,14 +23,14 @@ return new class extends Migration
             $table->smallInteger('qty_arrived')->nullable();
             $table->string('type', 15);
 
-            $table->unsignedBigInteger('po_id');
-            $table->foreign('po_id')->references('id')->on('purchase_orders')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedMediumInteger('po_id');
+            $table->foreign('po_id')->references('id')->on('purchase_orders')->onUpdate('cascade');
 
-            $table->unsignedBigInteger('stock_id')->nullable();
-            $table->foreign('stock_id')->references('id')->on('stocks')->onUpdate('cascade')->nullOnDelete();
+            $table->unsignedMediumInteger('stock_id')->nullable();
+            $table->foreign('stock_id')->references('id')->on('stocks')->onUpdate('cascade');
 
-            $table->unsignedBigInteger('eq_id')->nullable();
-            $table->foreign('eq_id')->references('id')->on('equipments')->onUpdate('cascade')->nullOnDelete();
+            $table->unsignedMediumInteger('eq_id')->nullable();
+            $table->foreign('eq_id')->references('id')->on('equipments')->onUpdate('cascade');
 
             $table->timestamps();
         });

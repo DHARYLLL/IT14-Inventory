@@ -12,16 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stocks', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
             $table->string('item_name', 100);
             $table->smallInteger('item_qty');
+            $table->smallInteger('item_net_content');
             $table->string('item_size', 20);
             $table->string('item_type', 15);
             $table->smallInteger('item_low_limit');
+            $table->boolean('archived')->nullable();
 
             $table->timestamps();
 
-            $table->unique(['item_name', 'item_size']);
+            $table->unique(['item_name', 'item_size', 'item_net_content'], 'stock_unique');
         });
     }
 

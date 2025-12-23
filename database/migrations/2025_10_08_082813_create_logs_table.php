@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('logs', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
             $table->string('transaction', 50);
             $table->string('tx_desc', 50);
             $table->timestamp('tx_date', 0);
 
-            $table->unsignedBigInteger('emp_id')->nullable();
-            $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();
+            $table->unsignedMediumInteger('emp_id');
+            $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade');
             $table->timestamps();
         });
     }

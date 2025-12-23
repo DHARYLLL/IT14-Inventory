@@ -1,6 +1,6 @@
 @if ($eqData->isEmpty())
     <tr>
-        <td colspan="5" class="text-center text-secondary py-3">
+        <td colspan="6" class="text-center text-secondary py-3">
             No Equipment available.
         </td>
     </tr>
@@ -9,6 +9,7 @@
         <tr>
             <td>{{ $row->eq_name }}</td>
             <td>{{ $row->eq_size }}</td>
+            <td>{{ $row->eq_net_content }}</td>
             <td>
                 @if ($row->eq_available == 0)
                     <p class="cust-empty">

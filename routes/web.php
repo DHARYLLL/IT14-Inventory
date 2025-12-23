@@ -22,6 +22,7 @@ use App\Http\Controllers\pkgStockController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\receiptController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ServiceRequestController;
 use App\Http\Controllers\setStoEqToPkgController;
 use App\Http\Controllers\SoaController;
@@ -41,6 +42,8 @@ Route::get('/', [LoginController::class, 'set'])->name('setLogin');
 Route::get('/login', [LoginController::class, 'loginPage'])->name('showLogin');
 Route::post('/', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('Report/Preview', [ReportController::class, 'preview'])->name('Report.preview');
 
 Route::middleware(AuthCheck::class)->group(function(){
     //Resource
@@ -65,7 +68,7 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::get('Package/{id}/Remove-Item', [PackageController::class, 'addRemoveItem'])->name('Package.addRemItem');
 
     Route::resource('SOA', SoaController::class);
-
+    
     Route::resource('Stock', StockController::class);
 
     Route::resource('Log', LogController::class);
@@ -96,6 +99,9 @@ Route::middleware(AuthCheck::class)->group(function(){
     Route::put('Job-Order/{id}/Schedule', [JobOrderController::class, 'applySched'])->name('Job-Order.sched');
     Route::put('Job-Order/{id}/RA', [JobOrderController::class, 'updateRA'])->name('Job-Order.raUpdate');
     Route::put('Job-Order/{id}/Pay', [JobOrderController::class, 'payAmount'])->name('Job-Order.pay');
+
+    Route::resource('Report', ReportController::class);
+    //Route::get('Report/Preview', [ReportController::class, 'preview'])->name('Report.preview');
 
     Route::resource('Add-Wake', AddWakeController::class);
     Route::resource('Personnel' , PersonnelController::class);

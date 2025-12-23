@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stock_outs', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
             $table->string('reason', 100);
             $table->date('so_date');
             $table->string('status',10)->nullable();
-            $table->unsignedBigInteger('emp_id')->nullable();
+
+            $table->unsignedMediumInteger('emp_id');
             $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade');
 
             $table->timestamps();

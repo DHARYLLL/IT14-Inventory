@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ba_other_infos', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
 
             $table->string('fname',50);
             $table->string('mname', 20);
@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('religion', 50);
             $table->string('relationship', 50);
 
-            $table->unsignedBigInteger('ba_id');
-            $table->foreign('ba_id')->references('id')->on('burial_assistance')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedMediumInteger('ba_id');
+            $table->foreign('ba_id')->references('id')->on('burial_assistance')->onUpdate('cascade');
 
             $table->timestamps();
         });

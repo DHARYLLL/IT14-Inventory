@@ -73,8 +73,6 @@ class EmbalmerController extends Controller
             'eqQtySet.*.max' => '3 digits limit reached.'
         ]);
 
-        //dd($request->embalmName);
-        //Get equpment and stock requests
         $eq = $request->equipment;
         $eqQty = $request->eqQty;
         $eqQtySet = $request->eqQtySet;
@@ -211,24 +209,23 @@ class EmbalmerController extends Controller
     {
         $request->validate([
             'stoAdd' => 'required',
-            'qty' => 'required|integer|min:1|max:999',
-            'qtySet' => 'required|integer|min:1|max:999'
+            'qty' => 'required|integer|min:1|max:999'
         ],[
             'stoAdd.required' => 'This field is required.',
             'qty.required' => 'This field is required.',
             'qty.min' => 'Must be 1 or more.',
-            'qty.max' => '3 digit limit reached.',
-            'qtySet.required' => 'This field is required.',
-            'qtySet.min' => 'Must be 1 or more.',
-            'qtySet.max' => '3 digit limit reached.',
+            'qty.max' => '3 digit limit reached.'
         ]);
         //dd($request->embId, $request->stoAdd, $request->utilQty);
+        $getStockQty = Stock::select('id', 'item_qty')->where('id' , $request->stoAdd)->first();
+        if ($getStockQty->item_qty < $request->qty) {
+            return back()->with('promt-f-sto', 'Requested quantity ('. $request->qty .') exceeds available stock ('. $getStockQty->item_qty .').')->withInput();
+        }
 
         PkgStock::create([
             'prep_id' => $request->embId,
             'stock_id' => $request->stoAdd,
             'stock_used' => $request->qty,
-            'stock_used_set' => $request->qtySet,
         ]);
 
         Log::create([
@@ -245,23 +242,23 @@ class EmbalmerController extends Controller
     {
         $request->validate([
             'eqAdd' => 'required',
-            'eqQty' => 'required|integer|min:1|max:999',
-            'eqQtySet' => 'required|integer|min:1|max:999'
+            'eqQty' => 'required|integer|min:1|max:999'
         ],[
             'eqAdd.required' => 'This field is required.',
             'eqQty.required' => 'This field is required.',
             'eqQty.min' => 'Must be 1 or more.',
-            'eqQty.max' => '3 digit limit reached.',
-            'eqQtySet.required' => 'This field is required.',
-            'eqQtySet.min' => 'Must be 1 or more.',
-            'eqQtySet.max' => '3 digit limit reached.',
+            'eqQty.max' => '3 digit limit reached.'
         ]);
-        //dd($request->embId, $request->eqAdd, $request->eqUtilQty);
+
+        $getEqQty = Equipment::select('id', 'eq_available')->where('id' , $request->eqAdd)->first();
+        if ($getEqQty->eq_available < $request->eqQty) {
+            return back()->with('promt-f-eq', 'Requested quantity ('. $request->eqQty .') exceeds available stock ('. $getEqQty->eq_available .').')->withInput();
+        }
+
         PkgEquipment::create([
             'prep_id' => $request->embId,
             'eq_id' => $request->eqAdd,
-            'eq_used' => $request->eqQty,
-            'eq_used_set' => $request->eqQtySet
+            'eq_used' => $request->eqQty
         ]);
 
         Log::create([
@@ -296,7 +293,7 @@ class EmbalmerController extends Controller
 
         Log::create([
             'transaction' => 'Remove',
-            'tx_desc' => 'Remove Equipment To Embalmer | ID: ' . $id,
+            'tx_desc' => 'Removed Equipment To Embalmer | ID: ' . $id,
             'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
@@ -321,9 +318,7 @@ class EmbalmerController extends Controller
             'embalmPrice' => 'required|numeric|min:1|max:999999.99',
             
             'qty.*' => 'required|integer|min:1|max:999',
-            'qtySet.*' => 'required|integer|min:1|max:999',
-            'eqQty.*' => 'required|integer|min:1|max:999',
-            'eqQtySet.*' => 'required|integer|min:1|max:999',  
+            'eqQty.*' => 'required|integer|min:1|max:999'
         ], [
             'embalmName.required' => 'This field is required.',
             'embalmName.unique' => 'Name is already added.',
@@ -340,33 +335,22 @@ class EmbalmerController extends Controller
             'qty.*.min' => 'Quantity must be 1 or more.',
             'qty.*.max' => '3 digits limit reached.',
 
-            'qtySet.*.required' => 'This field is required.',
-            'qtySet.*.min' => 'Quantity must be 1 or more.',
-            'qtySet.*.max' => '3 digits limit reached.',
-
             'eqQty.*.required' => 'This field is required.',
             'eqQty.*.min' => 'Quantity must be 1 or more.',
-            'eqQty.*.max' => '3 digits limit reached.',
-
-            'eqQtySet.*.required' => 'This field is required.',
-            'eqQtySet.*.min' => 'Quantity must be 1 or more.',
-            'eqQtySet.*.max' => '3 digits limit reached.'
+            'eqQty.*.max' => '3 digits limit reached.'
         ]);
 
         $getEqId = $request->eqId;
         $getStoId = $request->stoId;
         
         $getEqQty = $request->eqQty;
-        $getEqQtySet = $request->eqQtySet;
         $getStoQty = $request->qty;
-        $getStoQtySet = $request->qtySet;
         //dd($getStoQty);
 
         if ($getEqQty != null) {
             for ($i=0; $i < count($getEqId); $i++) { 
                 PkgEquipment::findOrFail($getEqId[$i])->update([
-                    'eq_used' => $getEqQty[$i],
-                    'eq_used_set' => $getEqQtySet[$i],
+                    'eq_used' => $getEqQty[$i]
                 ]);
             }
         }
@@ -374,8 +358,7 @@ class EmbalmerController extends Controller
         if ($getStoQty != null) {
             for ($i=0; $i < count($getStoId); $i++) { 
                 PkgStock::findOrFail($getStoId[$i])->update([
-                    'stock_used' => $getStoQty[$i],
-                    'stock_used_set' => $getStoQtySet[$i]
+                    'stock_used' => $getStoQty[$i]
                 ]);
             }
         }

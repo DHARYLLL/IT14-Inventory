@@ -2,9 +2,7 @@
 @section('title', 'Equipments')
 
 @section('content')
-@section('head', 'Edit Equipment')
-
-
+@section('head', 'Equipment')
 
 <div class="cust-h-full h-100">
 
@@ -18,35 +16,57 @@
                 <div class="col-md-12">
                     <h3 class="fw-semibold text-success mb-4">Edit Equipment Details</h3>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Item Name</label>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Item Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="eqName" value="{{ old('eqName', $eqData->eq_name) }}">
                     @error('eqName')
                         <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Available</label>
-                    <input type="text" class="form-control" value="{{ $eqData->eq_available }}" readonly>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Size/Unit</label>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Size/Unit <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="size" value="{{ old('size', $eqData->eq_size) }}">
                     @error('size')
                         <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label class="form-label fw-semibold">Item Type</label>
                     <input type="text" class="form-control" value="{{ $eqData->eq_type }}" readonly>
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Equipment Item Limit</label>
-                    <input type="number" class="form-control" name="eqLimit" value="{{ $eqData->eq_low_limit }}">
+                <div class="w-100"></div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Available / Quantity <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" name="eqAvail" value="{{ old('eqAvail', $eqData->eq_available) }}">
+                    @error('eqAvail')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Net Content <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" name="eqAvailSet" value="{{ old('eqAvailSet', $eqData->eq_net_content) }}">
+                    @error('eqAvailSet')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Equipment Limit Quantity <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" name="eqLimit" value="{{ old('eqLimit', $eqData->eq_low_limit) }}">
+                    @error('eqLimit')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Total Net Content</label>
+                    <input type="number" class="form-control" value="{{ $eqData->eq_available * $eqData->eq_net_content }}" readonly>
                 </div>
             </div>
 

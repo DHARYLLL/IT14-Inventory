@@ -54,14 +54,46 @@
                     <div class="row">
                         <div class="col-md-12">
                             @if ($poData->status == 'Pending')
-
-                                <form action="{{ route('Purchase-Order.export', $poData->id) }}" method="post">
-                                    @csrf
-                                    
                                     <div class="d-flex justify-content-center mt-3">
-                                        <button class="btn btn-approve-custom w-75" type="submit">Export</button>
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="cust-btn cust-btn-secondary w-75" data-bs-toggle="modal" data-bs-target="#exportNonApp">
+                                            Export
+                                        </button>
                                     </div>
-                                </form>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exportNonApp" tabindex="-1" aria-labelledby="exportNonAppLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exportNonAppLabel">Export</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form action="{{ route('Purchase-Order.export', $poData->id) }}" method="post">
+                                                @csrf
+                                                <div class="modal-body">
+                                                    <label for="deadline" class="form-label">Deadline Date <span class="text-danger">*</span></label>
+                                                    <input type="date" class="form-control" name="deadline" value="{{ old('deadline') }}">
+                                                    @error('deadline')
+                                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                                        <script>
+                                                            document.addEventListener("DOMContentLoaded", function () {
+                                                                var modal = new bootstrap.Modal(document.getElementById('exportNonApp'));
+                                                                modal.show();
+                                                            });
+                                                        </script>
+                                                    @enderror
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button class="cust-btn cust-btn-primary" type="submit">Export</button>
+                                                
+                                                </div>
+                                            </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
 
                                 <form action="{{ route('Purchase-Order.update', $poData->id) }}" method="post"
                                     class="{{ $poData->status }}">
@@ -69,7 +101,7 @@
                                     @method('put')
                                     <input type="hidden" name="total" value="{{ $poItemData->sum('total_amount') }}">
                                     <div class="d-flex justify-content-center mt-3">
-                                        <button class="btn btn-approve-custom w-75" type="submit">Approve</button>
+                                        <button class="cust-btn cust-btn-primary w-75" type="submit">Approve</button>
                                     </div>
                                 </form>
                             @endif
@@ -245,8 +277,8 @@
                                             <td>{{ $row->qty }}</td>
                                             <td>{{ $row->qty_total }}</td>
                                             <td>{{ $row->type }}</td>
-                                            <td>₱ {{ $row->unit_price }}</td>
-                                            <td>₱ {{ $row->total_amount }}</td>
+                                            <td>₱ {{ number_format($row->unit_price, 2) }}</td>
+                                            <td>₱ {{ number_format($row->total_amount, 2) }}</td>
                                             @if ($poData->status == 'Delivered')
                                                 <td>
                                                     {{ $row->qty_arrived }}
@@ -258,7 +290,7 @@
                                     {{-- SHOW TOTAL --}}
                                     <tr>
                                         <td colspan="5" style="font-style: normal;" class="text-end">Total:</td>
-                                        <td>₱ {{ $poItemData->sum('total_amount') }}</td>
+                                        <td>₱ {{ number_format($poItemData->sum('total_amount'), 2) }}</td>
                                     </tr>
                                 @endif
                             </tbody>

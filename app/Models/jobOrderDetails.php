@@ -8,7 +8,9 @@ class jobOrderDetails extends Model
 {
     protected $table = 'job_ord_details';
     protected $fillable = [
-        'dec_name',
+        'dec_fname',
+        'dec_mname',
+        'dec_lname',
         'dec_born_date',
         'dec_died_date',
         'jod_days_of_wake',

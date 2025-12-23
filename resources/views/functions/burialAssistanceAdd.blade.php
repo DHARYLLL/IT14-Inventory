@@ -17,7 +17,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="" class="form-label">Name of the Deceased:</label>
-                                    <input type="text" class="form-control" value="{{ $joData->joToJod->dec_name }}" readonly>
+                                    <input type="text" class="form-control" value="{{ $joData->joToJod->dec_fname }} {{ $joData->joToJod->dec_lname }}" readonly>
                                 </div>
                             </div>
 
@@ -66,21 +66,21 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="clientName" class="form-label">Last Name:</label>
-                                    <input type="text" class="form-control" name="cliLname" value="{{ old('cliLname') }}">
+                                    <input type="text" class="form-control" name="cliLname" value="{{ old('cliLname', $joData->client_lname) }}">
                                     @error('cliFname')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-12">
                                     <label for="clientName" class="form-label">First Name:</label>
-                                    <input type="text" class="form-control" name="cliFname" value="{{ old('cliFname') }}">
+                                    <input type="text" class="form-control" name="cliFname" value="{{ old('cliFname', $joData->client_fname) }}">
                                     @error('cliFname')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-12">
                                     <label for="clientName" class="form-label">Middle Name:</label>
-                                    <input type="text" class="form-control" name="cliMname" value="{{ old('cliMname') }}">
+                                    <input type="text" class="form-control" name="cliMname" value="{{ old('cliMname', $joData->client_mname) }}">
                                     @error('cliFname')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror

@@ -25,19 +25,38 @@
 
 
             {{-- Client Info --}}
-            <div class="row mt-4 row cust-white-bg">
+            <div class="row mt-4 cust-white-bg">
                 <div class="col-md-12">
                     <h5 class="cust-sub-title">Client Info:</h5>
                 </div>
 
                 <div class="col-md-4">
-                    <label for="clientName" class="form-label">Client Name <span class="text-danger">*</span></label>
-                    <input type="text" name="clientName" id="clientName" class="form-control"
-                        placeholder="Enter Full Name" value="{{ old('clientName') }}">
-                    @error('clientName')
+                    <label for="cliFname" class="form-label">First Name <span class="text-danger">*</span></label>
+                    <input type="text" name="cliFname" id="cliFname" class="form-control"
+                        placeholder="Enter Full Name" value="{{ old('cliFname') }}">
+                    @error('cliFname')
                         <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+                <div class="col-md-4">
+                    <label for="cliMname" class="form-label">Middle Name / Initial <span class="text-danger">*</span></label>
+                    <input type="text" name="cliMname" id="cliMname" class="form-control"
+                        placeholder="Enter Full Name" value="{{ old('cliMname') }}">
+                    @error('cliMname')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-md-4">
+                    <label for="cliLname" class="form-label">Last Name <span class="text-danger">*</span></label>
+                    <input type="text" name="cliLname" id="cliLname" class="form-control"
+                        placeholder="Enter Full Name" value="{{ old('cliLname') }}">
+                    @error('cliLname')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="w-100 mb-2"></div>
+
                 <div class="col-md-4">
                     <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
                     <input type="text" name="address" class="form-control"
@@ -66,12 +85,29 @@
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-4">
-                            <label for="" class="form-label">Name <span class="text-danger">*</span></label>
-                            <input type="text" name="decName" placeholder="Deceased Full Name" class="form-control" value="{{ old('decName') }}">
-                            @error('decName')
+                            <label for="" class="form-label">First Name <span class="text-danger">*</span></label>
+                            <input type="text" name="decFname" class="form-control" value="{{ old('decFname') }}">
+                            @error('decFname')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="col-md-4">
+                            <label for="" class="form-label">Middle Name / Initial <span class="text-danger">*</span></label>
+                            <input type="text" name="decMname" class="form-control" value="{{ old('decMname') }}">
+                            @error('decMname')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label for="" class="form-label">Last Name <span class="text-danger">*</span></label>
+                            <input type="text" name="decLname" class="form-control" value="{{ old('decLname') }}">
+                            @error('decLname')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="w-100 mb-2"></div>
+
                         <div class="col-md-4">
                             <label for="" class="form-label">Born <span class="text-danger">*</span></label>
                             <input type="date" name="decBorn" class="form-control" value="{{ old('decBorn') }}">

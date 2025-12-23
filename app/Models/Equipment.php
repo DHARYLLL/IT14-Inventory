@@ -11,9 +11,11 @@ class Equipment extends Model
         'eq_name',
         'eq_type',
         'eq_available',
+        'eq_net_content',
         'eq_size',
         'eq_in_use',
-        'eq_low_limit'
+        'eq_low_limit',
+        'archived'
     ];
 
     public function eqToPkgEq(){

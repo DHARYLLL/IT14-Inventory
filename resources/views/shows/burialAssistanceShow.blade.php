@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label for="" class="form-label">Name of the Deceased:</label>
-                                <p>{{ $burrAsstData->burAsstToJo->joToJod->dec_name }}</p>
+                                <p>{{ $burrAsstData->burAsstToJo->joToJod->dec_fname }} {{ $burrAsstData->burAsstToJo->joToJod->dec_mname }} {{ $burrAsstData->burAsstToJo->joToJod->dec_lname }}</p>
                             </div>
 
                             <div class="col-md-3">

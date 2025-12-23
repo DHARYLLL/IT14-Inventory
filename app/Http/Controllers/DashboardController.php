@@ -28,10 +28,12 @@ class DashboardController extends Controller
         $lowEqData = Equipment::whereRaw('eq_available + eq_in_use <= eq_low_limit')->get();
         $noEqData = Equipment::whereRaw('eq_available + eq_in_use <= ?', [0])->get();
 
-        $jobOrdData = jobOrder::where('jo_start_date', '<=', Carbon::today())->
-                                where('jo_burial_date', '>=', Carbon::today())->
+        $jobOrdData = jobOrder::where('jo_burial_date', '>=', Carbon::today())->
+                                orWhere('jo_start_date', '<=', Carbon::today())->
                                 whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')->
-                                orderBy('jo_burial_date', 'asc')->get();
+                                orderByRaw("CASE WHEN jo_burial_date = '' THEN 0 ELSE 1 END")->
+                                orderBy('jo_burial_date', 'asc')->
+                                orderBy('jo_burial_time', 'asc')->get();
 
         $getValue = Invoice::select('total')->whereMonth('invoice_date', date('m'))->get();
         $set = array();
@@ -42,12 +44,12 @@ class DashboardController extends Controller
             }
         }
 
-        $joPending = jobOrder::select('id', 'client_name', 'client_contact_number', 'jo_status', 'svc_id', 'jod_id')
+        $joPending = jobOrder::select('id', 'client_fname', 'client_lname', 'client_contact_number', 'jo_status', 'svc_id', 'jod_id')
                             ->where('jo_burial_date', '<', Carbon::today())
                             ->whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')
                             ->get();
 
-        $joOverDue = jobOrder::select('id', 'client_name', 'client_contact_number', 'svc_id', 'jod_id')
+        $joOverDue = jobOrder::select('id', 'client_fname', 'client_lname', 'client_contact_number', 'svc_id', 'jod_id')
                             ->where('jo_status', 'Pending')
                             ->whereRelation('joToSvcReq', 'svc_status', 'Completed')
                             ->get();

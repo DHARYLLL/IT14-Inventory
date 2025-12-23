@@ -10,6 +10,7 @@ class vehicle extends Model
     protected $fillable = [
         'driver_name',
         'driver_contact_number',
-        'veh_price'
+        'veh_price',
+        'archived'
     ];
 }

@@ -112,21 +112,7 @@
                             <span>Personnel</span>
                         </a>
                     </li>
-                    {{--
-                    <li class="nav-list">
-                        <a href="{{ route('Embalmer.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Embalmer.*') ? 'active' : '' }}">
-                            <span>Embalmer</span>
-                        </a>
-                    </li>
 
-                    <li class="nav-list">
-                        <a href="{{ route('Vehicle.index') }}"
-                            class="nav-link-custom {{ request()->routeIs('Vehicle.*') ? 'active' : '' }}">
-                            <span>Vehicle</span>
-                        </a>
-                    </li>
-                    --}}
                     @if(session("empRole") == 'admin' || session("empRole") == 'sadmin')
 
                         <li class="nav-list">

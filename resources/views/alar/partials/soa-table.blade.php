@@ -7,7 +7,7 @@
 @else
     @foreach ($soaData as $row)
         <tr>
-            <td>{{ $row->soaToJo->client_name }}</td>
+            <td>{{ $row->soaToJo->client_fname }} {{ $row->soaToJo->client_lname }}</td>
             <td>
                 {{ $row->soaToJo->jod_id
                     ? $row->soaToJo->joToJod->jodToPkg->pkg_name

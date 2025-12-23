@@ -33,12 +33,16 @@
             </div>
 
             <div class="col-md-3">
-                <label class="form-label fw-semibold">Client</label>
-                <p>{{ $joData->client_name }}</p>
+                <label class="form-label fw-semibold">First name</label>
+                <p>{{ $joData->client_fname }}</p>
             </div>
             <div class="col-md-3">
-                <label class="form-label fw-semibold">Contact Number</label>
-                <p>{{ $joData->client_contact_number }}</p>
+                <label class="form-label fw-semibold">Middle name / initial</label>
+                <p>{{ $joData->client_mname }}</p>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Last name</label>
+                <p>{{ $joData->client_lname }}</p>
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Referal (Ra)</label>
@@ -57,6 +61,13 @@
                         });
                     });
                 </script>
+            </div>
+
+            <div class="w-100"></div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Contact Number</label>
+                <p>{{ $joData->client_contact_number }}</p>
             </div>
 
             <div class="w-100"></div>
@@ -613,9 +624,19 @@
             </div>
 
             <div class="col-md-3">
-                <label class="form-label fw-semibold">Deceased Name</label>
-                <p>{{ $jodData->dec_name }}</p>
+                <label class="form-label fw-semibold">First name</label>
+                <p>{{ $jodData->dec_fname }}</p>
             </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Middle name / initial</label>
+                <p>{{ $jodData->dec_mname }}</p>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Last name</label>
+                <p>{{ $jodData->dec_lname }}</p>
+            </div>
+
+            <div class="w-100"></div>
 
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Birth Date</label>
@@ -682,49 +703,28 @@
                         </div>
                         <div class="col-md-12">
                             <div class="row cust-table-header cust-table-shadow">
-                                <div class="col-md-2">Name</div>
-                                <div class="col-md-2">Size</div>
-                                <div class="col-md-4">Initial Qty.</div>
-                                <div class="col-md-4">Deployed Qty.</div>
+                                <div class="col-md-4">Name</div>
+                                <div class="col-md-4">Size</div>
+                                <div class="col-md-2">Initial Qty.</div>
+                                <div class="col-md-2">Deployed Qty.</div>
                             </div>
                         </div>
                         <div class="col-md-12 cust-max-300 cust-table-shadow">
                             @foreach($pkgStoData as $row)
-                                <div class="row cust-table-content">
-                                    <div class="col-md-2">
-                                        <label class="form-label fw-semibold text-secondary"></label>
+                                <div class="row cust-table-content py-2">
+                                    <div class="col-md-4">
                                         <p>{{ $row->pkgStoToSto->item_name }}</p>
                                     </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label fw-semibold text-secondary"></label>
+                                    <div class="col-md-4">
                                         <p>{{ $row->pkgStoToSto->item_size }}</p>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-secondary">Quantity</label>
-                                                <p>{{ $row->stock_used }}</p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
-                                                <p>{{ $row->stock_used_set }}</p>
-                                            </div>
-                                        </div>
+                                    <div class="col-md-2">
+                                        <p>{{ $row->stock_used }}</p>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
+                                        <p>{{ $row->stock_used }}</p>
+                                        <input type="text" name="stoDepl[]" value="{{ $row->stock_used }}" hidden>
                                         <input type="text" name="stoId[]" value="{{ $row->pkgStoToSto->id }}" hidden>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-secondary">Quantity</label>
-                                                <p>{{ $row->stock_used }}</p>
-                                                <input type="text" name="stoDepl[]" value="{{ $row->stock_used }}" hidden>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
-                                                <p>{{ $row->stock_used_set }}</p>
-                                                <input type="text" name="stoDeplSet[]" value="{{ $row->stock_used_set }}" hidden>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             @endforeach
@@ -747,55 +747,31 @@
                         </div>
                         <div class="col-md-12">
                             <div class="row cust-table-header cust-table-shadow">
-                                <div class="col-md-2">Name</div>
-                                <div class="col-md-2">Size</div>
-                                <div class="col-md-4">Initial Qty.</div>
-                                <div class="col-md-4">Deploy Qty.</div>
+                                <div class="col-md-4">Name</div>
+                                <div class="col-md-4">Size</div>
+                                <div class="col-md-2">Initial Qty.</div>
+                                <div class="col-md-2">Deploy Qty.</div>
                             </div>
                         </div>
                         <div class="col-md-12 cust-max-300 cust-table-shadow">
                             @foreach($pkgEqData as $row)
-                                <div class="row cust-table-content">
-                                    <div class="col-md-2">
-                                        <label class="form-label fw-semibold text-secondary"></label>
+                                <div class="row cust-table-content py-2">
+                                    <div class="col-md-4">
                                         <p>{{ $row->pkgEqToEq->eq_name }}</p>
                                     </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label fw-semibold text-secondary"></label>
+                                    <div class="col-md-4">
                                         <p>{{ $row->pkgEqToEq->eq_size }}</p>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-secondary">Quantity</label>
-                                                <p>{{ $row->eq_used }}</p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
-                                                <p>{{ $row->eq_used_set }}</p>
-                                            </div>
-                                        </div>
+                                    <div class="col-md-2">
+                                        <p>{{ $row->eq_used }}</p>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
+                                        <input type="number" class="form-input w-100 mb-1" name="eqDepl[]"
+                                            value="{{ old('eqDepl.' . $loop->index, $row->eq_used) }}">
+                                        @error("eqDepl." . $loop->index)
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                         <input type="text" name="eqId[]" value="{{ $row->pkgEqToEq->id }}" hidden>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-secondary">Quantity</label>
-                                                <input type="number" class="form-input w-100 mb-1" name="eqDepl[]"
-                                                    value="{{ old('eqDepl.' . $loop->index, $row->eq_used) }}">
-                                                @error("eqDepl." . $loop->index)
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
-                                                <input type="number" class="form-input w-100 mb-1" name="eqDeplSet[]"
-                                                    value="{{ old('eqDeplSet.' . $loop->index, $row->eq_used_set) }}">
-                                                @error("eqDeplSet." . $loop->index)
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             @endforeach

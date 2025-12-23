@@ -20,33 +20,18 @@ if (document.getElementById('add_new')) {
     const pasteHere = document.getElementById('pasteHere');
 
     const template = `
-        <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
-            <div class="col-md-3">
+        <div class="row py-2 bg-light rounded-3 shadow-sm form-section mb-4 w-100 mx-0">
+            <div class="col-md-5">
                 <label class="form-label fw-semibold text-secondary">Item Name <span class="text-danger">*</span></label>
-                <input type="text" name="itemName[]" class="form-control shadow-sm">
+                <input type="text" name="itemName[]" class="form-control shadow-sm" placeholder="Name of the item">
             </div>
 
-            <div class="col-md-1">
-                <label class="form-label fw-semibold text-secondary">Quantity <span class="text-danger">*</span></label>
-                <input type="number" name="qty[]" class="form-control shadow-sm">
-            </div>
-
-            <div class="col-md-1">
-                <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
-                <input type="number" name="qtySet[]" value="1" class="form-control shadow-sm">
-            </div>
-
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label fw-semibold text-secondary">Size/Unit <span class="text-danger">*</span></label>
-                <input type="text" name="size[]" class="form-control shadow-sm">
+                <input type="text" name="size[]" class="form-control shadow-sm" placeholder="Size / Unit (gal, kg, g, etc.)">
             </div>
 
-            <div class="col-md-2">
-                <label class="form-label fw-semibold text-secondary">Price per Unit <span class="text-danger">*</span></label>
-                <input type="text" name="unitPrice[]" class="form-control shadow-sm">
-            </div>
-
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label fw-semibold text-secondary">
                     <i class="bi bi-weight text-success"></i> Type <span class="text-danger">*</span>
                 </label>
@@ -55,13 +40,32 @@ if (document.getElementById('add_new')) {
                     <option value="" selected>Select Type</option>
                     <option value="Consumable">Consumable</option>
                     <option value="Non-Consumable">Non-Consumable</option>
-
                 </select>
             </div>
 
-            <div class="col-md-1 align-items-start">
+            <div class="w-100 mb-2"></div>
+
+            <div class="col-md-5">
+                <label class="form-label fw-semibold text-secondary">Price per Unit <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text">₱</span>
+                    <input type="text" name="unitPrice[]" class="form-control shadow-sm">
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold text-secondary">Quantity <span class="text-danger">*</span></label>
+                <input type="number" name="qty[]" class="form-control shadow-sm" placeholder="Qty. / Box Qty. / Set Qty.">
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold text-secondary">Net Contents <span class="text-danger">*</span></label>
+                <input type="number" name="qtySet[]" class="form-control shadow-sm" placeholder="Total Contents">
+            </div>
+
+            <div class="col-md-1">
                 <label class="form-label fw-semibold text-secondary">Remove</label>
-                <button type="button" class="btn btn-outline-danger remove-btn">
+                <button type="button" class="cust-btn cust-btn-danger-secondary remove-btn w-100">
                     <i class="bi bi-x-circle"></i>
                 </button>
             </div>
@@ -98,47 +102,52 @@ function setStock() {
     if (get) {
         var idData = get.options[get.selectedIndex].value;
         let forName = idData.slice(0, idData.indexOf(","));
-        let forSize = idData.slice(idData.indexOf(",") + 1);
+        let forSize = idData.slice(idData.indexOf(",") + 1,idData.indexOf(":"));
+        let forNet = idData.slice(idData.indexOf(":") + 1);
 
         //const addBtn = document.getElementById('add_new');
         const pasteHere = document.getElementById('pasteHere');
 
         const template = `
-            <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
-                <div class="col-md-3">
+            <div class="row py-2 bg-light rounded-3 shadow-sm form-section mb-4 w-100 mx-0">
+                <div class="col-md-5">
                     <label class="form-label fw-semibold text-secondary">Item Name <span class="text-danger">*</span></label>
-                    <input type="text" name="itemName[]" class="form-control shadow-sm" value="${forName}">
+                    <input type="text" name="itemName[]" class="form-control shadow-sm" value="${forName}" placeholder="Name of the item">
                 </div>
 
-                <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">Quantity <span class="text-danger">*</span></label>
-                    <input type="number" name="qty[]" class="form-control shadow-sm">
-                </div>
-
-                <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
-                    <input type="number" name="qtySet[]" value="1" class="form-control shadow-sm">
-                </div>
-
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label class="form-label fw-semibold text-secondary">Size/Unit <span class="text-danger">*</span></label>
-                    <input type="text" name="size[]" class="form-control shadow-sm" value="${forSize}">
+                    <input type="text" name="size[]" class="form-control shadow-sm" value="${forSize}" placeholder="Size / Unit (gal, kg, g, etc.)">
                 </div>
 
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">Price per Unit <span class="text-danger">*</span></label>
-                    <input type="text" name="unitPrice[]" class="form-control shadow-sm">
-                </div>
-
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label class="form-label fw-semibold text-secondary">Type</label>
                     <input type="text" name="typeSelect[]" class="form-control shadow-sm" value="Consumable" readonly>
                 </div>
-                
+
+                <div class="w-100 mb-2"></div>
+
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold text-secondary">Price per Unit <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text">₱</span>
+                        <input type="text" name="unitPrice[]" class="form-control shadow-sm">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-secondary">Quantity <span class="text-danger">*</span></label>
+                    <input type="number" name="qty[]" class="form-control shadow-sm" placeholder="Qty. / Box Qty. / Set Qty.">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-secondary">Net Contents <span class="text-danger">*</span></label>
+                    <input type="number" name="qtySet[]" value="${forNet}" class="form-control shadow-sm" placeholder="Total Contents">
+                </div>
 
                 <div class="col-md-1 align-items-start">
                     <label class="form-label fw-semibold text-secondary">Remove</label>
-                    <button type="button" class="btn btn-outline-danger remove-btn">
+                    <button type="button" class="cust-btn cust-btn-danger-secondary w-100 remove-btn">
                         <i class="bi bi-x-circle"></i>
                     </button>
                 </div>
@@ -167,7 +176,8 @@ function setEquipment() {
     if (get) {
         var idData = get.options[get.selectedIndex].value;
         let forName = idData.slice(0, idData.indexOf(","));
-        let forSize = idData.slice(idData.indexOf(",") + 1);
+        let forSize = idData.slice(idData.indexOf(",") + 1, idData.indexOf(":"));
+        let forNet = idData.slice(idData.indexOf(":") + 1);
 
         //document.getElementById("itemName").value = forQty;
 
@@ -176,41 +186,45 @@ function setEquipment() {
 
 
         const template = `
-            <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
-                <div class="col-md-3">
+            <div class="row py-2 bg-light rounded-3 shadow-sm form-section mb-4 w-100 mx-0">
+                <div class="col-md-5">
                     <label class="form-label fw-semibold text-secondary">Item Name <span class="text-danger">*</span></label>
-                    <input type="text" name="itemName[]" class="form-control shadow-sm" value="${forName}">
+                    <input type="text" name="itemName[]" class="form-control shadow-sm" value="${forName}" placeholder="Name of the item">
                 </div>
 
-                <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">Quantity <span class="text-danger">*</span></label>
-                    <input type="number" name="qty[]" class="form-control shadow-sm">
-                </div>
-
-                <div class="col-md-1">
-                    <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
-                    <input type="number" name="qtySet[]" value="1" class="form-control shadow-sm">
-                </div>
-
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label class="form-label fw-semibold text-secondary">Size/Unit <span class="text-danger">*</span></label>
-                    <input type="text" name="size[]" class="form-control shadow-sm" value="${forSize}">
+                    <input type="text" name="size[]" class="form-control shadow-sm" value="${forSize}" placeholder="Size / Unit (gal, kg, g, etc.)">
                 </div>
 
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold text-secondary">Price per Unit <span class="text-danger">*</span></label>
-                    <input type="text" name="unitPrice[]" class="form-control shadow-sm">
-                </div>
-
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label class="form-label fw-semibold text-secondary">Type</label>
                     <input type="text" name="typeSelect[]" class="form-control shadow-sm" value="Non-Consumable" readonly>
                 </div>
-                
 
-                <div class="col-md-1 align-items-start">
+                <div class="w-100 mb-2"></div>
+
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold text-secondary">Price per Unit <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text">₱</span>
+                        <input type="text" name="unitPrice[]" class="form-control shadow-sm">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-secondary">Quantity <span class="text-danger">*</span></label>
+                    <input type="number" name="qty[]" class="form-control shadow-sm" placeholder="Qty. / Box Qty. / Set Qty.">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-secondary">Net Contents <span class="text-danger">*</span></label>
+                    <input type="number" name="qtySet[]" value="${forNet}" class="form-control shadow-sm" placeholder="Amount of Contents">
+                </div>
+
+                <div class="col-md-1">
                     <label class="form-label fw-semibold text-secondary">Remove</label>
-                    <button type="button" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 remove-btn">
+                    <button type="button" class="cust-btn cust-btn-danger-secondary w-100 remove-btn">
                         <i class="bi bi-x-circle"></i>
                     </button>
                 </div>
@@ -292,29 +306,25 @@ function checkInputEq() {
     let forAvail = idData.slice(idData.indexOf(";") + 1);
 
     const wrapper = document.createElement('div');
-    wrapper.classList.add('row', 'g-2', 'align-items-start', 'mb-2', 'added-item');
+    wrapper.classList.add('row', 'bg-light', 'rounded-3', 'shadow-sm', 'mb-4', 'added-item');
 
     wrapper.innerHTML = `
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label class="form-label fw-semibold text-secondary">Equipment</label>
             <input type="text" class="form-control" name="eqName[]" value="${forName}" readonly>
             <input type="text" name="equipment[]" value="${forId}" hidden>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label class="form-label fw-semibold text-secondary">Size/Unit</label>
             <input type="text" class="form-control" name="eqSize[]" value="${forSize}" readonly>     
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
             <label class="form-label fw-semibold text-secondary">In Stock</label>
             <input type="text" class="form-control" name="eqAvail[]"  value="${forAvail}" readonly>
         </div>
-        <div class="col-md-5">
-            <label class="form-label fw-semibold text-secondary">Qty. <span class="text-danger">*</span></label>
+        <div class="col-md-2">
+            <label class="form-label fw-semibold text-secondary">Assigned Qty. <span class="text-danger">*</span></label>
             <input type="number" class="form-control" name="eqQty[]" value="1">     
-        </div>
-        <div class="col-md-5">
-            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
-            <input type="number" class="form-control" name="eqQtySet[]" value="1">     
         </div>
         <div class="col-md-2">
             <label class="form-label fw-semibold text-secondary">Remove</label>
@@ -371,29 +381,25 @@ function checkInputSto() {
     let forAvail = idData.slice(idData.indexOf(";") + 1);
 
     const wrapper = document.createElement('div');
-    wrapper.classList.add('row', 'g-2', 'align-items-start', 'mb-2', 'added-item');
+    wrapper.classList.add('row', 'bg-light', 'rounded-3', 'shadow-sm', 'mb-4', 'added-item');
 
     wrapper.innerHTML = `
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label class="form-label fw-semibold text-secondary">Stock</label>
             <input type="text" class="form-control" name="itemName[]" value="${forName}" readonly>
             <input type="text" name="stock[]" value="${forId}" hidden>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label class="form-label fw-semibold text-secondary">Size/Unit</label>
             <input type="text" class="form-control" name="stoSize[]" value="${forSize}" readonly>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
             <label class="form-label fw-semibold text-secondary">In Stock</label>
             <input type="text" class="form-control" name="stoAvail[]" value="${forAvail}" readonly>
         </div>
-        <div class="col-md-5">
-            <label class="form-label fw-semibold text-secondary">Qty. <span class="text-danger">*</span></label>
+        <div class="col-md-2">
+            <label class="form-label fw-semibold text-secondary">Assign Qty. <span class="text-danger">*</span></label>
             <input type="number" class="form-control" name="stockQty[]" value="1">
-        </div>
-        <div class="col-md-5">
-            <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
-            <input type="number" class="form-control" name="stockQtySet[]" value="1">
         </div>
         <div class="col-md-2">
             <label class="form-label fw-semibold text-secondary">Remove</label>

@@ -14,7 +14,8 @@ class PurchaseOrder extends Model
         'approved_date',
         'delivered_date',
         'supplier_id',
-        'emp_id'
+        'emp_id',
+        'archived'
     ];
 
     public function poToSup()

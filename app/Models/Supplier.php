@@ -12,7 +12,8 @@ class Supplier extends Model
         'lname',
         'contact_number',
         'company_name',
-        'company_address'
+        'company_address',
+        'archived'
     ];
 
     public function supToPo()

@@ -42,10 +42,8 @@ class StockOutController extends Controller
 
             'itemName.*' => 'required',
             'stockQty.*' => 'required|integer|min:1|max:999',
-            'stockQtySet.*' => 'required|integer|min:1|max:999',
             'eqName.*' => 'required',
             'eqQty.*' => 'required|integer|min:1|max:999',
-            'eqQtySet.*' => 'required|integer|min:1|max:999'
         ], [
             'reason.required' => 'This field is required.',
             'reason.max' => '100 digits limit reached.',
@@ -70,10 +68,9 @@ class StockOutController extends Controller
 
         $eq = $request->equipment;
         $eqQty = $request->eqQty;
-        $eqQtySet = $request->eqQtySet;
+
         $sto = $request->stock;
         $stoQty = $request->stockQty;
-        $stoQtySet = $request->stockQtySet;
 
         if ($eq == null && $sto == null) {
             return redirect()->back()->with('emptyEq', 'Must have atleast 1 equipment or item.')->withInput();
@@ -85,7 +82,7 @@ class StockOutController extends Controller
         if ($sto != null) {
             for ($i = 0; $i < count($sto); $i++) {
                 $stockId = $sto[$i];
-                $requestedQty = (int) $stoQty[$i] * max(1, $stoQtySet[$i]);
+                $requestedQty = (int) $stoQty[$i];
                 // Get stock from DB
                 $stock = Stock::find($stockId); // replace with your actual Stock model
 
@@ -103,7 +100,7 @@ class StockOutController extends Controller
         if ($eq !== null) {
             for ($i = 0; $i < count($eq); $i++) {
                 $equipmentId = $eq[$i];
-                $requestedQty = (int) $eqQty[$i] * max(1, $eqQtySet[$i]);
+                $requestedQty = (int) $eqQty[$i];
 
                 $equipment = Equipment::find($equipmentId);
 
@@ -133,13 +130,13 @@ class StockOutController extends Controller
             for ($i = 0; $i < count($sto); $i++) {
                 $getStoQty = Stock::select('id', 'item_qty')->where('id', $sto[$i])->first();
                 Stock::find($sto[$i])->update([
-                    'item_qty' => $getStoQty->item_qty - ($stoQty[$i] * max(1, $stoQtySet[$i]))
+                    'item_qty' => $getStoQty->item_qty - $stoQty[$i]
                 ]); 
 
                 StoOutItems::create([
                     'so_id' => $soId,
                     'stock_id' => $sto[$i],
-                    'so_qty' => $stoQty[$i] * max(1, $stoQtySet[$i])
+                    'so_qty' => $stoQty[$i]
                 ]);
             }
         }
@@ -148,13 +145,13 @@ class StockOutController extends Controller
             for ($i = 0; $i < count($eq); $i++) {
                 $getEqQty = Equipment::select('id', 'eq_available')->where('id', $eq[$i])->first();
                 Equipment::find($eq[$i])->update([
-                    'eq_available' => $getEqQty->eq_available - ($eqQty[$i] * max(1, $eqQtySet[$i]))
+                    'eq_available' => $getEqQty->eq_available - $eqQty[$i]
                 ]); 
 
                 StoOutEquipment::create([
                     'so_id' => $soId,
                     'eq_id' => $eq[$i],
-                    'so_qty' => $eqQty[$i] * max(1, $eqQtySet[$i])
+                    'so_qty' => $eqQty[$i]
                 ]);
             }
         }
@@ -176,7 +173,7 @@ class StockOutController extends Controller
     {
         $soData = stockOut::findOrFail($id);
         $soStoData = StoOutItems::where('so_id', $id)->get();
-        $soEqData =StoOutEquipment::where('so_id', $id)->get();
+        $soEqData = StoOutEquipment::where('so_id', $id)->get();
         return view('shows/stockOutShow', ['soData' => $soData, 'soStoData' => $soStoData, 'soEqData' => $soEqData]);
     }
 

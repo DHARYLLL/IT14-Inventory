@@ -10,7 +10,8 @@ class Chapel extends Model
     protected $fillable = [
         'chap_name',
         'chap_room',
-        'chap_price'
+        'chap_price',
+        'archived'
     ];
 
     public function chapToSvcReq() {

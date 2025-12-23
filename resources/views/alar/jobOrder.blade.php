@@ -26,6 +26,9 @@
                 </select>
             </div>
         </div>
+        <div class="col col-auto">
+            <a href="{{ route('Report.create') }}" class="cust-btn cust-btn-secondary">Report</a>
+        </div>
         <div class="col-auto">
             <div class="dropdown">
                 <button class="cust-btn cust-btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -39,6 +42,7 @@
         </div>
     </div>
 </form>
+
 
 {{-- Table --}}
 <div class="cust-h-content">

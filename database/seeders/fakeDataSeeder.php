@@ -131,17 +131,17 @@ class fakeDataSeeder extends Seeder
         ]);
 
         $consumables = [
-            ['item_name' => 'Tealight Candle',      'item_qty' => 100,  'item_size' => '8 oz',         'item_type' => 'Consumable', 'item_low_limit' => 40],
-            ['item_name' => 'Pillar Candle',        'item_qty' => 50,   'item_size' => '8 oz',         'item_type' => 'Consumable', 'item_low_limit' => 10],
-            ['item_name' => 'Incense Stick',        'item_qty' => 200,  'item_size' => '21 cm',        'item_type' => 'Consumable', 'item_low_limit' => 100],
-            ['item_name' => 'Flower Petals Bag',    'item_qty' => 40,   'item_size' => '200 g',        'item_type' => 'Consumable', 'item_low_limit' => 10],
-            ['item_name' => 'Disinfectant Spray',   'item_qty' => 60,   'item_size' => '155 ml',       'item_type' => 'Consumable', 'item_low_limit' => 10],
-            ['item_name' => 'Facial Tissue Box',    'item_qty' => 4200, 'item_size' => '3 ply',        'item_type' => 'Consumable', 'item_low_limit' => 2100],
-            ['item_name' => 'Latex Gloves',         'item_qty' => 500,  'item_size' => 'Small',        'item_type' => 'Consumable', 'item_low_limit' => 200],
-            ['item_name' => 'Cotton Rolls',         'item_qty' => 50,   'item_size' => '300g',         'item_type' => 'Consumable', 'item_low_limit' => 10],
-            ['item_name' => 'Vigil Light',          'item_qty' => 15,   'item_size' => '16 cm x 6 cm', 'item_type' => 'Consumable', 'item_low_limit' => 10],
-            ['item_name' => 'Formalin',             'item_qty' => 15,   'item_size' => '1 Liter',      'item_type' => 'Consumable', 'item_low_limit' => 10],
-            ['item_name' => 'Genelyn Cavity Fluid', 'item_qty' => 15,   'item_size' => '1 Liter',      'item_type' => 'Consumable', 'item_low_limit' => 10]
+            ['item_name' => 'Tealight Candle',      'item_qty' => 10,   'item_net_content' => 4,    'item_size' => '8 oz',          'item_type' => 'Consumable', 'item_low_limit' => 5],
+            ['item_name' => 'Pillar Candle',        'item_qty' => 50,   'item_net_content' => 1,    'item_size' => '8 oz',          'item_type' => 'Consumable', 'item_low_limit' => 5],
+            ['item_name' => 'Incense Stick',        'item_qty' => 10,   'item_net_content' => 25,   'item_size' => '21 cm',         'item_type' => 'Consumable', 'item_low_limit' => 5],
+            ['item_name' => 'Flower Petals Bag',    'item_qty' => 40,   'item_net_content' => 300,  'item_size' => 'g',             'item_type' => 'Consumable', 'item_low_limit' => 5],
+            ['item_name' => 'Disinfectant Spray',   'item_qty' => 10,   'item_net_content' => 1,    'item_size' => '155 ml',        'item_type' => 'Consumable', 'item_low_limit' => 5],
+            ['item_name' => 'Facial Tissue Box',    'item_qty' => 10,   'item_net_content' => 320,  'item_size' => '3 ply',         'item_type' => 'Consumable', 'item_low_limit' => 5],
+            ['item_name' => 'Latex Gloves',         'item_qty' => 10,   'item_net_content' => 100,  'item_size' => 'Small',         'item_type' => 'Consumable', 'item_low_limit' => 5],
+            ['item_name' => 'Cotton Rolls',         'item_qty' => 20,   'item_net_content' => 300,  'item_size' => 'g',             'item_type' => 'Consumable', 'item_low_limit' => 5],
+            ['item_name' => 'Vigil Light',          'item_qty' => 15,   'item_net_content' => 3,    'item_size' => '16 cm x 6 cm',  'item_type' => 'Consumable', 'item_low_limit' => 5],
+            ['item_name' => 'Formalin',             'item_qty' => 15,   'item_net_content' => 1,    'item_size' => 'l',             'item_type' => 'Consumable', 'item_low_limit' => 5],
+            ['item_name' => 'Genelyn Cavity Fluid', 'item_qty' => 15,   'item_net_content' => 1,    'item_size' => 'l',             'item_type' => 'Consumable', 'item_low_limit' => 5]
         ];
 
         foreach ($consumables as $item) {
@@ -149,16 +149,16 @@ class fakeDataSeeder extends Seeder
         }
 
         $equipments = [
-            ['eq_name' => 'Casket Stand',            'eq_type' => 'Non-Consumable', 'eq_available' => 40,    'eq_size' => '84 x 28 x 23',  'eq_in_use' => 0, 'eq_low_limit' => 2],
-            ['eq_name' => 'Viewing Light Set',       'eq_type' => 'Non-Consumable', 'eq_available' => 50,    'eq_size' => '48 in',         'eq_in_use' => 0, 'eq_low_limit' => 2],
-            ['eq_name' => 'Flower Stand',            'eq_type' => 'Non-Consumable', 'eq_available' => 80,    'eq_size' => '36 in',         'eq_in_use' => 0, 'eq_low_limit' => 2],
-            ['eq_name' => 'Viewing Tent',            'eq_type' => 'Non-Consumable', 'eq_available' => 10,    'eq_size' => '3m x 3m',       'eq_in_use' => 0, 'eq_low_limit' => 2],
-            ['eq_name' => 'Chapel Chairs',           'eq_type' => 'Non-Consumable', 'eq_available' => 100,  'eq_size' => '35 x 19 x 20',   'eq_in_use' => 0, 'eq_low_limit' => 20],
-            ['eq_name' => 'Carpet',                  'eq_type' => 'Non-Consumable', 'eq_available' => 20,   'eq_size' => '80 x 150 cm',    'eq_in_use' => 0, 'eq_low_limit' => 2],
-            ['eq_name' => 'Curtain',                 'eq_type' => 'Non-Consumable', 'eq_available' => 20,   'eq_size' => '63 in',          'eq_in_use' => 0, 'eq_low_limit' => 2],
-            ['eq_name' => 'Crucifix',                'eq_type' => 'Non-Consumable', 'eq_available' => 10,   'eq_size' => '25 cm',          'eq_in_use' => 0, 'eq_low_limit' => 2],
-            ['eq_name' => 'Artery fixation forecep', 'eq_type' => 'Non-Consumable', 'eq_available' => 5,    'eq_size' => '5.5 in',         'eq_in_use' => 0, 'eq_low_limit' => 2],
-            ['eq_name' => 'Scalpel',                 'eq_type' => 'Non-Consumable', 'eq_available' => 5,    'eq_size' => '22',             'eq_in_use' => 0, 'eq_low_limit' => 2],
+            ['eq_name' => 'Casket Stand',            'eq_type' => 'Non-Consumable', 'eq_available' => 5,    'eq_net_content' => 1,      'eq_size' => '84 x 28 x 23',    'eq_in_use' => 0, 'eq_low_limit' => 2],
+            ['eq_name' => 'Viewing Light Set',       'eq_type' => 'Non-Consumable', 'eq_available' => 10,   'eq_net_content' => 4,      'eq_size' => '48 in',           'eq_in_use' => 0, 'eq_low_limit' => 2],
+            ['eq_name' => 'Flower Stand',            'eq_type' => 'Non-Consumable', 'eq_available' => 10,   'eq_net_content' => 1,      'eq_size' => '36 in',           'eq_in_use' => 0, 'eq_low_limit' => 2],
+            ['eq_name' => 'Viewing Tent',            'eq_type' => 'Non-Consumable', 'eq_available' => 10,   'eq_net_content' => 1,      'eq_size' => '3m x 3m',         'eq_in_use' => 0, 'eq_low_limit' => 2],
+            ['eq_name' => 'Chapel Chairs',           'eq_type' => 'Non-Consumable', 'eq_available' => 100,  'eq_net_content' => 1,      'eq_size' => '35 x 19 x 20',    'eq_in_use' => 0, 'eq_low_limit' => 20],
+            ['eq_name' => 'Carpet',                  'eq_type' => 'Non-Consumable', 'eq_available' => 20,   'eq_net_content' => 1,      'eq_size' => '80 x 150 cm',     'eq_in_use' => 0, 'eq_low_limit' => 2],
+            ['eq_name' => 'Curtain',                 'eq_type' => 'Non-Consumable', 'eq_available' => 20,   'eq_net_content' => 1,      'eq_size' => '63 in',           'eq_in_use' => 0, 'eq_low_limit' => 2],
+            ['eq_name' => 'Crucifix',                'eq_type' => 'Non-Consumable', 'eq_available' => 10,   'eq_net_content' => 1,      'eq_size' => '25 cm',           'eq_in_use' => 0, 'eq_low_limit' => 2],
+            ['eq_name' => 'Artery fixation forecep', 'eq_type' => 'Non-Consumable', 'eq_available' => 5,    'eq_net_content' => 1,      'eq_size' => '5.5 in',          'eq_in_use' => 0, 'eq_low_limit' => 2],
+            ['eq_name' => 'Scalpel',                 'eq_type' => 'Non-Consumable', 'eq_available' => 5,    'eq_net_content' => 1,      'eq_size' => '22',              'eq_in_use' => 0, 'eq_low_limit' => 2],
         ];
 
         foreach ($equipments as $eq) {
@@ -176,32 +176,27 @@ class fakeDataSeeder extends Seeder
             'pkg_id' => 1,
             'stock_id' => 2,
             'stock_used' => 2,
-            'stock_used_set' => 1,
         ]);
         PkgStock::create([
             'pkg_id' => 1,
             'stock_id' => 9,
             'stock_used' => 1,
-            'stock_used_set' => 1,
         ]);
 
         PkgEquipment::create([
             'pkg_id' => 1,
             'eq_id' => 1,
             'eq_used' => 1,
-            'eq_used_set' => 1
         ]);
         PkgEquipment::create([
             'pkg_id' => 1,
             'eq_id' => 2,
             'eq_used' => 4,
-            'eq_used_set' => 1
         ]);
         PkgEquipment::create([
             'pkg_id' => 1,
             'eq_id' => 5,
             'eq_used' => 25,
-            'eq_used_set' => 1
         ]);
         //end
 
@@ -215,28 +210,24 @@ class fakeDataSeeder extends Seeder
             'pkg_id' => 2,
             'stock_id' => 10,
             'stock_used' => 2,
-            'stock_used_set' => 1,
         ]);
 
         PkgStock::create([
             'pkg_id' => 2,
             'stock_id' => 11,
             'stock_used' => 2,
-            'stock_used_set' => 1,
         ]);
 
         PkgEquipment::create([
             'pkg_id' => 2,
             'eq_id' => 9,
             'eq_used' => 1,
-            'eq_used_set' => 1
         ]);
 
         PkgEquipment::create([
             'pkg_id' => 2,
             'eq_id' => 10,
             'eq_used' => 1,
-            'eq_used_set' => 1
         ]);
 
         //end
@@ -251,28 +242,24 @@ class fakeDataSeeder extends Seeder
             'prep_id' => 1,
             'stock_id' => 7,
             'stock_used' => 1,
-            'stock_used_set' => 20,
         ]);
 
         PkgStock::create([
             'prep_id' => 1,
             'stock_id' => 8,
             'stock_used' => 1,
-            'stock_used_set' => 20,
         ]);
 
         PkgEquipment::create([
             'prep_id' => 1,
             'eq_id' => 9,
             'eq_used' => 1,
-            'eq_used_set' => 1
         ]);
 
         PkgEquipment::create([
             'prep_id' => 1,
             'eq_id' => 10,
             'eq_used' => 1,
-            'eq_used_set' => 1
         ]);
 
         //end

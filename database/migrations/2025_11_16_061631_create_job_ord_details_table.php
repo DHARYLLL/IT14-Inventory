@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('job_ord_details', function (Blueprint $table) {
-            $table->id();
-            $table->string('dec_name', 100);
+            $table->mediumIncrements('id');
+            $table->string('dec_fname', 50);
+            $table->string('dec_mname', 20);
+            $table->string('dec_lname', 20);
             $table->date('dec_born_date');
             $table->date('dec_died_date');
             $table->string('jod_days_of_wake', 3);
@@ -22,13 +24,15 @@ return new class extends Migration
             $table->date('jod_deploy_date')->nullable();
             $table->date('jod_return_date')->nullable();
 
-            $table->unsignedBigInteger('pkg_id');
+            $table->unsignedMediumInteger('pkg_id');
             $table->foreign('pkg_id')->references('id')->on('packages')->onUpdate('cascade');
 
-            $table->unsignedBigInteger('chap_id')->nullable();
+            $table->unsignedMediumInteger('chap_id')->nullable();
             $table->foreign('chap_id')->references('id')->on('chapels')->onUpdate('cascade');
 
             $table->timestamps();
+
+            $table->unique(['dec_fname', 'dec_mname', 'dec_lname'], 'dec_fullname_unique');
         });
     }
 

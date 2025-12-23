@@ -9,7 +9,8 @@ class embalming extends Model
     protected $table = 'embalming';
     protected $fillable = [
         'embalmer_name',
-        'prep_price'
+        'prep_price',
+        'archived'
     ];
 
     public function embToPkgSto(){

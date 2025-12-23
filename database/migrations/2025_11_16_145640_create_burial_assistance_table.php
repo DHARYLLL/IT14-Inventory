@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('burial_assistance', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
             $table->decimal('amount', 8,2);
             $table->timestamps();
         });

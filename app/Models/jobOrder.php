@@ -8,18 +8,19 @@ class jobOrder extends Model
 {
     protected $table = 'job_orders';
     protected $fillable = [
-        'client_name',
+        'client_fname',
+        'client_mname',
+        'client_lname',
         'client_contact_number',
         'client_address',
         'ra',
-        //'jo_dp',
         'jo_total',
         'jo_status',
         'jo_start_date',
         'jo_embalm_time',
         'jo_burial_date',
         'jo_burial_time',
-        //'emp_id',
+        'archived',
         'jod_id',
         'svc_id',
         'ba_id'

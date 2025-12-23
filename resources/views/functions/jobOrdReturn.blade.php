@@ -31,12 +31,16 @@
             </div>
 
             <div class="col-md-3">
-                <label class="form-label fw-semibold">Client</label>
-                <p>{{ $joData->client_name }}</p>
+                <label class="form-label fw-semibold">First name</label>
+                <p>{{ $joData->client_fname }}</p>
             </div>
             <div class="col-md-3">
-                <label class="form-label fw-semibold">Contact Number</label>
-                <p>{{ $joData->client_contact_number }}</p>
+                <label class="form-label fw-semibold">Middle name / initial</label>
+                <p>{{ $joData->client_mname }}</p>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Last name</label>
+                <p>{{ $joData->client_lname }}</p>
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Referal (Ra)</label>
@@ -55,6 +59,13 @@
                         });
                     });
                 </script>
+            </div>
+
+            <div class="w-100"></div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Contact Number</label>
+                <p>{{ $joData->client_contact_number }}</p>
             </div>
 
             <div class="w-100"></div>
@@ -113,6 +124,8 @@
                     
                 @endif
                 
+
+                
                 @session('promt-s')
                     <div class="col-md-12">
                         <div class="text-success small mt-1">{{ $value }}</div>
@@ -120,7 +133,6 @@
                 @endsession
                 
             @endif
-            
             <div class="col-md-3">
                 <label for="" class="form-label fw-semibold text-secondary">Payment History</label>
                 <!-- Payment history modal -->
@@ -610,9 +622,19 @@
             </div>
 
             <div class="col-md-3">
-                <label class="form-label fw-semibold">Deceased Name</label>
-                <p>{{ $jodData->dec_name }}</p>
+                <label class="form-label fw-semibold">First name</label>
+                <p>{{ $jodData->dec_fname }}</p>
             </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Middle name / initial</label>
+                <p>{{ $jodData->dec_mname }}</p>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Last name</label>
+                <p>{{ $jodData->dec_lname }}</p>
+            </div>
+
+            <div class="w-100"></div>
 
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Birth Date</label>
@@ -653,11 +675,11 @@
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Deployed Date</label>
-                <p>{{ $jodData->jod_deploy_date ?? 'N/A'}}</p>
+                <p>{{ \Carbon\Carbon::parse($jodData->jod_deploy_date)->format('d/M/Y') ?? 'N/A'}}</p>
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Return Date</label>
-                <p>{{ $jodData->jod_return_date ?? 'N/A' }}</p>
+                <p>{{ \Carbon\Carbon::parse($jodData->jod_return_date)->format('d/M/Y') ?? 'N/A' }}</p>
             </div>
         </div>
 
@@ -677,34 +699,22 @@
                         </div>
                         <div class="col-md-12">
                             <div class="row cust-table-header cust-table-shadow">
-                                <div class="col-md-3">Name</div>
+                                <div class="col-md-6">Name</div>
                                 <div class="col-md-3">Size</div>
-                                <div class="col-md-6">Deployed Qty.</div>
+                                <div class="col-md-3">Deployed Qty.</div>
                             </div>
                         </div>
                         <div class="col-md-12 cust-max-300 cust-table-shadow">
                             @foreach($pkgStoData as $row)
                                 <div class="row cust-table-content">
-                                    <div class="col col-3">
-                                        <label class="form-label fw-semibold text-secondary">Name</label>
+                                    <div class="col col-6">
                                         <p>{{ $row->pkgStoToSto->item_name }}</p>
                                     </div>
                                     <div class="col col-3">
-                                        <label class="form-label fw-semibold text-secondary">Size</label>
                                         <p>{{ $row->pkgStoToSto->item_size }}</p>
                                     </div>
-                                    <div class="col col-6">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-secondary">Quantity</label>
-                                                <p>{{ $row->stock_used }}</p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
-                                                <p>{{ $row->stock_used_set }}</p>
-                                            </div>
-                                        </div>
-                                        
+                                    <div class="col-md-3">
+                                        <p>{{ $row->stock_used }}</p>
                                     </div>
                                     
                                 </div>
@@ -726,36 +736,24 @@
                 </div>
                 <div class="col-md-12">
                     <div class="row cust-table-header cust-table-shadow">
-                        <div class="col-md-3">Name</div>
+                        <div class="col-md-6">Name</div>
                         <div class="col-md-3">Size</div>
-                        <div class="col-md-6">Deployed Qty.</div>
+                        <div class="col-md-3">Deployed Qty.</div>
                     </div>
                 </div>
                 <div class="col-md-12 cust-max-300 cust-table-shadow">
                     @foreach($tempEqData as $row)
                         <div class="row cust-table-content">
-                            <div class="col-md-3">
-                                <label class="form-label fw-semibold text-secondary">Name</label>
+                            <div class="col-md-6">
                                 <p>{{ $row->tempEqToPkgEq->pkgEqToEq->eq_name }}</p>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label fw-semibold text-secondary">Size</label>
                                 <p>{{ $row->tempEqToPkgEq->pkgEqToEq->eq_size }}</p>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
+                                <p>{{ $row->eq_dpl_qty }}</p>
+                                <input type="text" name="eqDepl[]" value="{{ $row->eq_dpl_qty }}" hidden>
                                 <input type="text" name="eqId[]" value="{{ $row->tempEqToPkgEq->eq_id }}" hidden>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-semibold text-secondary">Quantity</label>
-                                        <p>{{ $row->eq_dpl_qty }}</p>
-                                        <input type="text" name="eqDepl[]" value="{{ $row->eq_dpl_qty }}" hidden>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-semibold text-secondary">Pcs/Kg/L</label>
-                                        <p>{{ $row->eq_dpl_qty_set }}</p>
-                                        <input type="text" name="eqDeplSet[]" value="{{ $row->eq_dpl_qty_set }}" hidden>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     @endforeach

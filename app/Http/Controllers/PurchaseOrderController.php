@@ -80,32 +80,32 @@ class PurchaseOrderController extends Controller
         $newItem = array();     
         $newItemSize = array();
         $newItemType = array();
-        $newItemLimit = array();
+        $newItemSet = array();
         
         $newEquipment = array();  
         $newEquipmentSize = array();
         $newEquipmentType = array();
-        $newEquipmentLimit = array();
+        $newEquipmentSet = array();
 
         // Check if stocks exists in the stocks and equipment table
         for ($i = 0; $i < count($item); $i++) {
             if ($type[$i] == "Consumable") {
-                if (Stock::where('item_name', '=', $item[$i])->where('item_size', '=', $size[$i])->doesntExist()) {
+                if (Stock::where('item_name', '=', $item[$i])->where('item_size', '=', $size[$i])->where('item_net_content', '=', $qtySet[$i])->doesntExist()) {
                     array_push($newItem, $item[$i]);
                     array_push($newItemSize, $size[$i]);
                     array_push($newItemType, $type[$i]);
-                    array_push($newItemLimit, $qtySet[$i] * 10);
+                    array_push($newItemSet, $qtySet[$i]);
                 }
             }
 
             if ($type[$i] == "Non-Consumable") {
 
-                if (Equipment::where('eq_name', '=', $item[$i])->where('eq_size', '=', $size[$i])->doesntExist()) {
+                if (Equipment::where('eq_name', '=', $item[$i])->where('eq_size', '=', $size[$i])->where('eq_net_content', '=', $qtySet[$i])->doesntExist()) {
 
                     array_push($newEquipment, $item[$i]);
                     array_push($newEquipmentSize, $size[$i]);
                     array_push($newEquipmentType, $type[$i]);
-                    array_push($newEquipmentLimit, $qtySet[$i] * 10);
+                    array_push($newEquipmentSet, $qtySet[$i]);
                 }
             }
         }
@@ -117,8 +117,9 @@ class PurchaseOrderController extends Controller
                     'item_name' => $newItem[$i],
                     'item_qty' => 0,
                     'item_size' => $newItemSize[$i],
+                    'item_net_content' => $newItemSet[$i],
                     'item_type' => $newItemType[$i],
-                    'item_low_limit' => $newItemLimit[$i]
+                    'item_low_limit' => 10
                 ]);
             }
         }
@@ -129,9 +130,10 @@ class PurchaseOrderController extends Controller
                     'eq_name' => $newEquipment[$i],
                     'eq_type' => $newEquipmentType[$i],
                     'eq_available' => 0,
+                    'eq_net_content' => $newEquipmentSet[$i],
                     'eq_size' => $newEquipmentSize[$i],
                     'eq_in_use' => 0,
-                    'eq_low_limit' => $newEquipmentLimit[$i]
+                    'eq_low_limit' => 10
                 ]);
             }
         }
@@ -216,47 +218,46 @@ class PurchaseOrderController extends Controller
 
     public function storeApprove(Request $request, String $id)
     {
-        
+        $today = Carbon::now('Asia/Manila')->startOfDay();
         $request->validate([
-            'inv_num' => 'required|integer',
+            'inv_num' => 'required',
             'inv_date' => [
                 'required',
-                Rule::date()->beforeOrEqual(today())
+                Rule::date()->beforeOrEqual($today->format('Y-m-d'))
             ],
-            'qtyArrived.*' => 'required|integer|min:1|max:999999',
+            'qtyArrived.*' => 'required|integer|min:0|max:999',
+            'qtyArrivedSet.*' => 'required|integer|min:1|max:999999',
             'del_date' => [
                 'required',
-                Rule::date()->afterOrEqual('inv_date'),
-                Rule::date()->beforeOrEqual(today()),
+                Rule::date()->afterOrEqual($today->format('Y-m-d'))
             ],
             'total' => 'required|numeric|min:1|max:999999'
         ], [
             'inv_num.required' => 'This field is required.',
-            'inv_num.integer' => 'Number only.',
-
             'inv_date.required' => 'This field is required.',
-            'inv_date.before_or_equal' => 'Date must be before or equal today.',
-
+            'inv_date.before_or_equal' => 'Date cannot be after today.',
             'del_date.required' => 'This field is required.',
-            'del_date.after_or_equal' => 'Date must be equal or after invoice date.',
-            'del_date.before_or_equal' => 'Date must be before or equal today.',
+            'del_date.after_or_equal' => 'Date cannot be before today',
 
             'total.numeric' => 'Number Only.',
             'total.min' => 'Total must be 1 or more',
             'total.max' => '6 digits is the max.',
+
             'qtyArrived.*.required' => 'This field is required.',
             'qtyArrived.*.min' => 'Quantity must be 1 or more.',
-            'qtyArrived.*.max' => '6 digits limit reached.'
+            'qtyArrived.*.max' => '4 digits limit reached.',
+
+            'qtyArrivedSet.*.required' => 'This field is required.',
+            'qtyArrivedSet.*.min' => 'Quantity must be 1 or more.',
+            'qtyArrivedSet.*.max' => '6 digits limit reached.',
         ]);
-
-        $items = PurchaseOrderItem::where('po_id', '=', $request->po_id)->get();
-        //$stock = stockModel::where()->first;
-
+        
         $getId = $request->stockId;
         $getEqId = $request->eqId;
         $getType = $request->type;
 
         $getArrivedQty = $request->qtyArrived;
+        $getArrivedQtySet = $request->qtyArrivedSet;
         
         Invoice::create([
             'invoice_number' => $request->inv_num,
@@ -268,9 +269,10 @@ class PurchaseOrderController extends Controller
         for ($i=0; $i < count($getId); $i++) { 
 
             if($getType[$i] == 'Consumable'){
-                $stock = Stock::where('id', '=', $getId[$i])->first();
+                $stock = Stock::select('id', 'item_qty', 'item_net_content')->where('id', '=', $getId[$i])->first();
                 Stock::findOrFail($stock->id)->update([
-                    'item_qty' => $stock->item_qty + $getArrivedQty[$i]
+                    'item_qty' => $stock->item_qty + $getArrivedQty[$i],
+                    'item_net_content' => $stock->item_net_content + $getArrivedQtySet[$i]
                 ]);
                 PurchaseOrderItem::where('stock_id', '=' , $getId[$i])->where('qty_arrived', '=' , null)->orderBy('id', "ASC")->take(1)->update([
                     'qty_arrived' => $getArrivedQty[$i]
@@ -278,17 +280,18 @@ class PurchaseOrderController extends Controller
             }
                 
             if($getType[$i] == 'Non-Consumable'){
-                $eq = Equipment::where('id', '=', $getId[$i])->first();
+                $eq = Equipment::select('id', 'eq_available', 'eq_net_content')->where('id', '=', $getId[$i])->first();
                 Equipment::findOrFail($eq->id)->update([
-                    'eq_available' => $eq->eq_available + $getArrivedQty[$i]
+                    'eq_available' => $eq->eq_available + $getArrivedQty[$i],
+                    'eq_net_content' => $eq->eq_net_content + $getArrivedQtySet[$i],
                 ]);
                 PurchaseOrderItem::where('eq_id', '=' , $getId[$i])->where('qty_arrived', '=' , null)->orderBy('id', "ASC")->take(1)->update([
                     'qty_arrived' => $getArrivedQty[$i]
                 ]);
-            }        
-
+            }
         }
         
+
         PurchaseOrder::findOrFail($request->po_id)->update([
             'status' => "Delivered",
             'delivered_date' => $request->del_date
@@ -310,6 +313,9 @@ class PurchaseOrderController extends Controller
             'emp_id' => session('loginId')
         ]);
 
+        //return redirect(route('Stock.index'));
+        //return redirect()->back();
+
         return redirect(route('Purchase-Order.showDelivered', $request->po_id))->with('success', 'Delivered Successfully!');
     }
 
@@ -318,7 +324,7 @@ class PurchaseOrderController extends Controller
         $poData = PurchaseOrder::findOrFail($id);
         $poItemData = PurchaseOrderItem::where('po_id', '=', $id)->get();
         $invData = Invoice::where('po_id', '=', $id)->first();
-        return view('shows/purchaseOrderShowDelivered', ['poData' => $poData, 'poItemData' => $poItemData, 'invData' => $invData]);
+        return view('shows/purchaseOrderShow', ['poData' => $poData, 'poItemData' => $poItemData, 'invData' => $invData]);
     }
 
     /**
@@ -350,14 +356,24 @@ class PurchaseOrderController extends Controller
         return redirect(route('Purchase-Order.showApproved', $id))->with('success', 'Approved Successfully!');
     }
 
-    public function exportPo(String $id)
+    public function exportPo(Request $request, String $id)
     {
-        //dd('hello');
+        $today = Carbon::now('Asia/Manila')->startOfDay();
+        $request->validate([
+            'deadline' => [
+                'required',
+                Rule::date()->afterOrEqual($today->format('Y-m-d'))
+            ],
+        ], [
+            'deadline.required' => 'This field is required.',
+            'deadline.after_or_equal' => 'Deadline cannot be before today.'
+        ]);
+        
         $poData = PurchaseOrder::findOrFail($id);
         $poItemData = PurchaseOrderItem::where('po_id', $id)->get();
 
         //return view('pdfTemp/purchaseOrderTemplate', ['poItemData' => $poItemData]);
-        $data = ['poItemData' => $poItemData, 'poData' => $poData];
+        $data = ['poItemData' => $poItemData, 'poData' => $poData, 'deadline' => $request->deadline];
         
         $pdf = Pdf::loadView('pdfTemp.purchaseOrderTemplate', $data);
         return $pdf->download(date('d-m-Y').'-purchase-order.pdf');

@@ -14,7 +14,7 @@
     </div>
 
     <a href="{{ route('Purchase-Order.create') }}" class="cust-btn cust-btn-primary max-h">
-        <i class="bi bi-plus-lg"></i><span>New Purchase Order</span>
+        <i class="bi bi-plus-lg"></i> <span>New Purchase Order</span>
     </a>
 
 </div>
@@ -48,9 +48,9 @@
                             <td>{{ $row->poToSup->fname }} {{ $row->poToSup->mname }} {{ $row->poToSup->lname }}</td>
                             <td>{{ $row->status ?? 'N/A' }}</td>
                             <td>{{ $row->total_amount ?? 'N/A' }}</td>
-                            <td>{{ $row->submitted_date ?? 'N/A' }}</td>
-                            <td>{{ $row->approved_date ?? 'N/A' }}</td>
-                            <td>{{ $row->delivered_date ?? 'N/A' }}</td>
+                            <td>{{ \Carbon\Carbon::parse($row->submitted_date)->format('d/M/Y') ?? 'N/A' }}</td>
+                            <td>{{ \Carbon\Carbon::parse($row->approved_date)->format('d/M/Y') ?? 'N/A' }}</td>
+                            <td>{{ \Carbon\Carbon::parse($row->delivered_date)->format('d/M/Y') ?? 'N/A' }}</td>
                             <td>
                                 <div class="d-flex justify-content-center align-items-center gap-2">
                                     

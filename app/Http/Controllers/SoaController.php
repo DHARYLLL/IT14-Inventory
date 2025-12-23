@@ -66,7 +66,7 @@ class SoaController extends Controller
      */
     public function create()
     {
-        //
+        return view('shows/viewReport'); // your Blade page
     }
 
     /**

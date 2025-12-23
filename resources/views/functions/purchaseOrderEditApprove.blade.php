@@ -10,10 +10,45 @@
 
 <div class="d-flex align-items-center justify-content-end cust-h-heading gap-2">
     <div>
-        <form action="{{ route('Purchase-Order.export', $poData->id) }}" method="post">
-            @csrf
-            <button class="cust-btn cust-btn-secondary d-flex align-items-center gap-2" type="submit">Export</button>
-        </form>
+        <div class="d-flex justify-content-center">
+            <!-- Button trigger modal -->
+            <button type="button" class="cust-btn cust-btn-secondary" data-bs-toggle="modal" data-bs-target="#exportNonApp">
+                Export
+            </button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exportNonApp" tabindex="-1" aria-labelledby="exportNonAppLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exportNonAppLabel">Export</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('Purchase-Order.export', $poData->id) }}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <label for="deadline" class="form-label">Deadline Date <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="deadline" value="{{ old('deadline') }}">
+                        @error('deadline')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    var modal = new bootstrap.Modal(document.getElementById('exportNonApp'));
+                                    modal.show();
+                                });
+                            </script>
+                        @enderror
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="cust-btn cust-btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button class="cust-btn cust-btn-primary" type="submit">Export</button>
+                    
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
     </div>
     
     <div>
@@ -24,7 +59,7 @@
     </div>
 </div>
 
-    <div class="cust-h">
+    <div class="cust-h-90">
         
         <form action="{{ route('Purchase-Order.storeApproved', $poData->id) }}" method="POST" class="h-100">
             @csrf
@@ -69,7 +104,7 @@
                                 <div class="row g-3">
                                     {{-- Invoice Number --}}
                                     <div class="col-md-12">
-                                        <label class="form-label fw-semibold text-secondary">Invoice Number</label>
+                                        <label class="form-label fw-semibold text-secondary">Invoice Number <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control modern-input" name="inv_num"
                                             value="{{ old('inv_num') }}">
                                         @error('inv_num')
@@ -78,7 +113,7 @@
                                     </div>
                                     {{-- Invoice Date --}}
                                     <div class="col-md-12">
-                                        <label class="form-label fw-semibold text-secondary">Invoice Date</label>
+                                        <label class="form-label fw-semibold text-secondary">Invoice Date <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control modern-input" name="inv_date"
                                             value="{{ old('inv_date') }}">
                                         @error('inv_date')
@@ -87,7 +122,7 @@
                                     </div>
                                     {{-- Delivery Date --}}
                                     <div class="col-md-12">
-                                        <label class="form-label fw-semibold text-secondary">Delivery Date</label>
+                                        <label class="form-label fw-semibold text-secondary">Delivery Date <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control modern-input" name="del_date"
                                             value="{{ old('del_date') }}">
                                         @error('del_date')
@@ -96,7 +131,7 @@
                                     </div>
                                     {{-- Total --}}
                                     <div class="col-md-12">
-                                        <label class="form-label fw-semibold text-secondary">Total</label>
+                                        <label class="form-label fw-semibold text-secondary">Total <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control modern-input" name="total"
                                             value="{{ old('total' , $poItemData->sum('total_amount')) }}">
                                         <input type="hidden" name="po_id" value="{{ $poData->id }}">
@@ -151,14 +186,15 @@
                                     <th>Unit Price</th>
                                     <th>Total Amount</th>
                                     @if ($poData->status == 'Approved')
-                                        <th>Qty Arrived</th>
+                                        <th class="col-2">Qty. Arrived</th>
+                                        <th class="col-2">Net Content</th>
                                     @endif
                                 </tr>
                             </thead>
                             <tbody>
                                 @if ($poItemData->isEmpty())
                                     <tr>
-                                        <td colspan="8" class="text-center text-muted py-4">
+                                        <td colspan="9" class="text-center text-muted py-4">
                                             No supplies available.
                                         </td>
                                     </tr>
@@ -181,7 +217,7 @@
                                                 </td>
                                             @endif
                                             <td>{{ $row->size }}</td>
-                                            <td>{{ $row->qty_total }}</td>
+                                            <td>{{ $row->qty }}</td>
                                             <td>
                                                 <span
                                                     class="{{ $row->type == 'Consumable' ? 'consumable' : 'non-consumable' }}">
@@ -194,8 +230,15 @@
                                             @if ($poData->status == 'Approved')
                                                 <td>
                                                     <input type="number" class="form-control qty-input" name="qtyArrived[]" placeholder="Qty Arrived" 
-                                                        value="{{ old('qtyArrived.' . $loop->index , $row->qty_total) }}">
+                                                        value="{{ old('qtyArrived.' . $loop->index , $row->qty) }}">
                                                     @error('qtyArrived.' . $loop->index)
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control qty-input" name="qtyArrivedSet[]" placeholder="Qty Arrived" 
+                                                        value="{{ old('qtyArrivedSet.' . $loop->index , $row->qty_set) }}" readonly>
+                                                    @error('qtyArrivedSet.' . $loop->index)
                                                         <small class="text-danger">{{ $message }}</small>
                                                     @enderror
                                                 </td>
@@ -204,7 +247,7 @@
                                     @endforeach
                                     {{-- SHOW TOTAL --}}
                                     <tr>
-                                        <td colspan="6" style="font-style: normal;" class="text-end">Total:</td>
+                                        <td colspan="7" style="font-style: normal;" class="text-end">Total:</td>
                                         <td>₱ {{ $poItemData->sum('total_amount') }}</td>
                                     </tr>
                                 @endif

@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('services_requests', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
 
-            $table->unsignedBigInteger('veh_id')->nullable();
-            $table->foreign('veh_id')->references('id')->on('vehicles')->onUpdate('cascade')->nullOnDelete();
+            $table->unsignedMediumInteger('veh_id')->nullable();
+            $table->foreign('veh_id')->references('id')->on('vehicles')->onUpdate('cascade');
 
-            $table->unsignedBigInteger('prep_id')->nullable();
-            $table->foreign('prep_id')->references('id')->on('embalming')->onUpdate('cascade')->nullOnDelete();
+            $table->unsignedMediumInteger('prep_id')->nullable();
+            $table->foreign('prep_id')->references('id')->on('embalming')->onUpdate('cascade');
 
             $table->string('svc_status', 15);
             

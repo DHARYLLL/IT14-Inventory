@@ -34,7 +34,7 @@ class SupplierController extends Controller
         $supplier = $request->validated();
         Supplier::create($supplier);
 
-        return redirect()->back()->with('success', 'Added Successfully!');
+        return redirect()->back()->with('success', 'Added Successfully!')->withInput();
     }
 
     /**

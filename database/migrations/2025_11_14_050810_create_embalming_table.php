@@ -12,9 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('embalming', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
             $table->string('embalmer_name', 50);
             $table->decimal('prep_price', 8,2);
+            $table->boolean('archived')->nullable();
+            
             $table->timestamps();
 
             $table->unique('embalmer_name');

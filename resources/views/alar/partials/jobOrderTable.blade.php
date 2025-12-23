@@ -1,6 +1,6 @@
 @forelse($jOData as $row)
 <tr class="{{ $row->joToSvcReq->svc_status == 'Completed' ? ($row->jo_status != 'Paid' ? 'cust-warning-row' : 'cust-success-row') : '' }}">
-    <td>{{ $row->client_name ?? '—' }}</td>
+    <td>{{ $row->client_fname ?? '—' }} {{ $row->client_lname ?? '—' }}</td>
     <td>{{ $row->ba_id ? '₱'.number_format($row->joToBurAsst->amount, 2) : 'N/A' }}</td>
     <td>
         <form action="{{ route('Job-Order.raUpdate', $row->id) }}" method="POST">

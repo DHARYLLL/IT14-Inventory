@@ -14,9 +14,20 @@
             </div>
 
             <div class="col-md-3">
-                <label class="form-label fw-semibold">Client</label>
-                <p>{{ $joData->client_name }}</p>
+                <label class="form-label fw-semibold">First name</label>
+                <p>{{ $joData->client_fname }}</p>
             </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Middle name / initial</label>
+                <p>{{ $joData->client_mname }}</p>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Last name</label>
+                <p>{{ $joData->client_lname }}</p>
+            </div>
+
+            <div class="w-100 mb-2"></div>
+
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Contact Number</label>
                 <p>{{ $joData->client_contact_number }}</p>
@@ -273,9 +284,19 @@
             </div>
 
             <div class="col-md-3">
-                <label class="form-label fw-semibold">Deceased Name</label>
-                <p>{{ $jodData->dec_name }}</p>
+                <label class="form-label fw-semibold">First name</label>
+                <p>{{ $jodData->dec_fname }}</p>
             </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Middle name / initial</label>
+                <p>{{ $jodData->dec_mname }}</p>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Last name</label>
+                <p>{{ $jodData->dec_lname }}</p>
+            </div>
+
+            <div class="w-100 mb-2"></div>
 
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Birth Date</label>
@@ -316,11 +337,11 @@
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Deployed Date</label>
-                <p>{{ $jodData->jod_deploy_date ?? 'N/A'}}</p>
+                <p>{{ \Carbon\Carbon::parse($jodData->jod_deploy_date)->format('d/M/Y') ?? 'N/A'}}</p>
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Return Date</label>
-                <p>{{ $jodData->jod_return_date ?? 'N/A' }}</p>
+                <p>{{ \Carbon\Carbon::parse($jodData->jod_return_date)->format('d/M/Y') ?? 'N/A' }}</p>
             </div>
         </div>
 

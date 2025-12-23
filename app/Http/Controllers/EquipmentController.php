@@ -54,13 +54,45 @@ class EquipmentController extends Controller
     public function store(Request $request)
     {   
         $request->validate([
-            'eq_name' => 'required|unique:equipments,eq_name',
-            'eq_add' => 'required|integer'
+            'eqName' => ['required',
+                        'max:100',
+                        Rule::unique('equipments', 'eq_name')
+                        ->where('eq_size', $request->size)
+            ],
+            'size' => 'required|max:20',
+            'eqAvail' => 'required|integer|min:0|max:999',
+            'eqAvailSet' => 'required|integer|min:1|max:999999',
+            'eqLimit' => 'required|integer|min:1|max:999999'
+        ], [
+            'eqName.required' => 'This field is required.',
+            'eqName.max' => '100 characters limit reached.',
+            'eqName.unique' => 'Equipment already added.',
+
+            'size.required' => 'This field is required.',
+            'size.max' => '20 characters limit reached.',
+
+            'eqAvail.required' => 'This field is required.',
+            'eqAvail.min' => 'Not a valid quantity.',
+            'eqAvail.max' => '3 digits limit reached.',
+
+            'eqAvailSet.required' => 'This field is required.',
+            'eqAvailSet.min' => 'Not a valid quantity.',
+            'eqAvailSet.max' => '6 digits limit reached.',
+
+            'eqLimit.required' => 'This field is required.',
+            'eqLimit.integer' => 'Number only.',
+            'eqLimit.min' => 'Must be 1 or more.',
+            'eqLimit.max' => '6 digits limit reached.',
         ]);
+
         Equipment::create([
-            'eq_name' => $request->eq_name,
-            'eq_available' => $request->eq_add,
-            'eq_in_use' => 0
+            'eq_name' => $request->eqName,
+            'eq_type' => 'Non-Consumable',
+            'eq_available' => $request->eqAvail,
+            'eq_net_content' => $request->eqAvailSet,
+            'eq_size' => $request->size,
+            'eq_in_use' => 0,
+            'eq_low_limit' => $request->eqLimit
         ]);
 
         $getEq = Equipment::orderBy('id','desc')->take(1)->value('id');
@@ -72,7 +104,7 @@ class EquipmentController extends Controller
             'emp_id' => session('loginId')
         ]);
 
-        return redirect(route('Equipment.index'))->with('success', 'Created Successfully!');
+        return redirect(route('Equipment.index'))->with('success', 'Added Successfully!');
     }
 
     /**
@@ -100,12 +132,14 @@ class EquipmentController extends Controller
     {
         $request->validate([
             'eqName' => ['required',
-                            'max:100',
-                            Rule::unique('equipments', 'eq_name')
-                            ->where('eq_size', $request->size)
-                            ->ignore($id)
+                        'max:100',
+                        Rule::unique('equipments', 'eq_name')
+                        ->where('eq_size', $request->size)
+                        ->ignore($id)
             ],
             'size' => "required|max:20",
+            'eqAvail' => 'required|integer|min:0|max:999',
+            'eqAvailSet' => 'required|integer|min:1|max:999999.99',
             'eqLimit' => 'required|integer|min:1|max:999999.99'
         ],  [
             'eqName.required' => 'This field is required.',
@@ -115,14 +149,24 @@ class EquipmentController extends Controller
             'size.required' => 'This field is required.',
             'size.max' => '20 Characters limit reached.',
 
+            'eqAvail.required' => 'This field is required.',
+            'eqAvail.min' => 'Not a valid number.',
+            'eqAvail.max' => '3 digits limit reached.',
+
+            'eqAvailSet.required' => 'This field is required.',
+            'eqAvailSet.min' => 'Must be 1 or more.',
+            'eqAvailSet.max' => '6 digits limit reached.',
+
             'eqLimit.required' => 'This field is required.',
-            'eqLimit.min' => 'Limit must be 1 or more.',
+            'eqLimit.min' => 'Must be 1 or more.',
             'eqLimit.max' => '6 digits limit reached.',
         ]);
 
         Equipment::findOrFail($id)->update([
             'eq_name' => $request->eqName,
             'eq_size' => $request->size,
+            'eq_available' => $request->eqAvail,
+            'eq_net_content' => $request->eqAvailSet,
             'eq_low_limit' => $request->eqLimit
         ]);
 

@@ -18,12 +18,13 @@
     </div>
 
     {{-- Main Card --}}
-    <div class="cust-h-content">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
+    <div class="cust-h-90">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body h-100">
                 <form action="{{ route('Purchase-Order.store') }}" method="POST" id="form" class="h-100">
                     @csrf
-                    <div class="cust-sticky">
+                    
+                    <div class="cust-h-40">
                         {{-- Supplier selection + buttons --}}
                         <div class="row align-items-end mb-4">
                             <div class="col-md-4">
@@ -66,7 +67,7 @@
                                                 <option value="" selected disabled>Select Item</option>
                                                 @foreach ($stoData as $row)
                                                     <option
-                                                        value="{{ $row->item_name }},{{ $row->item_size }}">
+                                                        value="{{ $row->item_name }},{{ $row->item_size }}:{{ $row->item_net_content }}">
                                                         {{ $row->item_name }} | Size: {{ $row->item_size }} | {{ $row->item_qty }}</option>
                                                 @endforeach
                                             </select>
@@ -87,7 +88,7 @@
                                                 <option value="" selected disabled>Select Item</option>
                                                 @foreach ($eqData as $row)
                                                     <option
-                                                        value="{{ $row->eq_name }},{{ $row->eq_size }}">
+                                                        value="{{ $row->eq_name }},{{ $row->eq_size }}:{{ $row->eq_net_content }}">
                                                         {{ $row->eq_name }} | Size: {{ $row->eq_size }} | {{ $row->eq_available }}</option>
                                                 @endforeach
                                             </select>
@@ -102,9 +103,10 @@
                             </div>
                         </div>
                     </div>
+                   
                     {{-- Dynamic input fields --}}
                     
-                    <div id="pasteHere" class="mt-3">
+                    <div id="pasteHere" class="cust-h-60 overflow-auto mx-0">
                         @php
                             $oldItems = old('itemName', ['']);
                             $oldQtys = old('qty', ['']);
@@ -113,49 +115,26 @@
                             $oldunitPrice = old('unitPrice', ['']);
                             $oldType = old('typeSelect', ['']);
                         @endphp
+                        
                         @foreach ($oldItems as $i => $item)
-                            <div class="row g-2 mb-2 px-3 py-2 bg-light rounded-3 shadow-sm form-section">
-                                <div class="col-md-3">
+                            <div class="row py-2 bg-light rounded-3 shadow-sm form-section mb-4 w-100 mx-0">
+                                <div class="col-md-5">
                                     <label class="form-label fw-semibold text-secondary">Item Name <span class="text-danger">*</span></label>
                                     <input type="text" name="itemName[]" value="{{ $item }}"
-                                        class="form-control shadow-sm" {{ $item }}>
+                                        class="form-control shadow-sm" {{ $item }} placeholder="Name of the item">
                                     @error("itemName.$i")
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
-                                <div class="col-md-1">
-                                    <label class="form-label fw-semibold text-secondary">Quantity <span class="text-danger">*</span></label>
-                                    <input type="number" name="qty[]" value="{{ $oldQtys[$i] ?? '' }}"
-                                        class="form-control shadow-sm">
-                                    @error("qty.$i")
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                                <div class="col-md-1">
-                                    <label class="form-label fw-semibold text-secondary">Pcs/Kg/L <span class="text-danger">*</span></label>
-                                    <input type="number" name="qtySet[]" value="{{ $oldqtySet[$i] ?? '' }}"
-                                        class="form-control shadow-sm">
-                                    @error("qtySet.$i")
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <label class="form-label fw-semibold text-secondary">Size/Unit <span class="text-danger">*</span></label>
                                     <input type="text" name="size[]" value="{{ $oldsize[$i] ?? '' }}"
-                                        class="form-control shadow-sm">
+                                        class="form-control shadow-sm" placeholder="Size / Unit (gal, kg, g, etc.)">
                                     @error("size.$i")
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
-                                <div class="col-md-2">
-                                    <label class="form-label fw-semibold text-secondary">Price per Unit <span class="text-danger">*</span></label>
-                                    <input type="text" name="unitPrice[]" value="{{ $oldunitPrice[$i] ?? '' }}"
-                                        class="form-control shadow-sm">
-                                    @error("unitPrice.$i")
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <label class="form-label fw-semibold text-secondary">Type <span class="text-danger">*</span></label>
                                     @if($oldType[$i])
                                         <input type="text" name="typeSelect[]" class="form-control shadow-sm" value="{{ $oldType[$i] }}" readonly>
@@ -175,15 +154,48 @@
                                     @endif
                                     
                                 </div>
-                                <div class="col-md-1 align-items-start">
+
+                                <div class="w-100 mb-2"></div>
+
+                                <div class="col-md-5">
+                                    <label class="form-label fw-semibold text-secondary">Price per Unit <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="text" name="unitPrice[]" value="{{ $oldunitPrice[$i] ?? '' }}" class="form-control shadow-sm">
+                                    </div>
+                                    @error("unitPrice.$i")
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold text-secondary">Quantity <span class="text-danger">*</span></label>
+                                    <input type="number" name="qty[]" value="{{ $oldQtys[$i] ?? '' }}"
+                                        class="form-control shadow-sm" placeholder="Qty. / Box Qty. / Set Qty.">
+                                    @error("qty.$i")
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold text-secondary">Net Contents <span class="text-danger">*</span></label>
+                                    <input type="number" name="qtySet[]" value="{{ $oldqtySet[$i] ?? '' }}"
+                                        class="form-control shadow-sm" placeholder="Total Contents">
+                                    @error("qtySet.$i")
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-1">
                                     <label class="form-label fw-semibold text-secondary">Remove</label>
                                     <button type="button"
-                                        class="btn btn-outline-danger remove-btn">
+                                        class="cust-btn cust-btn-danger-secondary remove-btn w-100">
                                         <i class="bi bi-x-circle"></i>
                                     </button>
                                 </div>
                             </div>
                         @endforeach
+                
+                        
                     </div>
                     
                 </form>
@@ -206,7 +218,7 @@
                 <div class="modal-body py-3">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <label class="form-label">First Name</label>
+                            <label class="form-label">First Name <span class="text-danger">*</span></label>
                             <input type="text" name="fname" class="form-control" value="{{ old('fname') }}">
                         </div>
                         <div class="col-md-4">
@@ -214,11 +226,11 @@
                             <input type="text" name="mname" class="form-control" value="{{ old('mname') }}">
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">Last Name</label>
+                            <label class="form-label">Last Name <span class="text-danger">*</span></label>
                             <input type="text" name="lname" class="form-control" value="{{ old('lname') }}">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Contact Number</label>
+                            <label class="form-label">Contact Number <span class="text-danger">*</span></label>
                             <input type="text" name="contact_number" class="form-control"
                                 value="{{ old('contact_number') }}" placeholder="Ex. 09...">
                             @error('contact_number')

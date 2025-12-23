@@ -48,40 +48,33 @@ class PackageController extends Controller
 
             'itemName.*' => 'required',
             'stockQty.*' => 'required|integer|min:1|max:999',
-            'stockQtySet.*' => 'required|integer|min:1|max:999',
             'eqName.*' => 'required',
             'eqQty.*' => 'required|integer|min:1|max:999',
-            'eqQtySet.*' => 'required|integer|min:1|max:999'  
         ], [
             'pkg_name.required' => 'This field is required',
-            'pkg_inclusion.*.required' => 'This field is required',
+            'pkg_name.unique' => 'Package already added.',
+
+            'pkgPrice.required' => 'This field is required',
+            'pkgPrice.numeric' => 'Number only',
+            'pkgPrice.min' => 'Price must be 1 or more',
+            'pkgPrice.max' => '6 digits limit reached',
 
             'stockQty.*.required' => 'This field is required.',
             'stockQty.*.min' => 'Item quantity must be 1 or more.',
             'stockQty.*.max' => '3 digits limit reached.',
 
-            'stockQtySet.*.required' => 'This field is required.',
-            'stockQtySet.*.min' => 'Item quantity must be 1 or more.',
-            'stockQtySet.*.max' => '3 digits limit reached.',
-
             'eqQty.*.required' => 'This field is required.',
             'eqQty.*.min' => 'Equipment quantity must be 1 or more.',
-            'eqQty.*.max' => '3 digits limit reached.',
-
-            'eqQtySet.*.required' => 'This field is required.',
-            'eqQtySet.*.min' => 'Equipment quantity must be 1 or more.',
-            'eqQtySet.*.max' => '3 digits limit reached.'
+            'eqQty.*.max' => '3 digits limit reached.'
         ]);
 
 
         //Get equpment and stock requests
         $eq = $request->equipment;
         $eqQty = $request->eqQty;
-        $eqQtySet = $request->eqQtySet;
 
         $sto = $request->stock;
         $stoQty = $request->stockQty;
-        $stoQtySet = $request->stockQtySet;
 
         if ($eq == null && $sto == null) {
             return redirect()->back()->with('emptyEq', 'Must have atleast 1 equipment or item.')->withInput();
@@ -93,9 +86,9 @@ class PackageController extends Controller
         if ($sto != null) {
             for ($i = 0; $i < count($sto); $i++) {
                 $stockId = $sto[$i];
-                $requestedQty = (int) $stoQty[$i] * max(1, $stoQtySet[$i]);
+                $requestedQty = (int) $stoQty[$i];
                 // Get stock from DB
-                $stock = Stock::find($stockId); // replace with your actual Stock model
+                $stock = Stock::find($stockId);
 
                 if (!$stock) {
                     $allErrors["stock.$i"] = "Stock item not found.";
@@ -111,7 +104,7 @@ class PackageController extends Controller
         if ($eq !== null) {
             for ($i = 0; $i < count($eq); $i++) {
                 $equipmentId = $eq[$i];
-                $requestedQty = (int) $eqQty[$i] * max(1, $eqQtySet[$i]);
+                $requestedQty = (int) $eqQty[$i];
 
                 $equipment = Equipment::find($equipmentId);
 
@@ -142,8 +135,7 @@ class PackageController extends Controller
                 PkgEquipment::create([
                     'pkg_id' => $getPkg,
                     'eq_id' => $eq[$i],
-                    'eq_used' => $eqQty[$i],
-                    'eq_used_set' => $eqQtySet[$i]
+                    'eq_used' => $eqQty[$i]
                 ]);
             }
         }
@@ -153,8 +145,7 @@ class PackageController extends Controller
                 PkgStock::create([
                     'pkg_id' => $getPkg,
                     'stock_id' => $sto[$i],    
-                    'stock_used' => $stoQty[$i],
-                    'stock_used_set' => $stoQtySet[$i]
+                    'stock_used' => $stoQty[$i]
                 ]);
             }
         }
@@ -228,9 +219,7 @@ class PackageController extends Controller
             'pkgPrice' => 'required|numeric|min:1|max:999999.99',
 
             'qty.*' => 'required|integer|min:1|max:999',
-            'qtySet.*' => 'required|integer|min:1|max:999',
             'eqQty.*' => 'required|integer|min:1|max:999',
-            'eqQtySet.*' => 'required|integer|min:1|max:999',  
         ], [
             'pkgName.required' => 'This field is required.',
             'pkgName.unique' => 'Package name is already added.',
@@ -245,17 +234,9 @@ class PackageController extends Controller
             'qty.*.min' => 'Quantity must be 1 or more.',
             'qty.*.max' => '3 digits limit reached.',
 
-            'qtySet.*.required' => 'This field is required.',
-            'qtySet.*.min' => 'Quantity must be 1 or more.',
-            'qtySet.*.max' => '3 digits limit reached.',
-
             'eqQty.*.required' => 'This field is required.',
             'eqQty.*.min' => 'Quantity must be 1 or more.',
-            'eqQty.*.max' => '3 digits limit reached.',
-
-            'eqQtySet.*.required' => 'This field is required.',
-            'eqQtySet.*.min' => 'Quantity must be 1 or more.',
-            'eqQtySet.*.max' => '3 digits limit reached.'
+            'eqQty.*.max' => '3 digits limit reached.'
         ]);
 
         //dd('hello');
@@ -263,9 +244,7 @@ class PackageController extends Controller
         $getStoId = $request->stoId;
         
         $getEqQty = $request->eqQty;
-        $getEqQtySet = $request->eqQtySet;
         $getStoQty = $request->qty;
-        $getStoQtySet = $request->qtySet;
 
         Package::findOrFail($id)->update([
             'pkg_name' => $request->pkgName,
@@ -275,8 +254,7 @@ class PackageController extends Controller
         if ($getEqQty != null) {
             for ($i=0; $i < count($getEqId); $i++) { 
                 PkgEquipment::findOrFail($getEqId[$i])->update([
-                    'eq_used' => $getEqQty[$i],
-                    'eq_used_set' => $getEqQtySet[$i],
+                    'eq_used' => $getEqQty[$i]
                 ]);
             }
         }
@@ -284,8 +262,7 @@ class PackageController extends Controller
         if ($getStoQty != null) {
             for ($i=0; $i < count($getStoId); $i++) { 
                 PkgStock::findOrFail($getStoId[$i])->update([
-                    'stock_used' => $getStoQty[$i],
-                    'stock_used_set' => $getStoQtySet[$i]
+                    'stock_used' => $getStoQty[$i]
                 ]);
             }
         }

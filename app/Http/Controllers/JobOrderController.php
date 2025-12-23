@@ -21,6 +21,7 @@ use App\Models\Soa;
 use App\Models\Stock;
 use App\Models\TempEquipment;
 use App\Models\vehicle;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Faker\Provider\Payment;
 use Illuminate\Http\Request;
@@ -48,13 +49,15 @@ class JobOrderController extends Controller
                     THEN 1 ELSE 0
                 END
             ")
-            ->orderBy('client_name', 'asc');
+            ->orderBy('client_fname', 'asc');
 
         // Search
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('client_name', 'like', "%{$search}%")
+                $q->where('client_fname', 'like', "%{$search}%")
+                ->orWhere('client_mname', 'like', "%{$search}%")
+                ->orWhere('client_lname', 'like', "%{$search}%")
                 ->orWhere('client_address', 'like', "%{$search}%")
                 ->orWhere('client_contact_number', 'like', "%{$search}%");
             });
@@ -119,27 +122,37 @@ class JobOrderController extends Controller
      */
     public function store(Request $request)
     {
+        $today = Carbon::now('Asia/Manila')->startOfDay();
         //dd(Carbon::parse($request->svcDate)->addDays((int)$request->wakeDay));
         $request->validate([
             'package' => 'required',
             'vehicle' => 'required',
             'embalm' => 'required',
-            'clientName' => 'required|regex:/^[A-Za-z0-9\s\.\'-]+$/|min:1|max:100',
+            'cliFname' => 'required|regex:/^[A-Za-z0-9\s\.\'-]+$/|min:1|max:50',
+            'cliMname' => 'required|regex:/^[A-Za-z0-9\s\.\'-]+$/|min:1|max:20',
+            'cliLname' => 'required|regex:/^[A-Za-z0-9\s\.\'-]+$/|min:1|max:20',
             'address' => 'required|max:150',
             'clientConNum' => 'required|regex:/^[0-9]{11}$/',
             'svcDate' => [
                 'required',
-                Rule::date()->afterOrEqual(today())
+                Rule::date()->afterOrEqual($today->format('Y-m-d'))
             ],
-            'decName' => 'required',
+            'decFname' => ['required',
+                            'max:50',
+                            Rule::unique('job_ord_details', 'dec_fname')
+                            ->where('dec_mname', $request->decMname)
+                            ->where('dec_lname', $request->decLname)
+            ],
+            'decMname' => 'required|max:20',
+            'decLname' => 'required|max:20',
             'decBorn' => [
                 'required',
-                Rule::date()->beforeOrEqual(today())
+                Rule::date()->beforeOrEqual($today->format('Y-m-d'))
             ],
             'decDied' => [
                 'required',
                 Rule::date()->afterOrEqual('decBorn')
-                ->beforeOrEqual(today())
+                ->beforeOrEqual($today->format('Y-m-d'))
             ],
             'payment' => 'required|integer|min:1000|max:999999',
             'total' => 'required|integer|min:1|max:999999',
@@ -150,10 +163,20 @@ class JobOrderController extends Controller
             'vehicle.required' => 'This field is required.',
             'embalm.required' => 'This field is required.',
 
-            'clientName.required' => 'This field is required.',
-            'clientName.regex' => 'Not a valid name.',
-            'clientName.min' => 'At least 1 or more characters.',
-            'clientName.max' => '100 charaters limit reached.',
+            'cliFname.required' => 'This field is required.',
+            'cliFname.regex' => 'Not a valid name.',
+            'cliFname.min' => 'At least 1 or more characters.',
+            'cliFname.max' => '50 charaters limit reached.',
+            
+            'cliMname.required' => 'This field is required.',
+            'cliMname.regex' => 'Not a valid name.',
+            'cliMname.min' => 'At least 1 or more characters.',
+            'cliMname.max' => '20 charaters limit reached.',
+
+            'cliLname.required' => 'This field is required.',
+            'cliLname.regex' => 'Not a valid name.',
+            'cliLname.min' => 'At least 1 or more characters.',
+            'cliLname.max' => '20 charaters limit reached.',
             
             'address.required' => 'This field is required.',
             'address.max' => '150 charaters limit reached.',
@@ -164,7 +187,15 @@ class JobOrderController extends Controller
             'svcDate.required' => 'This field is required.',
             'svcDate.after_or_equal' => 'The start date must be today or after.',
 
-            'decName.required' => 'This field is required.',
+            'decFname.required' => 'This field is required.',
+            'decFname.unique' => 'Deceased name has been taken.',
+            'decFname.max' => '50 characters limit reached.',
+
+            'decMname.required' => 'This field is required.',
+            'decMname.max' => '20 characters limit reached.',
+
+            'decLname.required' => 'This field is required.',
+            'decLname.max' => '20 characters limit reached.',
 
             'decBorn.required' => 'This field is required.',
             'decBorn.before_or_equal' => 'The date must be before or today.',
@@ -215,7 +246,9 @@ class JobOrderController extends Controller
 
         //dd($request->payment >= $request->total ? 'paid' : 'not paid');
         jobOrderDetails::create([
-            'dec_name' => $request->decName,
+            'dec_fname' => $request->decFname,
+            'dec_mname' => $request->decMname,
+            'dec_lname' => $request->decLname,
             'dec_born_date' => $request->decBorn, 
             'dec_died_date' => $request->decDied,
             'jod_days_of_wake' => $request->wakeDay,
@@ -228,7 +261,9 @@ class JobOrderController extends Controller
         $jodId = jobOrderDetails::orderBy('id', 'desc')->take(1)->value('id');
 
         jobOrder::create([
-            'client_name' => $request->clientName,
+            'client_fname' => $request->cliFname,
+            'client_mname' => $request->cliMname,
+            'client_lname' => $request->cliLname,
             'client_contact_number' => $request->clientConNum,
             'client_address' => $request->address,
             'jo_total' => $request->total,
@@ -301,27 +336,17 @@ class JobOrderController extends Controller
             'stoId.*' => 'required',
 
             'eqDepl.*' => 'required|integer|min:0|max:999',
-            'eqDeplSet.*' => 'required|integer|min:0|max:999',
 
             'stoDepl.*' => 'required|integer|min:0|max:999',
-            'stoDeplSet.*' => 'required|integer|min:0|max:999',
 
         ], [
             'stoDepl.*.required' => 'This field is required.',
             'stoDepl.*.min' => 'Quantity must atleast 0 or more.',
             'stoDepl.*.max' => '3 digit item quantity reached.',
 
-            'stoDeplSet.*.required' => 'This field is required.',
-            'stoDeplSet.*.min' => 'Quantity must atleast 0 or more.',
-            'stoDeplSet.*.max' => '3 digit item quantity reached.',
-
             'eqDepl.*.required' => 'This field is required.',
             'eqDepl.*.min' => 'Quantity must be 0 or more.',
-            'eqDepl.*.max' => '3 digit equipment quantity reached.',
-
-            'eqDeplSet.*.required' => 'This field is required.',
-            'eqDeplSet.*.min' => 'Quantity must be 0 or more.',
-            'eqDeplSet.*.max' => '3 digit equipment quantity reached.',
+            'eqDepl.*.max' => '3 digit equipment quantity reached.'
         ]);
 
         // Store equipment and stock IDs and quantity used
@@ -329,9 +354,7 @@ class JobOrderController extends Controller
         $eqId = $request->eqId;
 
         $stoDepl = $request->stoDepl;
-        $stoDeplSet = $request->stoDeplSet;
         $eqDepl = $request->eqDepl;
-        $eqDeplSet = $request->eqDeplSet;
 
         //dd($addStoId, $addStoDepl, $addEqId, $addEqDepl);
         //dd($stoId, $stoDepl, $eqId, $eqDepl);
@@ -344,7 +367,9 @@ class JobOrderController extends Controller
                 ->with('promt-f', 'Please schedule burial time.')
                 ->withInput();
         }
-        if (Carbon::parse($jo->jo_start_date)->gt(Carbon::today())) {
+        $today = Carbon::now('Asia/Manila')->startOfDay();
+        $joDate = Carbon::parse($jo->jo_start_date);
+        if ($joDate->gt($today->format('Y-m-d'))) {
             return redirect()->back()
                 ->with('promt-f', 'Cannot deploy before (' . $jo->jo_start_date . ')')
                 ->withInput();
@@ -357,7 +382,7 @@ class JobOrderController extends Controller
 
         foreach ($stocks as $index => $data) {
             $data->update([
-                'item_qty' => $data->item_qty - ($stoDepl[$index] * $stoDeplSet[$index]),
+                'item_qty' => $data->item_qty - $stoDepl[$index]
             ]);
         }
 
@@ -365,13 +390,12 @@ class JobOrderController extends Controller
             TempEquipment::create([
                 'jod_id' => $id,
                 'pkg_eq_id' => $pkgEq[$index]->id,
-                'eq_dpl_qty' => $eqDepl[$index],
-                'eq_dpl_qty_set' => $eqDeplSet[$index]
+                'eq_dpl_qty' => $eqDepl[$index]
             ]);
 
             $data->update([
-                'eq_available' => $data->eq_available - ($eqDepl[$index] * $eqDeplSet[$index]),
-                'eq_in_use' => $data->eq_in_use + ($eqDepl[$index] * $eqDeplSet[$index]),
+                'eq_available' => $data->eq_available - $eqDepl[$index],
+                'eq_in_use' => $data->eq_in_use + $eqDepl[$index],
             ]);
         }
 
@@ -419,20 +443,13 @@ class JobOrderController extends Controller
             'eqDepl.*' => 'required|integer|min:0|max:999'
 
         ]);
-
         // Store equipment and stock IDs and quantity used
         $eqId = $request->eqId;
 
         $eqDepl = $request->eqDepl;
-        $eqDeplSet = $request->eqDeplSet;
 
         // Check date for deployment
         $jo = jobOrder::select('id', 'jo_start_date', 'svc_id')->where('jod_id', $id)->first();
-        if (Carbon::parse($jo->jo_start_date)->gt(Carbon::today())) {
-            return redirect()->back()
-                ->with('promt-f', 'Cannot deploy before (' . $jo->jo_start_date . ')')
-                ->withInput();
-        }
 
         // for the inital item and equipment from the package
         $eq = Equipment::select('id', 'eq_available', 'eq_in_use')->whereIn('id', $eqId)->get();
@@ -440,8 +457,8 @@ class JobOrderController extends Controller
 
         foreach ($eq as $index => $data) {
             $data->update([
-                'eq_available' => $data->eq_available + ($eqDepl[$index] * $eqDeplSet[$index]),
-                'eq_in_use' => $data->eq_in_use - ($eqDepl[$index] * $eqDeplSet[$index]),
+                'eq_available' => $data->eq_available + $eqDepl[$index],
+                'eq_in_use' => $data->eq_in_use - $eqDepl[$index],
             ]);
         }
 

@@ -11,8 +11,7 @@ class TempEquipment extends Model
     protected $fillable = [
         'jod_id',
         'pkg_eq_id',
-        'eq_dpl_qty',
-        'eq_dpl_qty_set'
+        'eq_dpl_qty'
     ];
 
     public function tempEqToPkgEq() {

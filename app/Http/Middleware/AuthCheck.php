@@ -15,6 +15,9 @@ class AuthCheck
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if ($request->routeIs('Report.preview')) {
+            return $next($request);
+        }
         if(!Session()->has('loginId')){
             return redirect(route('showLogin'));
         }

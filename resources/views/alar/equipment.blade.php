@@ -14,6 +14,13 @@
                 value="{{ request('search') }}" style="border-radius: 0; border: none;">
             <button class="cust-btn cust-btn-search">Search</button>
         </div>
+        @if(session("empRole") == 'admin' || session("empRole") == 'sadmin')
+            <div>
+                <a href="{{ route('Equipment.create') }}" class="cust-btn cust-btn-primary"  data-bs-toggle="tooltip" title="Add New Equipment">
+                    <i class="bi bi-plus-lg"></i> Add Equipment
+                </a>
+            </div>
+        @endif
     </form>
 
 <!-- Equipment Table -->
@@ -23,6 +30,7 @@
             <tr>
                 <th class="fw-semibold">Equipment</th>
                 <th class="fw-semibold">Size/Unit</th>
+                <th class="fw-semibold">Net Content</th>
                 <th class="fw-semibold">Available</th>
                 <th class="fw-semibold">In Use</th>
                 <th class="fw-semibold">Action</th>

@@ -12,17 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('purchase_orders', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
             $table->string('status', 15);
             $table->decimal('total_amount', 8,2)->nullable();
             $table->date('submitted_date')->nullable();
             $table->date('approved_date')->nullable();
             $table->date('delivered_date')->nullable();
+            $table->boolean('archived')->nullable();
            
-            $table->unsignedBigInteger('supplier_id')->nullable();
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onUpdate('cascade')->nullOnDelete();
-            $table->unsignedBigInteger('emp_id')->nullable();
-            $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();
+            $table->unsignedMediumInteger('supplier_id');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onUpdate('cascade');
+
+            $table->unsignedMediumInteger('emp_id');
+            $table->foreign('emp_id')->references('id')->on('employees')->onUpdate('cascade');
+            
             $table->timestamps();
         });
     }

@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'Stock Management')
+@section('title', 'Stock')
 
 @section('content')
 
@@ -14,41 +14,60 @@
             @method('PUT')
 
             <div class="row cust-h-form">
-                <div class="col-md-12">
-                    <h3 class="fw-semibold text-success mb-4">Edit Stock Details</h3>
+                <div class="col col-12">
+                    <h3 class="fw-semibold text-success">Edit Stock Details</h3>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Item Name</label>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Item Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="itemName" value="{{ old('itemName', $stockData->item_name) }}">
                     @error('itemName')
                         <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Item Quantity</label>
-                    <input type="text" class="form-control" name="itemQty" value="{{ $stockData->item_qty }}" readonly>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Size/Unit</label>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Size/Unit <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="size" value="{{ old('size', $stockData->item_size) }}">
                     @error('size')
                         <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label class="form-label fw-semibold">Item Type</label>
                     <input type="text" class="form-control" value="{{ $stockData->item_type }}" readonly>
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Low Item Limit</label>
+                <div class="w-100"></div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Item Quantity <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" name="itemQty" value="{{ old('itemQty', $stockData->item_qty) }}">
+                    @error('itemQty')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Net Content <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" name="itemQtySet" value="{{ old('itemQtySet', $stockData->item_net_content) }}">
+                    @error('itemQtySet')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Low Item Limit Quantity <span class="text-danger">*</span></label>
                     <input type="number" class="form-control" name="itemLimit" value="{{ old('itemLimit', $stockData->item_low_limit) }}">
                     @error('itemLimit')
                         <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Total Net Content</label>
+                    <input type="number" class="form-control" value="{{ $stockData->item_qty * $stockData->item_net_content }}" readonly>
                 </div>
             </div>
 

@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
             $table->string('invoice_number', 50)->nullable();
             $table->date('invoice_date')->nullable();
             $table->decimal('total', 8,2);
 
-            $table->unsignedBigInteger('po_id')->nullable();
-            $table->foreign('po_id')->references('id')->on('purchase_orders')->onUpdate('cascade')->nullOnDelete();
+            $table->unsignedMediumInteger('po_id')->nullable();
+            $table->foreign('po_id')->references('id')->on('purchase_orders')->onUpdate('cascade');
             $table->timestamps();
         });
     }

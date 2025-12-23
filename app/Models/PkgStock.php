@@ -11,8 +11,7 @@ class PkgStock extends Model
         'pkg_id',
         'stock_id',
         'prep_id',
-        'stock_used',
-        'stock_used_set'
+        'stock_used'
     ];
 
     public function pkgStoToPgk(){

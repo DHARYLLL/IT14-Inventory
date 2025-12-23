@@ -1,6 +1,6 @@
 @if ($stoData->isEmpty())
     <tr>
-        <td colspan="4" class="text-center text-secondary py-3">
+        <td colspan="5" class="text-center text-secondary py-3">
             No Stock Item Available.
         </td>
     </tr>
@@ -9,6 +9,7 @@
         <tr>
             <td>{{ $row->item_name }}</td>
             <td>{{ $row->item_size }}</td>
+            <td>{{ $row->item_net_content }}</td>
             <td>
                 @if ($row->item_qty == 0)
                     <p class="cust-empty">

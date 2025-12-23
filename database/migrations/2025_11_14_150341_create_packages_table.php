@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('packages', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
             $table->string('pkg_name', 50)->unique();
             $table->decimal('pkg_price', 8,2);
+            $table->boolean('archived')->nullable();
 
             $table->timestamps();
         });

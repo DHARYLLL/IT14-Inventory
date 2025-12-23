@@ -33,7 +33,6 @@ class StockController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        // ✅ AJAX response
         if ($request->ajax()) {
             return response()->json([
                 'table' => view('alar.partials.stockTable', compact('stoData'))->render(),
@@ -41,7 +40,6 @@ class StockController extends Controller
             ]);
         }
 
-        // ✅ Normal page load
         return view('alar.stock', compact('stoData'));
     }
 
@@ -50,7 +48,7 @@ class StockController extends Controller
      */
     public function create()
     {
-        //
+        return view('functions/stockAdd');
     }
 
     /**
@@ -59,93 +57,58 @@ class StockController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'inv_num' => 'required',
-            'inv_date' => 'required',
-            'qtyArrived.*' => 'required|integer|min:1|max:999',
-            'del_date' => 'required',
-            'total' => 'required|numeric|min:1|max:999999'
+            'itemName' => ['required',
+                            'max:100',
+                            Rule::unique('stocks', 'item_name')
+                            ->where('item_size', $request->size)
+            ],
+            'itemQty' => 'required|integer|min:0|max:999999',
+            'itemQtySet' => 'required|integer|min:1|max:999999',
+            'size' => 'required|max:20',
+            'itemLimit' => 'required|integer|min:1|max:999999'
         ], [
-            'inv_num.required' => 'This field is required.',
-            'inv_date.required' => 'This field is required.',
-            'del_date.required' => 'This field is required.',
-            'total.numeric' => 'Number Only.',
-            'total.min' => 'Total must be 1 or more',
-            'total.max' => '6 digits is the max.',
-            'qtyArrived.*.required' => 'This field is required.',
-            'qtyArrived.*.min' => 'Quantity must be 1 or more.',
-            'qtyArrived.*.max' => '4 digits is the max.'
-        ]);
-        
+            'itemName.required' => 'This field is required.',
+            'itemName.max' => '100 Characters limit reached.',
+            'itemName.unique' => 'Item already added.',
 
+            'itemQty.required' => 'This field is required.',
+            'itemQty.integer' => 'Number only.',
+            'itemQty.min' => 'Not a valid Quantity.',
+            'itemQty.max' => '6 digits limit reached.', 
 
-        $items = PurchaseOrderItem::where('po_id', '=', $request->po_id)->get();
-        //$stock = stockModel::where()->first;
+            'itemQtySet.required' => 'This field is required.',
+            'itemQtySet.integer' => 'Number only.',
+            'itemQtySet.min' => 'Must be 1 or more.',
+            'itemQtySet.max' => '6 digits limit reached.',
 
-        $getId = $request->stockId;
-        $getEqId = $request->eqId;
-        $getType = $request->type;
+            'size.required' => 'This field is required.',
+            'size.max' => '20 characters limit reached.',
 
-        $getArrivedQty = $request->qtyArrived;
-        
-        Invoice::create([
-            'invoice_number' => $request->inv_num,
-            'invoice_date' => $request->inv_date,
-            'total' => $request->total,
-            'po_id' => $request->po_id
-        ]);
-        
-
-
-        for ($i=0; $i < count($getId); $i++) { 
-
-            if($getType[$i] == 'Consumable'){
-                $stock = Stock::where('id', '=', $getId[$i])->first();
-                Stock::findOrFail($stock->id)->update([
-                    'item_qty' => $stock->item_qty + $getArrivedQty[$i]
-                ]);
-                PurchaseOrderItem::where('stock_id', '=' , $getId[$i])->where('qty_arrived', '=' , null)->orderBy('id', "ASC")->take(1)->update([
-                    'qty_arrived' => $getArrivedQty[$i]
-                ]);
-            }
-                
-            if($getType[$i] == 'Non-Consumable'){
-                $eq = Equipment::where('id', '=', $getId[$i])->first();
-                Equipment::findOrFail($eq->id)->update([
-                    'eq_available' => $eq->eq_available + $getArrivedQty[$i]
-                ]);
-                PurchaseOrderItem::where('eq_id', '=' , $getId[$i])->where('qty_arrived', '=' , null)->orderBy('id', "ASC")->take(1)->update([
-                    'qty_arrived' => $getArrivedQty[$i]
-                ]);
-            }
-            
-            
-
-        }
-        
-
-        PurchaseOrder::findOrFail($request->po_id)->update([
-            'status' => "Delivered",
-            'delivered_date' => $request->del_date
+            'itemLimit.required' => 'This field is required.',
+            'itemLimit.integer' => 'Number only.',
+            'itemLimit.min' => 'Must be 1 or more.',
+            'itemLimit.max' => '6 digits limit reached.',
         ]);
 
-        $invId = Invoice::orderBy('id', 'desc')->take(1)->value('id');
-
-        Log::create([
-            'transaction' => 'Create',
-            'tx_desc' => 'Created Invoice | ID: ' . $invId,
-            'tx_date' => Carbon::now(),
-            'emp_id' => session('loginId')
+        Stock::create([
+            'item_name' => $request->itemName,
+            'item_qty' => $request->itemQty,
+            'item_net_content' => $request->itemQtySet,
+            'item_size' => $request->size,
+            'item_type' => 'Consumable',
+            'item_low_limit' => $request->itemLimit
         ]);
+        
+        $getId = Stock::orderBy('id', 'desc')->take(1)->value('id');
 
         Log::create([
             'transaction' => 'Added',
-            'tx_desc' => 'Added Stock from Po | ID: ' . $request->po_id,
+            'tx_desc' => 'Added new stock |'. $getId,
             'tx_date' => Carbon::now(),
             'emp_id' => session('loginId')
         ]);
 
-        //return redirect(route('Stock.index'));
-        return redirect()->back();
+        return redirect(route('Stock.index'))->with('success', 'Added Sucessfuly!');
     }
 
     /**
@@ -177,12 +140,24 @@ class StockController extends Controller
                             ->where('item_size', $request->size)
                             ->ignore($id)
             ],
+            'itemQty' => 'required|integer|min:0|max:999999',
+            'itemQtySet' => 'required|integer|min:1|max:999999',
             'size' => "required|max:20",
             'itemLimit' => 'required|integer|min:1|max:999999.99'
         ],  [
             'itemName.required' => 'This field is required.',
             'itemName.unique' => 'Item already added.',
             'itemName.max' => '100 Characters limit reached.',
+
+            'itemQty.required' => 'This field is required.',
+            'itemQty.integer' => 'Number only.',
+            'itemQty.min' => 'Not a valid Quantity.',
+            'itemQty.max' => '6 digits limit reached.',
+
+            'itemQtySet.required' => 'This field is required.',
+            'itemQtySet.integer' => 'Number only.',
+            'itemQtySet.min' => 'Quantity must be 1 or more.',
+            'itemQtySet.max' => '6 digits limit reached.',
 
             'size.required' => 'This field is required.',
             'size.max' => '20 Characters limit reached.',

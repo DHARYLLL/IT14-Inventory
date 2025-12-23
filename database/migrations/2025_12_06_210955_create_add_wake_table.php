@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('add_wake', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
             $table->smallInteger('day');
             $table->decimal('fee', 8,2);
 
-            $table->unsignedBigInteger('jod_id');
-            $table->foreign('jod_id')->references('id')->on('job_ord_details')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedMediumInteger('jod_id');
+            $table->foreign('jod_id')->references('id')->on('job_ord_details')->onUpdate('cascade');
 
             $table->timestamps();
         });

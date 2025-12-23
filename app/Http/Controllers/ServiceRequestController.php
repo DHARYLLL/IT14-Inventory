@@ -55,43 +55,36 @@ class ServiceRequestController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([ 
-            'clientName' => 'required|regex:/^[A-Za-z0-9\s\.\'-]+$/|min:1|max:100',
+        $today = Carbon::now('Asia/Manila')->startOfDay();
+        $generalValidation = [
+            'cliFname' => 'required|regex:/^[A-Za-z0-9\s\.\'-]+$/|min:1|max:50',
+            'cliMname' => 'required|regex:/^[A-Za-z0-9\s\.\'-]+$/|min:1|max:20',
+            'cliLname' => 'required|regex:/^[A-Za-z0-9\s\.\'-]+$/|min:1|max:20',
             'clientConNum' => 'required|regex:/^[0-9]{11}$/',
             'address' => 'required|max:150',
-            'vehicle' => 'required_without:embalm',
-            'embalm'  => 'required_without:vehicle',
-            'burialTime'  => 'required',
-            'svcDate' => [
-                Rule::date()->afterOrEqual(today())
-            ],
             'payment' => 'required|integer|min:1000|max:999999',
             'total' => 'required|integer|min:1|max:999999',
+            'vehicle' => 'required_without:embalm',
+            'embalm'  => 'required_without:vehicle',
+        ];
+        $generalMsg = [
+            'cliFname.required' => 'This field is required.',
+            'cliFname.regex' => 'Not a valid name.',
+            'cliFname.min' => 'At least 1 or more characters.',
+            'cliFname.max' => '50 charaters limit reached.',
 
-            'burrDate' => [
-                'required',
-                Rule::date()->afterOrEqual('svcDate')
-            ]
-        ], [
-            'clientName.required' => 'This field is required.',
-            'clientName.regex' => 'Not a valid name.',
-            'clientName.min' => 'At least 1 or more characters.',
-            'clientName.max' => '100 charaters limit reached.',
+            'cliMname.required' => 'This field is required.',
+            'cliMname.regex' => 'Not a valid name.',
+            'cliMname.min' => 'At least 1 or more characters.',
+            'cliMname.max' => '2o charaters limit reached.',
+
+            'cliLname.required' => 'This field is required.',
+            'cliLname.regex' => 'Not a valid name.',
+            'cliLname.min' => 'At least 1 or more characters.',
+            'cliLname.max' => '20 charaters limit reached.',
 
             'clientConNum.required' => 'This field is required.',
             'clientConNum.regex' => 'Not a valid number.',
-
-            'svcDate.required' => 'This field is required.',
-            'svcDate.after_or_equal' => 'Date must be today or after.',
-
-            'burrDate.required' => 'This field is required.',
-            'burrDate.after_or_equal' => 'Date must be today or after service date.',
-
-            'burialTime.required' => 'This field is required.',
-
-            'vehicle.required_without' => 'Select at least one: vehicle or embalm.',
-            'embalm.required_without'  => 'Select at least one: vehicle or embalm.',
-
             'address.required' => 'This field is required.',
             'address.max' => '150 charaters limit reached.',
 
@@ -103,8 +96,62 @@ class ServiceRequestController extends Controller
             'total.required' => 'This field is required.',
             'total.integer' => 'Number only.',
             'total.min' => 'Total must be 1 or more',
-            'total.max' => '6 digits is the max.'
-        ]);
+            'total.max' => '6 digits is the max.',
+
+            'vehicle.required_without' => 'Select at least one: vehicle or embalm.',
+            'embalm.required_without'  => 'Select at least one: vehicle or embalm.',
+        ];
+
+        $vehValidation = [
+            'burrDate' => [
+                'required',
+                Rule::date()->afterOrEqual($today->format('Y-m-d'))
+            ],
+            'burialTime'  => 'required'
+        ];
+        $vehMsg = [
+            'burrDate.required' => 'This field is required.',
+            'burrDate.after_or_equal' => 'Date must be today or after service date.',
+
+            'burialTime.required' => 'This field is required.',
+        ];
+
+        $prepValidation = [
+            'svcDate' => [
+                'required',
+                Rule::date()->afterOrEqual($today->format('Y-m-d'))
+            ],
+        ];
+        $prepMsg = [
+            'svcDate.required' => 'This field is required.',
+            'svcDate.after_or_equal' => 'Date must be today or after.',
+        ];
+
+        if ($request->setEmbalmId && $request->setVehId) {
+            $request->validate(
+                array_merge($generalValidation, $prepValidation, $vehValidation)
+            , 
+                array_merge( $generalMsg, $prepMsg, $vehMsg)
+            );
+        } elseif ($request->setEmbalmId) {
+           $request->validate(
+                array_merge($generalValidation,$prepValidation)
+            ,
+                array_merge( $generalMsg, $prepMsg) 
+            );
+        } elseif ($request->setVehId) {
+           $request->validate(
+                array_merge($generalValidation, $vehValidation)
+            , 
+                array_merge($generalMsg, $vehMsg)
+            );
+        } else {
+            $request->validate(
+                array_merge($generalValidation)
+            ,  
+                array_merge($generalMsg)
+            );
+        }
 
 
         $driverUnavailable = jobOrder::Where('jo_burial_date', $request->burrDate)
@@ -116,17 +163,19 @@ class ServiceRequestController extends Controller
             //dd('driver not available', $checkAvail);
             return back()->with('promt', 'Driver not available')->withInput();
         }
-
+        
         ServiceRequest::create([
             'veh_id' => $request->setVehId,
             'prep_id' => $request->setEmbalmId,
-            'svc_status' => Carbon::parse($request->svcDate)->isSameDay(Carbon::today()) ? 'Ongoing' : 'Pending'
+            'svc_status' => Carbon::parse($request->svcDate)->isSameDay($today->format('Y-m-d')) ? 'Ongoing' : 'Pending'
         ]);
 
         $svcId = ServiceRequest::orderBy('id', 'desc')->take(1)->value('id');
 
         jobOrder::create([
-            'client_name' => $request->clientName,
+            'client_fname' => $request->cliFname,
+            'client_mname' => $request->cliMname,
+            'client_lname' => $request->cliLname,
             'client_contact_number' => $request->clientConNum,
             'client_address' => $request->address,
             'jo_total' => $request->total,

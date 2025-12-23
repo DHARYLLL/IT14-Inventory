@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'Stock Management')
+@section('title', 'Stock')
 
 @section('content')
     @section('head', 'Stocks')
@@ -15,6 +15,14 @@
             <button class="cust-btn cust-btn-search">Search</button>
                 
         </div>
+        @if(session("empRole") == 'admin' || session("empRole") == 'sadmin')
+            <div>
+                <a href="{{ route('Stock.create') }}" class="cust-btn cust-btn-primary"  data-bs-toggle="tooltip" title="Add New Stock">
+                    <i class="bi bi-plus-lg"></i> Add Stock
+                </a>
+            </div>
+        @endif
+        
     </form>
 
     <div class="cust-h-content overflow-auto">
@@ -23,6 +31,7 @@
                 <tr class="table-white">
                     <th class="fw-semibold">Item Name</th>
                     <th class="fw-semibold">Size/Unit</th>
+                    <th class="fw-semibold">Net Content</th>
                     <th class="fw-semibold">Item Quantity</th>
                     <th class="fw-semibold">Action</th>
                 </tr>

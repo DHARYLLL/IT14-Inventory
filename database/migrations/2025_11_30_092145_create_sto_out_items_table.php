@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sto_out_items', function (Blueprint $table) {
-            $table->id();
+            $table->mediumIncrements('id');
 
-            $table->unsignedBigInteger('so_id')->nullable();
-            $table->foreign('so_id')->references('id')->on('stock_outs')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedMediumInteger('so_id')->nullable();
+            $table->foreign('so_id')->references('id')->on('stock_outs')->onUpdate('cascade');
 
-            $table->unsignedBigInteger('stock_id')->nullable();
+            $table->unsignedMediumInteger('stock_id')->nullable();
             $table->foreign('stock_id')->references('id')->on('stocks')->onUpdate('cascade');
 
             $table->smallInteger('so_qty');

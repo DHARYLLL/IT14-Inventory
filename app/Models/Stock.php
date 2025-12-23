@@ -10,9 +10,11 @@ class Stock extends Model
     protected $fillable = [
         'item_name',
         'item_qty',
+        'item_net_content',
         'item_size',
         'item_type',
-        'item_low_limit'
+        'item_low_limit',
+        'archived'
     ];
 
     public function stoToSvcSto(){
