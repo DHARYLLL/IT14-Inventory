@@ -41,7 +41,10 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="amount" class="form-label">Amount:</label>
-                                    <input type="text" class="form-control" name="amount" value="{{ old('amount') }}">
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="text" class="form-control" name="amount" value="{{ old('amount') }}">
+                                    </div>
                                     <input type="text" name="joId" value="{{ $joData->id }}" hidden>
                                     <input type="text" name="addWakeId" value="{{ $joData->joTojod->jodToAddWake->id ?? '' }}" hidden>
                                     @error('amount')

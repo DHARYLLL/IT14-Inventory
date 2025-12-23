@@ -61,6 +61,7 @@ class StockController extends Controller
                             'max:100',
                             Rule::unique('stocks', 'item_name')
                             ->where('item_size', $request->size)
+                            ->where('item_net_content', $request->itemQtySet)
             ],
             'itemQty' => 'required|integer|min:0|max:999999',
             'itemQtySet' => 'required|integer|min:1|max:999999',
@@ -138,6 +139,7 @@ class StockController extends Controller
                             'max:100',
                             Rule::unique('stocks', 'item_name')
                             ->where('item_size', $request->size)
+                            ->where('item_net_content)', $request->itemQtySet)
                             ->ignore($id)
             ],
             'itemQty' => 'required|integer|min:0|max:999999',

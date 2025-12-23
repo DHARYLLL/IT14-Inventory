@@ -31,7 +31,7 @@ class DashboardController extends Controller
         $jobOrdData = jobOrder::where('jo_burial_date', '>=', Carbon::today())->
                                 orWhere('jo_start_date', '<=', Carbon::today())->
                                 whereRelation('joToSvcReq', 'svc_status', '<>', 'Completed')->
-                                orderByRaw("CASE WHEN jo_burial_date = '' THEN 0 ELSE 1 END")->
+                                orderByRaw("CASE WHEN jo_burial_date IS NULL THEN 0 ELSE 1 END")->
                                 orderBy('jo_burial_date', 'asc')->
                                 orderBy('jo_burial_time', 'asc')->get();
 

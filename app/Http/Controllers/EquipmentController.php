@@ -58,6 +58,7 @@ class EquipmentController extends Controller
                         'max:100',
                         Rule::unique('equipments', 'eq_name')
                         ->where('eq_size', $request->size)
+                        ->where('eq_net_content', $request->eqAvailSet)
             ],
             'size' => 'required|max:20',
             'eqAvail' => 'required|integer|min:0|max:999',
@@ -135,6 +136,7 @@ class EquipmentController extends Controller
                         'max:100',
                         Rule::unique('equipments', 'eq_name')
                         ->where('eq_size', $request->size)
+                        ->where('eq_net_content', $request->eqAvailSet)
                         ->ignore($id)
             ],
             'size' => "required|max:20",
